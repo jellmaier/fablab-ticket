@@ -13,10 +13,12 @@ Licence: GP2
 
 include 'devices/device.php';
 include 'advanced-fields/device-fields.php';
-//include 'reservation.php';
+include 'reservation/reservation.php';
+include 'ticket/ticket.php';
 
 new Device();
 new DeviceFields();
-//new Reservation();
+new Reservation();
+new Ticket();
 
 ?>
