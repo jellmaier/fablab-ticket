@@ -6,6 +6,8 @@ Plugin URI: http://fablab.tugraz.at
 Description: Ticketing and Reservation System for FabLabs
 Author: Jakob Ellmaier
 Author URI: http://medienbausatz.at
+GitHub Plugin URI: https://github.com/jellmaier/fablab-ticket
+GitHub Branch:     master
 Licence: GP2
 */
 
