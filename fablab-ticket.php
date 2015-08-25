@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: FabLab Ticket
-Version: 0.1.0
+Version: 0.1.1
 Plugin URI: http://fablab.tugraz.at
 Description: Ticketing and Reservation System for FabLabs
 Author: Jakob Ellmaier
