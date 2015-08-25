@@ -12,7 +12,7 @@ if (!class_exists('Reservation'))
       add_action( 'init', 'reservation_register' );
 
       // Displaying Reservation Lists
-      add_action("manage_posts_custom_column",  "reservations_custom_columns");
+      //add_action("manage_posts_custom_column",  "reservations_custom_columns");
       add_filter("manage_reservations_posts_columns", "reservations_edit_columns");
 
       // Adding Sortable Columns
@@ -89,13 +89,13 @@ function reservations_edit_columns($columns){
     $columns = array(
         "cb" => "<input type=\"checkbox\" />",
         "title" => "Reservation",
-        "reservation_date" => "Reservation Date",
+        "reservation_start_time" => "Reservation Start Time",
+        "reservation_end_time" => "Reservation End Time",
         "reservation_location" => "Location",
-        "reservation_city" => "City",
   );
   return $columns;
 }
- 
+ /*
 function reservations_custom_columns($column){
     global $post;
     $custom = get_post_custom();
@@ -117,7 +117,7 @@ function reservations_custom_columns($column){
 function format_date($unixtime) {
     return date("F", $unixtime)." ".date("d", $unixtime).", ".date("Y", $unixtime);
 }
-
+*/
 
 
 // Adding Sortable Columns
@@ -146,9 +146,8 @@ function reservations_admin_init(){
  
 function reservation_details_meta() {
  
-    $ret = '<p><label>Date: </label><input type="text" name="reservation_date" value="' . format_date(get_reservation_field("reservation_date")) . '" /><em>(mm/dd/yyy)</em>';
-    $ret = $ret . '</p><p><label>Start Time: </label><input type="text" name="reservation_start_time" value="' . get_reservation_field("reservation_start_time") . '" /><em>(hh:mm pm)</em></p>';
-    $ret = $ret . '<p><label>End Time: </label><input type="text" name="reservation_end_time" value="' . get_reservation_field("reservation_end_time") . '" />    <em>(hh:mm pm)</em> </p>';
+    $ret = '</p><p><label>Start Time: </label><input type="text" name="reservation_start_time" id="reservation_start_time" value="' . get_reservation_field("reservation_start_time") . '" /></p>';
+    $ret = $ret . '<p><label>End Time: </label><input type="text" name="reservation_end_time"  id="reservation_end_time"value="' . get_reservation_field("reservation_end_time") . '" /> </p>';
     $ret = $ret . '<p><label>Location: </label><input type="text" size="70" name="reservation_location" value="' . get_reservation_field("reservation_location") . '" /></p>';
  
     echo $ret;
@@ -250,21 +249,10 @@ function get_reservation_details() {
     $ret = '';
     $ret = $ret . '<h3><a href="' . get_permalink() . '">' . $post->post_title . '</a></h3>'; 
     $ret = $ret . '<p><h4>'.get_post_meta($post->ID, 'reservation_location', true) . '</h4>';
-    $ret = $ret . '</p><p>';
-    $ret = $ret . date("F d, Y", $unixtime) . '<br/>';
     $ret = $ret . '<em>' . get_post_meta($post->ID, 'reservation_start_time', true) . ' - ';
     $ret = $ret . get_post_meta($post->ID, 'reservation_end_time', true) . '</em>';
  
     return $ret;
-}
- 
-function format_possibly_missing_metadata($field_name) {
-    global $post;
-    $field_value = get_post_meta($post->ID, $field_name, true);
- 
-    if (!empty($field_value)) {
-        return $field_value.'<br/>';
-    }
 }
 
 

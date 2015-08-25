@@ -1,5 +1,7 @@
 <?php
 
+//namespace fablab_ticket;
+
 if (!class_exists('Ticket'))
 {
   class Ticket
@@ -87,6 +89,8 @@ $post_information = array(
     );
  
     wp_insert_post( $post_information );
+    die();
 }
+add_action( 'wp_ajax_add_ticket', 'insert_post' );
 
-?>
+
