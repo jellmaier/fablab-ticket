@@ -1,8 +1,8 @@
 <?php
 /*
 Plugin Name: FabLab Ticket
-Version: 0.1.1
-Plugin URI: http://fablab.tugraz.at
+Version: 0.1.2
+Plugin URI: https://github.com/jellmaier/fablab-ticket
 Description: Ticketing and Reservation System for FabLabs
 Author: Jakob Ellmaier
 Author URI: http://medienbausatz.at
@@ -52,8 +52,8 @@ function fl_options_render(){
 function fl_load_script($hook) {
 	global $fl_settings;
 
-	//if($hook != $fl_settings)
-	//	return;
+	if($hook != $fl_settings)
+		return;
 
     //wp_deregister_script( 'jquery' );
     //wp_register_script('jquery', plugin_dir_url(__FILE__) . 'js/jquery.js');
@@ -69,32 +69,3 @@ function fl_load_script($hook) {
 add_action('admin_enqueue_scripts', 'fl_load_script');
 
 ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -93,4 +93,5 @@ $post_information = array(
 }
 add_action( 'wp_ajax_add_ticket', 'insert_post' );
 
+?>
 

@@ -147,8 +147,8 @@ function reservations_admin_init(){
 function reservation_details_meta() {
  
     $ret = '</p><p><label>Start Time: </label><input type="text" name="reservation_start_time" id="reservation_start_time" value="' . get_reservation_field("reservation_start_time") . '" /></p>';
-    $ret = $ret . '<p><label>End Time: </label><input type="text" name="reservation_end_time"  id="reservation_end_time"value="' . get_reservation_field("reservation_end_time") . '" /> </p>';
-    $ret = $ret . '<p><label>Location: </label><input type="text" size="70" name="reservation_location" value="' . get_reservation_field("reservation_location") . '" /></p>';
+    $ret = $ret . '<p><label>End Time: </label><input type="text" name="reservation_end_time"  id="reservation_end_time" value="' . get_reservation_field("reservation_end_time") . '" /> </p>';
+    $ret = $ret . '<p><label>Location: </label><input type="text" name="reservation_location" value="' . get_reservation_field("reservation_location") . '" /></p>';
  
     echo $ret;
 }
@@ -288,7 +288,5 @@ if ($_POST['lasercutter'])
 {
    insert_post();
 }
-
-
 
 ?>
