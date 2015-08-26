@@ -283,9 +283,11 @@ function get_ticket_shortcode($atts){
          
     }
     else {
+      ?>
       <div id="message" class="info">
        <p> Kein gerät verfügbar! </p>
     </div>
+    <?php
     }
 /*
     $terms = get_terms( 'device_type' );
