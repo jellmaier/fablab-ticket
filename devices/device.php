@@ -8,6 +8,18 @@ if (!class_exists('Device'))
     {
       register_activation_hook( __FILE__, 'my_rewrite_flush' );
       add_action( 'init', 'codex_device_init' );
+
+
+      // Displaying Device Lists
+      //add_action("manage_posts_custom_column",  "device_custom_columns");
+      add_filter("manage_device_posts_columns", "device_edit_columns");
+
+      // Editing Devices
+      add_action("admin_init", "device_admin_init");
+
+      // Saving Device Details
+      add_action('save_post', 'save_device_details');
+
     }
   }
 }
@@ -44,8 +56,8 @@ function codex_device_init() {
     'all_items'          => __( 'All Devices', 'your-plugin-textdomain' ),
     'search_items'       => __( 'Search Devices', 'your-plugin-textdomain' ),
     'parent_item_colon'  => __( 'Parent Devices:', 'your-plugin-textdomain' ),
-    'not_found'          => __( 'No devices found.', 'your-plugin-textdomain' ),
-    'not_found_in_trash' => __( 'No devices found in Trash.', 'your-plugin-textdomain' )
+    'not_found'          => __( 'No device found.', 'your-plugin-textdomain' ),
+    'not_found_in_trash' => __( 'No device found in Trash.', 'your-plugin-textdomain' )
   );
 
   $args = array(
@@ -62,7 +74,7 @@ function codex_device_init() {
     'hierarchical'       => false,
     'menu_position'      => null,
     'menu_icon'          => 'dashicons-desktop',
-    'supports'           => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments' )
+    'supports'           => array( 'title', 'editor', 'thumbnail')
   );
 
   register_post_type( 'device', $args );
@@ -98,9 +110,87 @@ function codex_device_init() {
       'rewrite'               => array( 'slug' => 'device_type' ),
     );
 
-    register_taxonomy( 'device_type', array( 'device', 'reservations', 'ticket'), $args );
+    register_taxonomy( 'device_type', array( 'device', 'device', 'ticket'), $args );
 
 
 }
+
+
+// Displaying Device Lists
+ 
+function device_edit_columns($columns){
+    $columns = array(
+        "cb" => "<input type=\"checkbox\" />",
+        "title" => "Device",
+        "device_status" => "Device Status",
+  );
+  return $columns;
+}
+
+// Editing Devices
+ 
+function device_admin_init(){
+  add_meta_box("device_meta", "Device Details", "device_details_meta", "device", "normal", "default");
+}
+ 
+function device_details_meta() {
+
+    ?>
+    <p><label>Status:   </label>
+    <form name="" id="deviceStatus">
+      <?php
+      if(get_device_field("device_status") == 'online'){ 
+        echo '<input type="radio" name="device_status" checked value="online">Online';
+        echo '<input type="radio" name="device_status" value="offline">Offline' ;
+      } else if (get_device_field("device_status") == 'offline') {
+        echo '<input type="radio" name="device_status" value="online">Online';
+        echo '<input type="radio" name="device_status" checked value="offline">Offline' ;
+      } else {
+        echo '<input type="radio" name="device_status" value="online">Online';
+        echo '<input type="radio" name="device_status" checked value="offline">Offline' ;
+      }
+    
+    echo '</form>';
+    
+    
+   // echo '<input type="text" value="' . get_reservation_field("device_status") . '" /></p>';
+}
+
+function get_device_field($device_field) {
+    global $post;
+ 
+    $custom = get_post_custom($post->ID);
+ 
+    if (isset($custom[$device_field])) {
+        return $custom[$device_field][0];
+    }
+}
+
+// Saving Device Details
+ 
+function save_device_details(){
+   global $post;
+ 
+   if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+      return;
+ 
+   if ( get_post_type($post) != 'device')
+      return;
+ 
+   if(isset($_POST["device_status"])) {
+      update_post_meta($post->ID, "device_status", strtotime($_POST["device_status"]));
+   }
+ 
+   save_device_field("device_status");
+}
+
+function save_device_field($device_field) {
+    global $post;
+ 
+    if(isset($_POST[$device_field])) {
+        update_post_meta($post->ID, $device_field, $_POST[$device_field]);
+    }
+}
+
 
 ?>

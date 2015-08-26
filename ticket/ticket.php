@@ -65,7 +65,7 @@ function codex_ticket_init() {
     'hierarchical'       => false,
     'menu_position'      => null,
     'menu_icon'          => 'dashicons-clipboard',
-    'supports'           => array( 'title', 'editor',)
+    'supports'           => array( 'title', 'editor', 'thumbnail')
   );
 
   register_post_type( 'ticket', $args );

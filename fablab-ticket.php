@@ -20,7 +20,7 @@ include 'reservation/reservation.php';
 include 'ticket/ticket.php';
 
 new Device();
-new DeviceFields();
+//new DeviceFields();
 new Reservation();
 new Ticket();
 
