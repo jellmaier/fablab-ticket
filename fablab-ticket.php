@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: FabLab Ticket
-Version: 0.1.3
+Version: 0.1.4
 Plugin URI: https://github.com/jellmaier/fablab-ticket
 Description: Ticketing and Reservation System for FabLabs
 Author: Jakob Ellmaier
@@ -36,7 +36,21 @@ function fl_options_render(){
 		<h2><?php _e('Fablab Options', 'fl'); ?></h2>
 		<form id="fl-form" action="" metod="POST">
 			<div>
-				<input type="text" id="reservation-date" name="reservation-date" value=""/>
+				<?php
+				$terms = get_terms( 'device_type' );
+			    if ( ! empty( $terms ) && ! is_wp_error( $terms ) ){
+			      ?>
+			        <select id="device_type_dropdown">
+			        <option value="Chose Device">Chose Device</option>
+			        <?php
+			         foreach ( $terms as $term ) {
+			           echo '<option value="' . $term->name . '">' . $term->name . '</option>';       
+			         }
+			         ?>
+			        </select>
+			        <?php
+			     }
+			     ?>
 				<input type="submit" name="fl-submit" class="button-primary" value="<?php _e('Click', 'fl'); ?>"/>
 			</div>
 		</form>
@@ -49,23 +63,42 @@ function fl_options_render(){
 	<?php
 }
 
-function fl_load_script($hook) {
+function fl_load_admin_script($hook) {
 	global $fl_settings;
 
-	if($hook != $fl_settings)
-		return;
+	//if($hook != $fl_settings)
+	//	return;
 
     //wp_deregister_script( 'jquery' );
     //wp_register_script('jquery', plugin_dir_url(__FILE__) . 'js/jquery.js');
 	//wp_enqueue_script('jquery');
 
 	wp_enqueue_script('fl_settings_ajax', plugin_dir_url(__FILE__) . 'js/fl-ajax.js', array('jquery') );
-	wp_enqueue_script('jquery-ui-datepicker');
+	//wp_enqueue_script('jquery-ui-datepicker');
 	wp_enqueue_style('jquery.datetimepicker', plugin_dir_url(__FILE__) . 'css/jquery.datetimepicker.css');
 	wp_enqueue_script('jquery.datetimepicker', plugin_dir_url(__FILE__) . 'js/jquery.datetimepicker.js', array('jquery') );
 	
 
 }
-add_action('admin_enqueue_scripts', 'fl_load_script');
+add_action('admin_enqueue_scripts', 'fl_load_admin_script');
+
+
+
+
+function fl_load_script() {
+	wp_register_script('fl_ticket_script', plugin_dir_url(__FILE__) . 'js/fl-ticket-ajax.js', array('jquery') );
+}
+add_action('init', 'fl_load_script');
+
+function print_fl_ticket_script() {
+	global $fl_ticket_script;
+
+	if ( ! $fl_ticket_script)
+		return;
+
+	wp_print_scripts('fl_ticket_script');
+}
+add_action('wp_footer', 'print_fl_ticket_script');
+
 
 ?>

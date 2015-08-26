@@ -91,7 +91,7 @@ function reservations_edit_columns($columns){
         "title" => "Reservation",
         "reservation_start_time" => "Reservation Start Time",
         "reservation_end_time" => "Reservation End Time",
-        "reservation_location" => "Location",
+        "reservation_device" => "Device",
   );
   return $columns;
 }
@@ -148,7 +148,7 @@ function reservation_details_meta() {
  
     $ret = '</p><p><label>Start Time: </label><input type="text" name="reservation_start_time" id="reservation_start_time" value="' . get_reservation_field("reservation_start_time") . '" /></p>';
     $ret = $ret . '<p><label>End Time: </label><input type="text" name="reservation_end_time"  id="reservation_end_time" value="' . get_reservation_field("reservation_end_time") . '" /> </p>';
-    $ret = $ret . '<p><label>Location: </label><input type="text" name="reservation_location" value="' . get_reservation_field("reservation_location") . '" /></p>';
+    $ret = $ret . '<p><label>Location: </label><input type="text" name="reservation_device" value="' . get_reservation_field("reservation_device") . '" /></p>';
  
     echo $ret;
 }
@@ -260,33 +260,73 @@ function get_reservation_details() {
 
 function get_ticket_shortcode($atts){
     global $post;
+    global $fl_ticket_script;
+    $fl_ticket_script = true;
 
-    $args = array('post_type' => 'device');
-
-
-    $products = new WP_Query( $args );
-    if( $products->have_posts() ) {
-    	$html .= '<div id="tag-list">';
-      while( $products->have_posts() ) {
-        $products->the_post();
-        $html .= '<div id="tag-entry">';
-        $html .= '<h3>'.  $post->post_title . '</h3>';
-        $html .= '<button type="submit" name="lasercutter">Get Ticket</button>';
-        $html .= '</div>';
+    $terms = get_terms( 'device_type' );
+    if ( ! empty( $terms ) && ! is_wp_error( $terms ) ){
+      echo '<div id="fl-getticket" action="" metod="POST">';
+      foreach ( $terms as $term ) {
+        echo '<a href="#" data-name="' . $term->name . '">';
+        echo '<div class="bubbles">';
+        echo '<div class="post-content">';
+        echo '<h2>' . $term->name . '</h2>'; 
+        echo '<input type="submit" name="' . $term->name . '" id="' . $term->name . '" class="button-primary" value="Get Ticket"/>';
+        echo '</div></div></a>';
       }
-      $html .= '</div>';
+      echo '</div>';
+
+      ?>
+      <div id="message" hidden class="info">
+    </div>
+      <?php
+         
     }
-    else {
-      $html .=  'Oh ohm no productsss!';
+/*
+    $terms = get_terms( 'device_type' );
+    if ( ! empty( $terms ) && ! is_wp_error( $terms ) ){
+      echo '<form id="fl-form-getticket" action="" metod="POST">';
+      foreach ( $terms as $term ) {
+        echo '<div class="bubbles">';
+        echo '<div class="post-content">';
+        echo '<h2>' . $term->name . '</h2>'; 
+        echo '<input type="submit" name="' . $term->name . '" id="' . $term->name . '" class="button-primary" value="Get Ticket"/>';
+        echo '</div></div>';
+      }
+      echo '</form>';
+         
     }
-    echo $html;
+    */
 
 
-}
 
-if ($_POST['lasercutter'])
-{
-   insert_post();
+
+/*
+    //echo '<p>' . date_i18n('D h:i') . '</p>';
+    // DeviceType Tags Dropdown
+    $terms = get_terms( 'device_type' );
+    if ( ! empty( $terms ) && ! is_wp_error( $terms ) ){
+      ?>
+      <div id="dropdown">
+        <select name="field">
+        <option value="Chose Device">Chose Device</option>
+        <?php
+         foreach ( $terms as $term ) {
+           echo '<option value="' . $term->term_id . '">' . $term->name . '</option>';       
+         }
+         ?>
+        </select>
+        </div>
+        <?php
+     }
+       
+*/
+
+
+
+
+    
+
 }
 
 ?>

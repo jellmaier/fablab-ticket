@@ -10,8 +10,7 @@ if (!class_exists('Ticket'))
     {
       register_activation_hook( __FILE__, 'my_ticket_rewrite_flush' );
       add_action( 'init', 'codex_ticket_init' );
-      add_action('add_new{ticket}', 'insert_post');
-      //add_filter( 'default_content', 'my_editor_content' );
+      add_action('add_new{ticket}', 'insert_ticket');
     }
   }
 }
@@ -73,24 +72,26 @@ function codex_ticket_init() {
 
 }
 
-function my_editor_content( $content, $post ) {
-  //if ($post->post_type == 'ticket')
-  //{
-    $content = "If you like this post, then please consider retweeting it or sharing it on Facebook.";
-    return $content;
-  //}
-}
 
-function insert_post() {
-$post_information = array(
-        'post_title' => 'tiiitel',
-        'post_content' => 'test',
-        'post_type' => 'ticket'
+
+function insert_ticket() {
+  $tag = $_POST['tag'];
+
+  $post_information = array(
+        'post_title' => "Ticket, vom " . date_i18n('D, d.m.y \u\m H:i'),
+        'post_type' => 'ticket',
     );
  
-    wp_insert_post( $post_information );
-    die();
+    $ID = wp_insert_post( $post_information );
+    //$tag = 'Lasercutter';
+    if ($ID != 0) {
+      $return = wp_set_object_terms( $ID, $tag, 'device_type', false);
+    }
+      
+
+    die($ID != 0);
 }
-add_action( 'wp_ajax_add_ticket', 'insert_post' );
+add_action( 'wp_ajax_add_ticket', 'insert_ticket' );
+add_action( 'wp_ajax-nopriv_add_ticket', 'insert_ticket' );
 
 ?>

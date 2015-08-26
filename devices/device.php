@@ -98,7 +98,7 @@ function codex_device_init() {
       'rewrite'               => array( 'slug' => 'device_type' ),
     );
 
-    register_taxonomy( 'device_type', 'device', $args );
+    register_taxonomy( 'device_type', array( 'device', 'reservations', 'ticket'), $args );
 
 
 }

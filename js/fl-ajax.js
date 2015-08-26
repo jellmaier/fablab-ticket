@@ -1,11 +1,15 @@
 jQuery(document).ready(function($){
 	$('#fl-form').submit(function(){
 
+		var device_type = jQuery('#device_type_dropdown').val();
 
 		data = {
-			action: 'add_ticket'
+			action: 'add_ticket',
+			tag: device_type,
+
 		};
 		$.post(ajaxurl, data, function(response) {
+			//alert(response)
 			
 		});
 		return false;
