@@ -265,14 +265,28 @@ function get_ticket_shortcode($atts){
 
     $terms = get_terms( 'device_type' );
     if ( ! empty( $terms ) && ! is_wp_error( $terms ) ){
+
       echo '<div id="fl-getticket" action="" metod="POST">';
       foreach ( $terms as $term ) {
-        echo '<a href="#" data-name="' . $term->name . '">';
-        echo '<div class="bubbles">';
-        echo '<div class="post-content">';
-        echo '<h2>' . $term->name . '</h2>'; 
-        echo '<input type="submit" name="' . $term->name . '" id="' . $term->name . '" class="button-primary" value="Get Ticket"/>';
-        echo '</div></div></a>';
+        $activedevice = get_active_device_number($term->name);
+        if ($activedevice) {
+          echo '<a href="#" data-name="' . $term->name . '">';
+          echo '<div class="bubbles">';
+          echo '<div class="post-content">';
+          echo '<h2>' . $term->name . '</h2>';
+          echo '<p> Active Devices: ' . get_active_device_number($term->name) . '</p>'; 
+          echo '<input type="submit" name="' . $term->name . '" id="' . $term->name . '" class="button-primary" value="Get Ticket"/>';
+          echo '</div></div></a>';
+        } else {
+          echo '<div class="bubbles">';
+          echo '<div class="post-content">';
+          echo '<h2>' . $term->name . '</h2>';
+          echo '<p> No device online! </p>'; 
+          echo '</div></div></a>';
+        }
+        
+        
+        
       }
       echo '</div>';
 
@@ -289,6 +303,12 @@ function get_ticket_shortcode($atts){
     </div>
     <?php
     }
+/*
+  $mykey_values = get_post_custom_values( 'device_status' );
+  foreach ( $mykey_values as $key => $value ) {
+    echo "$key  => $value ( 'device_status' )<br />"; 
+  }
+  */
 /*
     $terms = get_terms( 'device_type' );
     if ( ! empty( $terms ) && ! is_wp_error( $terms ) ){

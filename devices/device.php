@@ -192,5 +192,29 @@ function save_device_field($device_field) {
     }
 }
 
+function get_active_device_number($tag) {
+  $devicenumber = 0;
+  $args=array(
+    'post_type' => 'device',
+    'post_status' => 'publish',
+    'posts_per_page' => -1,
+    'caller_get_posts'=> 1
+    );
+
+
+  $tag_query = null;
+  $tag_query = new WP_Query($args);
+  if( $tag_query->have_posts() ) {
+    while ($tag_query->have_posts()) : $tag_query->the_post();
+      if ((get_post_custom_values( 'device_status', get_the_ID())[0] == online) && has_term( $tag, 'device_type' )) {
+        $devicenumber ++;
+      }
+    endwhile;
+  }
+  
+  return $devicenumber;
+}
+
+
 
 ?>
