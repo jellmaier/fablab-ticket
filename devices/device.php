@@ -206,7 +206,7 @@ function get_active_device_number($tag) {
   $tag_query = new WP_Query($args);
   if( $tag_query->have_posts() ) {
     while ($tag_query->have_posts()) : $tag_query->the_post();
-      if ((get_post_custom_values( 'device_status', get_the_ID())[0] == online) && has_term( $tag, 'device_type' )) {
+      if (((get_post_custom_values( 'device_status', get_the_ID())[0]) == online) && has_term( $tag, 'device_type' )) {
         $devicenumber ++;
       }
     endwhile;
