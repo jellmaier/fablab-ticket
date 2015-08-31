@@ -1,0 +1,33 @@
+/* overlay styles, all needed */
+.fl-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 10;
+}
+
+/* just some content with arbitrary styles for explanation purposes */
+.device-ticket {
+    width: 60%;
+    /* height: 80%; */
+    position: fixed;
+    top: 100px; 
+    /* left: 20%; */
+    margin: auto;
+    padding: 30px 30px 30px;
+    background-color: #f1f1f1;
+    border: 5px solid #dedede;
+    border-radius: 8px;
+    z-index: 11; /* 1px higher than the overlay layer */
+}
+
+.fl-ticket-buttons {
+    background-color: #f1f1f1;
+    border: 5px solid #dedede;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    padding: 15px 15px 5px;
+}

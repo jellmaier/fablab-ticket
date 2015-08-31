@@ -92,6 +92,27 @@ function insert_ticket() {
     die($ID != 0);
 }
 add_action( 'wp_ajax_add_ticket', 'insert_ticket' );
-add_action( 'wp_ajax-nopriv_add_ticket', 'insert_ticket' );
+//add_action( 'wp_ajax-nopriv_add_ticket', 'insert_ticket' );
+
+function get_device_content() {
+  $device_id = $_POST['device_id'];
+  //$device_id = '43';
+  $device = get_post( $device_id, ARRAY_A );
+  //echo var_dump($device);
+  //$contetnt = $post['post_contetnt'];
+  $content = apply_filters ("the_content", $device['post_content']);
+
+  die($content);
+}
+add_action( 'wp_ajax_get_device_content', 'get_device_content' );
+
+function get_device_title() {
+  $device_id = $_POST['device_id'];
+  $device = get_post( $device_id, ARRAY_A );
+  $title = $device['post_title'];
+
+  die($title);
+}
+add_action( 'wp_ajax_get_device_title', 'get_device_title' );
 
 ?>

@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: FabLab Ticket
-Version: 0.1.7
+Version: 0.1.8
 Plugin URI: https://github.com/jellmaier/fablab-ticket
 Description: Ticketing and Reservation System for FabLabs
 Author: Jakob Ellmaier
@@ -86,7 +86,9 @@ add_action('admin_enqueue_scripts', 'fl_load_admin_script');
 
 
 function fl_load_script() {
-	wp_register_script('fl_ticket_script', plugin_dir_url(__FILE__) . 'js/fl-ticket-ajax.js', array('jquery') );
+	wp_register_script('fl_ticket_script', plugin_dir_url(__FILE__) . 'js/fl-ticket.js', array('jquery') );
+	wp_register_style('fl_ticket_style', plugin_dir_url(__FILE__) . 'css/fl-ticket.css');
+
 }
 add_action('init', 'fl_load_script');
 
@@ -97,6 +99,7 @@ function print_fl_ticket_script() {
 		return;
 
 	wp_print_scripts('fl_ticket_script');
+	wp_print_styles('fl_ticket_style');
 }
 add_action('wp_footer', 'print_fl_ticket_script');
 

@@ -259,6 +259,64 @@ function get_reservation_details() {
 // Get Ticket Shortcut
 
 function get_ticket_shortcode($atts){
+  global $post;
+  global $fl_ticket_script;
+  $fl_ticket_script = true;
+
+
+  $query_arg = array(
+    'post_type' => 'device',
+    'meta_query' => array(   
+      'relation'=> 'OR',               
+      array(
+        'key' => 'device_status',                  
+        'value' => 'online',               
+        'compare' => '='                 
+      )
+    ) 
+  );
+  $device_query = new WP_Query($query_arg);
+  if ( $device_query->have_posts() ) {
+    echo '<div id="fl-getticket" action="" metod="POST">';
+    while ( $device_query->have_posts() ) : $device_query->the_post() ;
+      ?>
+      <a href="#" data-name="<?php the_ID(); ?>">
+          <div class="fl-ticket-buttons">
+          <h2><?php the_title(); ?></h2>
+          <?php /* <p id="<?php the_ID(); ?>-content" hidden><?php the_content(); ?></p> */ ?>
+          <input type="hidden" name="device-id" value="<?php the_ID(); ?>">
+          <input type="submit" name="<?php the_title(); ?>" id="<?php the_title(); ?>" class="button-primary" value="Get Ticket"/>
+          </div></a>
+      <?php
+    endwhile;
+    echo '</div>';
+  } else {
+    echo '<p> No device online! </p>'; 
+  }
+
+  wp_reset_query();
+  ?>
+
+  <div id="overlay" class="fl-overlay" hidden></div>
+      <div id="device-ticket-box"class="device-ticket" hidden action="" metod="POST">
+        <h2>Ticket bestätigen!</h2>
+        <p id="device-name"></p>
+        <input type="hidden" id="device-id" value="">
+        <div id="device-content"></div>
+        <p></p>
+        <p>Dauer: <select id="time-select"></select></p>
+        <input type="submit" id="submit-ticket" class="button-primary" value="Ticket ziehen"/>
+        <input type="submit" id="cancel-ticket" class="button-primary" value="Abbrechen"/>
+      </div>
+
+    <div id="message" hidden class="info"></div>
+  <?php
+
+}
+
+// Get Ticket Shortcut
+
+function get_ticket_category_shortcode($atts){
     global $post;
     global $fl_ticket_script;
     $fl_ticket_script = true;
@@ -271,38 +329,48 @@ function get_ticket_shortcode($atts){
         $activedevice = get_active_device_number($term->name);
         if ($activedevice) {
           echo '<a href="#" data-name="' . $term->name . '">';
-          echo '<div class="bubbles">';
-          echo '<div class="post-content">';
+          echo '<div class="fl-ticket-buttons">';
           echo '<h2>' . $term->name . '</h2>';
-          echo '<p> Active Devices: ' . get_active_device_number($term->name) . '</p>'; 
+          echo '<p> Active Devices: ' . get_active_device_number($term->name) . '! </p>'; 
           echo '<input type="submit" name="' . $term->name . '" id="' . $term->name . '" class="button-primary" value="Get Ticket"/>';
-          echo '</div></div></a>';
+          echo '</div></a>';
         } else {
-          echo '<div class="bubbles">';
-          echo '<div class="post-content">';
+          echo '<div class="fl-ticket-buttons">';
           echo '<h2>' . $term->name . '</h2>';
           echo '<p> No device online! </p>'; 
-          echo '</div></div></a>';
-        }
-        
-        
+          echo '</div></a>';
+        }      
         
       }
       echo '</div>';
 
       ?>
-      <div id="message" hidden class="info">
-    </div>
+      <div id="overlay" class="fl-overlay" hidden></div>
+      <div id="device-ticket-box"class="device-ticket" hidden>
+      <h2 id="device-name">Ticket bestätigen!</h2>
+      <p id="device-content"> blaa </p>
+      <select id="time-select">
+        <option value="15">15 Min</option>
+      </select> </br>
+      <input type="submit" id="fl-submit-getticket" class="button-primary" value="Ticket ziehen"/>
+      </div>
+
+      <div id="message" hidden class="info"></div>
       <?php
          
     }
     else {
       ?>
       <div id="message" class="info">
-       <p> Kein gerät verfügbar! </p>
-    </div>
+        <p> Kein gerät verfügbar! </p>
+      </div>
     <?php
     }
+
+
+
+
+
 /*
   $mykey_values = get_post_custom_values( 'device_status' );
   foreach ( $mykey_values as $key => $value ) {
@@ -347,12 +415,7 @@ function get_ticket_shortcode($atts){
         <?php
      }
        
-*/
-
-
-
-
-    
+*/ 
 
 }
 
