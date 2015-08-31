@@ -192,6 +192,8 @@ function save_device_field($device_field) {
     }
 }
 
+/*
+
 function get_active_device_number($tag) {
   $devicenumber = 0;
   $args=array(
@@ -214,6 +216,8 @@ function get_active_device_number($tag) {
   
   return $devicenumber;
 }
+
+*/
 
 
 
