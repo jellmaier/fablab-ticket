@@ -10,6 +10,13 @@ if (!class_exists('Ticket'))
     {
       register_activation_hook( __FILE__, 'my_ticket_rewrite_flush' );
       add_action( 'init', 'codex_ticket_init' );
+
+      // Displaying Ticket Lists
+      add_filter("manage_ticket_posts_columns", "ticket_edit_columns");
+      // Editing Tickets
+      add_action("admin_init", "ticket_admin_init");
+      // Saving Ticket Details
+      add_action('save_post', 'save_ticket_details');
       add_action('add_new{ticket}', 'insert_ticket');
     }
   }
@@ -72,21 +79,92 @@ function codex_ticket_init() {
 
 }
 
+// Displaying Ticket Lists
+ 
+function ticket_edit_columns($columns){
+    $columns = array(
+        "title" => "Ticket",
+        "device_id" => "Gerät ID",
+        "user_id" => "User ID"
+  );
+  return $columns;
+}
+
+// Editing Tickets
+ 
+function ticket_admin_init(){
+  add_meta_box("ticket_meta", "Ticket Details", "ticket_details_meta", "ticket", "normal", "default");
+}
+ 
+function ticket_details_meta() {
+    echo '<p><label>Gerät:   </label> <input type="text" id="device" disabled value="' . get_ticket_field("device_id") . '" ></p>';
+    echo '<p><label>User:   </label> <input type="text" id="user" disabled value="' . get_ticket_field("user_id") . '" ></p>';
+
+}
+
+function get_ticket_field($ticket_field) {
+    global $post;
+ 
+    $custom = get_post_custom($post->ID);
+ 
+    if (isset($custom[$ticket_field])) {
+        return $custom[$ticket_field][0];
+    } else if(strcmp($ticket_field, 'user_id') == 0) {
+      return $post->post_author;
+    }
+}
+
+// Saving Ticket Details
+ 
+function save_ticket_details(){
+   global $post;
+ 
+   if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+      return;
+ 
+   if ( get_post_type($post) != 'ticket')
+      return;
+ 
+   //save_ticket_field("device_id");
+}
+
+function save_ticket_field($ticket_field) {
+    global $post;
+ 
+    if(isset($_POST[$ticket_field])) {
+        update_post_meta($post->ID, $ticket_field, $_POST[$ticket_field]);
+    }
+}
+
+
+
+function get_ticket_query_from_user($user_id) {
+  $query_arg = array(
+    'post_type' => 'ticket',
+    'author' => $user_id
+  );
+  return new WP_Query($query_arg);
+}
 
 
 function insert_ticket() {
-  $tag = $_POST['tag'];
+  $device_id = $_POST['device_id'];
 
   $post_information = array(
         'post_title' => "Ticket, vom " . date_i18n('D, d.m.y \u\m H:i'),
         'post_type' => 'ticket',
+        'device_id' => $device_id,
+        'author' => get_current_user_id(),
+        'post_status' => 'publish',
     );
  
     $ID = wp_insert_post( $post_information );
+    /*
     //$tag = 'Lasercutter';
     if ($ID != 0) {
-      $return = wp_set_object_terms( $ID, $tag, 'device_type', false);
+      $return = wp_set_object_terms( $ID, $tag, 'ticket_type', false);
     }
+    */
       
 
     die($ID != 0);
@@ -94,25 +172,5 @@ function insert_ticket() {
 add_action( 'wp_ajax_add_ticket', 'insert_ticket' );
 //add_action( 'wp_ajax-nopriv_add_ticket', 'insert_ticket' );
 
-function get_device_content() {
-  $device_id = $_POST['device_id'];
-  //$device_id = '43';
-  $device = get_post( $device_id, ARRAY_A );
-  //echo var_dump($device);
-  //$contetnt = $post['post_contetnt'];
-  $content = apply_filters ("the_content", $device['post_content']);
-
-  die($content);
-}
-add_action( 'wp_ajax_get_device_content', 'get_device_content' );
-
-function get_device_title() {
-  $device_id = $_POST['device_id'];
-  $device = get_post( $device_id, ARRAY_A );
-  $title = $device['post_title'];
-
-  die($title);
-}
-add_action( 'wp_ajax_get_device_title', 'get_device_title' );
 
 ?>

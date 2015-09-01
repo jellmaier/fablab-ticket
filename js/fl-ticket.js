@@ -48,32 +48,32 @@ jQuery(document).ready(function($){
 
     return false;
   })
+
   $('#submit-ticket').on('click', function(){
     var device_id = jQuery('#device-id').val();
     var device_name = jQuery('#device-name').text();
     //alert(device_id);
-    $("#device-ticket-box").hide();
-    $("#overlay").hide();
-    $('#message').text("Ticket für " + device_name + " erfolgreich erstellt!");
-    $('#message').show();
-    $("#time-select").empty();
-    $('#device-id').val('');
-    $('#device-name').empty();
-    $('#device-content').empty();
-    /*
+    
 
     data = {
-      action: 'get_device_content',
-      tag: ,
-
+      action: 'add_ticket',
+      device_id:  device_id,
     };
     $.post(ajaxurl, data, function(response) {
       
-        $('#mesage').text("Ticket erfolgreich erstellt!");
+      $('#fl-getticket').hide();
+      $('#device-ticket-box').hide();
+      $('#overlay').hide();
+      $('#message').text("Ticket für das " + device_name + ", erfolgreich erstellt!");
+      $('#message').show();
+      $('#time-select').empty();
+      $('#device-id').val('');
+      $('#device-name').empty();
+      $('#device-content').empty();
     })
-*/
 
   })
+
   $('#cancel-ticket').on('click', function(){
     $("#device-ticket-box").hide();
     $("#overlay").hide();
@@ -82,7 +82,6 @@ jQuery(document).ready(function($){
     $('#device-name').empty();
     $('#device-content').empty();
   })
-
 
 
 

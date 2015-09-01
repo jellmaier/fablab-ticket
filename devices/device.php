@@ -120,7 +120,6 @@ function codex_device_init() {
  
 function device_edit_columns($columns){
     $columns = array(
-        "cb" => "<input type=\"checkbox\" />",
         "title" => "Device",
         "device_status" => "Device Status",
   );
@@ -176,11 +175,11 @@ function save_device_details(){
  
    if ( get_post_type($post) != 'device')
       return;
- 
+ /*
    if(isset($_POST["device_status"])) {
       update_post_meta($post->ID, "device_status", strtotime($_POST["device_status"]));
    }
- 
+ */
    save_device_field("device_status");
 }
 
@@ -191,6 +190,28 @@ function save_device_field($device_field) {
         update_post_meta($post->ID, $device_field, $_POST[$device_field]);
     }
 }
+
+function get_device_content() {
+  $device_id = $_POST['device_id'];
+  //$ticket_id = '43';
+  $device = get_post( $device_id, ARRAY_A );
+  //echo var_dump($ticket);
+  //$contetnt = $post['post_contetnt'];
+  $content = apply_filters ("the_content", $device['post_content']);
+
+  die($content);
+}
+add_action( 'wp_ajax_get_device_content', 'get_device_content' );
+
+function get_device_title() {
+  $device_id = $_POST['device_id'];
+  $device = get_post( $device_id, ARRAY_A );
+  $title = $device['post_title'];
+
+  die($title);
+}
+add_action( 'wp_ajax_get_device_title', 'get_device_title' );
+
 
 /*
 
@@ -216,6 +237,7 @@ function get_active_device_number($tag) {
   
   return $devicenumber;
 }
+
 
 */
 
