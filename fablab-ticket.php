@@ -13,7 +13,6 @@ Licence: GP2
 
 //namespace fablab_ticket;
 
-
 include 'devices/device.php';
 include 'reservation/reservation.php';
 include 'ticket/ticket.php';

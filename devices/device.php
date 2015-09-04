@@ -1,5 +1,8 @@
 <?php
 
+//namespace fablab_ticket;
+
+
 if (!class_exists('Device'))
 {
   class Device

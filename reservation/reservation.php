@@ -1,5 +1,7 @@
 <?php
 
+//namespace fablab_ticket;
+
 // Tutorial from http://tatiyants.com/how-to-use-wordpress-custom-post-types-to-add-events-to-your-site/
 
 if (!class_exists('Reservation'))

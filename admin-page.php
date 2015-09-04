@@ -1,5 +1,7 @@
 <?php
 
+//namespace fablab_ticket;
+
 
 if (!class_exists('AdminPage'))
 {
