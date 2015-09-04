@@ -251,4 +251,46 @@ function get_online_devices_select_options() {
 add_action( 'wp_ajax_get_online_devices_select_options', 'get_online_devices_select_options' );
 
 
+function get_waiting_time_and_persons($device_id, $ticket = 0) {
+  global $post;
+  //--------------------------------------------------------
+  // Display available Devices
+  //--------------------------------------------------------
+  $waiting = array();
+  $waiting['time'] = 0;
+  $waiting['persons'] = 0;
+
+
+  $query_arg = array(
+    'post_type' => 'ticket',
+    'orderby' => 'date',
+    'order'   => 'ASC',
+    'meta_query' => array(   
+      'relation'=> 'OR',               
+      array(
+        'key' => 'device_id',                  
+        'value' => $device_id,               
+        'compare' => '='                 
+      )
+    ) 
+  );
+  $ticket_query = new WP_Query($query_arg);
+  if ( $ticket_query->have_posts() ) {
+    while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
+      if ($post->ID == $ticket) {
+        return $waiting;
+      } else {
+        $waiting['persons'] ++;
+        $waiting['time'] += get_post_meta($post->ID, 'duration', true );
+      }
+    endwhile;
+  } 
+
+  wp_reset_query();
+
+  return $waiting;
+
+}
+
+
 ?>

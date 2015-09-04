@@ -41,10 +41,12 @@ function get_ticket_shortcode($atts){
       //--------------------------------------------------------
       // Display User Tickets
       //--------------------------------------------------------
+      $waiting = get_waiting_time_and_persons(get_post_meta($post->ID, 'device_id', true ), $post->ID)
       ?>
       <a href="#" data-name="<?= $post->ID ?>">
       <div class="fl-ticket-button">
         <h2> <?= $post->post_title ?></h2>
+        <p>Vor dir wartende Personen: <b><?= $waiting['persons'] ?>,</b> vorraussichtlich Wartezeit: <b><?= get_post_time_string($waiting['time'], true) ?></b></p>
         <p>Gerät: <b><?=  get_device_title_by_id(get_post_meta($post->ID, 'device_id', true )) ?>,</b> 
         Dauer: <b><?=  get_post_time_string(get_post_meta($post->ID, 'duration', true )) ?></b></p>
         <input type="hidden" id="ticket-device-id" value="<?=  get_post_meta($post->ID, 'device_id', true ) ?>">

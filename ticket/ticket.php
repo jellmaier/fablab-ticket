@@ -205,15 +205,20 @@ function delete_ticket() {
 }
 add_action( 'wp_ajax_delete_ticket', 'delete_ticket' );
 
-function get_post_time_string($time) {
+function get_post_time_string($time, $shownull = false) {
   $ret = "";
   $hours = floor($time / 60);
   $minutes = $time % 60;
   $hours > 0 ? ($ret .= $hours . " Stunde") : ('');
   $hours > 1 ? ($ret .= "n") : ('') ;
   $hours > 0 && $minutes > 0 ? ($ret .= ", ") : ('') ;
-  $minutes > 0 ? ($ret .= $minutes . " Minute") : ('');
-  $minutes > 1 ? ($ret .= "n") : ('') ;
+  if($shownull && $hours == 0) {
+    $ret .= $minutes . " Minute";
+    $minutes != 1 ? ($ret .= "n") : ('');
+  } else {
+    $minutes > 0 ? ($ret .= $minutes . " Minute") : ('');
+    $minutes > 1 ? ($ret .= "n") : ('');
+  }
   return $ret;
 }
 
