@@ -17,7 +17,8 @@ if (!class_exists('Ticket'))
       add_action("admin_init", "ticket_admin_init");
       // Saving Ticket Details
       add_action('save_post', 'save_ticket_details');
-      add_action('add_new{ticket}', 'insert_ticket');
+
+      //add_action('add_new{ticket}', 'insert_ticket');
     }
   }
 }
@@ -82,10 +83,11 @@ function codex_ticket_init() {
 // Displaying Ticket Lists
  
 function ticket_edit_columns($columns){
-    $columns = array(
+  $columns = array(
         "title" => "Ticket",
         "device_id" => "Gerät ID",
-        "user_id" => "User ID"
+        "duration" => "Ticket dauer",
+        "user_id" => "User ID",
   );
   return $columns;
 }
@@ -97,8 +99,9 @@ function ticket_admin_init(){
 }
  
 function ticket_details_meta() {
-    echo '<p><label>Gerät:   </label> <input type="text" id="device" disabled value="' . get_ticket_field("device_id") . '" ></p>';
-    echo '<p><label>User:   </label> <input type="text" id="user" disabled value="' . get_ticket_field("user_id") . '" ></p>';
+    echo '<p><label>Gerät:   </label> <input type="text"  disabled value="' . get_device_title_by_id(get_ticket_field("device_id")) . '" ></p>';
+    echo '<p><label>User:   </label> <input type="text" disabled value="' . get_ticket_field("user_id") . '" ></p>';
+    echo '<p><label>Ticket dauer (min):   </label> <input type="text" disabled value="' . get_ticket_field("duration") . '" ></p>';
 
 }
 
@@ -109,8 +112,10 @@ function get_ticket_field($ticket_field) {
  
     if (isset($custom[$ticket_field])) {
         return $custom[$ticket_field][0];
-    } else if(strcmp($ticket_field, 'user_id') == 0) {
-      return $post->post_author;
+    } else if ( strcmp($ticket_field, 'user_id') == 0 ) {
+      return get_user_by('id', $post->post_author)->user_login;
+    } else {
+      return 'not set';
     }
 }
 
@@ -126,6 +131,7 @@ function save_ticket_details(){
       return;
  
    //save_ticket_field("device_id");
+   //save_ticket_field("duration");
 }
 
 function save_ticket_field($ticket_field) {
@@ -146,31 +152,72 @@ function get_ticket_query_from_user($user_id) {
   return new WP_Query($query_arg);
 }
 
+function get_ticket_device($ID) {
+    $custom = get_post_custom($ID);
+    if (isset($custom['device_id'])) {
+        return $custom['device_id'][0];
+    } else {
+      return 'not set';
+    }
+}
+
 
 function insert_ticket() {
   $device_id = $_POST['device_id'];
+  $duration = $_POST['duration'];
 
   $post_information = array(
-        'post_title' => "Ticket, vom " . date_i18n('D, d.m.y \u\m H:i'),
+        'post_title' => "Ticket, von: " . wp_get_current_user()->user_login,
+        //'post_title' => "Ticket, für Gerät: " . get_device_title_by_id($device_id) . ", vom " . date_i18n('D, d.m.y \u\m H:i'),
         'post_type' => 'ticket',
-        'device_id' => $device_id,
         'author' => get_current_user_id(),
         'post_status' => 'publish',
     );
  
     $ID = wp_insert_post( $post_information );
-    /*
-    //$tag = 'Lasercutter';
-    if ($ID != 0) {
-      $return = wp_set_object_terms( $ID, $tag, 'ticket_type', false);
-    }
-    */
-      
 
+    if ($ID != 0) {
+      add_post_meta($ID, 'device_id', $device_id);
+      add_post_meta($ID, 'duration' , $duration);
+    }
+    
     die($ID != 0);
 }
 add_action( 'wp_ajax_add_ticket', 'insert_ticket' );
-//add_action( 'wp_ajax-nopriv_add_ticket', 'insert_ticket' );
+
+
+function update_ticket() {
+  $device_id = $_POST['device_id'];
+  $duration = $_POST['duration'];
+  $ticket_id = $_POST['ticket_id'];
+
+  update_post_meta($ticket_id, 'device_id', $device_id);
+  update_post_meta($ticket_id, 'duration' , $duration);
+      
+  die();
+}
+add_action( 'wp_ajax_update_ticket', 'update_ticket' );
+
+function delete_ticket() {
+  $ticket_id = $_POST['ticket_id'];
+
+  die(wp_delete_post($ticket_id));
+}
+add_action( 'wp_ajax_delete_ticket', 'delete_ticket' );
+
+function get_post_time_string($time) {
+  $ret = "";
+  $hours = floor($time / 60);
+  $minutes = $time % 60;
+  $hours > 0 ? ($ret .= $hours . " Stunde") : ('');
+  $hours > 1 ? ($ret .= "n") : ('') ;
+  $hours > 0 && $minutes > 0 ? ($ret .= ", ") : ('') ;
+  $minutes > 0 ? ($ret .= $minutes . " Minute") : ('');
+  $minutes > 1 ? ($ret .= "n") : ('') ;
+  return $ret;
+}
+
+
 
 
 ?>

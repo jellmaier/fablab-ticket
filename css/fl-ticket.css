@@ -9,25 +9,48 @@
     z-index: 10;
 }
 
-/* just some content with arbitrary styles for explanation purposes */
 .device-ticket {
+    max-width: 800px;
     width: 60%;
-    /* height: 80%; */
     position: fixed;
     top: 100px; 
     /* left: 20%; */
     margin: auto;
     padding: 30px 30px 30px;
-    background-color: #f1f1f1;
-    border: 5px solid #dedede;
+    background-color: #fdfdfd;
+    border: 7px solid #ccc;
     border-radius: 8px;
     z-index: 11; /* 1px higher than the overlay layer */
 }
 
-.fl-ticket-buttons {
-    background-color: #f1f1f1;
-    border: 5px solid #dedede;
+.fl-device-button {
+    background-color: #f6f6f6;
+    border: 6px solid #ddd;
     border-radius: 8px;
     margin-bottom: 8px;
-    padding: 15px 15px 5px;
+    padding: 15px;
+}
+.fl-device-button:hover{
+   background-color:#ddd;
+}
+
+.fl-ticket-button {
+    background: #fff;
+    border: 5px solid #eee;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 8px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+.fl-ticket-button:hover{
+   background-color:#eee;
+}
+
+.message-box {
+    background-color: #FDFDEF;
+    border: 1px solid #EBE9C5;
+    border-radius: 4px ;
+    padding: 5px 10px;
 }

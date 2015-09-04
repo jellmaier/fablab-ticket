@@ -212,35 +212,46 @@ function get_device_title() {
 }
 add_action( 'wp_ajax_get_device_title', 'get_device_title' );
 
-
-/*
-
-function get_active_device_number($tag) {
-  $devicenumber = 0;
-  $args=array(
-    'post_type' => 'device',
-    'post_status' => 'publish',
-    'posts_per_page' => -1,
-    'caller_get_posts'=> 1
-    );
-
-
-  $tag_query = null;
-  $tag_query = new WP_Query($args);
-  if( $tag_query->have_posts() ) {
-    while ($tag_query->have_posts()) : $tag_query->the_post();
-      if (((get_post_custom_values( 'device_status', get_the_ID())[0]) == online) && has_term( $tag, 'device_type' )) {
-        $devicenumber ++;
-      }
-    endwhile;
-  }
-  
-  return $devicenumber;
+function get_device_title_by_id($device_id) {
+  $device = get_post( $device_id, ARRAY_A );
+  return $device['post_title'];
 }
 
+function get_online_devices_select_options() {
+  global $post;
+  $query_arg = array(
+    'post_type' => 'device',
+    'meta_query' => array(   
+      'relation'=> 'OR',               
+      array(
+        'key' => 'device_status',                  
+        'value' => 'online',               
+        'compare' => '='                 
+      )
+    ) 
+  );
+  $device_query = new WP_Query($query_arg);
+  $device_list = array();
+  if ( $device_query->have_posts() ) {
+    while ( $device_query->have_posts() ) : $device_query->the_post() ;
+      $device = array();
+      $device['id'] = $post->ID;
+      $device['device'] = $post->post_title;
+      array_push($device_list, $device);
+      //$device_list .= '<option value="' . $post->ID . '">' . $post->post_title . '</option>';
+    endwhile;
+  } 
+  wp_reset_query();
+  //$result = array();
+  //$result['id'] = '13';
+ // $result['title'] = 'huh';
+  
+//  $result = array( 13 : "Orange", 12 : "Banane");
 
-*/
-
+  echo json_encode($device_list);
+  die();
+}
+add_action( 'wp_ajax_get_online_devices_select_options', 'get_online_devices_select_options' );
 
 
 ?>
