@@ -7,7 +7,7 @@ if (!class_exists('TicketShortcode'))
     public function __construct()
     {
       // Displaying Ticket options
-      add_shortcode( 'tickets', 'get_ticket_shortcode' );
+      add_shortcode( 'user-ticket', 'get_ticket_shortcode' );
     }
   }
 }
@@ -22,10 +22,23 @@ function get_ticket_shortcode($atts){
   //count_user_posts(uid, posttype);
 
   if($user_id == 0) {
-    echo '<div id="message" class="message-box">Du bist nicht eingeloggt!</div>';
+      //--------------------------------------------------------
+      // Display not Logged in
+      //--------------------------------------------------------
+    ?>
+    <div id="message" class="message-box">
+      <p>Du bist nicht eingeloggt!</br>
+      Du kannst dich <a href="<?= bloginfo('url'); ?>/wp-login.php?redirect_to=<?= get_permalink($post->ID) ?>">hier</a>
+        einloggen, oder <a href="<?= bloginfo('url'); ?>/register/">hier</a> registrieren!</p>
+    </div>
+    <?php
   } else if ($ticket_query->have_posts() ) {
+    echo '<p>Hier wird dir dein gezogenes Ticket angezeigt:</p>';
     echo '<div id="ticket-listing" action="" metod="POST">';
     while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
+      //--------------------------------------------------------
+      // Display User Tickets
+      //--------------------------------------------------------
       ?>
       <a href="#" data-name="<?= $post->ID ?>">
       <div class="fl-ticket-button">
@@ -43,8 +56,8 @@ function get_ticket_shortcode($atts){
     echo '</div>';
 
     wp_reset_query();
+    // Display overlay change Ticket
     ?>
-
     <div id="overlay" class="fl-overlay" hidden></div>
     <div id="device-ticket-box"class="device-ticket" hidden action="" metod="POST">
       <h2>Ticket bearbeiten</h2>
@@ -63,6 +76,9 @@ function get_ticket_shortcode($atts){
     <?php
 
   } else {
+    //--------------------------------------------------------
+    // Display available Devices
+    //--------------------------------------------------------
     $query_arg = array(
       'post_type' => 'device',
       'meta_query' => array(   
@@ -76,6 +92,7 @@ function get_ticket_shortcode($atts){
     );
     $device_query = new WP_Query($query_arg);
     if ( $device_query->have_posts() ) {
+      echo '<p>Hier werden dir die verfügbaren Geräte angezeigt:</p>';
       echo '<div id="fl-getticket" action="" metod="POST">';
       while ( $device_query->have_posts() ) : $device_query->the_post() ;
         ?>
@@ -93,8 +110,9 @@ function get_ticket_shortcode($atts){
     }
 
     wp_reset_query();
-    ?>
 
+    // Display overlay get Ticket
+    ?>
     <div id="overlay" class="fl-overlay" hidden></div>
         <div id="device-ticket-box"class="device-ticket" hidden action="" metod="POST">
           <h2>Ticket bestätigen</h2>

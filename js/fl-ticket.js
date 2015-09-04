@@ -78,19 +78,7 @@ jQuery(document).ready(function($){
   //Ticket listings section
   //--------------------------------------------
   
-    $('#ticket-listing').on('click', function(event) {
-
-    var time_option_values = {
-      15 : '1/4 Stunde',
-      30 : '1/2 Stunde',
-      45 : '3/4 Stunde',
-      60 : '1 Stunde',
-      75 : '1 1/4 Stunden',
-      90 : '1 1/2 Stunden',
-      105 : '1 3/4 Stunden',
-      120 : '2 Stunden'
-    };
-    
+  $('#ticket-listing').on('click', function(event) {
 
     // Set Device Name Dropdown
     data = {
@@ -138,13 +126,12 @@ jQuery(document).ready(function($){
     return false;
   })
 
+  // Save Button clicked
   $('#submit-change-ticket').on('click', function(){
     var device_id = $('#device-select :selected').val();
     var device_name = $('#device-select :selected').text();
     var duration = $('#time-select :selected').val();
     var ticket_id = $('#ticket-id').val();
-
-
     data = {
       action: 'update_ticket',
       device_id:  device_id,
@@ -164,9 +151,9 @@ jQuery(document).ready(function($){
     })
   })
 
+  // Delete Button clicked
   $('#delete-change-ticket').on('click', function(){
     var ticket_id = $('#ticket-id').val();
-
     data = {
       action: 'delete_ticket',
       ticket_id:  ticket_id
@@ -181,6 +168,7 @@ jQuery(document).ready(function($){
     })
   })
 
+  // Cancle Button clicked
   $('#cancel-change-ticket').on('click', function(){
     $("#device-ticket-box").hide();
     $("#overlay").fadeOut(600);
@@ -189,7 +177,6 @@ jQuery(document).ready(function($){
     $('#device-select').empty();
     $('#device-content').empty();
   })
-
 
 });
 

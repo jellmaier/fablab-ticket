@@ -238,15 +238,9 @@ function get_online_devices_select_options() {
       $device['id'] = $post->ID;
       $device['device'] = $post->post_title;
       array_push($device_list, $device);
-      //$device_list .= '<option value="' . $post->ID . '">' . $post->post_title . '</option>';
     endwhile;
   } 
   wp_reset_query();
-  //$result = array();
-  //$result['id'] = '13';
- // $result['title'] = 'huh';
-  
-//  $result = array( 13 : "Orange", 12 : "Banane");
 
   echo json_encode($device_list);
   die();

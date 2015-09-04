@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: FabLab Ticket
-Version: 0.1.9
+Version: 0.2.1
 Plugin URI: https://github.com/jellmaier/fablab-ticket
 Description: Ticketing and Reservation System for FabLabs
 Author: Jakob Ellmaier
@@ -26,8 +26,6 @@ new Reservation();
 new Ticket();
 new TicketShortcode();
 
-
-
 function fl_load_admin_script($hook) {
 	global $fl_settings;
 
@@ -37,8 +35,6 @@ function fl_load_admin_script($hook) {
 
 }
 add_action('admin_enqueue_scripts', 'fl_load_admin_script');
-
-
 
 
 function fl_load_script() {
