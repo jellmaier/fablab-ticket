@@ -1,4 +1,52 @@
-/* overlay styles, all needed */
+.fl-device-element {
+    background-color: #f6f6f6;
+    border: 6px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    padding: 15px;
+}
+.fl-device-element:hover{
+   background-color:#ddd;
+}
+
+.fl-ticket-element {
+    background: #fff;
+    border-left: 5px solid #dd7127;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    padding: 24px 28px;
+    margin: 0px 6px 14px 8px;
+}
+
+.message-box {
+    background-color: #FDFDEF;
+    border: 1px solid #EBE9C5;
+    border-radius: 4px ;
+    padding: 5px 10px;
+}
+
+.fl-ticket-element input[type=submit] {
+    border: 1px solid #58a3a2;
+    background: none;
+    color: #58a3a2;
+    text-transform: none;
+    padding: 11px 18px;
+    font-weight: 600;
+    border-radius: 5px;
+    transition: all 0.2s ease;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    -ms-transition: all 0.2s ease;
+    display: inline-block;
+}
+
+.fl-ticket-element input[type=submit]:hover {
+    background: #58a3a2;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* overlay styles */
 .fl-overlay {
     position: fixed;
     top: 0;
@@ -10,12 +58,11 @@
 }
 
 .device-ticket {
-    max-width: 800px;
-    width: 60%;
+    width: 70%;
     position: fixed;
     top: 100px; 
-    /* left: 20%; */
-    margin: auto;
+    margin-left: 8px;
+    margin-right: 8px;
     padding: 30px 30px 30px;
     background-color: #fdfdfd;
     border: 7px solid #ccc;
@@ -23,34 +70,52 @@
     z-index: 11; /* 1px higher than the overlay layer */
 }
 
-.fl-device-button {
-    background-color: #f6f6f6;
-    border: 6px solid #ddd;
-    border-radius: 8px;
-    margin-bottom: 8px;
-    padding: 15px;
-}
-.fl-device-button:hover{
-   background-color:#ddd;
+@media all and (min-width: 800px) {
+    .device-ticket {
+        width: 650px;
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
 
-.fl-ticket-button {
-    background: #fff;
-    border: 5px solid #eee;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 8px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
+.device-ticket input[type=submit] {
+    border: 1px solid #aaa;
+    background: none;
+    color: #aaa;
+    text-transform: none;
+    padding: 6px 12px;
+    font-weight: 600;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    -ms-transition: all 0.2s ease;
+    display: inline-block;
+    margin-right: 2px;
+    margin-bottom: 4px;
 }
 
-.fl-ticket-button:hover{
-   background-color:#eee;
+.device-ticket input[type=submit]:hover {
+    border: 1px solid #ccc;
+    background: #ccc;
+    color: #fff;
+    cursor: pointer;
 }
 
-.message-box {
-    background-color: #FDFDEF;
-    border: 1px solid #EBE9C5;
-    border-radius: 4px ;
-    padding: 5px 10px;
+.device-ticket select {
+    font-size: 14px;
+    height: 29px;
+    margin: 0;
+    -webkit-border-radius:4px;
+    -moz-border-radius:4px;
+    border-radius:4px;
+    border: 1px solid #eee;
+    border-right: 4px solid #ccc;
+    background: #f7f7f7;
+    color:#888;
+    display: inline-block;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    appearance:none;
 }

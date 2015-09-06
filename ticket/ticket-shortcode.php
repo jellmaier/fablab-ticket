@@ -23,6 +23,8 @@ function get_ticket_shortcode($atts){
   $ticket_query = get_ticket_query_from_user($user_id);
   //count_user_posts(uid, posttype);
 
+  echo '<div id="user-ticket">';
+
   if($user_id == 0) {
       //--------------------------------------------------------
       // Display not Logged in
@@ -34,7 +36,7 @@ function get_ticket_shortcode($atts){
         einloggen, oder <a href="<?= bloginfo('url'); ?>/register/">hier</a> registrieren!</p>
     </div>
     <?php
-  } else if ($ticket_query->have_posts() ) {
+  } else if ( $ticket_query->have_posts() ) {
     echo '<p>Hier wird dir dein gezogenes Ticket angezeigt:</p>';
     echo '<div id="ticket-listing" action="" metod="POST">';
     while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
@@ -44,15 +46,15 @@ function get_ticket_shortcode($atts){
       $waiting = get_waiting_time_and_persons(get_post_meta($post->ID, 'device_id', true ), $post->ID)
       ?>
       <a href="#" data-name="<?= $post->ID ?>">
-      <div class="fl-ticket-button">
+      <div class="fl-ticket-element">
         <h2> <?= $post->post_title ?></h2>
-        <p>Vor dir wartende Personen: <b><?= $waiting['persons'] ?>,</b> vorraussichtlich Wartezeit: <b><?= get_post_time_string($waiting['time'], true) ?></b></p>
+        <p id="waiting-time">Vor dir wartende Personen: <b><?= $waiting['persons'] ?>,</b> vorraussichtlich Wartezeit: <b><?= get_post_time_string($waiting['time'], true) ?></b></p>
         <p>Gerät: <b><?=  get_device_title_by_id(get_post_meta($post->ID, 'device_id', true )) ?>,</b> 
         Dauer: <b><?=  get_post_time_string(get_post_meta($post->ID, 'duration', true )) ?></b></p>
         <input type="hidden" id="ticket-device-id" value="<?=  get_post_meta($post->ID, 'device_id', true ) ?>">
         <input type="hidden" id="ticket-duration" value="<?=  get_post_meta($post->ID, 'duration', true ) ?>">
         <input type="hidden" id="ticket-id" value="<?=  $post->ID ?>">
-        <input type="submit" name="<?=  $post->post_title ?>" id="<?=  $post->post_title ?>" class="button-primary" value="Ticket bearbeiten"/>
+        <input type="submit" name="<?=  $post->post_title ?>" id="<?=  $post->post_title ?>" class="ticket-btn" value="Ticket bearbeiten"/>
       </div>
       </a>
       <?php
@@ -66,6 +68,7 @@ function get_ticket_shortcode($atts){
     <div id="device-ticket-box"class="device-ticket" hidden action="" metod="POST">
       <h2>Ticket bearbeiten</h2>
       <p>Gerät: <select id="device-select"></select></p>
+      <p id="waiting-time"><p>
       <input type="hidden" id="device-id" value="">
       <div id="device-content"></div>
       <p></p>
@@ -99,12 +102,15 @@ function get_ticket_shortcode($atts){
       echo '<p>Hier werden dir die verfügbaren Geräte angezeigt:</p>';
       echo '<div id="fl-getticket" action="" metod="POST">';
       while ( $device_query->have_posts() ) : $device_query->the_post() ;
+        //$ticket_waiting = get_waiting_time_and_persons(get_post_meta($post->ID, 'device_id', true ), $post->ID);
+        //$waiting = get_waiting_time_and_persons(get_post_meta($post->ID, 'device_id', true ), $post->ID);
+        //<p id="waiting-time">Wartende Personen: <b><?= $waiting['persons'] >,</b> vorraussichtlich Wartezeit: <b><?= get_post_time_string($ticket_waiting['time'], true) ></b></p><p>
         ?>
-        <a href="#" data-name="<?php the_ID(); ?>">
-            <div class="fl-device-button">
-            <h2><?php the_title(); ?></h2>
-            <input type="hidden" name="device-id" value="<?php the_ID(); ?>">
-            <input type="submit" name="<?php the_title(); ?>" id="<?php the_title(); ?>" class="button-primary" value="Ticket"/>
+        <a href="#" data-name="<?= $post->ID ?>">
+            <div class="fl-device-element">
+            <h2><?= $post->post_title ?></h2>
+            <input type="hidden" name="device-id" value="<?= the_ID(); ?>">
+            <input type="submit" name="<?= the_title(); ?>" id="<?= the_title(); ?>" class="button-primary" value="Ticket"/>
             </div></a>
         <?php
       endwhile;
@@ -118,7 +124,7 @@ function get_ticket_shortcode($atts){
     // Display overlay get Ticket
     ?>
     <div id="overlay" class="fl-overlay" hidden></div>
-        <div id="device-ticket-box"class="device-ticket" hidden action="" metod="POST">
+        <div id="device-ticket-box" class="device-ticket" hidden action="" metod="POST">
           <h2>Ticket bestätigen</h2>
           <p id="device-name"></p>
           <input type="hidden" id="device-id" value="">
@@ -132,8 +138,9 @@ function get_ticket_shortcode($atts){
     <div id="message" hidden class="message-box"></div>
 
     <?php
-
   }   
+
+  echo '</div>';
 
 }
 
