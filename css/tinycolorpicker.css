@@ -5,11 +5,16 @@
     height:         30px;
     position: relative;
     clear: both;
-    margin: 30px 80px;
+    margin: 0px;
+}
+
+th {
+    text-align: left;
+    padding: 4px 6px;
 }
 
 #colorPicker .track {
-    background:     #EFEFEF url(text-color.png) no-repeat 50% 50%;
+    background:     #eee url(text-color.png) no-repeat 50% 50%;
     height:         150px;
     width:          150px;
     padding:        10px;
@@ -21,8 +26,6 @@
     display:        none;
     border:         1px solid #ccc;
     z-index:        10;
-    -webkit-border-radius: 150px;
-    -moz-border-radius: 150px;
     border-radius: 150px;
 
 }
@@ -35,9 +38,7 @@
     display:        block;
     position:       relative;
     z-index:        11;
-    background-color: #EFEFEF;
-    -webkit-border-radius: 27px;
-    -moz-border-radius: 27px;
+    background-color: #eee;
     border-radius: 27px;
     cursor: pointer;
 }
@@ -45,8 +46,6 @@
 #colorPicker .colorInner {
     width:          25px;
     height:         25px;
-    -webkit-border-radius: 27px;
-    -moz-border-radius: 27px;
     border-radius: 27px;
 }
 

@@ -8,6 +8,8 @@
 
 .fl-device-element-content{
     transition: background-color 0.3s ease;
+    -webkit-transition: background-color 0.3s ease;
+    -moz-transition: background-color 0.3s ease;
     background-color: rgba(0,0,0,0.15);
     padding: 14px 18px;
     color: #fff;
@@ -61,8 +63,6 @@
     transition: all 0.2s ease;
     -webkit-transition: all 0.2s ease;
     -moz-transition: all 0.2s ease;
-    -o-transition: all 0.2s ease;
-    -ms-transition: all 0.2s ease;
     display: inline-block;
 }
 
@@ -107,6 +107,12 @@
     }
 }
 
+@media all and (max-height: 800px) {
+    .device-ticket {
+        margin: 50px auto;
+    }
+}
+
 .device-ticket input[type=submit] {
     border: 1px solid #aaa;
     background: none;
@@ -118,8 +124,6 @@
     transition: all 0.2s ease;
     -webkit-transition: all 0.2s ease;
     -moz-transition: all 0.2s ease;
-    -o-transition: all 0.2s ease;
-    -ms-transition: all 0.2s ease;
     display: inline-block;
     margin-right: 2px;
     margin-bottom: 4px;
@@ -135,18 +139,16 @@
 .device-ticket select {
     font-size: 14px;
     height: 29px;
-    margin: 0;
-    -webkit-border-radius:4px;
-    -moz-border-radius:4px;
+    line-height: 1;
     border-radius:4px;
     border: 1px solid #eee;
     border-right: 4px solid #ccc;
     background: #f7f7f7;
-    color:#888;
+    color: #888;
     display: inline-block;
+    appearance:none;
     -webkit-appearance:none;
     -moz-appearance:none;
-    appearance:none;
 }
 
 /* Message */
@@ -154,6 +156,6 @@
 .message-box {
     background-color: #efc;
     border: 1px solid #eee;
-    border-radius: 4px ;
+    border-radius: 4px;
     padding: 5px 10px;
 }

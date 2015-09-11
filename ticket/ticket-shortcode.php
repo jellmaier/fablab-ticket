@@ -134,6 +134,7 @@ function display_user_tickets($ticket_query) {
   echo '</div>';
 
   wp_reset_query();
+  
   // Display overlay change Ticket
   ?>
   <div id="overlay" class="fl-overlay" hidden>
@@ -154,6 +155,5 @@ function display_user_tickets($ticket_query) {
 
   <?php
 }
-
 
 ?>

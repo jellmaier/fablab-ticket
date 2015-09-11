@@ -137,33 +137,40 @@ function device_admin_init(){
 }
  
 function device_details_meta() {
-
-    ?>
-    <p><label>Status:   </label>
-    <form name="" id="deviceStatus">
-      <?php
-      if(get_device_field("device_status") == 'online'){ 
-        echo '<input type="radio" name="device_status" checked value="online">Online';
-        echo '<input type="radio" name="device_status" value="offline">Offline' ;
-      } else if (get_device_field("device_status") == 'offline') {
-        echo '<input type="radio" name="device_status" value="online">Online';
-        echo '<input type="radio" name="device_status" checked value="offline">Offline' ;
-      } else {
-        echo '<input type="radio" name="device_status" value="online">Online';
-        echo '<input type="radio" name="device_status" checked value="offline">Offline' ;
-      }
-      echo '</p>';
-      ?>
-      <div id="colorPicker">
-        <a class="color"><div class="colorInner" style="background-color: <?= get_timeticket_field("device_color"); ?>;"></div></a>
-        <div class="track"></div>
-        <ul class="dropdown"><li></li></ul>
-        <input type="hidden" name="device_color" class="colorInput" value="<?= get_timeticket_field("device_color"); ?>"/>
-      </div>
-      <?php
-      
-    
-    echo '</form>';
+  ?>
+   <table>
+    <tr>
+      <th>Status:</th>
+      <th>
+        <form name="" id="deviceStatus">
+        <?php
+        if(get_device_field("device_status") == 'online'){ 
+          echo '<input type="radio" name="device_status" checked value="online">Online ';
+          echo '<input type="radio" name="device_status" value="offline">Offline ' ;
+        } else if (get_device_field("device_status") == 'offline') {
+          echo '<input type="radio" name="device_status" value="online">Online ';
+          echo '<input type="radio" name="device_status" checked value="offline">Offline ' ;
+        } else {
+          echo '<input type="radio" name="device_status" value="online">Online ';
+          echo '<input type="radio" name="device_status" checked value="offline">Offline ' ;
+        }
+        ?>
+        </form>
+      </th>
+    </tr>
+     <tr>
+      <th>Device Color:</th>
+      <th> 
+        <div id="colorPicker">
+          <a class="color"><div class="colorInner" style="background-color: <?= get_timeticket_field("device_color"); ?>;"></div></a>
+          <div class="track"></div>
+          <ul class="dropdown"><li></li></ul>
+          <input type="hidden" name="device_color" class="colorInput" value="<?= get_timeticket_field("device_color"); ?>"/>
+        </div>
+      </th>
+    </tr>
+  </table> 
+  <?php
 }
 
 function get_device_field($device_field) {
