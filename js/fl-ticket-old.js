@@ -1,11 +1,11 @@
 jQuery(document).ready(function($){
   var max_time = 120;
   var time_interval = 15;
-  var origOverflow = $( 'body' ).css( 'overflow' );
 
 
 
-  // on click get ticket
+
+  
   $('#fl-getticket').on('click', function(event) {
     
     //Get Device ID
@@ -36,7 +36,7 @@ jQuery(document).ready(function($){
 
     };
     $.post(ajaxurl, data, function(response) {
-        $('body').css( 'overflow', 'hidden' );
+      
         $('#device-content').append(response);
         $("#device-ticket-box").show();
 
@@ -45,7 +45,6 @@ jQuery(document).ready(function($){
     return false;
   })
 
-  // on click submit ticket
   $('#submit-ticket').on('click', function(){
     var device_id = jQuery('#device-id').val();
     var device_name = jQuery('#device-name').text();
@@ -66,12 +65,10 @@ jQuery(document).ready(function($){
       $('#device-id').val('');
       $('#device-name').empty();
       $('#device-content').empty();
-      $('body').css( 'overflow', origOverflow );
       setTimeout(reloadPage, 2000);
     })
   })
 
-  // on click cancle ticket
   $('#cancel-ticket').on('click', function(){
     $("#device-ticket-box").hide();
     $("#overlay").fadeOut(600);
@@ -79,14 +76,12 @@ jQuery(document).ready(function($){
     $('#device-id').val('');
     $('#device-name').empty();
     $('#device-content').empty();
-    $('body').css( 'overflow', origOverflow );
   })
 
   //--------------------------------------------
   //Ticket listings section
   //--------------------------------------------
   
-  // on click edit ticket
   $('#ticket-listing').on('click', function(event) {
 
     // Set Device Name Dropdown
@@ -123,7 +118,6 @@ jQuery(document).ready(function($){
     $("#time-select").val($('#ticket-duration').val());
 
     $("#overlay").fadeIn(600);
-    $("#box").fadeIn(600);
     // Set Device Content
     data = {
       action: 'get_device_content',
@@ -132,7 +126,6 @@ jQuery(document).ready(function($){
     $.post(ajaxurl, data, function(response) {
         $('#device-content').append(response);
         $("#device-ticket-box").show();
-        $('body').css( 'overflow', 'hidden' );
     })
     return false;
   })
@@ -150,8 +143,6 @@ jQuery(document).ready(function($){
       ticket_id:  ticket_id
     };
     $.post(ajaxurl, data, function(response) {
-      $('body').css( 'overflow', origOverflow );
-      $('#ticket-listing').hide();
       $('#device-ticket-box').hide();
       $('#overlay').fadeOut(600);
       $('#message').text("Ticket für das " + device_name + ", erfolgreich geändert!");
@@ -172,7 +163,6 @@ jQuery(document).ready(function($){
       ticket_id:  ticket_id
     };
     $.post(ajaxurl, data, function(response) {
-      $('body').css( 'overflow', origOverflow );
       $('#ticket-listing').hide();
       $("#device-ticket-box").hide();
       $("#overlay").fadeOut(600);
@@ -184,7 +174,6 @@ jQuery(document).ready(function($){
 
   // Cancle Button clicked
   $('#cancel-change-ticket').on('click', function(){
-    $('body').css( 'overflow', origOverflow );
     $("#device-ticket-box").hide();
     $("#overlay").fadeOut(600);
     $("#time-select").empty();

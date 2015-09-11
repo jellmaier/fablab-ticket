@@ -222,7 +222,30 @@ function get_post_time_string($time, $shownull = false) {
   return $ret;
 }
 
+/* notused but working
+function get_active_tickets() {
+  global $post;
 
+  $ticket_query = get_ticket_query_from_user(get_current_user_id());
+  $ticket_list = array();
 
+  if ( $ticket_query->have_posts() ) {
+    while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
+      $ticket = array();
+      $ticket['id'] = $post->ID;
+      $ticket['title'] = $post->post_title;
+      //$ticket['date'] = $post->date; 
+      $ticket['device_id'] = get_post_meta($post->ID, 'device_id', true );
+      $ticket['duration'] = get_post_meta($post->ID, 'duration', true );
+      array_push($ticket_list, $ticket);
+    endwhile;
+  } 
+  wp_reset_query();
+
+  echo json_encode($ticket_list);
+  die();
+}
+add_action( 'wp_ajax_get_active_tickets', 'get_active_tickets' );
+*/
 
 ?>

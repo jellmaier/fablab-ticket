@@ -24,5 +24,26 @@ jQuery(document).ready(function($){
 			minTime:'8:00'
 		});
 	};
+
+	jQuery('#timeticket-date').datetimepicker({
+		onChangeDateTime:logic,
+		onShow:logic,
+		format:'d.m.Y H:i',
+  		inline:false,
+	});
+
+    jQuery('#timeticket_start_time').datetimepicker({
+		onChangeDateTime:logic,
+		onShow:logic,
+		format:'Y-m-d H:i',
+  		inline:false,
+	});
+
+	jQuery('#timeticket_end_time').datetimepicker({
+		onChangeDateTime:logic,
+		onShow:logic,
+		format:'Y-m-d H:i',
+  		inline:false,
+	});
 	
 });

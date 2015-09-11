@@ -125,6 +125,7 @@ function device_edit_columns($columns){
     $columns = array(
         "title" => "Device",
         "device_status" => "Device Status",
+        "device_color" => "Device Color",
   );
   return $columns;
 }
@@ -151,11 +152,18 @@ function device_details_meta() {
         echo '<input type="radio" name="device_status" value="online">Online';
         echo '<input type="radio" name="device_status" checked value="offline">Offline' ;
       }
+      echo '</p>';
+      ?>
+      <div id="colorPicker">
+        <a class="color"><div class="colorInner" style="background-color: <?= get_timeticket_field("device_color"); ?>;"></div></a>
+        <div class="track"></div>
+        <ul class="dropdown"><li></li></ul>
+        <input type="hidden" name="device_color" class="colorInput" value="<?= get_timeticket_field("device_color"); ?>"/>
+      </div>
+      <?php
+      
     
     echo '</form>';
-    
-    
-   // echo '<input type="text" value="' . get_reservation_field("device_status") . '" /></p>';
 }
 
 function get_device_field($device_field) {
@@ -178,12 +186,9 @@ function save_device_details(){
  
    if ( get_post_type($post) != 'device')
       return;
- /*
-   if(isset($_POST["device_status"])) {
-      update_post_meta($post->ID, "device_status", strtotime($_POST["device_status"]));
-   }
- */
+
    save_device_field("device_status");
+   save_device_field("device_color");
 }
 
 function save_device_field($device_field) {
@@ -220,7 +225,7 @@ function get_device_title_by_id($device_id) {
   return $device['post_title'];
 }
 
-function get_online_devices_select_options() {
+function get_online_devices() {
   global $post;
   $query_arg = array(
     'post_type' => 'device',
@@ -245,7 +250,11 @@ function get_online_devices_select_options() {
   } 
   wp_reset_query();
 
-  echo json_encode($device_list);
+  return $device_list;
+}
+
+function get_online_devices_select_options() {
+  echo json_encode(get_online_devices());
   die();
 }
 add_action( 'wp_ajax_get_online_devices_select_options', 'get_online_devices_select_options' );
@@ -253,6 +262,7 @@ add_action( 'wp_ajax_get_online_devices_select_options', 'get_online_devices_sel
 
 function get_waiting_time_and_persons($device_id, $ticket = 0) {
   global $post;
+  $temp_post = $post;
   //--------------------------------------------------------
   // Display available Devices
   //--------------------------------------------------------
@@ -287,10 +297,17 @@ function get_waiting_time_and_persons($device_id, $ticket = 0) {
   } 
 
   wp_reset_query();
+  $post = $temp_post;
 
   return $waiting;
 
 }
 
+function get_divice_waiting_time() {
+  $device_id = $_POST['device_id'];
+  echo json_encode(get_waiting_time_and_persons($device_id));
+  die();
+}
+add_action( 'wp_ajax_get_online_devices_select_options', 'get_online_devices_select_options' );
 
 ?>
