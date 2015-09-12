@@ -89,6 +89,7 @@ function display_available_devices() {
   ?>
   <div id="overlay" class="fl-overlay" hidden>
     <div id="device-ticket-box" class="device-ticket" hidden action="" metod="POST">
+      <a href="#" id="overlay-close" class="close">x</a>
       <h2>Ticket bestätigen</h2>
       <p id="device-name"></p>
       <input type="hidden" id="device-id" value="">
@@ -98,6 +99,7 @@ function display_available_devices() {
       <input type="submit" id="submit-ticket" class="button-primary" value="Ticket ziehen"/>
       <input type="submit" id="cancel-ticket" class="button-primary" value="Abbrechen"/>
     </div>
+    <div id="overlay-background" class="fl-overlay-background"></div>
   </div>
   <div id="message" hidden class="message-box"></div>
   <?php
@@ -139,6 +141,7 @@ function display_user_tickets($ticket_query) {
   ?>
   <div id="overlay" class="fl-overlay" hidden>
     <div id="device-ticket-box" class="device-ticket" hidden action="" metod="POST">
+      <a href="#" id="overlay-close" class="close">x</a>
       <h2>Ticket bearbeiten</h2>
       <p>Gerät: <select id="device-select"></select></p>
       <p id="waiting-time"><p>
@@ -150,6 +153,7 @@ function display_user_tickets($ticket_query) {
       <input type="submit" id="delete-change-ticket" class="button-primary" value="Löschen"/>
       <input type="submit" id="cancel-change-ticket" class="button-primary" value="Abbrechen"/>
    </div>
+   <div id="overlay-background" class="fl-overlay-background"></div>
   </div>
   <div id="message" hidden class="message-box"></div>
 

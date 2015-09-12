@@ -159,6 +159,12 @@ jQuery(document).ready(function($){
   $('#cancel-change-ticket').on('click', function() {
     close_overlay($, orig_overflow, '');
   })
+  $('#overlay-close').on('click', function() {
+    close_overlay($, orig_overflow, '');
+  })
+  $('#overlay-background').on('click', function() {
+    close_overlay($, orig_overflow, '');
+  })
   $(document).keyup(function(event){
     if (event.keyCode == 27) {
       close_overlay($, orig_overflow, '');
