@@ -2,7 +2,6 @@
 
 //namespace fablab_ticket;
 
-// Tutorial from http://tatiyants.com/how-to-use-wordpress-custom-post-types-to-add-events-to-your-site/
 
 if (!class_exists('TimeTicket'))
 {
@@ -11,24 +10,20 @@ if (!class_exists('TimeTicket'))
     public function __construct()
     {
       register_activation_hook( __FILE__, 'my_timeticket_rewrite_flush' );
-      add_action( 'init', 'timeticket_register' );
+      add_action( 'init', 'codex_timeticket_init' );
+
 
       // Displaying Time Ticket Lists
-      //add_action("manage_posts_custom_column",  "timetickets_custom_columns");
-      add_filter("manage_timetickets_posts_columns", "timetickets_edit_columns");
-
-      // Adding Sortable Columns
-      add_filter("manage_edit-timetickets_sortable_columns", "timeticket_date_column_register_sortable");
-      add_filter("request", "timeticket_date_column_orderby" );
+      add_filter( 'manage_timeticket_posts_columns', 'timeticket_edit_columns' );
+      add_action( 'manage_timeticket_posts_custom_column', 'timeticket_table_content', 10, 2 );
 
       // Editing Time Tickets
-      add_action("admin_init", "timetickets_admin_init");
+      add_action( 'admin_init', 'timeticket_admin_init' );
 
       // Saving Time Ticket Details
-      add_action('save_post', 'save_timeticket_details');
+      add_action( 'save_post', 'save_timeticket_details' );
 
-      // Displaying Time Tickets
-      add_shortcode( 'timetickets', 'get_timetickets_shortcode' );
+      add_filter( 'wp_insert_post_data' , 'set_timeticket_title' , '99', 2 );
 
     }
   }
@@ -36,107 +31,155 @@ if (!class_exists('TimeTicket'))
 
 
 function my_timeticket_rewrite_flush() {
-    // First, we "add" the custom post type via the above written function.
-    // Note: "add" is written with quotes, as CPTs don't get added to the DB,
-    // They are only referenced in the post_type column with a post entry, 
-    // when you add a post of this CPT.
-    timeticket_register();
-
-    // ATTENTION: This is *only* done during plugin activation hook in this example!
-    // You should *NEVER EVER* do this on every page load!!
+    codex_timeticket_init();
     flush_rewrite_rules();
 }
- 
-function timeticket_register() {
- 
-    $labels = array(
-        'name' => _x('Time Tickets', 'post type general name'),
-        'singular_name' => _x('Time Ticket', 'post type singular name'),
-        'add_new' => _x('Add New', 'timeticket'),
-        'add_new_item' => __('Add New Time Ticket'),
-        'edit_item' => __('Edit Time Ticket'),
-        'new_item' => __('New Time Ticket'),
-        'view_item' => __('View Time Ticket'),
-        'search_items' => __('Search Time Tickets'),
-        'not_found' =>  __('Nothing found'),
-        'not_found_in_trash' => __('Nothing found in Trash'),
-        'parent_item_colon' => ''
+
+/**
+ * Register a timeticket post type.
+ *
+ * @link http://codex.wordpress.org/Function_Reference/register_post_type
+ */
+function codex_timeticket_init() {
+  $labels = array(
+    'name'               => _x( 'Time Tickets', 'post type general name', 'your-plugin-textdomain' ),
+    'singular_name'      => _x( 'Time Ticket', 'post type singular name', 'your-plugin-textdomain' ),
+    'menu_name'          => _x( 'Time Tickets', 'admin menu', 'your-plugin-textdomain' ),
+    'name_admin_bar'     => _x( 'Time Ticket', 'add new on admin bar', 'your-plugin-textdomain' ),
+    'add_new'            => _x( 'Add New', 'timeticket', 'your-plugin-textdomain' ),
+    'add_new_item'       => __( 'Add New Time Ticket', 'your-plugin-textdomain' ),
+    'new_item'           => __( 'New Time Ticket', 'your-plugin-textdomain' ),
+    'edit_item'          => __( 'Edit Time Ticket', 'your-plugin-textdomain' ),
+    'view_item'          => __( 'View Time Ticket', 'your-plugin-textdomain' ),
+    'all_items'          => __( 'All Time Tickets', 'your-plugin-textdomain' ),
+    'search_items'       => __( 'Search Time Tickets', 'your-plugin-textdomain' ),
+    'parent_item_colon'  => __( 'Parent Time Tickets:', 'your-plugin-textdomain' ),
+    'not_found'          => __( 'No timeticket found.', 'your-plugin-textdomain' ),
+    'not_found_in_trash' => __( 'No timeticket found in Trash.', 'your-plugin-textdomain' )
+  );
+
+  $args = array(
+    'labels'             => $labels,
+                'description'        => __( 'Description.', 'your-plugin-textdomain' ),
+    'public'             => true,
+    'publicly_queryable' => true,
+    'show_ui'            => true,
+    'show_in_menu'       => true,
+    'query_var'          => true,
+    'rewrite'            => array( 'slug' => 'timeticket' ),
+    'capability_type'    => 'post',
+    'has_archive'        => true,
+    'hierarchical'       => false,
+    'menu_position'      => null,
+    'menu_icon'          => 'dashicons-schedule',
+    'supports'           => array( 'title', 'editor', 'thumbnail')
+  );
+
+  register_post_type( 'timeticket', $args );
+
+  // Init Taxonomy
+
+   $labels = array(
+      'name'                       => _x( 'Time Ticket Type', 'taxonomy general name' ),
+      'singular_name'              => _x( 'Time Ticket Type', 'taxonomy singular name' ),
+      'search_items'               => __( 'Time Ticket Types suchen' ),
+      'popular_items'              => __( 'Meistverwendete Lables' ),
+      'all_items'                  => __( 'Alle Labes' ),
+      'parent_item'                => null,
+      'parent_item_colon'          => null,
+      'edit_item'                  => __( 'Time Ticket Type bearbeiten' ),
+      'update_item'                => __( 'Time Ticket Type updaten' ),
+      'add_new_item'               => __( 'Add New Time Ticket Type' ),
+      'new_item_name'              => __( 'New Time Ticket Type Name' ),
+      'separate_items_with_commas' => __( '' ),
+      'add_or_remove_items'        => __( 'Add or remove Time Ticket Types' ),
+      'choose_from_most_used'      => __( '' ),
+      'not_found'                  => __( 'No Time Ticket Types found.' ),
+      'menu_name'                  => __( 'Time Ticket Types' ),
     );
- 
+
     $args = array(
-        'labels' => $labels,
-        'public' => true,
-        'publicly_queryable' => true,
-        'show_ui' => true,
-        'query_var' => true,
-        'rewrite' => array( 'slug' => 'timeticket' ),
-        'capability_type' => 'post',
-        'hierarchical' => false,
-        'menu_position' => null,
-        'menu_icon'          => 'dashicons-schedule',
-        'supports' => array('title','editor','thumbnail')
-      );
- 
-    register_post_type( 'timetickets' , $args );
+      'hierarchical'          => false,
+      'labels'                => $labels,
+      'show_ui'               => true,
+      'show_admin_column'     => true,
+      'update_count_callback' => '_update_post_term_count',
+      'query_var'             => true,
+      'rewrite'               => array( 'slug' => 'timeticket_type' ),
+    );
+
+    //register_taxonomy( 'timeticket_type', array( 'timeticket', 'timeticket', 'ticket'), $args );
 }
 
 
 // Displaying Time Ticket Lists
  
-function timetickets_edit_columns($columns){
+function timeticket_edit_columns($columns){
     $columns = array(
-        "cb" => "<input type=\"checkbox\" />",
         "title" => "Time Ticket",
-        "timeticket_start_time" => "Time Ticket Start Time",
-        "timeticket_end_time" => "Time Ticket End Time",
+        "timeticket_start_time" => "Start Time",
+        "timeticket_end_time" => "End Time",
         "timeticket_device" => "Device",
+        "timeticket_user" => "User",
   );
   return $columns;
 }
 
-// Adding Sortable Columns
-function timeticket_date_column_register_sortable( $columns ) {
-        $columns['timeticket_date'] = 'timeticket_date';
-        return $columns;
-}
+// Edit Admin Table-View
+function timeticket_table_content( $column_name, $post_id ) {
+  switch ( $column_name ) {
 
-function timeticket_date_column_orderby( $vars ) {
-    if ( isset( $vars['orderby'] ) && 'timeticket_date' == $vars['orderby'] ) {
-        $vars = array_merge( $vars, array(
-            'meta_key' => 'timeticket_date',
-            'orderby' => 'meta_value_num'
-        ) );
-    }
-    return $vars;
+    case 'timeticket_device' :
+      echo get_device_title_by_id(get_post_meta( $post_id, 'timeticket_device', true ));
+      break;
+
+    case 'timeticket_user' :
+      echo get_user_by('id', get_post_meta( $post_id, 'timeticket_user', true ))->display_name;
+      break;
+
+    default :
+      echo get_post_meta( $post_id, $column_name, true );
+      break;
+  }
 }
 
 
 // Editing Time Tickets
-function timetickets_admin_init(){
-  add_meta_box("timeticket_meta", "Time Ticket Details", "timeticket_details_meta", "timetickets", "normal", "default");
+ 
+function timeticket_admin_init(){
+  add_meta_box("timeticket_meta", "Time Ticket Details", "timeticket_details_meta", "timeticket", "normal", "default");
 }
  
 function timeticket_details_meta() {
-    global $fl_timeticket_edit_script;
-    $fl_timeticket_edit_script = true;
-    
-    $device_list = get_online_devices();
-    $device_selected = get_timeticket_field("timeticket_device");
- 
-    $ret = '</p><p><label>Start Time: </label><input type="text" name="timeticket_start_time" id="timeticket_start_time" value="' . get_timeticket_field("timeticket_start_time") . '" /></p>';
-    $ret .= '<p><label>End Time: </label><input type="text" name="timeticket_end_time"  id="timeticket_end_time" value="' . get_timeticket_field("timeticket_end_time") . '" /> </p>';
-    $ret .= '<p><label>Device: </label><select name="timeticket_device">';
+  
+  echo '<p><label>Start Time Ticket: </label><input type="text" name="timeticket_start_time" id="timeticket_start_time" value="' . get_timeticket_field("timeticket_start_time") . '" /></p>';
+  echo '<p><label>End Time: </label><input type="text" name="timeticket_end_time"  id="timeticket_end_time" value="' . get_timeticket_field("timeticket_end_time") . '" /> </p>';
+
+  $device_selected = get_timeticket_field("timeticket_device");
+  $timeticket_user = get_timeticket_field("timeticket_user");
+  $device_list = get_online_devices(); // after this no get_timeticket_field working
+
+  echo '<p><label>Device: </label><select name="timeticket_device">';
     foreach($device_list as $device) {
       if ($device['id'] == $device_selected) {
-         $ret .= '<option selected value="' . $device['id'] . '">' . $device['device'] . '</option>';
+        echo '<option selected value="' . $device['id'] . '">' . $device['device'] . '</option>';
       } else {
-        $ret .= '<option value="' . $device['id'] . '">' . $device['device'] . '</option>';
+        echo '<option value="' . $device['id'] . '">' . $device['device'] . '</option>';
       }
     }
-    $ret .= '</select></p>';
-    //$ret .= '<p><label>Device: </label><input type="text" name="timeticket_device" value="' . get_timeticket_field("timeticket_device") . '" /></p>';
- 
-    echo $ret;
+  echo '</select></p>';
+
+  $userlist = get_users( array( 'fields' => array( 'display_name', 'id'  ) ) );
+  echo '<p><label>User: </label><select name="timeticket_user">';
+  foreach ( $userlist as $user ) {
+    if ($user->id == $timeticket_user) {
+      echo '<option selected value="' . $user->id . '">' . $user->display_name . '</option>';
+    } else {
+      echo '<option value="' . $user->id . '">' . $user->display_name . '</option>';
+    }
+  }
+  echo '</select></p>';
+
 }
 
 function get_timeticket_field($timeticket_field) {
@@ -157,13 +200,14 @@ function save_timeticket_details(){
    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
       return;
  
-   if ( get_post_type($post) != 'timetickets')
+   if ( get_post_type($post) != 'timeticket')
       return;
 
- 
    save_timeticket_field("timeticket_start_time");
    save_timeticket_field("timeticket_end_time");
    save_timeticket_field("timeticket_device");
+   save_timeticket_field("timeticket_user");
+
 }
 
 function save_timeticket_field($timeticket_field) {
@@ -174,71 +218,71 @@ function save_timeticket_field($timeticket_field) {
     }
 }
 
-// Displaying Time Tickets
- 
-function get_timetickets_shortcode($atts){
-    global $post;
- 
-    ob_start();
- 
-    // prepare to get a list of timetickets sorted by the timeticket date
-    $args = array(
-        'post_type' => 'timetickets',
-        'orderby'   => 'timeticket_date',
-        'meta_key'  => 'timeticket_date',
-        'order'     => 'ASC'
+function set_timeticket_title( $data , $postarr ) {
+  if($data['post_type'] == 'timeticket' && $_POST["timeticket_user"] != '') {
+    $title = 'Time-Ticket von: ' . get_user_by('id', $_POST["timeticket_user"])->display_name;
+    $data['post_title'] = $title;
+    $data['post_name'] = sanitize_title_with_dashes( $title, '', save);
+  }
+  return $data;
+}
+
+function is_device_availabel($device_id){
+
+  global $post;
+  $query_arg = array(
+    'post_type' => 'timeticket',
+   'meta_query' => array(   
+      'relation'=> 'OR',               
+      array(
+        'key' => 'timeticket_device',                  
+        'value' => $device_id,               
+        'compare' => '='                 
+      )
+    ) 
+  );
+  $device_query = new WP_Query($query_arg);
+  if ( $device_query->have_posts() ) {
+    while ( $device_query->have_posts() ) : $device_query->the_post() ;
+      $start_time = strtotime(get_post_meta($post->ID, 'timeticket_start_time', true ));
+      $end_time = strtotime(get_post_meta($post->ID, 'timeticket_end_time', true ));
+      $current_time = strtotime('now -2');
+      if ( $start_time < $current_time && $current_time < $end_time ) {
+        return true;
+      } 
+    endwhile;
+  }
+
+  return false;
+}
+
+function insert_timeticket() {
+  $device_id = $_POST['device_id'];
+  $duration = $_POST['duration'];
+  $user_id = $_POST['user_id'];
+
+  $start_time = date_i18n('Y-m-d H:i');
+
+  $post_information = array(
+        'post_title' => 'Time-Ticket von: ' . get_user_by('id', $user_id)->display_name,
+        'post_type' => 'timeticket',
+        'author' => get_current_user_id(),
+        'post_status' => 'publish',
     );
  
-    query_posts( $args );
- 
-    $timetickets_found = false;
- 
-    // build up the HTML from the retrieved list of timetickets
-    if ( have_posts() ) {
-        while ( have_posts() ) {
-            the_post();
-            $timeticket_date = get_post_meta($post->ID, 'timeticket_date', true);
-            echo get_timeticket_container();
-            $timetickets_found = true;
- 
-        }
+    $ID = wp_insert_post( $post_information );
+
+    if ($ID != 0) {
+      add_post_meta($ID, 'timeticket_device', $device_id);
+      add_post_meta($ID, 'timeticket_start_time' , $start_time);
+      add_post_meta($ID, 'timeticket_end_time' , $start_time);
+      add_post_meta($ID, 'timeticket_user' , $user_id);
     }
- 
-    wp_reset_query();
- 
-    if (!$timetickets_found) {
-        echo "<p>no timetickets found.</p>";
-    }
- 
-    $output_string = ob_get_contents();
-    ob_end_clean();
- 
-    return $output_string;
-}
 
-function get_timeticket_container() {
-    global $post;
-    $ret = '<section class="timeticket_container">';
-    $ret = $ret .  get_timeticket_details();
-    $ret =  $ret . '</section>';
- 
-    return $ret;
+    
+    die($ID != 0);
 }
- 
-function get_timeticket_details() {
-    global $post;
-    $unixtime = get_post_meta($post->ID, 'timeticket_date', true);
- 
-    $ret = '';
-    $ret = $ret . '<h3><a href="' . get_permalink() . '">' . $post->post_title . '</a></h3>'; 
-    $ret = $ret . '<p><h4>'.get_post_meta($post->ID, 'timeticket_device', true) . '</h4>';
-    $ret = $ret . '<em>' . get_post_meta($post->ID, 'timeticket_start_time', true) . ' - ';
-    $ret = $ret . get_post_meta($post->ID, 'timeticket_end_time', true) . '</em>';
- 
-    return $ret;
-}
-
-
+add_action( 'wp_ajax_add_timeticket', 'insert_timeticket' );
 
 
 ?>

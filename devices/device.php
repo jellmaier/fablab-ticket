@@ -12,16 +12,15 @@ if (!class_exists('Device'))
       register_activation_hook( __FILE__, 'my_rewrite_flush' );
       add_action( 'init', 'codex_device_init' );
 
-
       // Displaying Device Lists
-      //add_action("manage_posts_custom_column",  "device_custom_columns");
-      add_filter("manage_device_posts_columns", "device_edit_columns");
+      add_filter( 'manage_device_posts_columns', 'device_edit_columns' );
+      add_action( 'manage_device_posts_custom_column', 'device_table_content', 10, 2 );
 
       // Editing Devices
-      add_action("admin_init", "device_admin_init");
+      add_action( 'admin_init', 'device_admin_init' );
 
       // Saving Device Details
-      add_action('save_post', 'save_device_details');
+      add_action( 'save_post', 'save_device_details' );
 
     }
   }
@@ -29,14 +28,7 @@ if (!class_exists('Device'))
 
 
 function my_rewrite_flush() {
-    // First, we "add" the custom post type via the above written function.
-    // Note: "add" is written with quotes, as CPTs don't get added to the DB,
-    // They are only referenced in the post_type column with a post entry, 
-    // when you add a post of this CPT.
     codex_device_init();
-
-    // ATTENTION: This is *only* done during plugin activation hook in this example!
-    // You should *NEVER EVER* do this on every page load!!
     flush_rewrite_rules();
 }
 
@@ -113,9 +105,7 @@ function codex_device_init() {
       'rewrite'               => array( 'slug' => 'device_type' ),
     );
 
-    register_taxonomy( 'device_type', array( 'device', 'device', 'ticket'), $args );
-
-
+    //register_taxonomy( 'device_type', array( 'device', 'device', 'ticket'), $args );
 }
 
 
@@ -130,6 +120,22 @@ function device_edit_columns($columns){
   return $columns;
 }
 
+// Edit Admin Table-View
+function device_table_content( $column_name, $post_id ) {
+  switch ( $column_name ) {
+
+    case 'device_status' :
+      echo get_post_meta( $post_id, 'device_status', true );
+      break;
+
+    case 'device_color' :
+      echo '<div style="background-color: ' . get_post_meta( $post_id, "device_color", true ) 
+      . '; width: 30px; height: 30px; border-radius: 15px;"><div>';
+      break;
+  }
+}
+
+
 // Editing Devices
  
 function device_admin_init(){
@@ -137,6 +143,7 @@ function device_admin_init(){
 }
  
 function device_details_meta() {
+  
   ?>
    <table>
     <tr>

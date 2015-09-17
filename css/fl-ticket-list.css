@@ -1,33 +1,3 @@
-/* Device Element */
-
-.fl-device-element {
-    border: 6px solid #ddd;
-    border-radius: 8px;
-    margin-bottom: 8px;
-}
-
-.fl-device-element-content{
-    transition: background-color 0.3s ease;
-    -webkit-transition: background-color 0.3s ease;
-    -moz-transition: background-color 0.3s ease;
-    background-color: rgba(0,0,0,0.15);
-    padding: 14px 18px;
-    color: #fff;
-}
-.fl-device-element-content:hover{
-    background-color: rgba(0,0,0,0);
-}
-.fl-device-element-content h2{
-    margin-bottom: 15px;
-}
-.fl-device-element-content p{
-    color: rgba(256,256,256,0.7);
-    margin-bottom: 5px;
-}
-.fl-device-element-content:hover p{
-    color: rgba(256,256,256,1);
-}
-
 /* Ticket Element */
 
 .fl-ticket-element {
@@ -35,16 +5,22 @@
     background: #fff;
     border-left: 5px solid #dd7127;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
-    padding: 24px 28px;
-    margin: 0px 6px 14px 8px;
+    padding: 20px 24px;
+    margin: 0px 6px 20px 8px;
 }
 .fl-ticket-element h2 {
-    margin-top: -10px;
-    margin-bottom: 10px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-size: 28px;
     color: #74a4a3;
+}
+.fl-ticket-element p {
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
 .fl-ticket-element input[type=submit] {
+    margin-top: 14px;
     border: 1px solid #74a4a3;
     background: none;
     color: #74a4a3;

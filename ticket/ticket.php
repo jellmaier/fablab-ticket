@@ -12,11 +12,12 @@ if (!class_exists('Ticket'))
       add_action( 'init', 'codex_ticket_init' );
 
       // Displaying Ticket Lists
-      add_filter("manage_ticket_posts_columns", "ticket_edit_columns");
+      add_filter( 'manage_ticket_posts_columns', 'ticket_edit_columns' );
+      add_action( 'manage_ticket_posts_custom_column', 'ticket_table_content', 10, 3 );
       // Editing Tickets
-      add_action("admin_init", "ticket_admin_init");
+      add_action( 'admin_init', 'ticket_admin_init' );
       // Saving Ticket Details
-      add_action('save_post', 'save_ticket_details');
+      add_action( 'save_post', 'save_ticket_details' );
 
       //add_action('add_new{ticket}', 'insert_ticket');
     }
@@ -69,6 +70,8 @@ function codex_ticket_init() {
     'query_var'          => true,
     'rewrite'            => array( 'slug' => 'ticket' ),
     'capability_type'    => 'post',
+    //'capabilities' => array( 'create_posts' => false, ),
+    //'map_meta_cap' => false, //  if users are allowed to edit/delete existing posts
     'has_archive'        => true,
     'hierarchical'       => false,
     'menu_position'      => null,
@@ -84,12 +87,32 @@ function codex_ticket_init() {
  
 function ticket_edit_columns($columns){
   $columns = array(
-        "title" => "Ticket",
-        "device_id" => "Gerät ID",
-        "duration" => "Ticket dauer",
-        "user_id" => "User ID",
+    "title" => "Ticket",
+    "device_id" => "Gerät",
+    "duration" => "Ticket dauer",
+    "user_id" => "User",
   );
   return $columns;
+}
+
+
+// Edit Admin Table-View
+function ticket_table_content($column_name, $post_id) {
+    switch ( $column_name ) {
+
+      case 'device_id' :
+        echo get_device_title_by_id(get_ticket_field('device_id'));
+        break;
+
+      case 'duration' :
+        echo get_post_time_string(get_ticket_field("duration"),true);
+        break;
+
+      case 'user_id' :
+        echo get_ticket_field("user_id");
+        break;
+
+    }
 }
 
 // Editing Tickets
@@ -99,9 +122,9 @@ function ticket_admin_init(){
 }
  
 function ticket_details_meta() {
-    echo '<p><label>Gerät:   </label> <input type="text"  disabled value="' . get_device_title_by_id(get_ticket_field("device_id")) . '" ></p>';
-    echo '<p><label>User:   </label> <input type="text" disabled value="' . get_ticket_field("user_id") . '" ></p>';
-    echo '<p><label>Ticket dauer (min):   </label> <input type="text" disabled value="' . get_ticket_field("duration") . '" ></p>';
+  echo '<p><label>Gerät:   </label> <input type="text"  disabled value="' . get_device_title_by_id(get_ticket_field("device_id")) . '" ></p>';
+  echo '<p><label>User:   </label> <input type="text" disabled value="' . get_ticket_field("user_id") . '" ></p>';
+  echo '<p><label>Ticket dauer (min):   </label> <input type="text" disabled value="' . get_ticket_field("duration") . '" ></p>';
 
 }
 
@@ -113,7 +136,7 @@ function get_ticket_field($ticket_field) {
     if (isset($custom[$ticket_field])) {
         return $custom[$ticket_field][0];
     } else if ( strcmp($ticket_field, 'user_id') == 0 ) {
-      return get_user_by('id', $post->post_author)->user_login;
+      return get_user_by('id', $post->post_author)->display_name;
     } else {
       return 'not set';
     }
@@ -167,7 +190,7 @@ function insert_ticket() {
   $duration = $_POST['duration'];
 
   $post_information = array(
-        'post_title' => "Ticket, von: " . wp_get_current_user()->user_login,
+        'post_title' => "Ticket, von: " . wp_get_current_user()->display_name,
         //'post_title' => "Ticket, für Gerät: " . get_device_title_by_id($device_id) . ", vom " . date_i18n('D, d.m.y \u\m H:i'),
         'post_type' => 'ticket',
         'author' => get_current_user_id(),
@@ -191,9 +214,14 @@ function update_ticket() {
   $duration = $_POST['duration'];
   $ticket_id = $_POST['ticket_id'];
 
-  update_post_meta($ticket_id, 'device_id', $device_id);
-  update_post_meta($ticket_id, 'duration' , $duration);
-      
+  if (intval($duration) && intval($ticket_id)) {
+    update_post_meta($ticket_id, 'device_id', $device_id);
+    update_post_meta($ticket_id, 'duration' , $duration);
+  } else {
+    die('naN');
+    return;
+  }
+       
   die();
 }
 add_action( 'wp_ajax_update_ticket', 'update_ticket' );
@@ -204,6 +232,16 @@ function delete_ticket() {
   die(wp_delete_post($ticket_id));
 }
 add_action( 'wp_ajax_delete_ticket', 'delete_ticket' );
+
+function deactivate_ticket() {
+  $post_information = array(
+        'ID' => $_POST['ticket_id'],
+        'post_status' => 'draft',
+    );
+  wp_update_post( $post_information );
+  die();
+}
+add_action( 'wp_ajax_deactivate_ticket', 'deactivate_ticket' );
 
 function get_post_time_string($time, $shownull = false) {
   $ret = "";
@@ -221,31 +259,5 @@ function get_post_time_string($time, $shownull = false) {
   }
   return $ret;
 }
-
-/* notused but working
-function get_active_tickets() {
-  global $post;
-
-  $ticket_query = get_ticket_query_from_user(get_current_user_id());
-  $ticket_list = array();
-
-  if ( $ticket_query->have_posts() ) {
-    while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
-      $ticket = array();
-      $ticket['id'] = $post->ID;
-      $ticket['title'] = $post->post_title;
-      //$ticket['date'] = $post->date; 
-      $ticket['device_id'] = get_post_meta($post->ID, 'device_id', true );
-      $ticket['duration'] = get_post_meta($post->ID, 'duration', true );
-      array_push($ticket_list, $ticket);
-    endwhile;
-  } 
-  wp_reset_query();
-
-  echo json_encode($ticket_list);
-  die();
-}
-add_action( 'wp_ajax_get_active_tickets', 'get_active_tickets' );
-*/
 
 ?>

@@ -3,7 +3,6 @@ jQuery(document).ready(function($){
   var time_interval = 15;
   var orig_overflow = $( 'body' ).css( 'overflow' );
 
-
   // on click get device ticket
   // load overlay content
   $('#fl-getticket').on('click', function(event) {
