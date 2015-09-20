@@ -18,7 +18,10 @@
     background-color: rgba(0,0,0,0);
 }
 .fl-device-element-content h2{
-    margin-bottom: 15px;
+    margin-top: 6px;
+    margin-bottom: 14px;
+    color: rgba(256,256,256,0.9);
+    font-weight: bold;
 }
 .fl-device-element-content p{
     color: rgba(256,256,256,0.7);
@@ -38,10 +41,12 @@
     padding: 24px 28px;
     margin: 0px 6px 14px 8px;
 }
+
 .fl-ticket-element h2 {
-    margin-top: -10px;
-    margin-bottom: 10px;
+    margin-top: -4px;
+    margin-bottom: 8px;
     color: #74a4a3;
+    font-weight: bold;
 }
 
 .fl-ticket-element input[type=submit] {
@@ -49,8 +54,9 @@
     background: none;
     color: #74a4a3;
     text-transform: none;
-    padding: 11px 18px;
-    font-weight: 600;
+    padding: 10px 16px;
+    font-weight: bold;
+    font-size: 14px;
     border-radius: 5px;
     transition: all 0.2s ease;
     -webkit-transition: all 0.2s ease;
@@ -76,8 +82,22 @@
     top: 0;
     overflow-x: hidden;
     overflow-y: auto;
-    z-index: 10;
+    z-index: 10010;
 }
+
+.fl-overlay-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    right: 0;
+    top: 0;
+    z-index: 10011;
+}
+
+/* Device Ticket Overlay */
 
 .device-ticket .close {
     margin: -20px -14px;
@@ -92,20 +112,6 @@
     opacity: 0.5;
 }
 
-.fl-overlay-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
-    right: 0;
-    top: 0;
-    z-index: 11;
-}
-
-/* Device Ticket Overlay */
-
 .device-ticket {
     width: 70%;
     position: relative;
@@ -114,7 +120,7 @@
     background-color: #fdfdfd;
     border: 7px solid #ccc;
     border-radius: 8px;
-    z-index: 12; /* 1px higher than the overlay layer */
+    z-index: 10012; /* 1px higher than the overlay layer */
 }
 
 @media all and (min-width: 800px) {
@@ -129,13 +135,20 @@
     }
 }
 
+.device-ticket h2 {
+    margin-top: 6px;
+    margin-bottom: 14px;
+    font-weight: bold;
+}
+
 .device-ticket input[type=submit] {
     border: 1px solid #aaa;
     background: none;
     color: #aaa;
     text-transform: none;
     padding: 6px 12px;
-    font-weight: 600;
+    font-weight: bold;
+    font-size: 12px;
     border-radius: 4px;
     transition: all 0.2s ease;
     -webkit-transition: all 0.2s ease;
@@ -162,6 +175,7 @@
     background: #f7f7f7;
     color: #888;
     display: inline-block;
+    padding: 6px;
     appearance:none;
     -webkit-appearance:none;
     -moz-appearance:none;
@@ -170,9 +184,9 @@
 /* Blink */
 
 .blink{
+    animation: blink 600ms infinite alternate;
     -webkit-animation: blink 600ms infinite alternate;
     -moz-animation: blink 600ms infinite alternate;
-    animation: blink 600ms infinite alternate;
 }
 @-webkit-keyframes blink {
     from { opacity:0.3; }
@@ -185,7 +199,7 @@
 @keyframes blink {
     from { opacity:0.3; }
     to { opacity:1; }
-};
+}
 
 /* Message */
 
@@ -194,4 +208,5 @@
     border: 1px solid #eee;
     border-radius: 4px;
     padding: 5px 10px;
+    margin-bottom: 10px;
 }

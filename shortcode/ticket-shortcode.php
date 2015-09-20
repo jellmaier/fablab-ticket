@@ -61,21 +61,20 @@ function display_available_devices() {
   $device_query = new WP_Query($query_arg);
   if ( $device_query->have_posts() ) {
     echo '<p>Hier werden dir die verfügbaren Geräte angezeigt:</p>';
-    echo '<div id="fl-getticket" action="" metod="POST">';
+    echo '<div id="message" hidden class="message-box"></div>';
+    echo '<div id="fl-getticket ">';
     while ( $device_query->have_posts() ) : $device_query->the_post() ;
       $waiting = get_waiting_time_and_persons($post->ID);
       $color = get_post_meta($post->ID, 'device_color', true );
       ?>
-      <a href="#" data-name="<?= $post->ID ?>">
-        <div class="fl-device-element"  style="border: 6px solid <?= $color ?>; background-color: <?= $color ?>;">
-          <div class="fl-device-element-content">
-            <h2><?= $post->post_title ?></h2>
-            <p id="waiting-time">Wartende Personen: <b><?= $waiting['persons'] ?>.</b></br>
-            Vorraussichtlich Wartezeit: <b><?= get_post_time_string($waiting['time'], true) ?>.</b></p>
-            <input type="hidden" name="device-id" value="<?= the_ID(); ?>">
-          </div>
+      <div class="fl-device-element get-ticket"  style="border: 6px solid <?= $color ?>; background-color: <?= $color ?>;"
+        data-device-id="<?= $post->ID ?>" data-device-name="<?= get_device_title_by_id($post->ID) ?>">
+        <div class="fl-device-element-content" data-device-id="<?= $post->ID ?>">
+          <h2><?= $post->post_title ?></h2>
+          <p id="waiting-time">Wartende Personen: <b><?= $waiting['persons'] ?>.</b></br>
+          Vorraussichtlich Wartezeit: <b><?= get_post_time_string($waiting['time'], true) ?>.</b></p>
         </div>
-      </a>
+      </div>
       <?php
     endwhile;
     echo '</div>';
@@ -94,14 +93,12 @@ function display_available_devices() {
       <p id="device-name"></p>
       <input type="hidden" id="device-id" value="">
       <div id="device-content"></div>
-      <p></p>
       <p>Dauer: <select id="time-select"></select></p>
       <input type="submit" id="submit-ticket" class="button-primary" value="Ticket ziehen"/>
       <input type="submit" id="cancel-ticket" class="button-primary" value="Abbrechen"/>
     </div>
     <div id="overlay-background" class="fl-overlay-background"></div>
   </div>
-  <div id="message" hidden class="message-box"></div>
   <?php
 }
 
@@ -112,25 +109,31 @@ function display_available_devices() {
 function display_user_tickets($ticket_query) {
   global $post;
   echo '<p>Hier wird dir dein gezogenes Ticket angezeigt:</p>';
+  echo '<div id="message" hidden class="message-box"></div>';
   echo '<div id="ticket-listing" action="" metod="POST">';
   while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
     $waiting = get_waiting_time_and_persons(get_post_meta($post->ID, 'device_id', true ), $post->ID);
     $color = get_post_meta(get_post_meta($post->ID, 'device_id', true ), 'device_color', true );
+    $device_id = get_post_meta($post->ID, 'device_id', true );
+          if(($post->post_status) == 'draft') {
+        $opacity = 0.6;
+      } else {
+        $opacity = 1;
+    };
     ?>
-    <a href="#" data-name="<?= $post->ID ?>">
-    <div class="fl-ticket-element" style="border-left: 5px solid <?= $color ?>;">
+    <div class="fl-ticket-element" style="border-left: 5px solid <?= $color ?>; opacity: <?= $opacity ?>;"
+      data-ticket-id="<?= $post->ID ?>" data-device-id="<?=  $device_id ?>"
+      data-duration="<?=  get_post_meta($post->ID, 'duration', true ) ?>"
+      data-user-id="<?=  $post->post_author ?>" data-device-name="<?= get_device_title_by_id($device_id) ?>"
+      data-user="<?=  get_user_by('id', $post->post_author)->display_name; ?>">
       <p><?= the_time('l, j. F, G:i') ?><p>
       <h2>Ticket</h2>
       <p>für Gerät: <b><?=  get_device_title_by_id(get_post_meta($post->ID, 'device_id', true )) ?>,</b> </br> 
       Benutzungsdauer: <b><?=  get_post_time_string(get_post_meta($post->ID, 'duration', true )) ?></b></p>
       <p id="waiting-time">Vor dir wartende Personen: <b><?= $waiting['persons'] ?>.</b></br>
       Vorraussichtlich Wartezeit: <b><?= get_post_time_string($waiting['time'], true) ?>.</b></p>
-      <input type="hidden" id="ticket-device-id" value="<?=  get_post_meta($post->ID, 'device_id', true ) ?>">
-      <input type="hidden" id="ticket-duration" value="<?=  get_post_meta($post->ID, 'duration', true ) ?>">
-      <input type="hidden" id="ticket-id" value="<?=  $post->ID ?>">
-      <input type="submit" name="<?=  $post->post_title ?>" id="<?=  $post->post_title ?>" class="ticket-btn" value="Ticket bearbeiten"/>
+      <input type="submit" class="ticket-btn edit-ticket" value="Ticket bearbeiten"/>
     </div>
-    </a>
     <?php
   endwhile;
   echo '</div>';
@@ -140,14 +143,12 @@ function display_user_tickets($ticket_query) {
   // Display overlay change Ticket
   ?>
   <div id="overlay" class="fl-overlay" hidden>
-    <div id="device-ticket-box" class="device-ticket" hidden action="" metod="POST">
+    <div id="device-ticket-box" class="device-ticket" hidden>
       <a href="#" id="overlay-close" class="close">x</a>
       <h2>Ticket bearbeiten</h2>
       <p>Gerät: <select id="device-select"></select></p>
       <p id="waiting-time"><p>
-      <input type="hidden" id="device-id" value="">
       <div id="device-content"></div>
-      <p></p>
       <p>Dauer: <select id="time-select"></select></p>
       <input type="submit" id="submit-change-ticket" class="button-primary" value="Ticket speichern"/>
       <input type="submit" id="delete-change-ticket" class="button-primary" value="Löschen"/>
@@ -155,8 +156,6 @@ function display_user_tickets($ticket_query) {
    </div>
    <div id="overlay-background" class="fl-overlay-background"></div>
   </div>
-  <div id="message" hidden class="message-box"></div>
-
   <?php
 }
 

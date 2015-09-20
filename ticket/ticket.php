@@ -170,7 +170,10 @@ function save_ticket_field($ticket_field) {
 function get_ticket_query_from_user($user_id) {
   $query_arg = array(
     'post_type' => 'ticket',
-    'author' => $user_id
+    'author' => $user_id,
+    'orderby' => 'date', 
+    'order' => 'ASC',
+    'post_status' => array('publish', 'draft'),
   );
   return new WP_Query($query_arg);
 }

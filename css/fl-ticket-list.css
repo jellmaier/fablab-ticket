@@ -1,6 +1,7 @@
 /* Ticket Element */
 
 .fl-ticket-element {
+    font-family: Helvetica, Arial, Sans-Serif;
     position: relative;
     background: #fff;
     border-left: 5px solid #dd7127;
@@ -15,6 +16,7 @@
     margin-top: 2px;
     margin-bottom: 2px;
     font-size: 28px;
+    font-weight: bold;
     color: #74a4a3;
 }
 .fl-ticket-element p {
@@ -55,7 +57,7 @@
     top: 0;
     overflow-x: hidden;
     overflow-y: auto;
-    z-index: 10;
+    z-index: 10010;
 }
 
 .device-ticket .close {
@@ -80,7 +82,7 @@
     background-color: rgba(0,0,0,0.5);
     right: 0;
     top: 0;
-    z-index: 11;
+    z-index: 10011;
 }
 
 /* Device Ticket Overlay */
@@ -93,7 +95,7 @@
     background-color: #fdfdfd;
     border: 7px solid #ccc;
     border-radius: 8px;
-    z-index: 12; /* 1px higher than the overlay layer */
+    z-index: 10012; /* 1px higher than the overlay layer */
 }
 
 @media all and (min-width: 800px) {
@@ -159,6 +161,7 @@
     color: #fff;
     padding: 6px 10px;
     cursor: pointer;
+    margin: 0px;
 }
 
 .time-ticket-box {
@@ -172,6 +175,7 @@
     color: #fff;
     padding: 6px 10px;
     cursor: pointer;
+    margin: 0px;
 }
 
 
@@ -182,4 +186,5 @@
     border: 1px solid #eee;
     border-radius: 4px;
     padding: 5px 10px;
+    margin-bottom: 10px;
 }
