@@ -393,4 +393,18 @@ function insert_timeticket() {
 add_action( 'wp_ajax_add_timeticket', 'insert_timeticket' );
 
 
+function delete_timeticket() {
+  $ticket_id = $_POST['ticket_id'];
+  die(wp_delete_post($ticket_id));
+}
+add_action( 'wp_ajax_delete_timeticket', 'delete_timeticket' );
+
+function stop_timeticket() {
+  $ticket_id = $_POST['ticket_id'];
+  update_post_meta($ticket_id, 'timeticket_end_time', current_time( 'timestamp' ));
+  die();
+}
+add_action( 'wp_ajax_stop_timeticket', 'stop_timeticket' );
+
+
 ?>

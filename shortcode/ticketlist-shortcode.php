@@ -121,18 +121,17 @@ function display_manager_ticketlist() {
     'order' => 'ASC',
     'meta_query'=>array(
     'relation'=>'and',
-    array(
-        'key'=>'timeticket_start_time',
-        'value'=> current_time( 'timestamp' ),
-        'compare' => '<'
-    ),
-    array(
-        'key'=>'timeticket_end_time',
-        'value'=> current_time( 'timestamp' ),
-        'compare' => '>'
-    )
-
+      array(
+          'key'=>'timeticket_start_time',
+          'value'=> current_time( 'timestamp' ),
+          'compare' => '<'
+      ),
+      array(
+          'key'=>'timeticket_end_time',
+          'value'=> current_time( 'timestamp' ),
+          'compare' => '>'
       )
+    )
   );
   $ticket_query = new WP_Query($query_arg);
   echo '<div class="time-ticket-box">';
@@ -142,17 +141,15 @@ function display_manager_ticketlist() {
     $device_id = get_post_meta($post->ID, 'timeticket_device', true );
     $color = get_post_meta($device_id, 'device_color', true );
     ?>
-    <div class="fl-ticket-element" data-ticket-id="<?= $post->ID ?>" style="border: 5px solid <?= $color ?>;">
+    <div class="fl-ticket-element" style="border: 5px solid <?= $color ?>;"
+      data-user="<?= get_user_by('id', get_post_meta($post->ID, 'timeticket_user', true ))->display_name ?>"
+      data-time-ticket-id="<?= $post->ID ?>">
       <p>Gerät: <b><?=  get_device_title_by_id($device_id) ?></b> </p> 
       <h2><?= $post->post_title ?></h2>
       <p>Start Zeit vor: <b><?=  human_time_diff(get_post_meta($post->ID, 'timeticket_start_time', true ), current_time( 'timestamp' ) ); ?></b></p>
       <p>End Zeit in: <b><?=  human_time_diff(get_post_meta($post->ID, 'timeticket_end_time', true ), current_time( 'timestamp' ) ); ?></b></p>
-      <input type="hidden" id="ticket-device-id" value="<?=  $device_id ?>">
-      <input type="hidden" id="ticket-duration" value="<?=  get_post_meta($post->ID, 'duration', true ) ?>">
-      <input type="hidden" id="ticket-user-id" value="<?=  $post->post_author ?>">
-      <input type="hidden" id="ticket-user" value="<?=  get_user_by('id', $post->post_author)->display_name; ?>">
-      <input type="submit" class="ticket-btn" value="Jetzt Beenden"/>
-      <input type="submit" class="ticket-btn" value="Löschen"/>
+      <input type="submit" class="ticket-btn stop-time-ticket" value="Jetzt Beenden"/>
+      <input type="submit" class="ticket-btn delete-time-ticket" value="Löschen"/>
     </div>
     <?php
   endwhile;
@@ -180,7 +177,7 @@ function display_manager_ticketlist() {
       data-ticket-id="<?= $post->ID ?>" data-device-id="<?=  $device_id ?>"
       data-duration="<?=  get_post_meta($post->ID, 'duration', true ) ?>"
       data-user-id="<?=  $post->post_author ?>" data-device-name="<?= get_device_title_by_id($device_id) ?>"
-      data-user="<?=  get_user_by('id', $post->post_author)->display_name; ?>" >
+      data-user="<?=  get_user_by('id', $post->post_author)->display_name ?>" >
       <p><?= the_time('l, j. F, G:i') ?><p>
       <h2><?= $post->post_title ?></h2>
       <p>für Gerät: <b><?=  get_device_title_by_id($device_id) ?>,</b> </br> 
