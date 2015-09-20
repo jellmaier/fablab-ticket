@@ -21,6 +21,7 @@ jQuery(document).ready(function($){
     };
     $.post(ajaxurl, data, function(response) {
        message($, "Time-Ticket von: " + time_ticket.data('user') + ", beendet!");
+       time_ticket.hide();
     })
   })
 
@@ -34,13 +35,13 @@ jQuery(document).ready(function($){
     };
     $.post(ajaxurl, data, function(response) {
        message($, "Time-Ticket von: " + time_ticket.data('user') + ", gelöscht!");
+       time_ticket.hide();
     })
   })
 
 
   // Ticket Handling 
   $('.deactivate-ticket').on('click', function(event) {
-    //Get Ticket option
     ticket = $(this).parent('div');
     data = {
       action: 'deactivate_ticket',
@@ -48,11 +49,11 @@ jQuery(document).ready(function($){
     };
     $.post(ajaxurl, data, function(response) {
        message($, "Ticket von: " + ticket.data('user') + ", deaktiviert!");
+       ticket.hide();
     })
   })
 
   $('.activate-ticket').on('click', function(event) {
-    //Get Ticket option
     ticket = $(this).parent('div');
     data = {
       action: 'activate_ticket',
@@ -60,6 +61,19 @@ jQuery(document).ready(function($){
     };
     $.post(ajaxurl, data, function(response) {
        message($, "Ticket von: " + ticket.data('user') + ", aktiviert!");
+       ticket.hide();
+    })
+  })
+
+  $('.delete-ticket').on('click', function(event) {
+    ticket = $(this).parent('div');
+    data = {
+      action: 'delete_ticket',
+      ticket_id:  ticket.data('ticket-id'),
+    };
+    $.post(ajaxurl, data, function(response) {
+       message($, "Ticket von: " + ticket.data('user') + ", gelöscht!");
+       ticket.hide();
     })
   })
 
@@ -81,17 +95,6 @@ jQuery(document).ready(function($){
     $("#time-select").append( new Option(minutesToHours(max_time), max_time) );
     $("#time-select").val(ticket.data('duration'));
 
-/*
-    // Set Device Name
-    data = {
-      action: 'get_device_title',
-      device_id: device_id,
-    };
-    $.post(ajaxurl, data, function(response) {
-      $('#device-name').replaceWith('<p id="device-name" >Gerät: <b>' + response + '</b></p>');
-      
-    })
-    */
     $('body').css( 'overflow', 'hidden' );
     $("#device-ticket-box").show();
     $("#overlay").fadeIn(600);
@@ -104,7 +107,7 @@ jQuery(document).ready(function($){
     data = {
       action: 'add_timeticket',
       device_id:  ticket.data('device-id'),
-      duration:  ticket.data('duration'),
+      duration:  $("#time-select").val(),
       user_id:  ticket.data('user-id'),
     };
     $.post(ajaxurl, data, function(response) {

@@ -106,6 +106,7 @@ function display_manager_ticketlist() {
       Vorraussichtlich Wartezeit: <b><?= get_post_time_string($waiting['time'], true) ?>.</b></p>
       <input type="submit" class="ticket-btn assign-ticket" value="Ticket zuweisen"/>
       <input type="submit" class="ticket-btn activate-ticket" value="Ticket aktivieren"/>
+      <input type="submit" class="ticket-btn delete-ticket" value="Ticket löschen"/>
     </div>
     <?php
   endwhile;
@@ -204,7 +205,6 @@ function display_manager_ticketlist() {
       <p id="waiting-time"><p>
       <p>Dauer: <select id="time-select"></select></p>
       <input type="submit" id="submit-ticket" class="button-primary" value="Ticket zuweisen"/>
-      <input type="submit" id="delete-ticket" class="button-primary" value="Löschen"/>
       <input type="submit" id="cancel-ticket" class="button-primary" value="Abbrechen"/>
    </div>
    <div id="overlay-background" class="fl-overlay-background"></div>
