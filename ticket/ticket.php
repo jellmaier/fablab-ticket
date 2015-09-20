@@ -243,6 +243,16 @@ function deactivate_ticket() {
 }
 add_action( 'wp_ajax_deactivate_ticket', 'deactivate_ticket' );
 
+function activate_ticket() {
+  $post_information = array(
+        'ID' => $_POST['ticket_id'],
+        'post_status' => 'publish',
+    );
+  wp_update_post( $post_information );
+  die();
+}
+add_action( 'wp_ajax_activate_ticket', 'activate_ticket' );
+
 function get_post_time_string($time, $shownull = false) {
   $ret = "";
   $hours = floor($time / 60);

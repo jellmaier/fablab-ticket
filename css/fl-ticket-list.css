@@ -6,11 +6,11 @@
     border-left: 5px solid #dd7127;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
     padding: 20px 24px;
-    margin: 0px 6px 20px 8px;
+    margin: 20px 10px;
 }
 .fl-ticket-element h2 {
-    margin-top: 0px;
-    margin-bottom: 0px;
+    margin-top: 2px;
+    margin-bottom: 2px;
     font-size: 28px;
     color: #74a4a3;
 }
@@ -142,6 +142,35 @@
     -webkit-appearance:none;
     -moz-appearance:none;
 }
+
+/* Draft Ticket List */
+
+.draft-box {
+    border: 1px solid #0066CC;
+    border-radius: 4px;
+    margin-bottom: 14px;
+}
+
+.draft-toggle {
+    background-color: #0066CC;
+    color: #fff;
+    padding: 6px 10px;
+    cursor: pointer;
+}
+
+.time-ticket-box {
+    border: 1px solid #74a4a3;
+    border-radius: 4px;
+    margin-bottom: 14px;
+}
+
+.time-ticket-toggle {
+    background-color: #74a4a3;
+    color: #fff;
+    padding: 6px 10px;
+    cursor: pointer;
+}
+
 
 /* Message */
 

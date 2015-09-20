@@ -113,6 +113,7 @@ function codex_device_init() {
  
 function device_edit_columns($columns){
     $columns = array(
+        "cb" => '<input type="checkbox" />',
         "title" => "Device",
         "device_status" => "Device Status",
         "device_color" => "Device Color",

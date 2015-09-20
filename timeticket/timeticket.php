@@ -116,6 +116,7 @@ function codex_timeticket_init() {
  
 function timeticket_edit_columns($columns){
     $columns = array(
+        "cb" => '<input type="checkbox" />',
         "title" => "Time Ticket",
         "timeticket_start_time" => "Start Time",
         "timeticket_end_time" => "End Time",
@@ -135,6 +136,14 @@ function timeticket_table_content( $column_name, $post_id ) {
 
     case 'timeticket_user' :
       echo get_user_by('id', get_post_meta( $post_id, 'timeticket_user', true ))->display_name;
+      break;
+
+    case 'timeticket_start_time' :
+      echo date_i18n('Y-m-d H:i', get_post_meta( $post_id, 'timeticket_start_time', true ));
+      break;
+
+    case 'timeticket_end_time' :
+      echo date_i18n('Y-m-d H:i', get_post_meta( $post_id, 'timeticket_end_time', true ));
       break;
 
     default :
@@ -188,7 +197,11 @@ function get_timeticket_field($timeticket_field) {
     $custom = get_post_custom($post->ID);
  
     if (isset($custom[$timeticket_field])) {
+      if (($timeticket_field == "timeticket_start_time") || ($timeticket_field == "timeticket_end_time")) {
+        return date_i18n('Y-m-d H:i', $custom[$timeticket_field][0]);
+      } else {
         return $custom[$timeticket_field][0];
+      }
     }
 }
 
@@ -214,7 +227,11 @@ function save_timeticket_field($timeticket_field) {
     global $post;
  
     if(isset($_POST[$timeticket_field])) {
+      if (($timeticket_field == "timeticket_start_time") || ($timeticket_field == "timeticket_end_time")) {
+          update_post_meta($post->ID, $timeticket_field, strtotime($_POST[$timeticket_field]));
+      } else {
         update_post_meta($post->ID, $timeticket_field, $_POST[$timeticket_field]);
+      }
     }
 }
 
@@ -228,32 +245,122 @@ function set_timeticket_title( $data , $postarr ) {
 }
 
 function is_device_availabel($device_id){
-
   global $post;
+
   $query_arg = array(
     'post_type' => 'timeticket',
-   'meta_query' => array(   
-      'relation'=> 'OR',               
+    'meta_query'=>array(
+      'relation'=>'and',
       array(
         'key' => 'timeticket_device',                  
         'value' => $device_id,               
         'compare' => '='                 
+      ),
+      array(
+          'key'=>'timeticket_start_time',
+          'value'=> current_time( 'timestamp' ),
+          'compare' => '<'
+      ),
+      array(
+          'key'=>'timeticket_end_time',
+          'value'=> current_time( 'timestamp' ),
+          'compare' => '>'
       )
-    ) 
+    )
   );
   $device_query = new WP_Query($query_arg);
   if ( $device_query->have_posts() ) {
-    while ( $device_query->have_posts() ) : $device_query->the_post() ;
-      $start_time = strtotime(get_post_meta($post->ID, 'timeticket_start_time', true ));
-      $end_time = strtotime(get_post_meta($post->ID, 'timeticket_end_time', true ));
-      $current_time = strtotime('now -2');
-      if ( $start_time < $current_time && $current_time < $end_time ) {
-        return true;
-      } 
-    endwhile;
+    return false;
+  }
+  wp_reset_query();
+
+  return true;
+}
+
+function is_device_availabel_range($device_id, $start_time, $end_time) {
+  global $post;
+  
+  $query_arg = array(
+    'post_type' => 'timeticket',
+    'meta_query'=>array(
+      'relation'=>'and',
+      array(
+        'key' => 'timeticket_device',                  
+        'value' => $device_id,               
+        'compare' => '='                 
+      ),
+      array(
+          'key'=>'timeticket_start_time',
+          'value'=> $start_time,
+          'compare' => '>'
+      ),
+      array(
+          'key'=>'timeticket_end_time',
+          'value'=> $end_time,
+          'compare' => '<'
+      )
+    )
+  );
+  $device_query = new WP_Query($query_arg);
+  if ( $device_query->have_posts() ) {
+    return false;
+  }
+  wp_reset_query();
+
+  $query_arg = array(
+    'post_type' => 'timeticket',
+    'meta_query'=>array(
+      'relation'=>'and',
+      array(
+        'key' => 'timeticket_device',                  
+        'value' => $device_id,               
+        'compare' => '='                 
+      ),
+      array(
+          'key'=>'timeticket_start_time',
+          'value'=> $start_time,
+          'compare' => '<'
+      ),
+      array(
+          'key'=>'timeticket_end_time',
+          'value'=> $start_time,
+          'compare' => '>'
+      )
+    )
+  );
+  $device_query = new WP_Query($query_arg);
+  if ( $device_query->have_posts() ) {
+    return false;
+  }
+  wp_reset_query();
+
+  $query_arg = array(
+    'post_type' => 'timeticket',
+    'meta_query'=>array(
+      'relation'=>'and',
+      array(
+        'key' => 'timeticket_device',                  
+        'value' => $device_id,               
+        'compare' => '='                 
+      ),
+      array(
+          'key'=>'timeticket_start_time',
+          'value'=> $end_time,
+          'compare' => '<'
+      ),
+      array(
+          'key'=>'timeticket_end_time',
+          'value'=> $end_time,
+          'compare' => '>'
+      )
+    )
+  );
+  $device_query = new WP_Query($query_arg);
+  if ( $device_query->have_posts() ) {
+    return false;
   }
 
-  return false;
+  return true;
 }
 
 function insert_timeticket() {
@@ -261,7 +368,8 @@ function insert_timeticket() {
   $duration = $_POST['duration'];
   $user_id = $_POST['user_id'];
 
-  $start_time = date_i18n('Y-m-d H:i');
+  $start_time = current_time( 'timestamp' );
+  $end_time = (current_time( 'timestamp' ) + (60 * $duration)) ;
 
   $post_information = array(
         'post_title' => 'Time-Ticket von: ' . get_user_by('id', $user_id)->display_name,
@@ -275,7 +383,7 @@ function insert_timeticket() {
     if ($ID != 0) {
       add_post_meta($ID, 'timeticket_device', $device_id);
       add_post_meta($ID, 'timeticket_start_time' , $start_time);
-      add_post_meta($ID, 'timeticket_end_time' , $start_time);
+      add_post_meta($ID, 'timeticket_end_time' , $end_time);
       add_post_meta($ID, 'timeticket_user' , $user_id);
     }
 
