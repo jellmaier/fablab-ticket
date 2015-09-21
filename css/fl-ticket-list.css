@@ -13,8 +13,8 @@
     -moz-transition: all 0.2s ease;
 }
 .fl-ticket-element h2 {
-    margin-top: 2px;
-    margin-bottom: 2px;
+    margin-top: 6px;
+    margin-bottom: 6px;
     font-size: 28px;
     font-weight: bold;
     color: #74a4a3;
@@ -25,13 +25,14 @@
 }
 
 .fl-ticket-element input[type=submit] {
-    margin-top: 14px;
+    margin: 10px 4px 0px 0px;
     border: 1px solid #74a4a3;
     background: none;
     color: #74a4a3;
     text-transform: none;
-    padding: 11px 18px;
-    font-weight: 600;
+    padding: 10px 16px;
+    font-weight: bold;
+    font-size: 14px;
     border-radius: 5px;
     transition: all 0.2s ease;
     -webkit-transition: all 0.2s ease;
@@ -110,6 +111,12 @@
     }
 }
 
+.device-ticket h2 {
+    margin-top: 6px;
+    margin-bottom: 14px;
+    font-weight: bold;
+}
+
 .device-ticket input[type=submit] {
     border: 1px solid #aaa;
     background: none;
@@ -143,6 +150,7 @@
     background: #f7f7f7;
     color: #888;
     display: inline-block;
+    padding: 6px;
     appearance:none;
     -webkit-appearance:none;
     -moz-appearance:none;
