@@ -1,6 +1,16 @@
 jQuery(document).ready(function($){
-  var max_time = 120;
-  var time_interval = 15;
+  
+  var max_time = '';
+  var time_interval = '';
+  data = {
+    action: 'get_fablab_options'
+  };
+  $.post(ajaxurl, data, function(response) {
+    var options = JSON.parse(response);
+    max_time = parseInt(options.ticket_max_time);
+    time_interval = parseInt(options.ticket_time_interval);
+  })
+
   var orig_overflow = $( 'body' ).css( 'overflow' );
 
   $('.draft-toggle').click(function(event) {
