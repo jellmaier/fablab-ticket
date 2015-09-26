@@ -62,7 +62,7 @@ function display_available_devices() {
   if ( $device_query->have_posts() ) {
     echo '<p>Hier werden dir die verfügbaren Geräte angezeigt:</p>';
     echo '<div id="message" hidden class="message-box"></div>';
-    echo '<div id="fl-getticket ">';
+    echo '<div id="fl-getticket">';
     while ( $device_query->have_posts() ) : $device_query->the_post() ;
       $waiting = get_waiting_time_and_persons($post->ID);
       $color = get_post_meta($post->ID, 'device_color', true );
@@ -115,7 +115,7 @@ function display_user_tickets($ticket_query) {
     $waiting = get_waiting_time_and_persons(get_post_meta($post->ID, 'device_id', true ), $post->ID);
     $color = get_post_meta(get_post_meta($post->ID, 'device_id', true ), 'device_color', true );
     $device_id = get_post_meta($post->ID, 'device_id', true );
-          if(($post->post_status) == 'draft') {
+    if(($post->post_status) == 'draft') {
         $opacity = 0.6;
       } else {
         $opacity = 1;
@@ -132,7 +132,13 @@ function display_user_tickets($ticket_query) {
       Benutzungsdauer: <b><?=  get_post_time_string(get_post_meta($post->ID, 'duration', true )) ?></b></p>
       <p id="waiting-time">Vor dir wartende Personen: <b><?= $waiting['persons'] ?>.</b></br>
       Vorraussichtlich Wartezeit: <b><?= get_post_time_string($waiting['time'], true) ?>.</b></p>
-      <input type="submit" class="ticket-btn edit-ticket" value="Ticket bearbeiten"/>
+      <?php
+      if($opacity == 1) {
+        echo '<input type="submit" class="ticket-btn edit-ticket" value="Ticket bearbeiten"/>';
+      } else {
+        echo '<p></br><b>Dein Ticket ist deaktiviert, bitte melde dich bei dem Manager!</b></p>';
+      } 
+      ?>
     </div>
     <?php
   endwhile;

@@ -221,3 +221,6 @@
     padding: 5px 10px;
     margin-bottom: 10px;
 }
+.message-box p{
+    margin: 4px;
+}

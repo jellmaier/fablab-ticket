@@ -70,7 +70,7 @@
     font-weight: bold;
     line-height: 1;
     opacity: 0.3;
-    text-decoration: none;
+    text-decoration: none;  
 }
 .device-ticket .close:hover {
     cursor: pointer;
@@ -202,4 +202,7 @@
     border-radius: 4px;
     padding: 5px 10px;
     margin-bottom: 10px;
+}
+.message-box p{
+    margin: 4px;
 }
