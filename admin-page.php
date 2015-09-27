@@ -10,29 +10,14 @@ if (!class_exists('AdminPage'))
     public function __construct()
     {
 
-      /*
-      function fl_admin_menu_seperator(){
-        if ( ! current_user_can( 'bp_moderate' ) ) {
-          return;
-        }
-        global $menu;
-
-        $menu[] = array( '', 'read', 'separator-fablab-ticket', '', 'wp-menu-separator' );
-      }
-      add_action('admin_menu', 'fl_admin_menu_seperator');
-
-      */
-
       function fl_options_page() {
         $parent_slug = 'edit.php?post_type=device';
         $page_title = __('Ticket Options', 'fl');
         $menu_title = __('Ticket Options', 'fl');
-        $capability = 'manage_options';
+        $capability = 'delete_others_posts';
         $menu_slug = 'fablab_options';
         $function = 'fablab_options_page';
 
-        //global $fl_settings;
-        //$fl_settings = add_options_page(__('Fablab Options', 'fl'), __('Fablab Options', 'fl'), 'manage_options', 'fablab_options', 'fl_options_render');
         add_submenu_page( $parent_slug, $page_title, $menu_title, $capability, $menu_slug, $function);
 
 

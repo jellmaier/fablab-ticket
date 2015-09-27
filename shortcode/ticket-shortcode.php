@@ -21,7 +21,7 @@ function get_ticket_shortcode($atts){
   $fl_ticket_script = true;
   $user_id = get_current_user_id();
   $ticket_query = get_ticket_query_from_user($user_id);
-  //count_user_posts(uid, posttype);
+  $tickets_per_user = fablab_get_option()['tickets_per_user'];
 
   if($user_id == 0) {
       //--------------------------------------------------------
@@ -34,11 +34,15 @@ function get_ticket_shortcode($atts){
       einloggen, oder <a href="<?= bloginfo('url'); ?>/register/">hier</a> registrieren!</p>
     </div>
     <?php
-  } else if ( $ticket_query->have_posts() ) {
-    display_user_tickets($ticket_query);
   } else {
-    display_available_devices();
+    if ( $ticket_query->have_posts() ) {
+      display_user_tickets($ticket_query);
+    } 
+    if ( $ticket_query->found_posts < $tickets_per_user ) {
+      display_available_devices();
+    }
   }
+  
 }
     
 
@@ -110,7 +114,7 @@ function display_user_tickets($ticket_query) {
   global $post;
   echo '<p>Hier wird dir dein gezogenes Ticket angezeigt:</p>';
   echo '<div id="message" hidden class="message-box"></div>';
-  echo '<div id="ticket-listing" action="" metod="POST">';
+  echo '<div id="ticket-listing">';
   while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
     $waiting = get_waiting_time_and_persons(get_post_meta($post->ID, 'device_id', true ), $post->ID);
     $color = get_post_meta(get_post_meta($post->ID, 'device_id', true ), 'device_color', true );

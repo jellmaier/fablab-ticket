@@ -189,17 +189,33 @@ function get_ticket_device($ID) {
 
 
 function insert_ticket() {
-  $device_id = $_POST['device_id'];
-  $duration = $_POST['duration'];
+  $device_id = sanitize_text_field($_POST['device_id']);
+  $duration = sanitize_text_field($_POST['duration']);
+  $options = fablab_get_option();
 
-  $post_information = array(
-        'post_title' => "Ticket, von: " . wp_get_current_user()->display_name,
-        //'post_title' => "Ticket, für Gerät: " . get_device_title_by_id($device_id) . ", vom " . date_i18n('D, d.m.y \u\m H:i'),
+  //valide input
+  if(($duration > $options['ticket_max_time']) || is_no_device_entry($device_id)) {
+    die(false);
+  }
+
+  //check how many tickets of user
+  $tickets_per_user = $options['tickets_per_user'];
+  $query_arg = array(
         'post_type' => 'ticket',
         'author' => get_current_user_id(),
-        'post_status' => 'publish',
+        'post_status' => array('publish', 'draft'),
+  );
+
+  $ticket_query = new WP_Query($query_arg);
+  if ($ticket_query->found_posts < $tickets_per_user) {
+    $post_information = array(
+      'post_title' => "Ticket, von: " . wp_get_current_user()->display_name,
+      //'post_title' => "Ticket, für Gerät: " . get_device_title_by_id($device_id) . ", vom " . date_i18n('D, d.m.y \u\m H:i'),
+      'post_type' => 'ticket',
+      'author' => get_current_user_id(),
+      'post_status' => 'publish',
     );
- 
+   
     $ID = wp_insert_post( $post_information );
 
     if ($ID != 0) {
@@ -208,14 +224,22 @@ function insert_ticket() {
     }
     
     die($ID != 0);
+  }
+  die(false);
 }
 add_action( 'wp_ajax_add_ticket', 'insert_ticket' );
 
 
 function update_ticket() {
-  $device_id = $_POST['device_id'];
-  $duration = $_POST['duration'];
-  $ticket_id = $_POST['ticket_id'];
+  $device_id = sanitize_text_field($_POST['device_id']);
+  $duration = sanitize_text_field($_POST['duration']);
+  $ticket_id = sanitize_text_field($_POST['ticket_id']);
+
+  //valide input  
+  if(($duration > fablab_get_option()['ticket_max_time']) 
+    || is_no_device_entry($device_id) || !is_ticket_entry($ticket_id)) {
+    die(false);
+  }
 
   if (intval($duration) && intval($ticket_id)) {
     update_post_meta($ticket_id, 'device_id', $device_id);
@@ -225,20 +249,32 @@ function update_ticket() {
     return;
   }
        
-  die();
+  die(true);
 }
 add_action( 'wp_ajax_update_ticket', 'update_ticket' );
 
 function delete_ticket() {
-  $ticket_id = $_POST['ticket_id'];
+  $ticket_id = sanitize_text_field($_POST['ticket_id']);
+
+  //valide input  
+  if(!is_ticket_entry($ticket_id)) {
+    die(false);
+  }
 
   die(wp_delete_post($ticket_id));
 }
 add_action( 'wp_ajax_delete_ticket', 'delete_ticket' );
 
 function deactivate_ticket() {
+  $ticket_id = sanitize_text_field($_POST['ticket_id']);
+
+  //valide input  
+  if(!is_ticket_entry($ticket_id)) {
+    die(false);
+  }
+
   $post_information = array(
-        'ID' => $_POST['ticket_id'],
+        'ID' => $ticket_id,
         'post_status' => 'draft',
     );
   wp_update_post( $post_information );
@@ -247,14 +283,29 @@ function deactivate_ticket() {
 add_action( 'wp_ajax_deactivate_ticket', 'deactivate_ticket' );
 
 function activate_ticket() {
+  $ticket_id = sanitize_text_field($_POST['ticket_id']);
+
+  //valide input  
+  if(!is_ticket_entry($ticket_id)) {
+    die(false);
+  }
+
   $post_information = array(
-        'ID' => $_POST['ticket_id'],
+        'ID' => $ticket_id,
         'post_status' => 'publish',
     );
   wp_update_post( $post_information );
   die();
 }
 add_action( 'wp_ajax_activate_ticket', 'activate_ticket' );
+
+
+function is_ticket_entry($ID) {
+  $post_object = get_post($ID);
+  return (!empty($post_object) && ($post_object->post_type == 'ticket') 
+    && (($post_object->post_author == get_current_user_id()) 
+              || current_user_can( 'delete_others_posts' )));
+}
 
 function get_post_time_string($time, $shownull = false) {
   $ret = "";

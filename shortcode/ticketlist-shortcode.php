@@ -21,7 +21,7 @@ function get_ticketlist_shortcode($atts){
   global $fl_ticketlist_script;
   $fl_ticketlist_script = true;
   $user_id = get_current_user_id();
-  $is_manager = current_user_can( 'manage_options' );
+  $is_manager = current_user_can( 'delete_others_posts' );
 
   //--------------------------------------------------------
   // Display Ticket List

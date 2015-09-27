@@ -214,6 +214,11 @@ function save_device_field($device_field) {
     }
 }
 
+function is_no_device_entry($ID) {
+  $post_object = get_post($ID);
+  return (empty($post_object) && ($post_object->post_type != 'device'));
+}
+
 function get_device_content() {
   $device_id = $_POST['device_id'];
   //$ticket_id = '43';

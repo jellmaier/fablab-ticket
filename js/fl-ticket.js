@@ -56,8 +56,12 @@ jQuery(document).ready(function($){
       duration:  $('#time-select :selected').val(),
     };
     $.post(ajaxurl, data, function(response) {
-      $('#fl-getticket').hide();
-      close_overlay($, orig_overflow, "Ticket für das " + device.data('device-name') + ", erfolgreich erstellt!");
+      if(response){
+        $('#fl-getticket').hide();
+        close_overlay($, orig_overflow, "Ticket für das " + device.data('device-name') + ", erfolgreich erstellt!");
+      } else {
+        close_overlay($, orig_overflow, "Ticket konnte nicht erstellt werden!");
+      }
     })
   })
 
@@ -148,8 +152,12 @@ jQuery(document).ready(function($){
       ticket_id:  ticket_id
     };
     $.post(ajaxurl, data, function(response) {
-      $('#ticket-listing').hide();
-      close_overlay($, orig_overflow, "Ticket für das " + device_name + ", erfolgreich geändert!");
+      if(response){
+        $('#ticket-listing').hide();
+        close_overlay($, orig_overflow, "Ticket für das " + device_name + ", erfolgreich geändert!");
+      } else {
+        close_overlay($, orig_overflow, "Ticket konnte nicht geändert werden!");
+      }
     })
   })
 
