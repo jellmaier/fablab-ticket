@@ -21,7 +21,8 @@ function get_ticket_shortcode($atts){
   $fl_ticket_script = true;
   $user_id = get_current_user_id();
   $ticket_query = get_ticket_query_from_user($user_id);
-  $tickets_per_user = fablab_get_option()['tickets_per_user'];
+  $options = fablab_get_option();
+  $tickets_per_user = $options['tickets_per_user'];
 
   if($user_id == 0) {
       //--------------------------------------------------------
