@@ -235,8 +235,10 @@ function update_ticket() {
   $duration = sanitize_text_field($_POST['duration']);
   $ticket_id = sanitize_text_field($_POST['ticket_id']);
 
+  $options = fablab_get_option();
+
   //valide input  
-  if(($duration > fablab_get_option()['ticket_max_time']) 
+  if(($duration > $options['ticket_max_time']) 
     || is_no_device_entry($device_id) || !is_ticket_entry($ticket_id)) {
     die(false);
   }
