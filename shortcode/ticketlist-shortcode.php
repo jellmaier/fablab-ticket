@@ -47,7 +47,7 @@ function display_ticketlist() {
   $ticket_query = new WP_Query($query_arg);
 
   global $post;
-  echo '<p>Hier werden dir die aktiven Ticket angezeigt:</p>';
+  echo '<p>Hier werden dir die aktiven Tickets angezeigt:</p>';
   if ($ticket_query->have_posts()) {
     echo '<META HTTP-EQUIV="refresh" CONTENT="10">';
   } else if(fablab_get_option('ticket_online') == 1) {
@@ -81,9 +81,13 @@ function display_ticketlist() {
 function display_manager_ticketlist() {
   global $post;
 
-  echo '<p>Hier werden dir die aktiven Ticket angezeigt:</p>';
-  echo '<div id="message" hidden class="message-box"></div>';
-  echo '<a class="yourstyle" href="javascript:location.reload();" >RELOAD PAGE</a>';
+  ?>
+  <p>Hier werden dir die aktiven Tickets angezeigt:</p>
+  <div id="message" hidden class="message-box"></div>
+  <div class="reload">
+    <a style="text-decoration: none;" href="javascript:location.reload();" >&#8634 Reload</a>
+  </div>
+  <?php
 
   $query_arg = array(
     'post_type' => 'ticket',
