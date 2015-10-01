@@ -1,4 +1,28 @@
 jQuery(document).ready(function($){
+
+  //enable ticketing
+  $('#enable-ticketing').on('click', function(){
+    data = {
+      action: 'activate_ticketing',
+    };
+    $.post(ajaxurl, data, function(response) {
+      if(response){
+        message($, "Ticketing aktiviert!");
+      }
+    })
+  })
+
+  //enable ticketing
+  $('#disable-ticketing').on('click', function(){
+    data = {
+      action: 'deactivate_ticketing',
+    };
+    $.post(ajaxurl, data, function(response) {
+      if(response){
+        message($, "Ticketing deaktiviert!");
+      }
+    })
+  })
   
   var max_time = '';
   var time_interval = '';
@@ -148,6 +172,8 @@ jQuery(document).ready(function($){
       close_overlay($, orig_overflow);
     }
   });
+
+
 
 });
 

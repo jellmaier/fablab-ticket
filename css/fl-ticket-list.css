@@ -42,11 +42,16 @@
     display: inline-block;
 }
 
-.fl-ticket-element input[type=submit]:hover {
+.fl-ticket-element input[type=submit]:enabled:hover{
     background: #74a4a3;
     color: #fff;
     cursor: pointer;
 }
+
+.fl-ticket-element input[type=submit][disabled] {
+    opacity: 0.6;
+} 
+
 
 .reload {
     margin: 10px;
@@ -55,7 +60,7 @@
     line-height: 1;
     opacity: 1;  
 }
-.reload:hover {
+.reload a:hover {
     cursor: pointer;
     opacity: 0.5;
 }

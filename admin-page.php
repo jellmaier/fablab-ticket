@@ -198,4 +198,26 @@ function get_fablab_options() {
 }
 add_action( 'wp_ajax_get_fablab_options', 'get_fablab_options' );
 
+function fablab_activate_ticketing() {
+  if(current_user_can( 'delete_others_posts' )){
+    $options = fablab_get_option();
+    $options['ticket_online'] = 1; 
+    update_option( 'settings_fields', $options);
+    die(true);
+  }
+  die(false);
+}
+add_action( 'wp_ajax_activate_ticketing', 'fablab_activate_ticketing' );
+
+function fablab_deactivate_ticketing() {
+  if(current_user_can( 'delete_others_posts' )){
+    $options = fablab_get_option();
+    $options['ticket_online'] = 0; 
+    update_option( 'settings_fields', $options);
+    die(true);
+  }
+  die(false);
+}
+add_action( 'wp_ajax_deactivate_ticketing', 'fablab_deactivate_ticketing' );
+
 ?>
