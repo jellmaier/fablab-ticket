@@ -387,7 +387,6 @@ function insert_timeticket() {
       add_post_meta($ID, 'timeticket_user' , $user_id);
     }
 
-    
     die($ID != 0);
 }
 add_action( 'wp_ajax_add_timeticket', 'insert_timeticket' );

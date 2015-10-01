@@ -21,8 +21,6 @@ function get_ticket_shortcode($atts){
   $fl_ticket_script = true;
   $user_id = get_current_user_id();
   $ticket_query = get_ticket_query_from_user($user_id);
-  $options = fablab_get_option();
-  $tickets_per_user = $options['tickets_per_user'];
 
   if($user_id == 0) {
       //--------------------------------------------------------
@@ -39,8 +37,10 @@ function get_ticket_shortcode($atts){
     if ( $ticket_query->have_posts() ) {
       display_user_tickets($ticket_query);
     } 
-    if ( $ticket_query->found_posts < $tickets_per_user ) {
+    if ( (fablab_get_option('ticket_online') == 1) && ($ticket_query->found_posts < fablab_get_option('tickets_per_user')) ) {
       display_available_devices();
+    } else {
+      echo 'Zurzeit sind keine Tickets verfügbar!';
     }
   }
   
@@ -120,13 +120,10 @@ function display_user_tickets($ticket_query) {
     $waiting = get_waiting_time_and_persons(get_post_meta($post->ID, 'device_id', true ), $post->ID);
     $color = get_post_meta(get_post_meta($post->ID, 'device_id', true ), 'device_color', true );
     $device_id = get_post_meta($post->ID, 'device_id', true );
-    if(($post->post_status) == 'draft') {
-        $opacity = 0.6;
-      } else {
-        $opacity = 1;
-    };
+    (($post->post_status) == 'draft') ? $opacity = 0.6 : $opacity = 1;
+    ($waiting['time'] == 0) ? $class = "fl-ticket-element blink" : $class = "fl-ticket-element";
     ?>
-    <div class="fl-ticket-element" style="border-left: 5px solid <?= $color ?>; opacity: <?= $opacity ?>;"
+    <div class="<?= $class ?>" style="border-left: 5px solid <?= $color ?>; opacity: <?= $opacity ?>;"
       data-ticket-id="<?= $post->ID ?>" data-device-id="<?=  $device_id ?>"
       data-duration="<?=  get_post_meta($post->ID, 'duration', true ) ?>"
       data-user-id="<?=  $post->post_author ?>" data-device-name="<?= get_device_title_by_id($device_id) ?>"

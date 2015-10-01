@@ -91,6 +91,7 @@ function ticket_edit_columns($columns){
     "device_id" => "Gerät",
     "duration" => "Ticket dauer",
     "user_id" => "User",
+    "activation_time" => "Activierungs Zeit",
   );
   return $columns;
 }
@@ -112,6 +113,14 @@ function ticket_table_content($column_name, $post_id) {
         echo get_ticket_field("user_id");
         break;
 
+      case 'activation_time' :
+        if(get_ticket_field("activation_time") != 'not set'){
+          echo date_i18n('Y-m-d H:i', get_ticket_field("activation_time"));
+        } else {
+          echo 'Nicht Aktiv';
+        }
+        break;
+
     }
 }
 
@@ -125,6 +134,7 @@ function ticket_details_meta() {
   echo '<p><label>Gerät:   </label> <input type="text"  disabled value="' . get_device_title_by_id(get_ticket_field("device_id")) . '" ></p>';
   echo '<p><label>User:   </label> <input type="text" disabled value="' . get_ticket_field("user_id") . '" ></p>';
   echo '<p><label>Ticket dauer (min):   </label> <input type="text" disabled value="' . get_ticket_field("duration") . '" ></p>';
+  echo '<p><label>Activireungs Zeit:   </label> <input type="text" disabled value="' . get_ticket_field("activation_time") . '" ></p>';
 
 }
 
@@ -239,7 +249,8 @@ function update_ticket() {
 
   //valide input  
   if(($duration > $options['ticket_max_time']) 
-    || is_no_device_entry($device_id) || !is_ticket_entry($ticket_id)) {
+    || is_no_device_entry($device_id) || !is_ticket_entry($ticket_id) 
+    || !has_update_premission()) {
     die(false);
   }
 
@@ -259,7 +270,7 @@ function delete_ticket() {
   $ticket_id = sanitize_text_field($_POST['ticket_id']);
 
   //valide input  
-  if(!is_ticket_entry($ticket_id)) {
+  if(!is_ticket_entry($ticket_id) || !has_update_premission()) {
     die(false);
   }
 
@@ -267,28 +278,33 @@ function delete_ticket() {
 }
 add_action( 'wp_ajax_delete_ticket', 'delete_ticket' );
 
-function deactivate_ticket() {
-  $ticket_id = sanitize_text_field($_POST['ticket_id']);
-
-  //valide input  
-  if(!is_ticket_entry($ticket_id)) {
-    die(false);
-  }
+function deactivate_ticket($ticket_id) {
 
   $post_information = array(
         'ID' => $ticket_id,
         'post_status' => 'draft',
     );
   wp_update_post( $post_information );
-  die();
+  return true;
 }
-add_action( 'wp_ajax_deactivate_ticket', 'deactivate_ticket' );
+
+function deactivate_ticket_ajax() {
+  $ticket_id = sanitize_text_field($_POST['ticket_id']);
+
+    //valide input  
+  if(!is_ticket_entry($ticket_id) || !has_update_premission()) {
+    die(false);
+  }
+
+  die(deactivate_ticket($ticket_id));
+}
+add_action( 'wp_ajax_deactivate_ticket', 'deactivate_ticket_ajax' );
 
 function activate_ticket() {
   $ticket_id = sanitize_text_field($_POST['ticket_id']);
 
   //valide input  
-  if(!is_ticket_entry($ticket_id)) {
+  if(!is_ticket_entry($ticket_id) || !has_update_premission()) {
     die(false);
   }
 
@@ -304,9 +320,35 @@ add_action( 'wp_ajax_activate_ticket', 'activate_ticket' );
 
 function is_ticket_entry($ID) {
   $post_object = get_post($ID);
-  return (!empty($post_object) && ($post_object->post_type == 'ticket') 
-    && (($post_object->post_author == get_current_user_id()) 
-              || current_user_can( 'delete_others_posts' )));
+  return (!empty($post_object) && ($post_object->post_type == 'ticket'));
+}
+
+function has_update_premission() {
+  return (($post_object->post_author == get_current_user_id()) 
+              || current_user_can( 'delete_others_posts' ));
+}
+
+function set_activation_time($ticket_id) {
+  if(is_ticket_entry($ticket_id) && !is_active_ticket($ticket_id)) {
+    update_post_meta($ticket_id, 'activation_time', current_time( 'timestamp' ));
+    return true;
+  }
+  return false;
+}
+
+function delete_activation_time($ticket_id) {
+  delete_post_meta($ticket_id, 'activation_time');
+}
+
+function is_active_ticket($ticket_id){
+  if(empty(get_activation_time($ticket_id))){
+    return false;
+  }
+  return true;
+}
+
+function get_activation_time($ticket_id) {
+  return get_post_meta( $ticket_id, 'activation_time', true );
 }
 
 function get_post_time_string($time, $shownull = false) {

@@ -48,12 +48,18 @@ function display_ticketlist() {
 
   global $post;
   echo '<p>Hier werden dir die aktiven Ticket angezeigt:</p>';
+  if ($ticket_query->have_posts()) {
+    echo '<META HTTP-EQUIV="refresh" CONTENT="10">';
+  } else if(fablab_get_option('ticket_online') == 1) {
+    echo '<META HTTP-EQUIV="refresh" CONTENT="60">';
+  }
   echo '<div id="ticket-listing">';
   while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
     $waiting = get_waiting_time_and_persons(get_post_meta($post->ID, 'device_id', true ), $post->ID);
     $color = get_post_meta(get_post_meta($post->ID, 'device_id', true ), 'device_color', true );
+    ($waiting['time'] == 0) ? $class = "fl-ticket-element blink" : $class = "fl-ticket-element";
     ?>
-    <div class="fl-ticket-element" style="border-left: 5px solid <?= $color ?>;">
+    <div class="<?= $class ?>" style="border-left: 5px solid <?= $color ?>;">
       <p><?= the_time('l, j. F, G:i') ?><p>
       <h2><?= $post->post_title ?></h2>
       <p>für Gerät: <b><?=  get_device_title_by_id(get_post_meta($post->ID, 'device_id', true )) ?>,</b> </br> 
@@ -77,6 +83,7 @@ function display_manager_ticketlist() {
 
   echo '<p>Hier werden dir die aktiven Ticket angezeigt:</p>';
   echo '<div id="message" hidden class="message-box"></div>';
+  echo '<a class="yourstyle" href="javascript:location.reload();" >RELOAD PAGE</a>';
 
   $query_arg = array(
     'post_type' => 'ticket',
@@ -94,6 +101,7 @@ function display_manager_ticketlist() {
       $waiting = get_waiting_time_and_persons(get_post_meta($post->ID, 'device_id', true ), $post->ID);
       $color = get_post_meta(get_post_meta($post->ID, 'device_id', true ), 'device_color', true );
       $device_id = get_post_meta($post->ID, 'device_id', true );
+      delete_activation_time($post->ID); // just in case it gets activated again
       ?>
       <div class="fl-ticket-element" data-ticket-id="<?= $post->ID ?>" style="border-left: 5px solid <?= $color ?>; opacity: 0.5;"
         data-ticket-id="<?= $post->ID ?>" data-device-id="<?=  $device_id ?>"
@@ -182,8 +190,9 @@ function display_manager_ticketlist() {
       $waiting = get_waiting_time_and_persons(get_post_meta($post->ID, 'device_id', true ), $post->ID);
       $color = get_post_meta(get_post_meta($post->ID, 'device_id', true ), 'device_color', true );
       $device_id = get_post_meta($post->ID, 'device_id', true );
+      ($waiting['time'] == 0) ? $class = "fl-ticket-element blink" :  $class = "fl-ticket-element";
       ?>
-      <div class="fl-ticket-element" style="border-left: 5px solid <?= $color ?>;"
+      <div class="<?= $class ?>" style="border-left: 5px solid <?= $color ?>;"
         data-ticket-id="<?= $post->ID ?>" data-device-id="<?=  $device_id ?>"
         data-duration="<?=  get_post_meta($post->ID, 'duration', true ) ?>"
         data-user-id="<?=  $post->post_author ?>" data-device-name="<?= get_device_title_by_id($device_id) ?>"
@@ -191,13 +200,14 @@ function display_manager_ticketlist() {
         <p><?= the_time('l, j. F, G:i') ?><p>
         <h2><?= $post->post_title ?></h2>
         <p>für Gerät: <b><?=  get_device_title_by_id($device_id) ?>,</b> </br> 
-        Verfügbar: <b><?=  is_device_availabel_range($device_id, current_time( 'timestamp' ), (current_time( 'timestamp' ) + (60 * get_post_meta($post->ID, 'duration', true )))) ?></b></br>
         Benutzungsdauer: <b><?=  get_post_time_string(get_post_meta($post->ID, 'duration', true )) ?></b></br>
         Vorraussichtlich Wartezeit: <b><?= get_post_time_string($waiting['time'], true) ?>.</b></p>
         <input type="submit" class="ticket-btn assign-ticket" value="Ticket zuweisen"/>
         <input type="submit" class="ticket-btn deactivate-ticket" value="Ticket deaktivieren"/>
       </div>
       <?php
+      /* Verfügbar: <b><?=  is_device_availabel_range($device_id, current_time( 'timestamp' ), (current_time( 'timestamp' ) + (60 * get_post_meta($post->ID, 'duration', true )))) ?></b></br>
+    */
     endwhile;
     echo '</div>';
   }

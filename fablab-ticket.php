@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: FabLab Ticket
-Version: 0.2.15
+Version: 0.2.16
 Plugin URI: https://github.com/jellmaier/fablab-ticket
 Description: Ticketing and Reservation System for FabLabs
 Author: Jakob Ellmaier
@@ -16,6 +16,7 @@ Licence: GP2
 include 'devices/device.php';
 include 'timeticket/timeticket.php';
 include 'ticket/ticket.php';
+include 'ticket/ticket-handler.php';
 include 'shortcode/ticket-shortcode.php';
 include 'shortcode/ticketlist-shortcode.php';
 include 'shortcode/calendar-shortcode.php';

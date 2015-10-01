@@ -25,11 +25,20 @@ if (!class_exists('AdminPage'))
         // Add all your sections, fields and settings during admin_menu
         // ------------------------------------------------------------------
 
+        add_settings_field(
+          'ticket_online',                           // ID/Name of the field
+          'Ticket System Online',                    // Title
+          'fablab_ticket_online_function',           // callback
+          'fablab_options',                          // page slug
+          'fablab_settings'                          // section
+        );
+
+
         // Add the section to reading settings so we can add our
         // fields to it
         add_settings_section(
           'fablab_settings',                          // ID
-          'Example settings section in reading',      // Title
+          'Fablab Settings',      // Title
           'fablab_settings_function',                 // callback
           'fablab_options'                            // Page slug
         );
@@ -37,19 +46,19 @@ if (!class_exists('AdminPage'))
         // Add the field with the names and function to use for our new
         // settings, put it in our new section
         add_settings_field(
-          'tickets_per_user',                            // ID/Name of the field
-          'Ticket pro User',                                // Title
-          'fablab_tickets_per_user_function',               // callback
-          'fablab_options',                                     // page slug
-          'fablab_settings'                          // section
+          'tickets_per_user',                           // ID/Name of the field
+          'Ticket pro User',                            // Title
+          'fablab_tickets_per_user_function',           // callback
+          'fablab_options',                             // page slug
+          'fablab_settings'                             // section
         );
 
         add_settings_field(
-          'ticket_time_interval',                            // ID/Name of the field
-          'Zeit Intervall (min)',                                // Title
-          'fablab_ticket_time_interval_function',               // callback
-          'fablab_options',                                     // page slug
-          'fablab_settings'                          // section
+          'ticket_time_interval',                           // ID/Name of the field
+          'Zeit Intervall (min)',                           // Title
+          'fablab_ticket_time_interval_function',           // callback
+          'fablab_options',                                 // page slug
+          'fablab_settings'                                 // section
         );
 
         add_settings_field(
@@ -58,6 +67,14 @@ if (!class_exists('AdminPage'))
           'fablab_ticket_max_time_function',         // callback
           'fablab_options',                          // page slug
           'fablab_settings'                          // section
+        );
+
+        add_settings_field(
+          'ticket_delay',                                           // ID/Name of the field
+          'Zeit bis zur automatischen Deaktivierung (min)',         // Title
+          'fablab_ticket_delay_function',                           // callback
+          'fablab_options',                                         // page slug
+          'fablab_settings'                                         // section
         );
 
         // Register our setting so that $_POST handling is done for us and
@@ -75,14 +92,23 @@ if (!class_exists('AdminPage'))
 // Get Option wraper and set default values
 // ------------------------------------------------------------------
 
-function fablab_get_option() {
+function fablab_get_option($key = 'array') {
   $default_values =  array(
     'tickets_per_user' => '1',
     'ticket_time_interval' => '15',
-    'ticket_max_time' => '120'
+    'ticket_max_time' => '120',
+    'ticket_online' => '0',
+    'ticket_delay' => '10',
+
   );
 
-  return wp_parse_args(get_option('settings_fields'), $default_values);
+  $options = wp_parse_args(get_option('settings_fields'), $default_values);
+
+  if($key == 'array'){
+    return $options;
+  } else {
+    return $options[$key];
+  }
 }
 
 // ------------------------------------------------------------------
@@ -106,20 +132,23 @@ function fablab_options_page() {
 }
  
 function fablab_settings_function() {
-  echo '<p>Intro text for our settings section</p>';
+  //echo '<p>Fablab Einstellungen</p>';
 }
  
 function fablab_tickets_per_user_function() {
-  $options = fablab_get_option();
-  echo '<input type="text" name="settings_fields[tickets_per_user]" value="' . $options['tickets_per_user'] . '"/>';
+  echo '<input type="text" name="settings_fields[tickets_per_user]" value="' . fablab_get_option('tickets_per_user') . '"/>';
 }
 function fablab_ticket_time_interval_function() {
-  $options = fablab_get_option();
-  echo '<input type="text" name="settings_fields[ticket_time_interval]" value="' . $options['ticket_time_interval'] . '"/>';
+  echo '<input type="text" name="settings_fields[ticket_time_interval]" value="' . fablab_get_option('ticket_time_interval') . '"/>';
 }
 function fablab_ticket_max_time_function() {
-  $options = fablab_get_option();
-  echo '<input type="text" name="settings_fields[ticket_max_time]" value="' . $options['ticket_max_time'] . '"/>';
+  echo '<input type="text" name="settings_fields[ticket_max_time]" value="' . fablab_get_option('ticket_max_time') . '"/>';
+}
+function fablab_ticket_online_function() {
+  echo '<input type="checkbox" name="settings_fields[ticket_online]" value="1"' . checked( 1, fablab_get_option('ticket_online'), false ) . '/>';
+}
+function fablab_ticket_delay_function() {
+  echo '<input type="text" name="settings_fields[ticket_delay]" value="' . fablab_get_option('ticket_delay') . '"/>';
 }
 
 // ------------------------------------------------------------------
@@ -131,12 +160,22 @@ function validate_options($options) {
   $old_settings = fablab_get_option();
 
   foreach ($options as $key => $value) {
-    if(is_pos_int($value)) {
-      $output[$key] = sanitize_text_field($value);
-    } else {
-      add_settings_error('settings_fields', 'naN', 'Bitte eine positive Zahl eingeben!');
-      $output[$key] = $old_settings[$key];
-    } 
+
+    switch ($key) {
+      
+      default:
+        if(is_pos_int($value)) {
+          $output[$key] = sanitize_text_field($value);
+        } else {
+          add_settings_error('settings_fields', 'naN', 'Bitte eine positive Zahl eingeben!');
+          $output[$key] = $old_settings[$key];
+        } 
+        break;
+
+      case 'ticket_example':
+        $output[$key] = ($value);
+        break;
+    }
   }
   return $output;
 }

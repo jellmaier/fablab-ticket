@@ -193,6 +193,25 @@
     margin: 0px;
 }
 
+/* Blink */
+
+.blink{
+    animation: blink 600ms infinite alternate;
+    -webkit-animation: blink 600ms infinite alternate;
+    -moz-animation: blink 600ms infinite alternate;
+}
+@-webkit-keyframes blink {
+    from { opacity:0.3; }
+    to { opacity:1; }
+}
+@-moz-keyframes blink {
+    from { opacity:0.3; }
+    to { opacity:1; }
+}
+@keyframes blink {
+    from { opacity:0.3; }
+    to { opacity:1; }
+}
 
 /* Message */
 
