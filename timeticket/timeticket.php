@@ -363,6 +363,90 @@ function is_device_availabel_range($device_id, $start_time, $end_time) {
   return true;
 }
 
+// handle waiting time of current active time-tickets
+function device_waiting_time($device_id, $waiting_time) {
+  global $post;
+  $temp_post = $post;
+  
+  $query_arg = array(
+    'post_type' => 'timeticket',
+    'meta_query'=>array(
+      'relation'=>'and',
+      array(
+        'key' => 'timeticket_device',                  
+        'value' => $device_id,               
+        'compare' => '='                 
+      ),
+      array(
+          'key'=>'timeticket_start_time',
+          'value'=> current_time( 'timestamp' ),
+          'compare' => '<'
+      ),
+      array(
+          'key'=>'timeticket_end_time',
+          'value'=> current_time( 'timestamp' ),
+          'compare' => '>'
+      )
+    )
+  );
+  $device_query = new WP_Query($query_arg);
+  if ( $device_query->have_posts() ) {
+    while ( $device_query->have_posts() ) : $device_query->the_post() ; 
+      $waiting_time += ((get_post_meta($post->ID, 'timeticket_end_time', true ) - current_time( 'timestamp' )) / 60 );
+    endwhile;
+  }
+  wp_reset_query();
+ 
+  // handle waiting time of upcoming time-tickets
+ /*
+  $query_arg = array(
+    'post_type' => 'timeticket',
+    'meta_query'=>array(
+      'relation'=>'and',
+      array(
+        'key' => 'timeticket_device',                  
+        'value' => $device_id,               
+        'compare' => '='                 
+      ),
+      array(
+          'key'=>'timeticket_start_time',
+          'value'=> current_time( 'timestamp' ),
+          'compare' => '>'
+      ),
+      array(
+          'key'=>'timeticket_start_time',
+          'value'=> (current_time( 'timestamp' ) + (60*60*24)),
+          'compare' => '<'
+      )
+    )
+  );
+  $device_query = new WP_Query($query_arg);
+  if ( $device_query->have_posts() ) {
+    while ( $device_query->have_posts() ) : $device_query->the_post() ;
+      $start_time = get_post_meta($post->ID, 'timeticket_start_time', true );
+      $end_time = get_post_meta($post->ID, 'timeticket_end_time', true );
+      $current_endtime = (current_time( 'timestamp' ) + (60 * $waiting_time));
+      if($current_endtime > $start_time) {
+        if($current_endtime > $end_time) {
+          $waiting_time += (($end_time - $start_time) / 60 );
+        } else {
+          $waiting_time += (($end_time - $current_endtime) / 60 );
+        }
+      } else {
+        $post = $temp_post;
+        return $waiting_time;
+      }
+    endwhile;
+  }
+  wp_reset_query();
+
+  */
+
+  $post = $temp_post;
+
+  return $waiting_time;
+}
+
 function insert_timeticket() {
   $device_id = $_POST['device_id'];
   $duration = $_POST['duration'];

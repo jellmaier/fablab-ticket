@@ -1,6 +1,15 @@
 <?php
 
 function get_waiting_time_and_persons($device_id, $ticket = 0) {
+
+  $waiting = get_device_ticket_waiting_time($device_id, $ticket);
+
+  $waiting['time'] = device_waiting_time($device_id, $waiting['time']);
+
+  return $waiting;
+}
+
+function get_device_ticket_waiting_time($device_id, $ticket = 0) {
   global $post;
   $temp_post = $post;
   //--------------------------------------------------------
@@ -45,7 +54,6 @@ function get_waiting_time_and_persons($device_id, $ticket = 0) {
   $post = $temp_post;
 
   return $waiting;
-
 }
 
 function check_and_deactivate_ticket($ticket_id){
