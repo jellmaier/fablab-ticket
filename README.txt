@@ -150,10 +150,18 @@ fullcalendar.js
 ~ calendar-shortcode.php
 
 + ticketlist-shortcode.php
-  + ...
+  + manager-view
+    + ...
+  + ohers-view
+    + reload
+      + every 10 seconds (when there are tickets)
+      + every 60 seconds (when there are no tickets)
 
 + ticket-shortcode.php
-  + ...
+  + Device view
+    + ...
+  + Ticket view
+    + ...
 
 //------------------------------------------------------------
 // ./ticket
