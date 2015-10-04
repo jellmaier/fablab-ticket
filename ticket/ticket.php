@@ -92,6 +92,7 @@ function ticket_edit_columns($columns){
     "duration" => "Ticket dauer",
     "user_id" => "User",
     "activation_time" => "Activierungs Zeit",
+    "ticket_type" => "Ticket Typ",
   );
   return $columns;
 }
@@ -111,6 +112,10 @@ function ticket_table_content($column_name, $post_id) {
 
       case 'user_id' :
         echo get_ticket_field("user_id");
+        break;
+
+      case 'ticket_typ' :
+        echo get_ticket_field("ticket_type");
         break;
 
       case 'activation_time' :
@@ -135,6 +140,7 @@ function ticket_details_meta() {
   echo '<p><label>User:   </label> <input type="text" disabled value="' . get_ticket_field("user_id") . '" ></p>';
   echo '<p><label>Ticket dauer (min):   </label> <input type="text" disabled value="' . get_ticket_field("duration") . '" ></p>';
   echo '<p><label>Activireungs Zeit:   </label> <input type="text" disabled value="' . get_ticket_field("activation_time") . '" ></p>';
+  echo '<p><label>Ticket Typ:   </label> <input type="text" disabled value="' . get_ticket_field("ticket_type") . '" ></p>';
 
 }
 
@@ -220,7 +226,6 @@ function insert_ticket() {
   if ($ticket_query->found_posts < $tickets_per_user) {
     $post_information = array(
       'post_title' => "Ticket, von: " . wp_get_current_user()->display_name,
-      //'post_title' => "Ticket, für Gerät: " . get_device_title_by_id($device_id) . ", vom " . date_i18n('D, d.m.y \u\m H:i'),
       'post_type' => 'ticket',
       'author' => get_current_user_id(),
       'post_status' => 'publish',
@@ -238,6 +243,33 @@ function insert_ticket() {
   die(false);
 }
 add_action( 'wp_ajax_add_ticket', 'insert_ticket' );
+
+function insert_instruction_ticket() {
+  $device_id = sanitize_text_field($_POST['device_id']);
+  $options = fablab_get_option();
+
+  //valide input
+  if(is_no_device_entry($device_id)) {
+    die(false);
+  }
+
+  $post_information = array(
+    'post_title' => "Instruction Ticket, von: " . wp_get_current_user()->display_name,
+    'post_type' => 'ticket',
+    'author' => get_current_user_id(),
+    'post_status' => 'publish',
+  );
+ 
+  $ID = wp_insert_post( $post_information );
+
+  if ($ID != 0) {
+    add_post_meta($ID, 'device_id', $device_id);
+    add_post_meta($ID, 'ticket_type' , 'instruction');
+  }
+  
+  die($ID != 0);
+}
+add_action( 'wp_ajax_add_instruction_ticket', 'insert_instruction_ticket' );
 
 
 function update_ticket() {
