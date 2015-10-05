@@ -20,7 +20,6 @@ function get_ticket_shortcode($atts){
   global $fl_ticket_script;
   $fl_ticket_script = true;
   $user_id = get_current_user_id();
-  $ticket_query = get_ticket_query_from_user($user_id);
 
   if($user_id == 0) {
       //--------------------------------------------------------
@@ -34,6 +33,15 @@ function get_ticket_shortcode($atts){
     </div>
     <?php
   } else {
+    echo '<div id="message" hidden class="message-box"></div>';
+
+    $ticket_query = get_ticket_query_from_user($user_id);
+    $instruction_query = get_instruction_query_from_user($user_id);
+
+    if ( $instruction_query->have_posts() ) {
+        display_user_instructions($instruction_query);
+    } 
+
     if ( $ticket_query->have_posts() ) {
       display_user_tickets($ticket_query);
     } 
@@ -46,6 +54,31 @@ function get_ticket_shortcode($atts){
   
 }
     
+
+//--------------------------------------------------------
+// Display User Instruction
+//--------------------------------------------------------
+function display_user_instructions($ticket_query) {
+  global $post;
+  echo '<p>Hier wird dir deine Einschulungsanfragen angezeigt:</p>';
+  echo '<div class="instruction-listing">';
+  while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
+    $color = get_post_meta(get_post_meta($post->ID, 'device_id', true ), 'device_color', true );
+    $device_id = get_post_meta($post->ID, 'device_id', true );
+    ?>
+    <div class="fl-ticket-element instruction-element" style="border-top: 5px solid <?= $color ?>;"
+      data-ticket-id="<?= $post->ID ?>"  data-user-id="<?=  $post->post_author ?>"
+      <p><?= the_time('l, j. F, G:i') ?><p>
+      <h2>Einschulungsanfrage</h2>
+      <p>für Gerät: <b><?=  get_device_title_by_id(get_post_meta($post->ID, 'device_id', true )) ?></b></p>
+      <input type="submit" class="ticket-btn delete-instruction" value="Einschulungsanfrage löschen"/>
+    </div>
+    <?php
+  endwhile;
+  echo '</div>';
+
+  wp_reset_query();
+}
 
 //--------------------------------------------------------
 // Display available Devices
@@ -64,23 +97,37 @@ function display_available_devices() {
     ) 
   );
   $device_query = new WP_Query($query_arg);
+  $user_id = get_current_user_id();
+  get_current_user_id();
   if ( $device_query->have_posts() ) {
     echo '<p>Hier werden dir die verfügbaren Geräte angezeigt:</p>';
-    echo '<div id="message" hidden class="message-box"></div>';
     echo '<div id="fl-getticket">';
     while ( $device_query->have_posts() ) : $device_query->the_post() ;
-      $waiting = get_waiting_time_and_persons($post->ID);
-      $color = get_post_meta($post->ID, 'device_color', true );
-      ?>
-      <div class="fl-device-element get-ticket"  style="border: 6px solid <?= $color ?>; background-color: <?= $color ?>;"
-        data-device-id="<?= $post->ID ?>" data-device-name="<?= get_device_title_by_id($post->ID) ?>">
-        <div class="fl-device-element-content" data-device-id="<?= $post->ID ?>">
-          <h2><?= $post->post_title ?></h2>
-          <p id="waiting-time">Wartende Personen: <b><?= $waiting['persons'] ?>.</b></br>
-          Vorraussichtlich Wartezeit: <b><?= get_post_time_string($waiting['time'], true) ?>.</b></p>
+      //if (get_post_meta($post->ID, 'ticket_type', true ) == 'device'){
+      if (get_user_meta($user_id, $post->ID, true ) == true){
+        $waiting = get_waiting_time_and_persons($post->ID);
+        $color = get_post_meta($post->ID, 'device_color', true );
+        ?>
+        <div class="fl-device-element get-ticket"  style="border: 6px solid <?= $color ?>; background-color: <?= $color ?>;"
+          data-device-id="<?= $post->ID ?>" data-device-name="<?= get_device_title_by_id($post->ID) ?>">
+          <div class="fl-device-element-content">
+            <h2><?= $post->post_title ?></h2>
+            <p id="waiting-time">Wartende Personen: <b><?= $waiting['persons'] ?>.</b></br>
+            Vorraussichtlich Wartezeit: <b><?= get_post_time_string($waiting['time'], true) ?>.</b></p>
+          </div>
         </div>
-      </div>
-      <?php
+        <?php
+      } else {
+        ?>
+        <div class="fl-device-element get-instruction" data-device-id="<?= $post->ID ?>" 
+          data-device-name="<?= get_device_title_by_id($post->ID) ?>">
+          <div class="fl-device-element-content">
+            <h2><?= $post->post_title ?></h2>
+            <p>Ich möchte für dieses Gerät eine Einschulung</p>
+          </div>
+        </div>
+        <?php
+      }
     endwhile;
     echo '</div>';
   } else {
@@ -114,7 +161,6 @@ function display_available_devices() {
 function display_user_tickets($ticket_query) {
   global $post;
   echo '<p>Hier wird dir dein gezogenes Ticket angezeigt:</p>';
-  echo '<div id="message" hidden class="message-box"></div>';
   echo '<div id="ticket-listing">';
   while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
     $waiting = get_waiting_time_and_persons(get_post_meta($post->ID, 'device_id', true ), $post->ID);

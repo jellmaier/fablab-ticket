@@ -32,12 +32,32 @@
     color: rgba(256,256,256,1);
 }
 
+/* Instruction Element */
+
+.get-instruction {
+    background-color: #ddd;
+}
+
+.get-instruction p{
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.instruction-element {
+    width: 400px;
+    float: left;
+}
+
+.instruction-listing {
+    float: none;
+    padding-bottom: 2px;
+}
+
 /* Ticket Element */
 
 .fl-ticket-element {
     position: relative;
     background: #fff;
-    border-left: 5px solid #dd7127;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
     padding: 24px 28px;
     margin: 0px 6px 14px 8px;

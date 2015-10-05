@@ -190,6 +190,28 @@ function get_ticket_query_from_user($user_id) {
     'orderby' => 'date', 
     'order' => 'ASC',
     'post_status' => array('publish', 'draft'),
+    'meta_query'=>array(
+      array(
+          'key'=>'ticket_type',
+          'value'=> 'device',
+      )
+    )
+  );
+  return new WP_Query($query_arg);
+}
+
+function get_instruction_query_from_user($user_id) {
+  $query_arg = array(
+    'post_type' => 'ticket',
+    'author' => $user_id,
+    'orderby' => 'date', 
+    'order' => 'ASC',
+    'meta_query'=>array(
+      array(
+          'key'=>'ticket_type',
+          'value'=> 'instruction',
+      )
+    )
   );
   return new WP_Query($query_arg);
 }
@@ -220,6 +242,12 @@ function insert_ticket() {
         'post_type' => 'ticket',
         'author' => get_current_user_id(),
         'post_status' => array('publish', 'draft'),
+        'meta_query'=>array(
+          array(
+            'key'=>'ticket_type',
+            'value'=> 'device',
+      )
+    )
   );
 
   $ticket_query = new WP_Query($query_arg);
@@ -236,6 +264,7 @@ function insert_ticket() {
     if ($ID != 0) {
       add_post_meta($ID, 'device_id', $device_id);
       add_post_meta($ID, 'duration' , $duration);
+      add_post_meta($ID, 'ticket_type' , 'device');
     }
     
     die($ID != 0);
@@ -254,7 +283,7 @@ function insert_instruction_ticket() {
   }
 
   $post_information = array(
-    'post_title' => "Instruction Ticket, von: " . wp_get_current_user()->display_name,
+    'post_title' => "Einschulungsanfrage, von: " . wp_get_current_user()->display_name,
     'post_type' => 'ticket',
     'author' => get_current_user_id(),
     'post_status' => 'publish',
@@ -282,7 +311,7 @@ function update_ticket() {
   //valide input  
   if(($duration > $options['ticket_max_time']) 
     || is_no_device_entry($device_id) || !is_ticket_entry($ticket_id) 
-    || !has_update_premission()) {
+    || !has_update_premission($ticket_id)) {
     die(false);
   }
 
@@ -302,7 +331,7 @@ function delete_ticket() {
   $ticket_id = sanitize_text_field($_POST['ticket_id']);
 
   //valide input  
-  if(!is_ticket_entry($ticket_id) || !has_update_premission()) {
+  if(!is_ticket_entry($ticket_id) || !has_update_premission($ticket_id)) {
     die(false);
   }
 
@@ -311,7 +340,6 @@ function delete_ticket() {
 add_action( 'wp_ajax_delete_ticket', 'delete_ticket' );
 
 function deactivate_ticket($ticket_id) {
-
   $post_information = array(
         'ID' => $ticket_id,
         'post_status' => 'draft',
@@ -345,7 +373,7 @@ function activate_ticket() {
         'post_status' => 'publish',
     );
   wp_update_post( $post_information );
-  die();
+  die(true);
 }
 add_action( 'wp_ajax_activate_ticket', 'activate_ticket' );
 
@@ -355,7 +383,8 @@ function is_ticket_entry($ID) {
   return (!empty($post_object) && ($post_object->post_type == 'ticket'));
 }
 
-function has_update_premission() {
+function has_update_premission($post_id = 0) {
+  $post_object = get_post($post_id);
   return (($post_object->post_author == get_current_user_id()) 
               || current_user_can( 'delete_others_posts' ));
 }

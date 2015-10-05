@@ -28,6 +28,8 @@ function get_ticketlist_shortcode($atts){
   } else {
     display_ticketlist();
   }
+
+  echo '<div id="overlay-background" class="fl-overlay-background" hidden></div>';
   
 }
 
@@ -98,10 +100,15 @@ function display_manager_ticketlist() {
 
   $query_arg = array(
     'post_type' => 'ticket',
-    'posts_per_page' => 10, 
     'orderby' => 'date', 
     'order' => 'ASC',
-    'post_status' => 'draft'
+    'post_status' => 'draft',
+    'meta_query'=>array(
+      array(
+          'key'=>'ticket_type',
+          'value'=> 'device',
+      )
+    )
   );
   $ticket_query = new WP_Query($query_arg);
   echo '<div class="draft-box">';
@@ -192,7 +199,13 @@ function display_manager_ticketlist() {
     'posts_per_page' => 10, 
     'orderby' => 'date', 
     'order' => 'ASC',
-    'post_status' => 'publish'
+    'post_status' => 'publish',
+    'meta_query'=>array(
+      array(
+          'key'=>'ticket_type',
+          'value'=> 'device',
+      )
+    )
   );
   $ticket_query = new WP_Query($query_arg);
   if ( $ticket_query->have_posts() ) {
@@ -230,17 +243,67 @@ function display_manager_ticketlist() {
   // Display overlay change Ticket
   ?>
   <div id="overlay" class="fl-overlay" hidden>
-    <div id="device-ticket-box" class="device-ticket" hidden action="" metod="POST">
-      <a href="#" id="overlay-close" class="close">x</a>
+    <div id="device-ticket-box" class="device-ticket" hidden>
+      <a href="#" class="close">x</a>
       <h2>Ticket zuweisen</h2>
       <p id="user-name"></p>
       <p id="device-name"></p>
       <p id="waiting-time"><p>
       <p>Dauer: <select id="time-select"></select></p>
       <input type="submit" id="submit-ticket" class="button-primary" value="Ticket zuweisen"/>
-      <input type="submit" id="cancel-ticket" class="button-primary" value="Abbrechen"/>
-   </div>
-   <div id="overlay-background" class="fl-overlay-background"></div>
+      <input type="submit" class="button-primary cancel-overlay" value="Abbrechen"/>
+    </div> 
+  <div class="fl-overlay-layer"></div>
+  </div>
+  <?php
+
+  $query_arg = array(
+    'post_type' => 'ticket',
+    'posts_per_page' => 10, 
+    'orderby' => 'date', 
+    'order' => 'ASC',
+    'post_status' => 'publish',
+    'meta_query'=>array(
+      array(
+          'key'=>'ticket_type',
+          'value'=> 'instruction',
+      )
+    )
+  );
+  $ticket_query = new WP_Query($query_arg);
+  if ( $ticket_query->have_posts() ) {
+    echo '<div id="instruction-listing">';
+    while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
+      $color = get_post_meta(get_post_meta($post->ID, 'device_id', true ), 'device_color', true );
+      $device_id = get_post_meta($post->ID, 'device_id', true );
+      ?>
+      <div class="fl-ticket-element instruction-element" style="border-top: 5px solid <?= $color ?>;"
+        data-ticket-id="<?= $post->ID ?>" data-device-id="<?=  $device_id ?>"
+        data-user-id="<?=  $post->post_author ?>" data-user="<?=  get_user_by('id', $post->post_author)->display_name ?>"
+        <p><?= the_time('l, j. F, G:i') ?><p>
+        <h2><?= $post->post_title ?></h2>
+        <p>für Gerät: <b><?=  get_device_title_by_id(get_post_meta($post->ID, 'device_id', true )) ?></b></p>
+        <input type="submit" class="ticket-btn set-permissions" value="Berechtigung bearbeiten"/>
+      </div>
+      <?php
+    endwhile;
+    echo '</div>';
+  }
+
+  wp_reset_query();
+  
+  // Display overlay change Ticket
+  ?>
+  <div id="permission-overlay" class="fl-overlay" hidden>
+  <div id="permission-box" class="device-ticket">
+    <a href="#" class="close">x</a>
+    <h2>Berechtigung bearbeiten</h2>
+    <p id="user"></p>
+    <div id="permission-list"></div>
+    <input type="submit" id="submit-permission" class="button-primary" value="Berechtigungen speichern"/>
+    <input type="submit" class="button-primary cancel-overlay" value="Abbrechen"/>
+  </div>
+  <div class="fl-overlay-layer"></div>
   </div>
   <?php
 }

@@ -82,8 +82,12 @@ jQuery(document).ready(function($){
       ticket_id:  ticket.data('ticket-id'),
     };
     $.post(ajaxurl, data, function(response) {
-       message($, "Ticket von: " + ticket.data('user') + ", deaktiviert!");
-       ticket.hide();
+      if(response){
+        message($, "Ticket von: " + ticket.data('user') + ", deaktiviert!");
+      } else {
+        message($, "Ticket konnte nicht deaktiviert werden!");
+      }
+      ticket.hide();
     })
   })
 
@@ -94,8 +98,12 @@ jQuery(document).ready(function($){
       ticket_id:  ticket.data('ticket-id'),
     };
     $.post(ajaxurl, data, function(response) {
-       message($, "Ticket von: " + ticket.data('user') + ", aktiviert!");
-       ticket.hide();
+      if(response){
+        message($, "Ticket von: " + ticket.data('user') + ", aktiviert!");
+      } else {
+        message($, "Ticket konnte nicht aktiviert werden!");
+      }
+      ticket.hide();
     })
   })
 
@@ -106,8 +114,12 @@ jQuery(document).ready(function($){
       ticket_id:  ticket.data('ticket-id'),
     };
     $.post(ajaxurl, data, function(response) {
-       message($, "Ticket von: " + ticket.data('user') + ", gelöscht!");
-       ticket.hide();
+      if(response){
+        message($, "Ticket von: " + ticket.data('user') + ", gelöscht!");
+      } else {
+        message($, "Ticket konnte nicht gelöscht werden!");
+      } 
+      ticket.hide();
     })
   })
 
@@ -157,14 +169,59 @@ jQuery(document).ready(function($){
     $.post(ajaxurl, data, function(response) {})
   })
 
+
+  // on click set permission
+  // load overlay content
+  $('.set-permissions').on('click', function(event) {
+    //Get Ticket option
+    ticket = $(this).parent('div');
+    $('#user').replaceWith('<p id="user" >User: <b>' + ticket.data('user') + '</b></p>');
+
+    $("#permission-list").empty();
+
+    data = {
+      action: 'get_user_device_permission',
+      user_id: ticket.data('user-id')
+    };
+    $.post(ajaxurl, data, function(response) {
+      var device_list = JSON.parse(response);
+      $.each(device_list, function(time, caption) {
+        var checked = (this.permission)? 'checked' : '';
+        $("#permission-list").append( '<input type="checkbox" class="permission-checkbox" id="' + this.id + '"' 
+          + checked + '>' + this.device);
+      });
+    })
+
+    $('body').css( 'overflow', 'hidden' );
+    $("#permission-overlay").show();
+    $("#overlay-background").fadeIn(600);
+  })
+
+    // on click submit permission
+  $('#submit-permission').on('click', function(){
+    var user_id = ticket.data('user-id');
+    $('.permission-checkbox').each(function(){
+      data = {
+        action: 'set_user_device_permission',
+        user_id: user_id,
+        device_id:  this.id,
+        set_permission: this.checked
+      };
+      $.post(ajaxurl, data, function(response) {
+      })
+      close_overlay($, orig_overflow);
+    })
+  })
+
+
   // on click cancle ticket
-  $('#cancel-ticket').on('click', function(){
+  $('.cancel-overlay').on('click', function(){
     close_overlay($, orig_overflow);
   })
-  $('#overlay-close').on('click', function() {
+  $('.close').on('click', function() {
     close_overlay($, orig_overflow);
   })
-  $('#overlay-background').on('click', function() {
+  $('.fl-overlay-layer').on('click', function() {
     close_overlay($, orig_overflow);
   })
   $(document).keyup(function(event){
@@ -186,8 +243,8 @@ function reloadPage(){
 // if message set, display message and reload
 function close_overlay($, orig_overflow){
   $('body').css( 'overflow', orig_overflow );    
-  $("#device-ticket-box").hide();
-  $("#overlay").fadeOut(600);
+  $(".fl-overlay").hide();
+  $("#overlay-background").fadeOut(600);
 }
 
 // closes overlay

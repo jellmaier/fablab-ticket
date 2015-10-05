@@ -24,11 +24,15 @@ function get_device_ticket_waiting_time($device_id, $ticket = 0) {
     'orderby' => 'date',
     'order'   => 'ASC',
     'meta_query' => array(   
-      'relation'=> 'OR',               
+      'relation'=> 'AND',               
       array(
         'key' => 'device_id',                  
         'value' => $device_id,               
         'compare' => '='                 
+      ),
+      array(
+          'key'=>'ticket_type',
+          'value'=> 'device',
       )
     ) 
   );

@@ -48,6 +48,48 @@ jQuery(document).ready(function($){
     })
   })
 
+  // on click get instruction ticket
+  // load overlay content
+  $('.get-instruction').on('click', function(event) {
+    
+    //Get Device Element
+    device = $(this);
+
+    // Set Device Content
+    data = {
+      action: 'add_instruction_ticket',
+      device_id: device.data('device-id'),
+    };
+    $.post(ajaxurl, data, function(response) {
+      if(response){
+        close_overlay($, orig_overflow, "Einschulungs - Ticket für das " + device.data('device-name') + ", erfolgreich erstellt!");
+      } else {
+        close_overlay($, orig_overflow, "Ticket konnte nicht erstellt werden!");
+      }
+    })
+  })
+
+  // on click delete instruction ticket
+  // load overlay content
+  $('.delete-instruction').on('click', function(event) {
+    
+    //Get Ticket Element
+    ticket = $(this).parent('div');
+
+    // Set Device Content
+    data = {
+      action: 'delete_ticket',
+      ticket_id: ticket.data('ticket-id'),
+    };
+    $.post(ajaxurl, data, function(response) {
+      if(response){
+        close_overlay($, orig_overflow, "Einschulungs - Ticket wurde gelöscht!");
+      } else {
+        close_overlay($, orig_overflow, "Ticket konnte nicht gelöscht werden!");
+      }
+    })
+  })
+
   // on click submit ticket
   $('#submit-ticket').on('click', function(){
     data = {
@@ -81,13 +123,16 @@ jQuery(document).ready(function($){
 
     // Set Device Name Dropdown
     data = {
-      action: 'get_online_devices_select_options'
+      action: 'get_user_device_permission',
+      user_id: ticket.data('user-id'),
     };
     $.post(ajaxurl, data, function(response) {
       var device_list = JSON.parse(response);
       $('#device-select').empty();
       $.each(device_list, function(time, caption) {
-        $("#device-select").append( new Option(this.device,this.id) );
+        if(this.permission){
+          $("#device-select").append( new Option(this.device,this.id) );
+        }
       });
       $("#device-select").val(ticket.data('device-id'));
     })
@@ -170,7 +215,11 @@ jQuery(document).ready(function($){
     };
     $.post(ajaxurl, data, function(response) {
       $('#ticket-listing').hide();
-      close_overlay($, orig_overflow, '"Ticket wurde gelöscht!"');
+      if(response){
+        close_overlay($, orig_overflow, "Ticket wurde gelöscht!");
+      } else {
+        close_overlay($, orig_overflow, "Ticket konnte nicht gelöscht werden!");
+      }
     })
   })
 

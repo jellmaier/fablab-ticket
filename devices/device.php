@@ -273,10 +273,52 @@ function get_online_devices() {
   return $device_list;
 }
 
-function get_online_devices_select_options() {
-  echo json_encode(get_online_devices());
+
+function get_user_device_permission() {
+  $user_id = sanitize_text_field($_POST['user_id']);
+  global $post;
+  $query_arg = array(
+    'post_type' => 'device',
+    'meta_query' => array(   
+      'relation'=> 'OR',               
+      array(
+        'key' => 'device_status',                  
+        'value' => 'online',               
+        'compare' => '='                 
+      )
+    ) 
+  );
+  $device_query = new WP_Query($query_arg);
+  $device_list = array();
+  if ( $device_query->have_posts() ) {
+    while ( $device_query->have_posts() ) : $device_query->the_post() ;
+      $device = array();
+      $device['id'] = $post->ID;
+      $device['device'] = $post->post_title;
+      $device['permission'] =  (get_user_meta($user_id, $device['id'], true ) == true);
+      array_push($device_list, $device);
+    endwhile;
+  } 
+  wp_reset_query();
+
+  echo json_encode($device_list);
   die();
 }
-add_action( 'wp_ajax_get_online_devices_select_options', 'get_online_devices_select_options' );
+add_action( 'wp_ajax_get_user_device_permission', 'get_user_device_permission' );
+
+function set_user_device_permission() {
+  $user_id = sanitize_text_field($_POST['user_id']);
+  $device_id = sanitize_text_field($_POST['device_id']);
+  $set_permission = sanitize_text_field($_POST['set_permission']);
+
+  if(is_no_device_entry($device_id)){
+    die(false);
+  }
+
+  update_user_meta( $user_id, $device_id, ($set_permission == 'true') );
+
+  die(true);
+}
+add_action( 'wp_ajax_set_user_device_permission', 'set_user_device_permission' );
 
 ?>
