@@ -37,11 +37,20 @@ function get_ticketlist_shortcode($atts){
 // Display Tickets
 //--------------------------------------------------------
 function display_ticketlist() {
+
+  global $fl_ticketlist_script;
+  $fl_ticketlist_script = true;
+
     $query_arg = array(
     'post_type' => 'ticket',
-    'posts_per_page' => 10, 
     'orderby' => 'date', 
-    'order' => 'ASC'
+    'order' => 'ASC',
+    'meta_query'=>array(
+      array(
+          'key'=>'ticket_type',
+          'value'=> 'device',
+      )
+    )
   );
   $ticket_query = new WP_Query($query_arg);
 
@@ -56,8 +65,9 @@ function display_ticketlist() {
   while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
     $waiting = get_waiting_time_and_persons(get_post_meta($post->ID, 'device_id', true ), $post->ID);
     $color = get_post_meta(get_post_meta($post->ID, 'device_id', true ), 'device_color', true );
+    $available = ($waiting['time'] == 0);
     ?>
-    <div class="<?= ($waiting['time'] == 0) ? $class = "fl-ticket-element blink" : $class = "fl-ticket-element"; ?>" 
+    <div class="<?= $available ? "fl-ticket-element blink" :  "fl-ticket-element"; ?>" 
       style="border-left: 5px solid <?= $color ?>;">
       <p><?= the_time('l, j. F, G:i') ?><p>
       <h2><?= $post->post_title ?></h2>
