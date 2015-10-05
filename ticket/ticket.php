@@ -402,7 +402,8 @@ function delete_activation_time($ticket_id) {
 }
 
 function is_active_ticket($ticket_id){
-  if(empty(get_activation_time($ticket_id))){
+  $activation_time = get_activation_time($ticket_id);
+  if(empty($activation_time)){
     return false;
   }
   return true;
