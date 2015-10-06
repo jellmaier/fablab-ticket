@@ -1,7 +1,7 @@
 //------------------------------------------------------------
 // README of Fablab Ticket 
 // by Jakob Ellmaier
-// 2.10.2015
+// 6.10.2015
 //------------------------------------------------------------
 
 //------------------------------------------------------------
@@ -11,8 +11,8 @@
 
 + Manager add/edit Device
 + Manager add/edit Time-Tickets
-- get briefing Ticket
-- restrict premission to get Ticket
++ get briefing Ticket
++ restrict premission to get Ticket
 + all: get Ticket
 + all: update Ticket
 + Manager: manage Ticket
@@ -31,6 +31,7 @@ Possible Future Features:
 - Using Time-Ticket system while Ticketing is on
   - waiting time in respect of future Time-Tickets
 
+- email notification
 - multilingual
 - load via jquery (no pagereload needed anymore)
 
@@ -51,7 +52,7 @@ Possible Future Features:
 // other - login message
 
 [ticket-list]
-// Manager - List to manage all tickets and active time-tickets
+// Manager - List to manage all tickets, permission and active time-tickets
 // other - view ticket list
 
 [calendar]
@@ -118,6 +119,7 @@ jquery.datetimepicker.css
   + Getter methods
     - sanitize
     + ...
+  + handler for user permission
 
 //------------------------------------------------------------
 // ./js

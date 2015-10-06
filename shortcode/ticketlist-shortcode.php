@@ -219,7 +219,7 @@ function display_manager_ticketlist() {
   );
   $ticket_query = new WP_Query($query_arg);
   if ( $ticket_query->have_posts() ) {
-    echo '<div id="ticket-listing">';
+    echo '<div id="ticket-listing" class="ticket-list">';
     while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
       $waiting = get_waiting_time_and_persons(get_post_meta($post->ID, 'device_id', true ), $post->ID);
       $color = get_post_meta(get_post_meta($post->ID, 'device_id', true ), 'device_color', true );
@@ -282,7 +282,7 @@ function display_manager_ticketlist() {
   );
   $ticket_query = new WP_Query($query_arg);
   if ( $ticket_query->have_posts() ) {
-    echo '<div id="instruction-listing">';
+    echo '<div id="instruction-listing" class="instruction-list">';
     while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
       $color = get_post_meta(get_post_meta($post->ID, 'device_id', true ), 'device_color', true );
       $device_id = get_post_meta($post->ID, 'device_id', true );
@@ -297,7 +297,7 @@ function display_manager_ticketlist() {
       </div>
       <?php
     endwhile;
-    echo '</div>';
+    echo '<div style="clear:left;"></div>';
   }
 
   wp_reset_query();

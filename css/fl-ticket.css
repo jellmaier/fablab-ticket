@@ -32,6 +32,10 @@
     color: rgba(256,256,256,1);
 }
 
+.device-list {
+    margin-bottom: 24px;
+}
+
 /* Instruction Element */
 
 .get-instruction {
@@ -48,9 +52,8 @@
     float: left;
 }
 
-.instruction-listing {
-    float: none;
-    padding-bottom: 2px;
+.instruction-list {
+    margin-bottom: 24px;
 }
 
 /* Ticket Element */
@@ -96,6 +99,10 @@
     background: #74a4a3;
     color: #fff;
     cursor: pointer;
+}
+
+.ticket-list {
+    margin-bottom: 24px;
 }
 
 /* overlay style */

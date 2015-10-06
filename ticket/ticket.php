@@ -88,11 +88,11 @@ function codex_ticket_init() {
 function ticket_edit_columns($columns){
   $columns = array(
     "title" => "Ticket",
+    "ticket_type" => "Ticket Typ",
     "device_id" => "Gerät",
     "duration" => "Ticket dauer",
     "user_id" => "User",
     "activation_time" => "Activierungs Zeit",
-    "ticket_type" => "Ticket Typ",
   );
   return $columns;
 }
@@ -114,7 +114,7 @@ function ticket_table_content($column_name, $post_id) {
         echo get_ticket_field("user_id");
         break;
 
-      case 'ticket_typ' :
+      case 'ticket_type' :
         echo get_ticket_field("ticket_type");
         break;
 

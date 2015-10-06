@@ -190,11 +190,12 @@ jQuery(document).ready(function($){
         $("#permission-list").append( '<input type="checkbox" class="permission-checkbox" id="' + this.id + '"' 
           + checked + '>' + this.device);
       });
+      $("#permission-overlay").show();
     })
 
     $('body').css( 'overflow', 'hidden' );
-    $("#permission-overlay").show();
     $("#overlay-background").fadeIn(600);
+    
   })
 
     // on click submit permission

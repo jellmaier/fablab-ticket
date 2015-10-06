@@ -48,7 +48,7 @@ function get_ticket_shortcode($atts){
     if ( (fablab_get_option('ticket_online') == 1) && ($ticket_query->found_posts < fablab_get_option('tickets_per_user')) ) {
       display_available_devices();
     } else {
-      echo 'Zurzeit sind keine Tickets verfügbar!';
+      //echo 'Zurzeit sind keine Tickets verfügbar!';
     }
   }
   
@@ -61,7 +61,7 @@ function get_ticket_shortcode($atts){
 function display_user_instructions($ticket_query) {
   global $post;
   echo '<p>Hier wird dir deine Einschulungsanfragen angezeigt:</p>';
-  echo '<div class="instruction-listing">';
+  echo '<div class="instruction-list">';
   while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
     $color = get_post_meta(get_post_meta($post->ID, 'device_id', true ), 'device_color', true );
     $device_id = get_post_meta($post->ID, 'device_id', true );
@@ -75,7 +75,7 @@ function display_user_instructions($ticket_query) {
     </div>
     <?php
   endwhile;
-  echo '</div>';
+  echo '<div style="clear:left;"></div></div>';
 
   wp_reset_query();
 }
@@ -101,7 +101,7 @@ function display_available_devices() {
   get_current_user_id();
   if ( $device_query->have_posts() ) {
     echo '<p>Hier werden dir die verfügbaren Geräte angezeigt:</p>';
-    echo '<div id="fl-getticket">';
+    echo '<div id="fl-getticket" class="device-list">';
     while ( $device_query->have_posts() ) : $device_query->the_post() ;
       //if (get_post_meta($post->ID, 'ticket_type', true ) == 'device'){
       if (get_user_meta($user_id, $post->ID, true ) == true){
@@ -161,7 +161,7 @@ function display_available_devices() {
 function display_user_tickets($ticket_query) {
   global $post;
   echo '<p>Hier wird dir dein gezogenes Ticket angezeigt:</p>';
-  echo '<div id="ticket-listing">';
+  echo '<div id="ticket-listing" class="ticket-list">';
   while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
     $waiting = get_waiting_time_and_persons(get_post_meta($post->ID, 'device_id', true ), $post->ID);
     $color = get_post_meta(get_post_meta($post->ID, 'device_id', true ), 'device_color', true );
