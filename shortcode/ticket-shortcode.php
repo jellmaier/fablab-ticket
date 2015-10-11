@@ -41,15 +41,11 @@ function get_ticket_shortcode($atts){
     if ( $instruction_query->have_posts() ) {
         display_user_instructions($instruction_query);
     } 
-
     if ( $ticket_query->have_posts() ) {
       display_user_tickets($ticket_query);
     } 
-    if ( (fablab_get_option('ticket_online') == 1) && ($ticket_query->found_posts < fablab_get_option('tickets_per_user')) ) {
-      display_available_devices();
-    } else {
-      //echo 'Zurzeit sind keine Tickets verfügbar!';
-    }
+    display_available_devices($get_ticket = (fablab_get_option('ticket_online') == 1) 
+                && ($ticket_query->found_posts < fablab_get_option('tickets_per_user')));
   }
   
 }
@@ -70,7 +66,8 @@ function display_user_instructions($ticket_query) {
       data-ticket-id="<?= $post->ID ?>"  data-user-id="<?=  $post->post_author ?>"
       <p><?= the_time('l, j. F, G:i') ?><p>
       <h2>Einschulungsanfrage</h2>
-      <p>für Gerät: <b><?=  get_device_title_by_id(get_post_meta($post->ID, 'device_id', true )) ?></b></p>
+      <p>für Gerät: <b><?=  get_device_title_by_id($device_id); ?></b></p>
+      <p>Nächster Termin: <b><?= next_instruction($device_id); ?></b></p>
       <input type="submit" class="ticket-btn delete-instruction" value="Einschulungsanfrage löschen"/>
     </div>
     <?php
@@ -83,7 +80,7 @@ function display_user_instructions($ticket_query) {
 //--------------------------------------------------------
 // Display available Devices
 //--------------------------------------------------------
-function display_available_devices() {
+function display_available_devices($get_ticket) {
   global $post;
   $query_arg = array(
     'post_type' => 'device',
@@ -98,13 +95,14 @@ function display_available_devices() {
   );
   $device_query = new WP_Query($query_arg);
   $user_id = get_current_user_id();
+
+
   get_current_user_id();
   if ( $device_query->have_posts() ) {
     echo '<p>Hier werden dir die verfügbaren Geräte angezeigt:</p>';
     echo '<div id="fl-getticket" class="device-list">';
     while ( $device_query->have_posts() ) : $device_query->the_post() ;
-      //if (get_post_meta($post->ID, 'ticket_type', true ) == 'device'){
-      if (get_user_meta($user_id, $post->ID, true ) == true){
+      if ($get_ticket && (get_user_meta($user_id, $post->ID, true ) == true || fablab_get_option('tickets_permission') != '1')){
         $waiting = get_waiting_time_and_persons($post->ID);
         $color = get_post_meta($post->ID, 'device_color', true );
         ?>
@@ -123,6 +121,7 @@ function display_available_devices() {
           data-device-name="<?= get_device_title_by_id($post->ID) ?>">
           <div class="fl-device-element-content">
             <h2><?= $post->post_title ?></h2>
+            <p>Nächster Termin: <b><?= next_instruction($post->ID); ?></b></p>
             <p>Ich möchte für dieses Gerät eine Einschulung</p>
           </div>
         </div>
@@ -131,8 +130,10 @@ function display_available_devices() {
     endwhile;
     echo '</div>';
   } else {
-      echo '<p> No device online! </p>'; 
+      echo '<p>No device online!</p>'; 
   }
+
+  //echo '<p>Zurzeit sind keine Tickets verfügbar!</p>';
 
   wp_reset_query();
 

@@ -48,7 +48,9 @@
 }
 
 .instruction-element {
-    width: 400px;
+    width: 94%;
+    max-width: 400px;
+    min-width: 340px;
     float: left;
 }
 
@@ -81,6 +83,7 @@
 .fl-ticket-element input[type=submit] {
     margin-top: 10px;
     border: 1px solid #74a4a3;
+    border-radius: 6px;
     background: none;
     color: #74a4a3;
     text-transform: none;
@@ -88,12 +91,13 @@
     font-weight: bold;
     font-size: 14px;
     letter-spacing: 0.5px;
-    border-radius: 5px;
     transition: all 0.2s ease;
     -webkit-transition: all 0.2s ease;
     -moz-transition: all 0.2s ease;
     display: inline-block;
 }
+
+
 
 .fl-ticket-element input[type=submit]:hover {
     background: #74a4a3;

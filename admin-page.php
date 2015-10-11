@@ -25,15 +25,6 @@ if (!class_exists('AdminPage'))
         // Add all your sections, fields and settings during admin_menu
         // ------------------------------------------------------------------
 
-        add_settings_field(
-          'ticket_online',                           // ID/Name of the field
-          'Ticket System Online',                    // Title
-          'fablab_ticket_online_function',           // callback
-          'fablab_options',                          // page slug
-          'fablab_settings'                          // section
-        );
-
-
         // Add the section to reading settings so we can add our
         // fields to it
         add_settings_section(
@@ -42,6 +33,25 @@ if (!class_exists('AdminPage'))
           'fablab_settings_function',                 // callback
           'fablab_options'                            // Page slug
         );
+
+        // Set Ticketing system online
+        add_settings_field(
+          'ticket_online',                           // ID/Name of the field
+          'Ticket System Online',                    // Title
+          'fablab_ticket_online_function',           // callback
+          'fablab_options',                          // page slug
+          'fablab_settings'                          // section
+        );
+
+        // If user need ticket for permission
+        add_settings_field(
+          'ticket_permission',                           // ID/Name of the field
+          'Einschulungen erforderlich',                    // Title
+          'fablab_ticket_permission_function',           // callback
+          'fablab_options',                          // page slug
+          'fablab_settings'                          // section
+        );
+
         
         // Add the field with the names and function to use for our new
         // settings, put it in our new section
@@ -99,6 +109,7 @@ function fablab_get_option($key = 'array') {
     'ticket_max_time' => '120',
     'ticket_online' => '0',
     'ticket_delay' => '10',
+    'ticket_permission' => '0',
 
   );
 
@@ -149,6 +160,9 @@ function fablab_ticket_online_function() {
 }
 function fablab_ticket_delay_function() {
   echo '<input type="text" name="settings_fields[ticket_delay]" value="' . fablab_get_option('ticket_delay') . '"/>';
+}
+function fablab_ticket_permission_function() {
+  echo '<input type="checkbox" name="settings_fields[tickets_permission]" value="1"' . checked( 1, fablab_get_option('tickets_permission'), false ) . '"/>';
 }
 
 // ------------------------------------------------------------------

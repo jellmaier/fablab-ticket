@@ -254,7 +254,7 @@ function close_overlay($, orig_overflow, message){
     if(message != '') {
       $('#message').text(message);
       $('#message').show();
-      setTimeout(reloadPage, 2000);
+      setTimeout(reloadPage, 1000);
     }
   }
 

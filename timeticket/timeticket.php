@@ -161,8 +161,8 @@ function timeticket_admin_init(){
  
 function timeticket_details_meta() {
   
-  echo '<p><label>Start Time Ticket: </label><input type="text" name="timeticket_start_time" id="timeticket_start_time" value="' . get_timeticket_field("timeticket_start_time") . '" /></p>';
-  echo '<p><label>End Time: </label><input type="text" name="timeticket_end_time"  id="timeticket_end_time" value="' . get_timeticket_field("timeticket_end_time") . '" /> </p>';
+  echo '<p><label>Start Time Ticket: </label><input type="text" name="timeticket_start_time" class="start_time" value="' . get_timeticket_field("timeticket_start_time") . '" /></p>';
+  echo '<p><label>End Time: </label><input type="text" name="timeticket_end_time"  class="end_time" value="' . get_timeticket_field("timeticket_end_time") . '" /> </p>';
 
   $device_selected = get_timeticket_field("timeticket_device");
   $timeticket_user = get_timeticket_field("timeticket_user");

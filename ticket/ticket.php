@@ -75,7 +75,7 @@ function codex_ticket_init() {
     'has_archive'        => true,
     'hierarchical'       => false,
     'menu_position'      => null,
-    'menu_icon'          => 'dashicons-clipboard',
+    'menu_icon'          => 'dashicons-tickets-alt',
     'supports'           => array( 'title', 'editor', 'thumbnail')
   );
 
