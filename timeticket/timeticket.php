@@ -453,6 +453,8 @@ function extend_timeticket() {
   $new_time = get_post_meta($ticket_id, 'timeticket_end_time', true ) + ($minutes * 60);
   update_post_meta($ticket_id, 'timeticket_end_time', $new_time);
 
+  clear_device_activation_time(get_post_meta( $ticket_id, 'timeticket_device', true ));
+
   die();
 }
 add_action( 'wp_ajax_extend_timeticket', 'extend_timeticket' );

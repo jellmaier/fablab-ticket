@@ -6,6 +6,8 @@ function get_waiting_time_and_persons($device_id, $ticket = 0) {
 
   $waiting['time'] = device_waiting_time($device_id, $waiting['time']);
 
+  check_and_activate_ticket($ticket, $waiting['time']);
+
   return $waiting;
 }
 
@@ -45,7 +47,6 @@ function get_device_ticket_waiting_time($device_id, $ticket = 0) {
       check_and_deactivate_ticket($post->ID);
 
       if ($post->ID == $ticket) {
-        check_and_activate_ticket($ticket, $waiting['time']);
         return $waiting;
       } else {
         $waiting['persons'] ++;

@@ -369,15 +369,16 @@ function activate_ticket() {
   }
 
   $post_information = array(
-        'ID' => $ticket_id,
-        'post_status' => 'publish',
-    );
+    'ID' => $ticket_id,
+    'post_status' => 'publish',
+  );
   wp_update_post( $post_information );
+
+  clear_device_activation_time(get_post_meta( $ticket_id, 'device_id', true ));
+
   die(true);
 }
 add_action( 'wp_ajax_activate_ticket', 'activate_ticket' );
-
-
 
 
 function is_ticket_entry($ID) {
@@ -399,8 +400,28 @@ function set_activation_time($ticket_id) {
   return false;
 }
 
-function delete_activation_time($ticket_id) {
-  delete_post_meta($ticket_id, 'activation_time');
+function clear_device_activation_time($device_id){
+  global $post;
+  $query_arg = array(
+    'post_type' => 'ticket',
+    'orderby' => 'date', 
+    'order' => 'ASC',
+    'meta_query'=>array(
+      array(
+          'key'=>'ticket_type',
+          'value'=> 'device',
+      ),
+      array(
+          'key'=>'activation_time',
+          'value'=> '',
+          'compare' => '!='
+      )
+    )
+  );
+  $ticket_query = new WP_Query($query_arg);
+  while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
+    delete_post_meta($post->ID, 'activation_time');
+  endwhile;
 }
 
 function is_active_ticket($ticket_id){

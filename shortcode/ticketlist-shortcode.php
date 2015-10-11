@@ -340,7 +340,6 @@ function print_deactivatet_tickets() {
       $waiting = get_waiting_time_and_persons(get_post_meta($post->ID, 'device_id', true ), $post->ID);
       $color = get_post_meta(get_post_meta($post->ID, 'device_id', true ), 'device_color', true );
       $device_id = get_post_meta($post->ID, 'device_id', true );
-      delete_activation_time($post->ID); // just in case it gets activated again
       ?>
       <div class="fl-ticket-element" data-ticket-id="<?= $post->ID ?>" style="border-left: 5px solid <?= $color ?>; opacity: 0.5;"
         data-ticket-id="<?= $post->ID ?>" data-device-id="<?=  $device_id ?>"
