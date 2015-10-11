@@ -67,6 +67,15 @@ if (!class_exists('ManageScripts'))
         wp_print_styles('fl_ticketlist_style');
       }
       add_action('wp_footer', 'print_fl_ticketlist_script');
+
+      function print_fl_ticketlist_style() {
+        global $fl_ticketlist_style;
+        if ( ! $fl_ticketlist_style)
+          return;
+
+        wp_print_styles('fl_ticketlist_style');
+      }
+      add_action('wp_footer', 'print_fl_ticketlist_style');
     }
   }
 }
