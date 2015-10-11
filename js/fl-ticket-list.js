@@ -45,7 +45,7 @@ jQuery(document).ready(function($){
     $('#time-ticket-listing').slideToggle(200);
   })
 
-  // Time-Ticket Handling
+  // Time-Ticket stop
   $('.stop-time-ticket').on('click', function(event) {
     //Get Ticket option
     var time_ticket = $(this).parent('div');
@@ -59,7 +59,7 @@ jQuery(document).ready(function($){
     })
   })
 
-  // Time-Ticket Handling
+  // Time-Ticket delete
   $('.delete-time-ticket').on('click', function(event) {
     //Get Ticket option
     var time_ticket = $(this).parent('div');
@@ -70,6 +70,21 @@ jQuery(document).ready(function($){
     $.post(ajaxurl, data, function(response) {
        message($, "Time-Ticket von: " + time_ticket.data('user') + ", gelöscht!");
        time_ticket.hide();
+    })
+  })
+
+  // Time-Ticket extend
+  $('.extend-time-ticket').on('click', function(event) {
+    //Get Ticket option
+    var time_ticket = $(this).parent('div');
+    data = {
+      action: 'extend_timeticket',
+      ticket_id:  time_ticket.data('time-ticket-id'),
+      minutes: $(this).data('minutes'),
+    };
+    $.post(ajaxurl, data, function(response) {
+       message($, "Time-Ticket von: " + time_ticket.data('user') + ", verlängert!");
+       $('#time-ticket-listing').slideToggle(200);
     })
   })
 

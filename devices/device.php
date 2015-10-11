@@ -57,7 +57,7 @@ function codex_device_init() {
 
   $args = array(
     'labels'             => $labels,
-                'description'        => __( 'Description.', 'your-plugin-textdomain' ),
+    'description'        => __( 'Description.', 'your-plugin-textdomain' ),
     'public'             => true,
     'publicly_queryable' => true,
     'show_ui'            => true,
@@ -74,38 +74,6 @@ function codex_device_init() {
 
   register_post_type( 'device', $args );
 
-  // Init Taxonomy
-
-   $labels = array(
-      'name'                       => _x( 'Device Type', 'taxonomy general name' ),
-      'singular_name'              => _x( 'Device Type', 'taxonomy singular name' ),
-      'search_items'               => __( 'Device Types suchen' ),
-      'popular_items'              => __( 'Meistverwendete Lables' ),
-      'all_items'                  => __( 'Alle Labes' ),
-      'parent_item'                => null,
-      'parent_item_colon'          => null,
-      'edit_item'                  => __( 'Device Type bearbeiten' ),
-      'update_item'                => __( 'Device Type updaten' ),
-      'add_new_item'               => __( 'Add New Device Type' ),
-      'new_item_name'              => __( 'New Device Type Name' ),
-      'separate_items_with_commas' => __( '' ),
-      'add_or_remove_items'        => __( 'Add or remove Device Types' ),
-      'choose_from_most_used'      => __( '' ),
-      'not_found'                  => __( 'No Device Types found.' ),
-      'menu_name'                  => __( 'Device Types' ),
-    );
-
-    $args = array(
-      'hierarchical'          => false,
-      'labels'                => $labels,
-      'show_ui'               => true,
-      'show_admin_column'     => true,
-      'update_count_callback' => '_update_post_term_count',
-      'query_var'             => true,
-      'rewrite'               => array( 'slug' => 'device_type' ),
-    );
-
-    //register_taxonomy( 'device_type', array( 'device', 'device', 'ticket'), $args );
 }
 
 

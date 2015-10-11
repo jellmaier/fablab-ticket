@@ -397,50 +397,7 @@ function device_waiting_time($device_id, $waiting_time) {
   }
   wp_reset_query();
  
-  // handle waiting time of upcoming time-tickets
- /*
-  $query_arg = array(
-    'post_type' => 'timeticket',
-    'meta_query'=>array(
-      'relation'=>'and',
-      array(
-        'key' => 'timeticket_device',                  
-        'value' => $device_id,               
-        'compare' => '='                 
-      ),
-      array(
-          'key'=>'timeticket_start_time',
-          'value'=> current_time( 'timestamp' ),
-          'compare' => '>'
-      ),
-      array(
-          'key'=>'timeticket_start_time',
-          'value'=> (current_time( 'timestamp' ) + (60*60*24)),
-          'compare' => '<'
-      )
-    )
-  );
-  $device_query = new WP_Query($query_arg);
-  if ( $device_query->have_posts() ) {
-    while ( $device_query->have_posts() ) : $device_query->the_post() ;
-      $start_time = get_post_meta($post->ID, 'timeticket_start_time', true );
-      $end_time = get_post_meta($post->ID, 'timeticket_end_time', true );
-      $current_endtime = (current_time( 'timestamp' ) + (60 * $waiting_time));
-      if($current_endtime > $start_time) {
-        if($current_endtime > $end_time) {
-          $waiting_time += (($end_time - $start_time) / 60 );
-        } else {
-          $waiting_time += (($end_time - $current_endtime) / 60 );
-        }
-      } else {
-        $post = $temp_post;
-        return $waiting_time;
-      }
-    endwhile;
-  }
-  wp_reset_query();
-
-  */
+  // -- mssing -- handle waiting time of upcoming time-tickets
 
   $post = $temp_post;
 
@@ -488,6 +445,17 @@ function stop_timeticket() {
   die();
 }
 add_action( 'wp_ajax_stop_timeticket', 'stop_timeticket' );
+
+function extend_timeticket() {
+  $ticket_id = sanitize_text_field($_POST['ticket_id']);
+  $minutes = sanitize_text_field($_POST['minutes']);
+
+  $new_time = get_post_meta($ticket_id, 'timeticket_end_time', true ) + ($minutes * 60);
+  update_post_meta($ticket_id, 'timeticket_end_time', $new_time);
+
+  die();
+}
+add_action( 'wp_ajax_extend_timeticket', 'extend_timeticket' );
 
 
 ?>

@@ -14,7 +14,9 @@ if (!class_exists('TicketListShortcode'))
   }
 }
 
-// Get Ticket Shortcut
+//--------------------------------------------------------
+// Display Tickets ViewS
+//--------------------------------------------------------
 function get_ticketlist_shortcode($atts){
 
   global $post;
@@ -31,8 +33,9 @@ function get_ticketlist_shortcode($atts){
   
 }
 
+
 //--------------------------------------------------------
-// Display Tickets
+// Display active Tickets
 //--------------------------------------------------------
 function display_ticketlist() {
 
@@ -53,6 +56,8 @@ function display_ticketlist() {
   $ticket_query = new WP_Query($query_arg);
 
   global $post;
+
+  // reload function
   echo '<p>Hier werden dir die aktiven Tickets angezeigt:</p>';
   if ($ticket_query->have_posts()) {
     echo '<META HTTP-EQUIV="refresh" CONTENT="10">';
@@ -60,6 +65,9 @@ function display_ticketlist() {
     echo '<META HTTP-EQUIV="refresh" CONTENT="60">';
   }
   echo '<div id="ticket-listing">';
+
+
+  // Display Tickets
   while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
     $waiting = get_waiting_time_and_persons(get_post_meta($post->ID, 'device_id', true ), $post->ID);
     $color = get_post_meta(get_post_meta($post->ID, 'device_id', true ), 'device_color', true );
@@ -123,6 +131,10 @@ function display_manager_ticketlist() {
 
 }
 
+
+//--------------------------------------------------------
+// Display active Tickets
+//--------------------------------------------------------
 function print_active_tickets() {
   global $post;
 
@@ -175,8 +187,13 @@ function print_active_tickets() {
   wp_reset_query();
 }
 
+//--------------------------------------------------------
+// Display active Timeticket
+//--------------------------------------------------------
 function print_active_timetickets() {
   global $post;
+
+  $time_delay = (fablab_get_option('ticket_delay') * 60);
 
   $query_arg = array(
     'post_type' => 'timeticket',
@@ -192,7 +209,7 @@ function print_active_timetickets() {
       ),
       array(
           'key'=>'timeticket_end_time',
-          'value'=> current_time( 'timestamp' ),
+          'value'=> (current_time( 'timestamp' ) - $time_delay),
           'compare' => '>'
       )
     )
@@ -211,10 +228,11 @@ function print_active_timetickets() {
         data-time-ticket-id="<?= $post->ID ?>">
         <p>Gerät: <b><?=  get_device_title_by_id($device_id) ?></b> </p> 
         <h2><?= $post->post_title ?></h2>
-        <p>Start Zeit vor: <b><?=  human_time_diff(get_post_meta($post->ID, 'timeticket_start_time', true ), current_time( 'timestamp' ) ); ?></b></p>
-        <p>End Zeit in: <b><?=  human_time_diff(get_post_meta($post->ID, 'timeticket_end_time', true ), current_time( 'timestamp' ) ); ?></b></p>
+        <p>Start Zeit: <b><?=  get_timediff_string(get_post_meta($post->ID, 'timeticket_start_time', true )) ?></b></p>
+        <p>End Zeit: <b><?=  get_timediff_string(get_post_meta($post->ID, 'timeticket_end_time', true )) ?></b></p>
         <input type="submit" class="ticket-btn stop-time-ticket" value="Jetzt Beenden"/>
         <input type="submit" class="ticket-btn delete-time-ticket" value="Löschen"/>
+        <input type="submit" data-minutes="30" class="ticket-btn extend-time-ticket" value="+30 Minuten"/>
       </div>
       <?php
     endwhile;
@@ -228,6 +246,9 @@ function print_active_timetickets() {
 }
 
 
+//--------------------------------------------------------
+// Display deactivated tickets
+//--------------------------------------------------------
 function print_deactivatet_tickets() {
   global $post;
 
@@ -280,6 +301,9 @@ function print_deactivatet_tickets() {
   wp_reset_query();
 }
 
+//--------------------------------------------------------
+// Display device instruction
+//--------------------------------------------------------
 function print_device_instruction($device_id) {
   global $post;
 
@@ -331,8 +355,10 @@ function print_device_instruction($device_id) {
 
 }
 
+//--------------------------------------------------------
+// Display overlay assign Ticket
+//--------------------------------------------------------
 function print_assign_overlay() {
-  // Display overlay assign Ticket
   ?>
   <div id="overlay" class="fl-overlay" hidden>
     <div id="device-ticket-box" class="device-ticket" hidden>

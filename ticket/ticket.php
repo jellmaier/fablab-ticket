@@ -378,6 +378,8 @@ function activate_ticket() {
 add_action( 'wp_ajax_activate_ticket', 'activate_ticket' );
 
 
+
+
 function is_ticket_entry($ID) {
   $post_object = get_post($ID);
   return (!empty($post_object) && ($post_object->post_type == 'ticket'));
@@ -411,6 +413,21 @@ function is_active_ticket($ticket_id){
 
 function get_activation_time($ticket_id) {
   return get_post_meta( $ticket_id, 'activation_time', true );
+}
+
+function get_timediff_string($first_time, $second_time = 0) {
+  if($second_time == 0) {
+    $second_time = current_time('timestamp');
+  }
+  $second_time = round($second_time / 60);
+  $first_time = round($first_time / 60);
+  if($second_time > $first_time){
+    return 'vor ' . get_post_time_string($second_time - $first_time);
+  } else if ($first_time > $second_time) {
+    return 'in ' . get_post_time_string($first_time - $second_time);
+  } else {
+    return 'jetzt';
+  }
 }
 
 function get_post_time_string($time, $shownull = false) {
