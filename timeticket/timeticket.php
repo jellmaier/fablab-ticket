@@ -408,6 +408,7 @@ function insert_timeticket() {
   $device_id = $_POST['device_id'];
   $duration = $_POST['duration'];
   $user_id = $_POST['user_id'];
+  $ticket_id = $_POST['ticket_id'];
 
   $start_time = current_time( 'timestamp' );
   $end_time = (current_time( 'timestamp' ) + (60 * $duration)) ;
@@ -427,6 +428,8 @@ function insert_timeticket() {
       add_post_meta($ID, 'timeticket_end_time' , $end_time);
       add_post_meta($ID, 'timeticket_user' , $user_id);
     }
+
+    deactivate_ticket($ticket_id);
 
     die($ID != 0);
 }

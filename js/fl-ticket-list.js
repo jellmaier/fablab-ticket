@@ -171,18 +171,13 @@ jQuery(document).ready(function($){
       device_id:  ticket.data('device-id'),
       duration:  $("#time-select").val(),
       user_id:  ticket.data('user-id'),
+      ticket_id:  ticket.data('ticket-id'),
     };
     $.post(ajaxurl, data, function(response) {
       ticket.hide();
       close_overlay($, orig_overflow);
       message($, "Time-Ticket für das Gerät: " + ticket.data('device-name') + ", erfolgreich erstellt!")
     })
-
-    data = {
-      action: 'deactivate_ticket',
-      ticket_id:  ticket.data('ticket-id'),
-    };
-    $.post(ajaxurl, data, function(response) {})
   })
 
   $('.set-permission').on('click', function(event) {

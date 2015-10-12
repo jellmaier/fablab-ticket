@@ -61,15 +61,21 @@ function get_device_ticket_waiting_time($device_id, $ticket = 0) {
   return $waiting;
 }
 
-function check_and_deactivate_ticket($ticket_id){
+function check_and_deactivate_ticket($ticket_id) {
   $activation_time = get_activation_time($ticket_id);
   if( !empty($activation_time) && (( current_time( 'timestamp' ) - $activation_time) >= (60 * fablab_get_option('ticket_delay')))) {
-    deactivate_ticket($ticket_id);
+    deactivate_ticket_delete_act_time($ticket_id);
   }
 }
 
+function check_and_delete_ticket($ticket_id) {
+  $activation_time = get_activation_time($ticket_id);
+  if( !empty($activation_time) && (( current_time( 'timestamp' ) - $activation_time) >= (2*60 * fablab_get_option('ticket_delay')))) {
+    wp_delete_post($ticket_id);
+  }
+}
 function check_and_activate_ticket($ticket_id, $waiting_time) {
-  if($waiting_time == 0){
+  if(($waiting_time == 0) && ( get_post_status($ticket_id) == 'publish')){
     set_activation_time($ticket_id);
   }
 }

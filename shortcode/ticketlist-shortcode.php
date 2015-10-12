@@ -57,7 +57,6 @@ function display_ticketlist() {
 
   $query_arg = array(
     'post_type' => 'timeticket',
-    'posts_per_page' => 10, 
     'orderby' => 'date', 
     'order' => 'ASC',
     'meta_query'=>array(
@@ -90,16 +89,30 @@ function display_ticketlist() {
     echo '<div class="fl-fullscreen-layer">';
     echo '<a href="' . get_permalink($post->ID) . '" class="close">x</a>';
     echo '<div class="tickets-box">'; 
+    display_user_timeticketlist($time_ticket_query);
+    display_user_ticketlist($ticket_query);
+    echo '</div></div>'; 
+    echo '<div class="fl-fullscreen-background"></div>';
   } else {
     echo '<div class="reload">';
     echo '<a style="text-decoration: none;" href="' . get_permalink($post->ID) 
                       . '/?fullscreen">⤢ fullscreen</a>';
     echo '</div>';
+    display_user_timeticketlist($time_ticket_query);
+    display_user_ticketlist($ticket_query);
   }
 
+}
+
+
+//--------------------------------------------------------
+// Display Manager View Tickets
+//--------------------------------------------------------
+function display_user_ticketlist($ticket_query) {
   // Display Tickets
   echo '<div class="ticket-list">';
-  echo '<p>Hier werden dir die aktiven Tickets angezeigt:</p>';
+  echo '<p>Hier werden die wartenden Tickets angezeigt:</p>';
+  global $post;
   if ( $ticket_query->have_posts() ) {
     while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
       $waiting = get_waiting_time_and_persons(get_post_meta($post->ID, 'device_id', true ), $post->ID);
@@ -123,16 +136,19 @@ function display_ticketlist() {
 
   wp_reset_query();
 
+}
 
+function display_user_timeticketlist($time_ticket_query) {
   //Time-Tiket listing
   echo '<div class="time-ticket-list">';
-  echo '<p>Hier werden dir die aktiven Time-Tickets angezeigt:</p>';
+  echo '<p>Hier werden die aktiven Tickets angezeigt:</p>';
+  global $post;
   if ( $time_ticket_query->have_posts() ) {
     while ( $time_ticket_query->have_posts() ) : $time_ticket_query->the_post() ;
       $device_id = get_post_meta($post->ID, 'timeticket_device', true );
       $color = get_post_meta($device_id, 'device_color', true );
       ?>
-      <div class="fl-ticket-element" style="border: 5px solid <?= $color ?>;"
+      <div class="fl-ticket-element" style="border: 4px solid <?= $color ?>;"
         data-user="<?= get_user_by('id', get_post_meta($post->ID, 'timeticket_user', true ))->display_name ?>"
         data-time-ticket-id="<?= $post->ID ?>">
         <p>Gerät: <b><?=  get_device_title_by_id($device_id) ?></b> </p> 
@@ -147,14 +163,9 @@ function display_ticketlist() {
   }
   echo '</div>';
 
-  if(isset( $_GET['fullscreen'])) {
-    echo '</div></div>'; 
-    echo '<div class="fl-fullscreen-background"></div>';
-  }
-
   wp_reset_query();
-
 }
+
 
 
 //--------------------------------------------------------
@@ -290,7 +301,7 @@ function print_active_timetickets() {
       $device_id = get_post_meta($post->ID, 'timeticket_device', true );
       $color = get_post_meta($device_id, 'device_color', true );
       ?>
-      <div class="fl-ticket-element" style="border: 5px solid <?= $color ?>;"
+      <div class="fl-ticket-element" style="border: 4px solid <?= $color ?>;"
         data-user="<?= get_user_by('id', get_post_meta($post->ID, 'timeticket_user', true ))->display_name ?>"
         data-time-ticket-id="<?= $post->ID ?>">
         <p>Gerät: <b><?=  get_device_title_by_id($device_id) ?></b> </p> 
@@ -340,6 +351,7 @@ function print_deactivatet_tickets() {
       $waiting = get_waiting_time_and_persons(get_post_meta($post->ID, 'device_id', true ), $post->ID);
       $color = get_post_meta(get_post_meta($post->ID, 'device_id', true ), 'device_color', true );
       $device_id = get_post_meta($post->ID, 'device_id', true );
+      check_and_delete_ticket($post->ID);
       ?>
       <div class="fl-ticket-element" data-ticket-id="<?= $post->ID ?>" style="border-left: 5px solid <?= $color ?>; opacity: 0.5;"
         data-ticket-id="<?= $post->ID ?>" data-device-id="<?=  $device_id ?>"

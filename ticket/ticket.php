@@ -348,6 +348,11 @@ function deactivate_ticket($ticket_id) {
   return true;
 }
 
+function deactivate_ticket_delete_act_time($ticket_id) {
+  deactivate_ticket($ticket_id);
+  delete_post_meta($ticket_id, 'activation_time');
+}
+
 function deactivate_ticket_ajax() {
   $ticket_id = sanitize_text_field($_POST['ticket_id']);
 
@@ -355,8 +360,7 @@ function deactivate_ticket_ajax() {
   if(!is_ticket_entry($ticket_id) || !has_update_premission()) {
     die(false);
   }
-
-  die(deactivate_ticket($ticket_id));
+  die(deactivate_ticket_delete_act_time($ticket_id));
 }
 add_action( 'wp_ajax_deactivate_ticket', 'deactivate_ticket_ajax' );
 
