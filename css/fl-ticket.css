@@ -251,13 +251,16 @@
 
 /* Message */
 
-.message-box {
-    background-color: #efc;
-    border: 1px solid #eee;
-    border-radius: 4px;
-    padding: 5px 10px;
-    margin-bottom: 10px;
-}
 .message-box p{
     margin: 4px;
+    font-size: 14px;
+}
+
+.message-box {
+    background: #fff;
+    border-left: 4px solid #74a4a3;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.1);
+    margin: 6px;
+    padding: 10px 12px;
 }

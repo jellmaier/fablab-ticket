@@ -31,7 +31,7 @@ function get_ticket_shortcode($atts){
     <div id="message" class="message-box">
       <p>Du bist nicht eingeloggt!</br>
       Du kannst dich <a href="<?= bloginfo('url'); ?>/wp-login.php?redirect_to=<?= get_permalink($post->ID) ?>">hier</a>
-      einloggen, oder <a href="<?= bloginfo('url'); ?>/register/">hier</a> registrieren!</p>
+      einloggen, oder <a href="<?= bloginfo('url'); ?>/wp-login.php?action=register">hier</a> registrieren!</p>
     </div>
     <?php
     return;
