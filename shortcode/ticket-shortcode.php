@@ -59,7 +59,7 @@ function get_ticket_shortcode($atts){
   if ( $instruction_query->have_posts() ) {
     display_user_instructions($instruction_query);
   } 
-  display_available_instruction_devices($ticket_online, $permission_needed);
+  display_available_instruction_devices($permission_needed);
 
 }
     
@@ -180,9 +180,9 @@ function display_available_devices($ticket_online, $max_ticket, $permission_need
 //--------------------------------------------------------
 // Display available Devices
 //--------------------------------------------------------
-function display_available_instruction_devices($ticket_online, $permission_needed) {
+function display_available_instruction_devices($permission_needed) {
 
-  if (!$ticket_online || !$permission_needed) {
+  if (!$permission_needed) {
     return;
   }
 
