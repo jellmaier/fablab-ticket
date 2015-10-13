@@ -81,8 +81,41 @@ function get_user_permission_checkboxes($user_id, $device_list) {
 
 
 // ------------------------------------------------------------------
-// AJAX setter functions
+// AJAX getter/setter functions
 // ------------------------------------------------------------------
+
+function get_user_device_permission() {
+  $user_id = sanitize_text_field($_POST['user_id']);
+  global $post;
+  $query_arg = array(
+    'post_type' => 'device',
+    'meta_query' => array(   
+      'relation'=> 'OR',               
+      array(
+        'key' => 'device_status',                  
+        'value' => 'online',               
+        'compare' => '='                 
+      )
+    ) 
+  );
+  $device_query = new WP_Query($query_arg);
+  $device_list = array();
+  if ( $device_query->have_posts() ) {
+    while ( $device_query->have_posts() ) : $device_query->the_post() ;
+      $device = array();
+      $device['id'] = $post->ID;
+      $device['device'] = $post->post_title;
+      $device['permission'] =  (get_user_meta($user_id, $device['id'], true ) == true);
+      array_push($device_list, $device);
+    endwhile;
+  } 
+  wp_reset_query();
+
+  echo json_encode($device_list);
+  die();
+}
+add_action( 'wp_ajax_get_user_device_permission', 'get_user_device_permission' );
+
 
 function set_user_device_permission() {
   $user_id = sanitize_text_field($_POST['user_id']);

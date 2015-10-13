@@ -4,6 +4,7 @@
     border: 6px solid #ddd;
     border-radius: 8px;
     margin-bottom: 8px;
+    cursor: pointer;
 }
 
 .fl-device-element-content{
@@ -150,6 +151,11 @@
 .device-ticket .close:hover {
     cursor: pointer;
     opacity: 0.5;
+}
+
+.device-message {
+    margin-bottom: 40px; 
+    opacity: 0.6;
 }
 
 .device-ticket {

@@ -230,9 +230,11 @@ function insert_ticket() {
   $device_id = sanitize_text_field($_POST['device_id']);
   $duration = sanitize_text_field($_POST['duration']);
   $options = fablab_get_option();
+  $user_id = get_current_user_id();
 
   //valide input
-  if(($duration > $options['ticket_max_time']) || is_no_device_entry($device_id)) {
+  if(($duration > $options['ticket_max_time']) || is_no_device_entry($device_id) 
+                  || user_has_ticket($user_id, $device_id, 'device')) {
     die(false);
   }
 
@@ -276,16 +278,17 @@ add_action( 'wp_ajax_add_ticket', 'insert_ticket' );
 function insert_instruction_ticket() {
   $device_id = sanitize_text_field($_POST['device_id']);
   $options = fablab_get_option();
+  $user_id = get_current_user_id();
 
   //valide input
-  if(is_no_device_entry($device_id)) {
+  if(is_no_device_entry($device_id) || user_has_ticket($user_id, $device_id, 'instruction')) {
     die(false);
   }
 
   $post_information = array(
     'post_title' => "Einschulungsanfrage, von: " . wp_get_current_user()->display_name,
     'post_type' => 'ticket',
-    'author' => get_current_user_id(),
+    'author' => $user_id,
     'post_status' => 'publish',
   );
  
@@ -306,7 +309,13 @@ function update_ticket() {
   $duration = sanitize_text_field($_POST['duration']);
   $ticket_id = sanitize_text_field($_POST['ticket_id']);
 
+  $user_id = get_current_user_id();
   $options = fablab_get_option();
+
+  if ((get_ticket_device($ticket_id) != $device_id) && 
+    user_has_ticket($user_id, $device_id, 'device')) {
+    die(false);
+  }
 
   //valide input  
   if(($duration > $options['ticket_max_time']) 
@@ -434,6 +443,30 @@ function is_active_ticket($ticket_id){
     return false;
   }
   return true;
+}
+
+function user_has_ticket($user_id, $device_id, $device_type){
+  global $post;
+  $query_arg = array(
+    'post_type' => 'ticket',
+    'author' => $user_id,
+    'post_status' => array('publish', 'draft'),
+    'meta_query'=>array(
+      array(
+          'key'=>'ticket_type',
+          'value'=> $device_type,
+      ),
+      array(
+          'key'=>'device_id',
+          'value'=> $device_id,
+      )
+    )
+  );
+  $ticket_query = new WP_Query($query_arg);
+  if ( $ticket_query->have_posts() ) {
+    return true;
+  }
+  return false;
 }
 
 function get_activation_time($ticket_id) {

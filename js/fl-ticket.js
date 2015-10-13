@@ -24,16 +24,16 @@ jQuery(document).ready(function($){
     device = $(this);
 
     //Eddit Time Options
-    $("#time-select").empty();
+    $("#get-ticket-time-select").empty();
     for (time = time_interval; time < max_time; time+=time_interval) {
-      $("#time-select").append( new Option(minutesToHours(time), time) );
+      $("#get-ticket-time-select").append( new Option(minutesToHours(time), time) );
     }
-    $("#time-select").append( new Option(minutesToHours(max_time), max_time) );
+    $("#get-ticket-time-select").append( new Option(minutesToHours(max_time), max_time) );
 
     // Set Device Name
-    $('#device-name').replaceWith('<p id="device-name" >Gerät: <b>' + device.data('device-name') + '</b></p>');
+    $('#get-ticket-device-name').replaceWith('<p id="get-ticket-device-name" >Gerät: <b>' + device.data('device-name') + '</b></p>');
 
-    $("#overlay").fadeIn(600);
+    $("#overlay-get-ticket").fadeIn(600);
 
     // Set Device Content
     data = {
@@ -42,9 +42,9 @@ jQuery(document).ready(function($){
     };
     $.post(ajaxurl, data, function(response) {
         $('body').css( 'overflow', 'hidden' );
-        $('#device-content').empty();
-        $('#device-content').append(response);
-        $("#device-ticket-box").show();
+        $('#get-ticket-device-content').empty();
+        $('#get-ticket-device-content').append(response);
+        $("#device-get-ticket-box").show();
     })
   })
 
@@ -84,6 +84,7 @@ jQuery(document).ready(function($){
     $.post(ajaxurl, data, function(response) {
       if(response){
         close_overlay($, orig_overflow, "Einschulungs - Ticket wurde gelöscht!");
+        ticket.hide();
       } else {
         close_overlay($, orig_overflow, "Ticket konnte nicht gelöscht werden!");
       }
@@ -95,7 +96,7 @@ jQuery(document).ready(function($){
     data = {
       action: 'add_ticket',
       device_id:  device.data('device-id'),
-      duration:  $('#time-select :selected').val(),
+      duration:  $('#get-ticket-time-select :selected').val(),
     };
     $.post(ajaxurl, data, function(response) {
       if(response){
@@ -128,13 +129,13 @@ jQuery(document).ready(function($){
     };
     $.post(ajaxurl, data, function(response) {
       var device_list = JSON.parse(response);
-      $('#device-select').empty();
+      $('#edit-ticket-device-select').empty();
       $.each(device_list, function(time, caption) {
         if(this.permission){
-          $("#device-select").append( new Option(this.device,this.id) );
+          $("#edit-ticket-device-select").append( new Option(this.device,this.id) );
         }
       });
-      $("#device-select").val(ticket.data('device-id'));
+      $("#edit-ticket-device-select").val(ticket.data('device-id'));
     })
 
     data = {
@@ -142,33 +143,32 @@ jQuery(document).ready(function($){
       device_id: ticket.data('device-id'),
     };
     $.post(ajaxurl, data, function(response) {
-      $('#device-content').empty();
-      $('#device-content').append(response);
+      $('#edit-ticket-device-content').empty();
+      $('#edit-ticket-device-content').append(response);
     })
 
     //Refresh Content when Dropdown change
-    $("#device-select").change(function () {
+    $("#edit-ticket-device-select").change(function () {
       // Change Device Content
       data = {
         action: 'get_device_content',
         device_id: $(this).val(),
       };
       $.post(ajaxurl, data, function(response) {
-        $('#device-content').empty();
-        $('#device-content').append(response);
+        $('#edit-ticket-device-content').empty();
+        $('#edit-ticket-device-content').append(response);
       })
     });
 
     //Eddit Time Options
-    $("#time-select").empty();
+    $("#edit-ticket-time-select").empty();
     for (time = time_interval; time < max_time; time+=time_interval) {
-      $("#time-select").append( new Option(minutesToHours(time), time) );
+      $("#edit-ticket-time-select").append( new Option(minutesToHours(time), time) );
     }
-    $("#time-select").append( new Option(minutesToHours(max_time), max_time) );
-    $("#time-select").val(ticket.data('duration'));
+    $("#edit-ticket-time-select").append( new Option(minutesToHours(max_time), max_time) );
+    $("#edit-ticket-time-select").val(ticket.data('duration'));
 
-    $("#overlay").fadeIn(600);
-    $("#box").fadeIn(600);
+    $("#overlay-edit-ticket").fadeIn(600);
 
     // Set Device Content
     data = {
@@ -176,9 +176,9 @@ jQuery(document).ready(function($){
       device_id: $('#ticket-device-id').val(),
     };
     $.post(ajaxurl, data, function(response) {
-        $('#device-content').empty();
-        $('#device-content').append(response);
-        $("#device-ticket-box").show();
+        $('#edit-ticket-device-content').empty();
+        $('#edit-ticket-device-content').append(response);
+        $("#device-edit-ticket-box").show();
         $('body').css( 'overflow', 'hidden' );
     })
     return false;
@@ -186,9 +186,9 @@ jQuery(document).ready(function($){
 
   // Save Button clicked
   $('#submit-change-ticket').on('click', function(){
-    var device_id = $('#device-select :selected').val();
-    var device_name = $('#device-select :selected').text();
-    var duration = $('#time-select :selected').val();
+    var device_id = $('#edit-ticket-device-select :selected').val();
+    var device_name = $('#edit-ticket-device-select :selected').text();
+    var duration = $('#edit-ticket-time-select :selected').val();
     var ticket_id = ticket.data('ticket-id');
     data = {
       action: 'update_ticket',
@@ -198,7 +198,7 @@ jQuery(document).ready(function($){
     };
     $.post(ajaxurl, data, function(response) {
       if(response){
-        $('#ticket-listing').hide();
+        ticket.hide();
         close_overlay($, orig_overflow, "Ticket für das " + device_name + ", erfolgreich geändert!");
       } else {
         close_overlay($, orig_overflow, "Ticket konnte nicht geändert werden!");
@@ -214,7 +214,7 @@ jQuery(document).ready(function($){
       ticket_id:  ticket_id
     };
     $.post(ajaxurl, data, function(response) {
-      $('#ticket-listing').hide();
+      ticket.hide();
       if(response){
         close_overlay($, orig_overflow, "Ticket wurde gelöscht!");
       } else {
@@ -227,10 +227,10 @@ jQuery(document).ready(function($){
   $('#cancel-change-ticket').on('click', function() {
     close_overlay($, orig_overflow, '');
   })
-  $('#overlay-close').on('click', function() {
+  $('.close').on('click', function() {
     close_overlay($, orig_overflow, '');
   })
-  $('#overlay-background').on('click', function() {
+  $('.fl-overlay-background').on('click', function() {
     close_overlay($, orig_overflow, '');
   })
   $(document).keyup(function(event){
@@ -249,8 +249,8 @@ function reloadPage(){
 // if message set, display message and reload
 function close_overlay($, orig_overflow, message){
     $('body').css( 'overflow', orig_overflow );    
-    $("#device-ticket-box").hide();
-    $("#overlay").fadeOut(600);
+    $(".device-ticket").hide();
+    $(".fl-overlay").fadeOut(600);
     if(message != '') {
       $('#message').text(message);
       $('#message').show();
