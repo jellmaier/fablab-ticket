@@ -16,6 +16,15 @@ jQuery(document).ready(function($){
   var ticket = '';
 
 
+  // busy indicator handler
+  $(".busy").bind("ajaxSend", function() {
+    $(this).fadeIn(200);
+  }).bind("ajaxStop", function() {
+    $(this).fadeOut(200);
+  }).bind("ajaxError", function() {
+    $(this).fadeOut(200);
+  });
+
   // on click get device ticket
   // load overlay content
   $('.get-ticket').on('click', function(event) {
@@ -62,9 +71,10 @@ jQuery(document).ready(function($){
     };
     $.post(ajaxurl, data, function(response) {
       if(response){
-        close_overlay($, orig_overflow, "Einschulungs - Ticket für das " + device.data('device-name') + ", erfolgreich erstellt!");
+        message_success($, "Einschulungsanfrage für " + device.data('device-name') + ", erfolgreich erstellt!");
+        device.hide();
       } else {
-        close_overlay($, orig_overflow, "Ticket konnte nicht erstellt werden!");
+        message_error($, "Ticket konnte nicht erstellt werden!");
       }
     })
   })
@@ -83,10 +93,10 @@ jQuery(document).ready(function($){
     };
     $.post(ajaxurl, data, function(response) {
       if(response){
-        close_overlay($, orig_overflow, "Einschulungs - Ticket wurde gelöscht!");
+        message_success($, "Einschulungs - Ticket wurde gelöscht!");
         ticket.hide();
       } else {
-        close_overlay($, orig_overflow, "Ticket konnte nicht gelöscht werden!");
+        message_error($, "Ticket konnte nicht gelöscht werden!");
       }
     })
   })
@@ -100,17 +110,18 @@ jQuery(document).ready(function($){
     };
     $.post(ajaxurl, data, function(response) {
       if(response){
-        $('#fl-getticket').hide();
-        close_overlay($, orig_overflow, "Ticket für das " + device.data('device-name') + ", erfolgreich erstellt!");
+        device.hide();
+        message_success($, "Ticket für " + device.data('device-name') + ", erfolgreich erstellt!");
       } else {
-        close_overlay($, orig_overflow, "Ticket konnte nicht erstellt werden!");
+        message_error($, "Ticket konnte nicht erstellt werden!");
       }
     })
+    close_overlay($, orig_overflow);
   })
 
   // on click cancle ticket
   $('#cancel-ticket').on('click', function(){
-    close_overlay($, orig_overflow, '');
+    close_overlay($, orig_overflow);
   })
 
   //--------------------------------------------
@@ -186,6 +197,7 @@ jQuery(document).ready(function($){
 
   // Save Button clicked
   $('#submit-change-ticket').on('click', function(){
+    ticket.hide();
     var device_id = $('#edit-ticket-device-select :selected').val();
     var device_name = $('#edit-ticket-device-select :selected').text();
     var duration = $('#edit-ticket-time-select :selected').val();
@@ -199,11 +211,12 @@ jQuery(document).ready(function($){
     $.post(ajaxurl, data, function(response) {
       if(response){
         ticket.hide();
-        close_overlay($, orig_overflow, "Ticket für das " + device_name + ", erfolgreich geändert!");
+        message_success($, "Ticket für " + device_name + ", erfolgreich geändert!");
       } else {
-        close_overlay($, orig_overflow, "Ticket konnte nicht geändert werden!");
+        message_error($, "Ticket konnte nicht geändert werden!");
       }
     })
+    close_overlay($, orig_overflow);
   })
 
   // Delete Button clicked
@@ -216,26 +229,27 @@ jQuery(document).ready(function($){
     $.post(ajaxurl, data, function(response) {
       ticket.hide();
       if(response){
-        close_overlay($, orig_overflow, "Ticket wurde gelöscht!");
+        message_success($, "Ticket wurde gelöscht!");
       } else {
-        close_overlay($, orig_overflow, "Ticket konnte nicht gelöscht werden!");
+        message_error($, "Ticket konnte nicht gelöscht werden!");
       }
     })
+    close_overlay($, orig_overflow);
   })
 
   // Cancle Functions
   $('#cancel-change-ticket').on('click', function() {
-    close_overlay($, orig_overflow, '');
+    close_overlay($, orig_overflow);
   })
   $('.close').on('click', function() {
-    close_overlay($, orig_overflow, '');
+    close_overlay($, orig_overflow);
   })
   $('.fl-overlay-background').on('click', function() {
-    close_overlay($, orig_overflow, '');
+    close_overlay($, orig_overflow);
   })
   $(document).keyup(function(event){
     if (event.keyCode == 27) {
-      close_overlay($, orig_overflow, '');
+      close_overlay($, orig_overflow);
     }
   });
 
@@ -246,17 +260,24 @@ function reloadPage(){
 }
 
 // closes overlay
+function close_overlay($, orig_overflow){
+  $('body').css( 'overflow', orig_overflow );    
+  $(".device-ticket").hide();
+  $(".fl-overlay").fadeOut(600);
+}
+
+// display message
 // if message set, display message and reload
-function close_overlay($, orig_overflow, message){
-    $('body').css( 'overflow', orig_overflow );    
-    $(".device-ticket").hide();
-    $(".fl-overlay").fadeOut(600);
-    if(message != '') {
-      $('#message').text(message);
-      $('#message').show();
-      setTimeout(reloadPage, 1000);
-    }
-  }
+function message_success($, message){
+  $('#message-container').append('<div class="message-box success"><p>' + message + '</p></div>');
+  setTimeout(reloadPage, 1000);
+}
+
+// display message
+// if message set, display message and reload
+function message_error($, message){
+  $('#message-container').append('<div class="message-box error"><p>' + message + '</p></div>');
+}
 
 function minutesToHours(time){
   var ret = "";

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="54px" height="54px" viewBox="0 0 54 54" enable-background="new 0 0 54 54" xml:space="preserve">
+<g>
+	<path fill="#74A4A3" d="M23.119,5.26c0-1.964,1.607-3.571,3.571-3.571s3.571,1.607,3.571,3.571v7.143
+		c0,1.964-1.606,3.572-3.571,3.572s-3.571-1.607-3.571-3.572V5.26z"/>
+	
+		<animate  begin="0s;animation5.end" values="1;0;1" restart="always" additive="replace" calcMode="linear" id="animation1" attributeName="opacity" accumulate="none" fill="remove" dur="1s">
+		</animate>
+</g>
+<g>
+	<path fill="#74A4A3" d="M23.119,40.976c0-1.964,1.607-3.571,3.571-3.571s3.571,1.607,3.571,3.571v7.143
+		c0,1.963-1.606,3.571-3.571,3.571s-3.571-1.607-3.571-3.571V40.976z"/>
+	
+		<animate  begin="animation1.end" values="1;0;1" restart="always" additive="replace" calcMode="linear" id="animation5" attributeName="opacity" accumulate="none" fill="remove" dur="1s">
+		</animate>
+</g>
+<g>
+	<path fill="#74A4A3" d="M5.26,30.26c-1.964,0-3.571-1.607-3.571-3.571s1.607-3.571,3.571-3.571h7.143
+		c1.964,0,3.572,1.607,3.572,3.571s-1.607,3.571-3.572,3.571H5.26z"/>
+	
+		<animate  begin="animation3.end" values="1;0;1" restart="always" additive="replace" calcMode="linear" id="animation7" attributeName="opacity" accumulate="none" fill="remove" dur="1s">
+		</animate>
+</g>
+<g>
+	<path fill="#74A4A3" d="M40.977,30.26c-1.965,0-3.572-1.607-3.572-3.571s1.607-3.571,3.572-3.571h7.141
+		c1.963,0,3.571,1.607,3.571,3.571s-1.607,3.571-3.571,3.571H40.977z"/>
+	
+		<animate  begin="0.5s;animation7.end" values="1;0;1" restart="always" additive="replace" calcMode="linear" id="animation3" attributeName="opacity" accumulate="none" fill="remove" dur="1s">
+		</animate>
+</g>
+<g>
+	<path fill="#74A4A3" d="M9.012,14.062c-1.389-1.389-1.39-3.662-0.001-5.051c1.389-1.389,3.662-1.389,5.052,0l5.051,5.05
+		c1.389,1.389,1.39,3.662,0,5.051c-1.389,1.389-3.662,1.389-5.051,0L9.012,14.062z"/>
+	
+		<animate  begin="animation4.end" values="1;0;1" restart="always" additive="replace" calcMode="linear" id="animation8" attributeName="opacity" accumulate="none" fill="remove" dur="1s">
+		</animate>
+</g>
+<g>
+	<path fill="#74A4A3" d="M34.266,39.316c-1.389-1.389-1.389-3.661,0-5.05s3.661-1.389,5.051,0l5.05,5.05
+		c1.389,1.389,1.389,3.662,0,5.051s-3.661,1.389-5.05,0L34.266,39.316z"/>
+	
+		<animate  begin="0.75s;animation8.end" values="1;0;1" restart="always" additive="replace" calcMode="linear" id="animation4" attributeName="opacity" accumulate="none" fill="remove" dur="1s">
+		</animate>
+</g>
+<g>
+	<path fill="#74A4A3" d="M14.062,44.367c-1.389,1.389-3.662,1.389-5.051,0s-1.389-3.662,0-5.052l5.051-5.051
+		c1.389-1.389,3.662-1.389,5.051,0c1.389,1.389,1.389,3.662,0,5.051L14.062,44.367z"/>
+	
+		<animate  begin="animation2.end" values="1;0;1" restart="always" additive="replace" calcMode="linear" id="animation6" attributeName="opacity" accumulate="none" fill="remove" dur="1s">
+		</animate>
+</g>
+<g>
+	<path fill="#74A4A3" d="M39.316,19.112c-1.389,1.389-3.661,1.389-5.052,0c-1.389-1.389-1.389-3.662,0-5.051l5.05-5.05
+		c1.389-1.389,3.661-1.389,5.052,0c1.389,1.389,1.389,3.661,0,5.05L39.316,19.112z"/>
+	
+		<animate  begin="0.25s;animation6.end" values="1;0;1" restart="always" additive="replace" calcMode="linear" id="animation2" attributeName="opacity" accumulate="none" fill="remove" dur="1s">
+		</animate>
+</g>
+</svg>

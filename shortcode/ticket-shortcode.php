@@ -41,7 +41,10 @@ function get_ticket_shortcode($atts){
   // Display Ticket options
   //--------------------------------------------------------
 
-  echo '<div id="message" hidden class="message-box"></div>';
+  ?>
+  <div id="message-container"></div>
+  <div class="busy" hidden></div>
+  <?php
 
   $ticket_query = get_ticket_query_from_user($user_id);
   $instruction_query = get_instruction_query_from_user($user_id);

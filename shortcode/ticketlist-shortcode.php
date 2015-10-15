@@ -177,7 +177,8 @@ function display_manager_ticketlist() {
   $fl_ticketlist_script = true;
 
   ?>
-  <div id="message" hidden class="message-box"></div>
+  <div id="message-container"></div>
+  <div class="busy" hidden></div>
   <div class="reload">
     <?php 
     if(fablab_get_option('ticket_online') == 1){
@@ -415,7 +416,8 @@ function print_device_instruction($device_id) {
       ?>
       <div class="fl-ticket-element instruction-element" style="border-top: 5px solid <?= $color ?>;"
         data-ticket-id="<?= $post->ID ?>" data-device-id="<?=  $device_id ?>"
-        data-user-id="<?=  $post->post_author ?>" >
+        data-user-id="<?=  $post->post_author ?>" data-device-name="<?= get_device_title_by_id($device_id) ?>"
+        data-user="<?=  get_user_by('id', $post->post_author)->display_name; ?>" >
         <p><?= the_time('l, j. F, G:i') ?><p>
         <h2><?= $post->post_title ?></h2>
         <p>für Gerät: <b><?= $device_name ?></b></p>

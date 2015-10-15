@@ -1,29 +1,5 @@
 jQuery(document).ready(function($){
 
-  //enable ticketing
-  $('#enable-ticketing').on('click', function(){
-    data = {
-      action: 'activate_ticketing',
-    };
-    $.post(ajaxurl, data, function(response) {
-      if(response){
-        message($, "Ticketing aktiviert!");
-      }
-    })
-  })
-
-  //enable ticketing
-  $('#disable-ticketing').on('click', function(){
-    data = {
-      action: 'deactivate_ticketing',
-    };
-    $.post(ajaxurl, data, function(response) {
-      if(response){
-        message($, "Ticketing deaktiviert!");
-      }
-    })
-  })
-  
   var max_time = '';
   var time_interval = '';
   data = {
@@ -36,6 +12,40 @@ jQuery(document).ready(function($){
   })
 
   var orig_overflow = $( 'body' ).css( 'overflow' );
+
+  // busy indicator handler
+  $(".busy").bind("ajaxSend", function() {
+    $(this).fadeIn(200);
+  }).bind("ajaxStop", function() {
+    $(this).fadeOut(200);
+  }).bind("ajaxError", function() {
+    $(this).fadeOut(200);
+  });
+
+
+  //enable ticketing
+  $('#enable-ticketing').on('click', function(){
+    data = {
+      action: 'activate_ticketing',
+    };
+    $.post(ajaxurl, data, function(response) {
+      if(response){
+        message_success($, "Ticketing aktiviert!", true);
+      }
+    })
+  })
+
+  //enable ticketing
+  $('#disable-ticketing').on('click', function(){
+    data = {
+      action: 'deactivate_ticketing',
+    };
+    $.post(ajaxurl, data, function(response) {
+      if(response){
+        message_success($, "Ticketing deaktiviert!", true);
+      }
+    })
+  })
 
   $('.draft-toggle').click(function(event) {
     $('#draft-ticket-listing').slideToggle(200);
@@ -54,7 +64,7 @@ jQuery(document).ready(function($){
       ticket_id:  time_ticket.data('time-ticket-id'),
     };
     $.post(ajaxurl, data, function(response) {
-       message($, "Time-Ticket von: " + time_ticket.data('user') + ", beendet!");
+       message_success($, "Time-Ticket von: " + time_ticket.data('user') + ", beendet!", true);
        time_ticket.hide();
     })
   })
@@ -68,7 +78,7 @@ jQuery(document).ready(function($){
       ticket_id:  time_ticket.data('time-ticket-id'),
     };
     $.post(ajaxurl, data, function(response) {
-       message($, "Time-Ticket von: " + time_ticket.data('user') + ", gelöscht!");
+       message_success($, "Time-Ticket von: " + time_ticket.data('user') + ", gelöscht!", true);
        time_ticket.hide();
     })
   })
@@ -83,7 +93,7 @@ jQuery(document).ready(function($){
       minutes: $(this).data('minutes'),
     };
     $.post(ajaxurl, data, function(response) {
-       message($, "Time-Ticket von: " + time_ticket.data('user') + ", verlängert!");
+       message_success($, "Time-Ticket von: " + time_ticket.data('user') + ", verlängert!", true);
        $('#time-ticket-listing').slideToggle(200);
     })
   })
@@ -98,9 +108,9 @@ jQuery(document).ready(function($){
     };
     $.post(ajaxurl, data, function(response) {
       if(response){
-        message($, "Ticket von: " + ticket.data('user') + ", deaktiviert!");
+        message_success($, "Ticket von: " + ticket.data('user') + ", deaktiviert!", true);
       } else {
-        message($, "Ticket konnte nicht deaktiviert werden!");
+        message_error($, "Ticket konnte nicht deaktiviert werden!");
       }
       ticket.hide();
     })
@@ -114,9 +124,9 @@ jQuery(document).ready(function($){
     };
     $.post(ajaxurl, data, function(response) {
       if(response){
-        message($, "Ticket von: " + ticket.data('user') + ", aktiviert!");
+        message_success($, "Ticket von: " + ticket.data('user') + ", aktiviert!", true);
       } else {
-        message($, "Ticket konnte nicht aktiviert werden!");
+        message_error($, "Ticket konnte nicht aktiviert werden!");
       }
       ticket.hide();
     })
@@ -130,9 +140,9 @@ jQuery(document).ready(function($){
     };
     $.post(ajaxurl, data, function(response) {
       if(response){
-        message($, "Ticket von: " + ticket.data('user') + ", gelöscht!");
+        message_success($, "Ticket von: " + ticket.data('user') + ", gelöscht!", true);
       } else {
-        message($, "Ticket konnte nicht gelöscht werden!");
+        message_error($, "Ticket konnte nicht gelöscht werden!");
       } 
       ticket.hide();
     })
@@ -176,7 +186,7 @@ jQuery(document).ready(function($){
     $.post(ajaxurl, data, function(response) {
       ticket.hide();
       close_overlay($, orig_overflow);
-      message($, "Time-Ticket für das Gerät: " + ticket.data('device-name') + ", erfolgreich erstellt!")
+      message_success($, "Time-Ticket für das Gerät: " + ticket.data('device-name') + ", erfolgreich erstellt!", true);
     })
   })
 
@@ -197,6 +207,8 @@ jQuery(document).ready(function($){
       $.post(ajaxurl, data, function(response) {
         if(response){
           ticket.fadeOut(200);
+          message_success($, "Berechtigung an " +
+            ticket.data('user') + ", für das Gerät: " + ticket.data('device-name') + ", erteilt!", false);
         } 
       })
       
@@ -213,6 +225,8 @@ jQuery(document).ready(function($){
     $.post(ajaxurl, data, function(response) {
       if(response){
         ticket.fadeOut(200);
+        message_success($, "Einschulungsanfrage von " +
+            ticket.data('user') + " gelöscht!");
       } 
     })
   })
@@ -248,12 +262,19 @@ function close_overlay($, orig_overflow){
   $("#overlay-background").fadeOut(600);
 }
 
-// closes overlay
+// display message
 // if message set, display message and reload
-function message($, message){
-  $('#message').text(message);
-  $('#message').show();
-  setTimeout(reloadPage, 1000);
+function message_success($, message, reload){
+  $('#message-container').append('<div class="message-box success"><p>' + message + '</p></div>');
+  if(reload){
+    setTimeout(reloadPage, 1000);
+  }
+}
+
+// display message
+// if message set, display message and reload
+function message_error($, message){
+  $('#message-container').append('<div class="message-box error"><p>' + message + '</p></div>');
 }
 
 function minutesToHours(time){
