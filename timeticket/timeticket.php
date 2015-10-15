@@ -438,14 +438,14 @@ add_action( 'wp_ajax_add_timeticket', 'insert_timeticket' );
 
 function delete_timeticket() {
   $ticket_id = $_POST['ticket_id'];
-  die(wp_delete_post($ticket_id));
+  die((wp_delete_post($ticket_id))? false : true);
 }
 add_action( 'wp_ajax_delete_timeticket', 'delete_timeticket' );
 
 function stop_timeticket() {
   $ticket_id = $_POST['ticket_id'];
-  update_post_meta($ticket_id, 'timeticket_end_time', current_time( 'timestamp' ));
-  die();
+  $retval = (update_post_meta($ticket_id, 'timeticket_end_time', current_time( 'timestamp' )) == true);
+  die($retval);
 }
 add_action( 'wp_ajax_stop_timeticket', 'stop_timeticket' );
 
@@ -454,11 +454,11 @@ function extend_timeticket() {
   $minutes = sanitize_text_field($_POST['minutes']);
 
   $new_time = get_post_meta($ticket_id, 'timeticket_end_time', true ) + ($minutes * 60);
-  update_post_meta($ticket_id, 'timeticket_end_time', $new_time);
+  $retval = (update_post_meta($ticket_id, 'timeticket_end_time', $new_time) == true);
 
   clear_device_activation_time(get_post_meta( $ticket_id, 'timeticket_device', true ));
 
-  die();
+  die($retval);
 }
 add_action( 'wp_ajax_extend_timeticket', 'extend_timeticket' );
 
