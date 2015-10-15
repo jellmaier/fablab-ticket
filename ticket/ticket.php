@@ -344,7 +344,8 @@ function delete_ticket() {
     die(false);
   }
 
-  die(wp_delete_post($ticket_id));
+
+  die((wp_delete_post($ticket_id) == false)? false : true);
 }
 add_action( 'wp_ajax_delete_ticket', 'delete_ticket' );
 
@@ -358,8 +359,8 @@ function deactivate_ticket($ticket_id) {
 }
 
 function deactivate_ticket_delete_act_time($ticket_id) {
-  deactivate_ticket($ticket_id);
   delete_post_meta($ticket_id, 'activation_time');
+  return deactivate_ticket($ticket_id);
 }
 
 function deactivate_ticket_ajax() {
