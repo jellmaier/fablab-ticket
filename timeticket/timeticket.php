@@ -459,6 +459,7 @@ function insert_timeticket() {
     }
 
     deactivate_ticket($ticket_id);
+    set_activation_time($ticket_id);
 
     die($ID != 0);
 }

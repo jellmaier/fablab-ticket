@@ -70,7 +70,7 @@ function check_and_deactivate_ticket($ticket_id) {
 
 function check_and_delete_ticket($ticket_id) {
   $activation_time = get_activation_time($ticket_id);
-  if( !empty($activation_time) && (( current_time( 'timestamp' ) - $activation_time) >= (2*60 * fablab_get_option('ticket_delay')))) {
+  if( !empty($activation_time) && (( current_time( 'timestamp' ) - $activation_time) >= (60 * fablab_get_option('ticket_delay')))) {
     wp_delete_post($ticket_id);
   }
 }
