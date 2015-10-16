@@ -275,6 +275,7 @@ function get_active_user_ticket($user_id) {
 
 function is_device_availabel($device_id){
   global $post;
+  $temp_post = $post;
 
   $query_arg = array(
     'post_type' => 'timeticket',
@@ -302,6 +303,7 @@ function is_device_availabel($device_id){
     return false;
   }
   wp_reset_query();
+  $post = $temp_post;
 
   return true;
 }

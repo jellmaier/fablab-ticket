@@ -64,7 +64,7 @@ function get_device_ticket_waiting_time($device_id, $ticket = 0) {
 function check_and_deactivate_ticket($ticket_id) {
   $activation_time = get_activation_time($ticket_id);
   if( !empty($activation_time) && (( current_time( 'timestamp' ) - $activation_time) >= (60 * fablab_get_option('ticket_delay')))) {
-    deactivate_ticket_delete_act_time($ticket_id);
+    deactivate_ticket($ticket_id);
   }
 }
 
