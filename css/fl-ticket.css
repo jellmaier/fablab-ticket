@@ -228,6 +228,7 @@
     appearance:none;
     -webkit-appearance:none;
     -moz-appearance:none;
+    margin: 14px 0;
 }
 
 /* Blink */
