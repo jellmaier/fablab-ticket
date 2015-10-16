@@ -37,6 +37,7 @@ function get_ticket_shortcode($atts){
     return;
   }
 
+
   //--------------------------------------------------------
   // Display Ticket options
   //--------------------------------------------------------
@@ -46,34 +47,86 @@ function get_ticket_shortcode($atts){
   <div class="busy" hidden></div>
   <?php
 
+
   $ticket_query = get_ticket_query_from_user($user_id);
   $instruction_query = get_instruction_query_from_user($user_id);
+  $timeticket_query = get_active_user_ticket($user_id);
 
-  if ( $ticket_query->have_posts() ) {
-    display_user_tickets($ticket_query);
-  } 
+
+  print_active_user_timetickets($timeticket_query);
 
   $ticket_online = (fablab_get_option('ticket_online') == 1);
-  $max_tickets = ($ticket_query->found_posts >= fablab_get_option('tickets_per_user'));
   $permission_needed = (fablab_get_option('tickets_permission') == '1');
+  $ticket_count = $ticket_query->found_posts;
+  $timeticket_count = $timeticket_query->found_posts;
+  $tickets_per_user = fablab_get_option('tickets_per_user');
+  $max_tickets = (($ticket_count + $timeticket_count) >= $tickets_per_user);
 
-  display_available_devices($ticket_online, $max_tickets, $permission_needed);
 
+  if ( $ticket_query->have_posts() && ($timeticket_count < $tickets_per_user)) {
+    echo '<h2>Tickets</h2>';
+    display_user_tickets($ticket_query);
+  }
+
+  echo '<h2>Geräte</h2>';
+  if (!$ticket_online) {
+    echo '<p class="device-message">Zurzeit können keine Tickets gezogen werden!</p>';
+  } else if ( !$max_tickets ) {
+    display_available_devices($permission_needed);
+  } else {
+    echo '<p class="device-message">Du hast die maximale Anzahl von Tickets gezogen!</p>';
+  }
+
+  echo '<h2>Einschulungsanfragen</h2>';
   if ( $instruction_query->have_posts() ) {
     display_user_instructions($instruction_query);
   } 
-  display_available_instruction_devices($permission_needed);
+  if ($permission_needed) {
+    display_available_instruction_devices();
+  }
 
 }
-    
+
+//--------------------------------------------------------
+// Display active Timeticket
+//--------------------------------------------------------
+function print_active_user_timetickets($ticket_query) {
+  global $post;
+
+  if ( $ticket_query->have_posts() ) {
+    echo '<div id="time-ticket-listing">';
+    echo '<h2>Time-Ticket</h2>';
+    echo '<p>Hier wird dir dein aktives Time-Ticket angezeigt:</p>';
+    while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
+      $device_id = get_post_meta($post->ID, 'timeticket_device', true );
+      $color = get_post_meta($device_id, 'device_color', true );
+      ?>
+      <div class="fl-ticket-element" style="border: 4px solid <?= $color ?>;"
+        data-user="<?= get_user_by('id', get_post_meta($post->ID, 'timeticket_user', true ))->display_name ?>"
+        data-time-ticket-id="<?= $post->ID ?>">
+        <p>Gerät: <b><?=  get_device_title_by_id($device_id) ?></b> </p> 
+        <h2><?= $post->post_title ?></h2>
+        <p>Start Zeit: <b><?=  get_timediff_string(get_post_meta($post->ID, 'timeticket_start_time', true )) ?></b></p>
+        <p>End Zeit: <b><?=  get_timediff_string(get_post_meta($post->ID, 'timeticket_end_time', true )) ?></b></p>
+        <input type="submit" class="ticket-btn stop-time-ticket" value="Jetzt Beenden"/>
+        <input type="submit" data-minutes="30" class="ticket-btn extend-time-ticket" value="+30 Minuten"/>
+      </div>
+      <?php
+    endwhile;
+    echo '<div>';
+  }
+
+  wp_reset_query();
+}   
 
 //--------------------------------------------------------
 // Display User Instruction
 //--------------------------------------------------------
 function display_user_instructions($ticket_query) {
   global $post;
-  echo '<p>Hier wird dir deine Einschulungsanfragen angezeigt:</p>';
+  if ( $ticket_query->have_posts() ) {
   echo '<div class="instruction-list">';
+  echo '<p>Hier werden dir deine Einschulungsanfragen angezeigt:</p>';
   while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
     $color = get_post_meta(get_post_meta($post->ID, 'device_id', true ), 'device_color', true );
     $device_id = get_post_meta($post->ID, 'device_id', true );
@@ -89,6 +142,7 @@ function display_user_instructions($ticket_query) {
     <?php
   endwhile;
   echo '<div style="clear:left;"></div></div>';
+}
 
   wp_reset_query();
 }
@@ -96,18 +150,8 @@ function display_user_instructions($ticket_query) {
 //--------------------------------------------------------
 // Display available Devices
 //--------------------------------------------------------
-function display_available_devices($ticket_online, $max_ticket, $permission_needed) {
+function display_available_devices($permission_needed) {
   global $post;
-
-  if(!$ticket_online){
-    echo '<p class="device-message">Zurzeit können keine Tickets gezogen werden!</p>';
-    return;
-  }
-
-  if($max_ticket){
-    echo '<p class="device-message">Du hast die maximale Anzahl von Tickets gezogen!</p>';
-    return;
-  }
 
   $query_arg = array(
     'post_type' => 'device',
@@ -143,8 +187,8 @@ function display_available_devices($ticket_online, $max_ticket, $permission_need
         data-device-id="<?= $post->ID ?>" data-device-name="<?= get_device_title_by_id($post->ID) ?>">
         <div class="fl-device-element-content">
           <h2><?= $post->post_title ?></h2>
-          <p id="waiting-time">Wartende Personen: <b><?= $waiting['persons'] ?>.</b></br>
-          Vorraussichtlich Wartezeit: <b><?= get_post_time_string($waiting['time'], true) ?>.</b></p>
+          <p id="waiting-time">Wartende Personen: <b><?= $waiting['persons'] ?></b></br>
+          Vorraussichtlich Wartezeit: <b><?= get_post_time_string($waiting['time'], true) ?></b></p>
         </div>
       </div>
       <?php
@@ -183,11 +227,7 @@ function display_available_devices($ticket_online, $max_ticket, $permission_need
 //--------------------------------------------------------
 // Display available Devices
 //--------------------------------------------------------
-function display_available_instruction_devices($permission_needed) {
-
-  if (!$permission_needed) {
-    return;
-  }
+function display_available_instruction_devices() {
 
   global $post;
   $query_arg = array(
@@ -249,27 +289,29 @@ function display_user_tickets($ticket_query) {
     $device_id = get_post_meta($post->ID, 'device_id', true );
     (($post->post_status) == 'draft') ? $opacity = 0.6 : $opacity = 1;
     ($waiting['time'] == 0) ? $class = "fl-ticket-element blink" : $class = "fl-ticket-element";
-    ?>
-    <div class="<?= $class ?>" style="border-left: 5px solid <?= $color ?>; opacity: <?= $opacity ?>;"
-      data-ticket-id="<?= $post->ID ?>" data-device-id="<?=  $device_id ?>"
-      data-duration="<?=  get_post_meta($post->ID, 'duration', true ) ?>"
-      data-user-id="<?=  $post->post_author ?>" data-device-name="<?= get_device_title_by_id($device_id) ?>"
-      data-user="<?=  get_user_by('id', $post->post_author)->display_name; ?>">
-      <p><?= the_time('l, j. F, G:i') ?><p>
-      <h2>Ticket</h2>
-      <p>für Gerät: <b><?=  get_device_title_by_id(get_post_meta($post->ID, 'device_id', true )) ?>,</b> </br> 
-      Benutzungsdauer: <b><?=  get_post_time_string(get_post_meta($post->ID, 'duration', true )) ?></b></p>
-      <p id="waiting-time">Vor dir wartende Personen: <b><?= $waiting['persons'] ?>.</b></br>
-      Vorraussichtlich Wartezeit: <b><?= get_post_time_string($waiting['time'], true) ?>.</b></p>
-      <?php
-      if($opacity == 1) {
-        echo '<input type="submit" class="ticket-btn edit-ticket" value="Ticket bearbeiten"/>';
-      } else {
-        echo '<p></br><b>Dein Ticket ist deaktiviert, bitte melde dich bei dem Manager!</b></p>';
-      } 
+    if((get_post_meta($post->ID, 'activation_time', true ) == 'not set') || $opacity == 1) {
       ?>
-    </div>
-    <?php
+      <div class="<?= $class ?>" style="border-left: 5px solid <?= $color ?>; opacity: <?= $opacity ?>;"
+        data-ticket-id="<?= $post->ID ?>" data-device-id="<?=  $device_id ?>"
+        data-duration="<?=  get_post_meta($post->ID, 'duration', true ) ?>"
+        data-user-id="<?=  $post->post_author ?>" data-device-name="<?= get_device_title_by_id($device_id) ?>"
+        data-user="<?=  get_user_by('id', $post->post_author)->display_name; ?>">
+        <p><?= the_time('l, j. F, G:i') ?><p>
+        <h2>Ticket</h2>
+        <p>für Gerät: <b><?=  get_device_title_by_id(get_post_meta($post->ID, 'device_id', true )) ?></b> </br> 
+        Benutzungsdauer: <b><?=  get_post_time_string(get_post_meta($post->ID, 'duration', true )) ?></b></p>
+        <p id="waiting-time">Vor dir wartende Personen: <b><?= $waiting['persons'] ?></b></br>
+        Vorraussichtlich Wartezeit: <b><?= get_post_time_string($waiting['time'], true) ?></b></p>
+        <?php
+        if($opacity == 1) {
+          echo '<input type="submit" class="ticket-btn edit-ticket" value="Ticket bearbeiten"/>';
+        } else {
+          echo '<p></br><b>Dein Ticket ist deaktiviert, bitte melde dich bei dem Manager!</b></p>';
+        } 
+        ?>
+      </div>
+      <?php
+    }
   endwhile;
   echo '</div>';
 

@@ -64,8 +64,12 @@ jQuery(document).ready(function($){
       ticket_id:  time_ticket.data('time-ticket-id'),
     };
     $.post(ajaxurl, data, function(response) {
-       message_success($, "Time-Ticket von: " + time_ticket.data('user') + ", beendet!", true);
-       time_ticket.hide();
+      if(response) {
+        message_success($, "Time-Ticket von: " + time_ticket.data('user') + ", beendet!", true);
+        time_ticket.hide();
+      } else {
+        message_error($, "Time-Ticket konnte nicht gestoppt werden!");
+      }
     })
   })
 
@@ -78,8 +82,12 @@ jQuery(document).ready(function($){
       ticket_id:  time_ticket.data('time-ticket-id'),
     };
     $.post(ajaxurl, data, function(response) {
-       message_success($, "Time-Ticket von: " + time_ticket.data('user') + ", gelöscht!", true);
-       time_ticket.hide();
+      if(response) {
+        message_success($, "Time-Ticket von: " + time_ticket.data('user') + ", gelöscht!", true);
+        time_ticket.hide();
+      } else {
+        message_error($, "Time-Ticket konnte nicht gelöscht werden!");
+      }
     })
   })
 
@@ -93,8 +101,12 @@ jQuery(document).ready(function($){
       minutes: $(this).data('minutes'),
     };
     $.post(ajaxurl, data, function(response) {
-       message_success($, "Time-Ticket von: " + time_ticket.data('user') + ", verlängert!", true);
-       $('#time-ticket-listing').slideToggle(200);
+      if(response) {
+        message_success($, "Time-Ticket von: " + time_ticket.data('user') + ", verlängert!", true);
+        $('#time-ticket-listing').slideToggle(200);
+      } else {
+        message_error($, "Time-Ticket konnte nicht verlängert werden!");
+      }
     })
   })
 

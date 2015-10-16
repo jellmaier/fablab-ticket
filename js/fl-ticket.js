@@ -25,6 +25,43 @@ jQuery(document).ready(function($){
     $(this).fadeOut(200);
   });
 
+  // Time-Ticket stop
+  $('.stop-time-ticket').on('click', function(event) {
+    //Get Ticket option
+    var time_ticket = $(this).parent('div');
+    data = {
+      action: 'stop_timeticket',
+      ticket_id:  time_ticket.data('time-ticket-id'),
+    };
+    $.post(ajaxurl, data, function(response) {
+      if(response) {
+        message_success($, "Time-Ticket von: " + time_ticket.data('user') + ", beendet!", true);
+        time_ticket.hide();
+      } else {
+        message_error($, "Time-Ticket konnte nicht gestoppt werden!");
+      }
+    })
+  })
+
+  // Time-Ticket extend
+  $('.extend-time-ticket').on('click', function(event) {
+    //Get Ticket option
+    var time_ticket = $(this).parent('div');
+    data = {
+      action: 'extend_timeticket',
+      ticket_id:  time_ticket.data('time-ticket-id'),
+      minutes: $(this).data('minutes'),
+    };
+    $.post(ajaxurl, data, function(response) {
+      if(response) {
+        message_success($, "Time-Ticket von: " + time_ticket.data('user') + ", verlängert!", true);
+        time_ticket.hide();
+      } else {
+        message_error($, "Time-Ticket konnte nicht verlängert werden, vielleicht ist die maximale Ticketdauer überschritten!");
+      }
+    })
+  })
+
   // on click get device ticket
   // load overlay content
   $('.get-ticket').on('click', function(event) {

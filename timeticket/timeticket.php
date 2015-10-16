@@ -244,6 +244,35 @@ function set_timeticket_title( $data , $postarr ) {
   return $data;
 }
 
+function get_active_user_ticket($user_id) {
+  $time_delay = (fablab_get_option('ticket_delay') * 60);
+  
+  $query_arg = array(
+    'post_type' => 'timeticket',
+    'orderby' => 'date', 
+    'order' => 'ASC',
+    'meta_query'=>array(
+    'relation'=>'and',
+      array(
+          'key'=>'timeticket_start_time',
+          'value'=> current_time( 'timestamp' ),
+          'compare' => '<'
+      ),
+      array(
+          'key'=>'timeticket_end_time',
+          'value'=> (current_time( 'timestamp' ) - $time_delay),
+          'compare' => '>'
+      ),
+      array(
+          'key'=>'timeticket_user',
+          'value'=> $user_id,
+          'compare' => '='
+      )
+    )
+  );
+  return new WP_Query($query_arg);
+}
+
 function is_device_availabel($device_id){
   global $post;
 
@@ -416,7 +445,7 @@ function insert_timeticket() {
   $post_information = array(
         'post_title' => 'Time-Ticket von: ' . get_user_by('id', $user_id)->display_name,
         'post_type' => 'timeticket',
-        'author' => get_current_user_id(),
+        'author' => $user_id,
         'post_status' => 'publish',
     );
  
@@ -435,17 +464,26 @@ function insert_timeticket() {
 }
 add_action( 'wp_ajax_add_timeticket', 'insert_timeticket' );
 
+function is_timeticket_entry($ID) {
+  $post_object = get_post($ID);
+  return (!empty($post_object) && ($post_object->post_type == 'timeticket'));
+}
 
 function delete_timeticket() {
-  $ticket_id = $_POST['ticket_id'];
-  die((wp_delete_post($ticket_id))? false : true);
+  $ticket_id = sanitize_text_field($_POST['ticket_id']);
+  if(!is_timeticket_entry($ticket_id) || !is_manager()) {
+    die(false);
+  }
+  die(!(wp_delete_post($ticket_id) == false));
 }
 add_action( 'wp_ajax_delete_timeticket', 'delete_timeticket' );
 
-function stop_timeticket() {
-  $ticket_id = $_POST['ticket_id'];
-  $retval = (update_post_meta($ticket_id, 'timeticket_end_time', current_time( 'timestamp' )) == true);
-  die($retval);
+function stop_timeticket() {  
+  $ticket_id = sanitize_text_field($_POST['ticket_id']);
+  if(!is_timeticket_entry($ticket_id) || !has_timeticket_update_permission($ticket_id)) {
+    die(false);
+  }
+  die(update_post_meta($ticket_id, 'timeticket_end_time', current_time( 'timestamp' )) == true);
 }
 add_action( 'wp_ajax_stop_timeticket', 'stop_timeticket' );
 
@@ -453,12 +491,29 @@ function extend_timeticket() {
   $ticket_id = sanitize_text_field($_POST['ticket_id']);
   $minutes = sanitize_text_field($_POST['minutes']);
 
-  $new_time = get_post_meta($ticket_id, 'timeticket_end_time', true ) + ($minutes * 60);
-  $retval = (update_post_meta($ticket_id, 'timeticket_end_time', $new_time) == true);
+  if(!is_timeticket_entry($ticket_id) || !has_timeticket_update_permission($ticket_id)) {
+    die(false);
+  }
+
+  $start_time = get_post_meta($ticket_id, 'timeticket_start_time', true );
+  $end_time = get_post_meta($ticket_id, 'timeticket_end_time', true );
+  $new_time = $end_time + ($minutes * 60);
+  $ticket_max_time = (fablab_get_option('ticket_max_time') * 60);
+
+  if((($new_time - $start_time) > $ticket_max_time) && !is_manager()) {
+    if(($end_time - $start_time) < $ticket_max_time) {
+      $new_time = $start_time + $ticket_max_time;
+    } else {
+      die(false);
+    }
+    
+  }
+
+  
 
   clear_device_activation_time(get_post_meta( $ticket_id, 'timeticket_device', true ));
 
-  die($retval);
+  die(update_post_meta($ticket_id, 'timeticket_end_time', $new_time) == true);
 }
 add_action( 'wp_ajax_extend_timeticket', 'extend_timeticket' );
 

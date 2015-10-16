@@ -168,9 +168,6 @@ function save_ticket_details(){
  
    if ( get_post_type($post) != 'ticket')
       return;
- 
-   //save_ticket_field("device_id");
-   //save_ticket_field("duration");
 }
 
 function save_ticket_field($ticket_field) {
@@ -180,8 +177,6 @@ function save_ticket_field($ticket_field) {
         update_post_meta($post->ID, $ticket_field, $_POST[$ticket_field]);
     }
 }
-
-
 
 function get_ticket_query_from_user($user_id) {
   $query_arg = array(
@@ -242,7 +237,7 @@ function insert_ticket() {
   $tickets_per_user = $options['tickets_per_user'];
   $query_arg = array(
         'post_type' => 'ticket',
-        'author' => get_current_user_id(),
+        'author' => $user_id,
         'post_status' => array('publish', 'draft'),
         'meta_query'=>array(
           array(
@@ -320,7 +315,7 @@ function update_ticket() {
   //valide input  
   if(($duration > $options['ticket_max_time']) 
     || is_no_device_entry($device_id) || !is_ticket_entry($ticket_id) 
-    || !has_update_premission($ticket_id)) {
+    || !has_ticket_update_permission($ticket_id)) {
     die(false);
   }
 
@@ -340,12 +335,10 @@ function delete_ticket() {
   $ticket_id = sanitize_text_field($_POST['ticket_id']);
 
   //valide input  
-  if(!is_ticket_entry($ticket_id) || !has_update_premission($ticket_id)) {
+  if(!is_ticket_entry($ticket_id) || !has_ticket_update_permission($ticket_id)) {
     die(false);
   }
-
-
-  die((wp_delete_post($ticket_id) == false)? false : true);
+  die(!(wp_delete_post($ticket_id) == false));
 }
 add_action( 'wp_ajax_delete_ticket', 'delete_ticket' );
 
@@ -366,8 +359,8 @@ function deactivate_ticket_delete_act_time($ticket_id) {
 function deactivate_ticket_ajax() {
   $ticket_id = sanitize_text_field($_POST['ticket_id']);
 
-    //valide input  
-  if(!is_ticket_entry($ticket_id) || !has_update_premission()) {
+  //valide input  
+  if(!is_ticket_entry($ticket_id) || !is_manager()) {
     die(false);
   }
   die(deactivate_ticket_delete_act_time($ticket_id));
@@ -378,7 +371,7 @@ function activate_ticket() {
   $ticket_id = sanitize_text_field($_POST['ticket_id']);
 
   //valide input  
-  if(!is_ticket_entry($ticket_id) || !has_update_premission()) {
+  if(!is_ticket_entry($ticket_id) || !is_manager()) {
     die(false);
   }
 
@@ -400,10 +393,18 @@ function is_ticket_entry($ID) {
   return (!empty($post_object) && ($post_object->post_type == 'ticket'));
 }
 
-function has_update_premission($post_id = 0) {
+function has_ticket_update_permission($post_id = 0) {
   $post_object = get_post($post_id);
   return (($post_object->post_author == get_current_user_id()) 
               || current_user_can( 'delete_others_posts' ));
+}
+
+function has_timeticket_update_permission($post_id = 0) {
+  return ((get_post_meta($post_id, 'timeticket_user', true ) == get_current_user_id()) || is_manager());
+}
+
+function is_manager() {
+  return current_user_can('delete_others_posts');
 }
 
 function set_activation_time($ticket_id) {
