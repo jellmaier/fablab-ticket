@@ -123,9 +123,9 @@ function display_user_ticketlist($ticket_query) {
         style="border-left: 5px solid <?= $color ?>;">
         <p><?= the_time('l, j. F, G:i') ?><p>
         <h2><?= $post->post_title ?></h2>
-        <p>für Gerät: <b><?=  get_device_title_by_id(get_post_meta($post->ID, 'device_id', true )) ?>,</b> </br> 
+        <p>für Gerät: <b><?=  get_device_title_by_id(get_post_meta($post->ID, 'device_id', true )) ?></b> </br> 
         Benutzungsdauer: <b><?=  get_post_time_string(get_post_meta($post->ID, 'duration', true )) ?></b></br>
-        Vorraussichtlich Wartezeit: <b><?= get_post_time_string($waiting['time'], true) ?>.</b></p>
+        Vorraussichtlich Wartezeit: <b><?= get_post_time_string($waiting['time'], true) ?></b></p>
       </div>
       <?php
     endwhile;
@@ -251,9 +251,9 @@ function print_active_tickets() {
         data-user="<?=  get_user_by('id', $post->post_author)->display_name ?>" >
         <p><?= the_time('l, j. F, G:i') ?><p>
         <h2><?= $post->post_title ?></h2>
-        <p>für Gerät: <b><?=  get_device_title_by_id($device_id) ?>,</b> </br> 
+        <p>für Gerät: <b><?=  get_device_title_by_id($device_id) ?></b> </br> 
         Benutzungsdauer: <b><?=  get_post_time_string(get_post_meta($post->ID, 'duration', true )) ?></b></br>
-        Vorraussichtlich Wartezeit: <b><?= get_post_time_string($waiting['time'], true) ?>.</b></p>
+        Vorraussichtlich Wartezeit: <b><?= get_post_time_string($waiting['time'], true) ?></b></p>
         <input type="submit" <?= $available ? "" :  "disabled"; ?>
         class="ticket-btn assign-ticket" value="Ticket zuweisen"/>
         <input type="submit" class="ticket-btn deactivate-ticket" value="Ticket deaktivieren"/>
