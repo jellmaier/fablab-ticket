@@ -197,9 +197,8 @@ function display_manager_ticketlist() {
 
   print_active_timetickets();
  
-  print_deactivatet_tickets();
-
   echo '<h2>Tickets</h2>';
+  print_deactivatet_tickets();
   print_active_tickets();
 
   echo '<h2>Einschulungsanfragen</h2>';
