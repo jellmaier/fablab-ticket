@@ -112,7 +112,7 @@ function print_user_help() {
     <div class="help-box" <?= $show ? "" :  "hidden"; ?> >
       <div><p class="help-headder">1. Einschulung</p>
       <div class="help-content" hidden>
-      <p>Geräte für die du noch nicht eingeschult wurdest, werden Grau angezeigt.</p>
+      <p>Geräte für die du noch nicht eingeschult wurdest, werden grau angezeigt.</p>
       <ol>
         <li>Stelle eine Einschulungsanfrage für dein gewünschtes Gerät</li>
         <li>Komm zu einem Einschulungstermin</li>
@@ -120,14 +120,14 @@ function print_user_help() {
       </div></div>
       <div><p class="help-headder">2. Zugang zu Geräten</p>
       <div class="help-content" hidden>
-      <p>Aktive Geräte werden farbig angezeigt.</p>
+      <p>Für dich verfügbare Geräte werden farbig angezeigt.</p>
       <ol>
         <li>Gewünschtes Gerät auswählen</li>
         <li>Benutzungsdauer auswählen</li>
         <li>Ticket ziehen</li>
       </ol>
       </div></div>
-      <div><p class="help-headder">3. Ticket verwalten</p>
+      <div><p class="help-headder">3. Ticket ändern</p>
       <div class="help-content" hidden>
       <p>Gezogene Tickets werden unter Tickets angezeigt.</p>
       <ol>
