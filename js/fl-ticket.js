@@ -25,6 +25,17 @@ jQuery(document).ready(function($){
     $(this).fadeOut(200);
   });
 
+
+  // Help handler
+  $('.help-button').on('click', function(event) {
+    $('.help-box').slideToggle(150);
+  })
+  
+  $('.help-headder').on('click', function(event) {
+    $('.help-content:visible').slideUp(100);
+    $(this).next().slideDown(150);
+  })
+
   // Time-Ticket stop
   $('.stop-time-ticket').on('click', function(event) {
     //Get Ticket option

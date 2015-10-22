@@ -47,11 +47,13 @@ function get_ticket_shortcode($atts){
   <div class="busy" hidden></div>
   <?php
 
+  print_user_help();
 
   $ticket_query = get_ticket_query_from_user($user_id);
   $instruction_query = get_instruction_query_from_user($user_id);
   $timeticket_query = get_active_user_ticket($user_id);
 
+  
 
   print_active_user_timetickets($timeticket_query);
 
@@ -84,6 +86,71 @@ function get_ticket_shortcode($atts){
   if ($permission_needed) {
     display_available_instruction_devices();
   }
+
+}
+
+
+//--------------------------------------------------------
+// Display User Help
+//--------------------------------------------------------
+function print_user_help() { 
+  $devices = get_online_devices();
+  $user_id = get_current_user_id();
+  $show = true;
+
+  foreach ($devices as $device) {
+    if(get_user_meta($user_id, $device['id'], true )) {
+      $show = false;
+    }
+  }
+
+  ?>
+  <div class="help-container">
+
+    <input type="submit" class="help-button" value="Erste Schritte" />
+
+    <div class="help-box" <?= $show ? "" :  "hidden"; ?> >
+      <div><p class="help-headder">1. Einschulung</p>
+      <div class="help-content" hidden>
+      <p>Geräte für die du noch nicht eingeschult wurdest, werden Grau angezeigt.</p>
+      <ol>
+        <li>Stelle eine Einschulungsanfrage für dein gewünschtes Gerät</li>
+        <li>Komm zu einem Einschulungstermin</li>
+      </ol>
+      </div></div>
+      <div><p class="help-headder">2. Zugang zu Geräten</p>
+      <div class="help-content" hidden>
+      <p>Aktive Geräte werden farbig angezeigt.</p>
+      <ol>
+        <li>Gewünschtes Gerät auswählen</li>
+        <li>Benutzungsdauer auswählen</li>
+        <li>Ticket ziehen</li>
+      </ol>
+      </div></div>
+      <div><p class="help-headder">3. Ticket verwalten</p>
+      <div class="help-content" hidden>
+      <p>Gezogene Tickets werden unter Tickets angezeigt.</p>
+      <ol>
+        <li>Ticket bearbeiten klicken</li>
+        <li>Gerät oder Dauer ändern</li>
+        <li>Ticket speichern</li>
+      </ol>
+      </div></div>
+      <div><p class="help-headder">4. Du bist an der Reihe</p>
+      <div class="help-content" hidden>
+      <p>Wenn dein gewünschtes Gerät verfügbar ist (Ticket blinkt), melde dich bei dem Manager, er wird dir dein Gerät zuweisen.</p>
+      </div></div>
+      <div><p class="help-headder">5. Gerät benutzen</p>
+      <div class="help-content" hidden>
+      <p>Wenn dir ein Gerät zugewiesen wurde, wird dir ein Time-Ticket angezeigt.</p>
+      <ul>
+        <li>Du bist früher fertig: <b>"Jetzt Beenden"</b> klicken.</li>
+        <li>Du brauchst länger: <b>"+30 Minuten"</b> klicken. (Maximale Benutzungsdauer: 2h)</li>
+      </ul>
+      </div></div>
+    </div>
+  </div>
+  <?php
 
 }
 
