@@ -11,6 +11,7 @@ if (!class_exists('ManageScripts'))
         wp_register_style('fl_ticket_style', plugin_dir_url(__FILE__) . 'css/fl-ticket.css');
         wp_register_script('fl_ticketlist_script', plugin_dir_url(__FILE__) . 'js/fl-ticket-list.js', array('jquery') );
         wp_register_style('fl_ticketlist_style', plugin_dir_url(__FILE__) . 'css/fl-ticket-list.css');
+        wp_register_script('fl_ticketlist_script_user', plugin_dir_url(__FILE__) . 'js/fl-ticket-list-user.js', array('jquery') );
         wp_register_script('fl_calendar_script', plugin_dir_url(__FILE__) . 'js/fl-calendar.js', array('jquery') );
         wp_register_script('fl_fullcalendar_script', plugin_dir_url(__FILE__) . 'js/fullcalendar.min.js', array('jquery', 'moment') );
         wp_register_script('fl_moment_script', plugin_dir_url(__FILE__) . 'js/moment.min.js', array('jquery') );
@@ -58,24 +59,25 @@ if (!class_exists('ManageScripts'))
       }
       add_action('wp_footer', 'print_fl_ticket_script');
 
-      function print_fl_ticketlist_script() {
-        global $fl_ticketlist_script;
-        if ( ! $fl_ticketlist_script)
+      function print_fl_ticketlist_manager() {
+        global $fl_ticketlist_manager;
+        if ( ! $fl_ticketlist_manager)
           return;
 
         wp_print_scripts('fl_ticketlist_script');
         wp_print_styles('fl_ticketlist_style');
       }
-      add_action('wp_footer', 'print_fl_ticketlist_script');
+      add_action('wp_footer', 'print_fl_ticketlist_manager');
 
-      function print_fl_ticketlist_style() {
-        global $fl_ticketlist_style;
-        if ( ! $fl_ticketlist_style)
+      function print_fl_ticketlist_user() {
+        global $fl_ticketlist_user;
+        if ( ! $fl_ticketlist_user)
           return;
-
+        
+        wp_print_scripts('fl_ticketlist_script_user');
         wp_print_styles('fl_ticketlist_style');
       }
-      add_action('wp_footer', 'print_fl_ticketlist_style');
+      add_action('wp_footer', 'print_fl_ticketlist_user');
     }
   }
 }

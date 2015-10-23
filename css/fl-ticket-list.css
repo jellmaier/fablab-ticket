@@ -379,8 +379,12 @@ input[type="checkbox"] {
     z-index: 100011;
 }
 
-.fl-fullscreen-layer .fl-ticket-element {
-    height: 180px;
+.ticket-list .fl-ticket-element {
+    margin: 8px 8px 16px 8px;
+}
+
+.time-ticket-list .fl-ticket-element {
+    margin: 8px 8px 10px 8px;
 }
 
 .fl-fullscreen-layer .close {
@@ -391,24 +395,24 @@ input[type="checkbox"] {
     text-decoration: none;
 }
 
-.fl-fullscreen-layer .ticket-list {
+.fl-fullscreen-layer .time-ticket-list {
+    min-height: 200px;   
+    margin-bottom: 0px;
+}
+
+ .fl-fullscreen-layer .devices-box {
+    position: relative;
+    margin: 20px auto; 
+    z-index: 10013; /* 1px higher than the overlay layer */
+}
+
+ .fl-fullscreen-layer .device-box {
     float: left;
     width: 600px;
     margin-bottom: 0px;
 }
 
-.fl-fullscreen-layer .time-ticket-list {
-    float: left;
-    width: 600px;    
-    margin-bottom: 0px;
-}
 
- .fl-fullscreen-layer .tickets-box {
-    width: 1200px;
-    position: relative;
-    margin: 40px auto; 
-    z-index: 10013; /* 1px higher than the overlay layer */
-}
 
 @media all and (max-width: 1200px) {
     .fl-fullscreen-layer .tickets-box {
