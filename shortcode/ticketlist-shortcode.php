@@ -80,7 +80,6 @@ function display_user_list() {
     display_devicelist($selected_devices, $device_colums, $ticket_rows);
   }
 
-
 }
 
 
@@ -104,10 +103,7 @@ function display_devicelist($selected_devices, $device_colums, $ticket_rows) {
       $showlist = true;
     }
     if(($counter < $device_colums) && $showlist) {
-      echo '<div class="device-box">'; 
-      echo '<h2>' . get_device_title_by_id($device) . '</h2>';
       display_device($device, $ticket_rows);
-      echo '</div>';
       $counter++;
     } else if($showlist) {
       echo '<input type="text" id="next-device" disabled  hidden value="' . $device . '">';
@@ -122,9 +118,13 @@ function display_devicelist($selected_devices, $device_colums, $ticket_rows) {
 //--------------------------------------------------------
 function display_device($device_id, $ticket_number) {
 
-
+  $color = get_post_meta($device_id, 'device_color', true );
+  echo '<div class="device-box">';
+  echo '<h2 style="border-bottom: 4px solid ' . $color 
+      . '; display: inline-block;" >' . get_device_title_by_id($device_id) . '</h2>';
   display_decvice_timeticket($device_id);
   display_device_tickets($device_id, $ticket_number);
+  echo '</div>';
 
 }
 //--------------------------------------------------------
