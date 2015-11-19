@@ -1,5 +1,6 @@
 /* Device Element */
 
+
 .fl-device-element {
     border: 6px solid #ddd;
     border-radius: 8px;
@@ -96,6 +97,8 @@
     -webkit-transition: all 0.2s ease;
     -moz-transition: all 0.2s ease;
     display: inline-block;
+    box-shadow: none;
+    text-shadow: none;
 }
 
 
@@ -205,6 +208,8 @@
     display: inline-block;
     margin-right: 2px;
     margin-bottom: 4px;
+    box-shadow: none;
+    text-shadow: none;
 }
 
 .device-ticket input[type=submit]:hover {
@@ -282,14 +287,35 @@
     right: 0;
 }
 
-.help-button {
+.help-container input[type=submit]{
     cursor: pointer;
     background-color: #74a4a3;
     color: #fff;
     margin: 6px;
     border-radius: 4px;
     padding: 6px 10px;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    border: none;
+    box-shadow: none;
+    text-shadow: none;
 }
+
+.help-container input[type=submit]:hover{
+    cursor: pointer;
+    background-color: #74a4a3;
+    color: #fff;
+    margin: 6px;
+    border-radius: 4px;
+    padding: 6px 10px;
+    border: none;
+    box-shadow: none;
+    text-shadow: none;
+    margin-bottom: none;
+
+}
+
 
 .help-box {
     text-align: left;
@@ -330,12 +356,7 @@
     padding-left: 6px;
     margin-bottom: 2px;
 }
-.help-content ol {
-    margin-left: -6px;
-}
-.help-content ul {
-    margin-left: -14px;
-}
+
 
 /* busy indicator */
 

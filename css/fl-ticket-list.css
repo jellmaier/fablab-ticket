@@ -39,12 +39,16 @@
     -webkit-transition: all 0.2s ease;
     -moz-transition: all 0.2s ease;
     display: inline-block;
+    box-shadow: none;
+    text-shadow: none;
 }
 
 .fl-ticket-element input[type=submit]:enabled:hover{
     background: #74a4a3;
     color: #fff;
     cursor: pointer;
+    box-shadow: none;
+    text-shadow: none;
 }
 
 .fl-ticket-element input[type=submit][disabled] {
@@ -198,6 +202,8 @@ input[type="checkbox"] {
     display: inline-block;
     margin-right: 2px;
     margin-bottom: 4px;
+    box-shadow: none;
+    text-shadow: none;
 }
 
 .device-ticket input[type=submit]:hover {
