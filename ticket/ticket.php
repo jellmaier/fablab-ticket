@@ -43,21 +43,23 @@ function my_ticket_rewrite_flush() {
  * @link http://codex.wordpress.org/Function_Reference/register_post_type
  */
 function codex_ticket_init() {
+  $posttype_singular_name = fablab_get_captions('ticket_caption');
+  $posttype_name = fablab_get_captions('tickets_caption');
   $labels = array(
-    'name'               => _x( 'Tickets', 'post type general name', 'your-plugin-textdomain' ),
-    'singular_name'      => _x( 'Ticket', 'post type singular name', 'your-plugin-textdomain' ),
-    'menu_name'          => _x( 'Tickets', 'admin menu', 'your-plugin-textdomain' ),
-    'name_admin_bar'     => _x( 'Ticket', 'add new on admin bar', 'your-plugin-textdomain' ),
+    'name'               => _x( $posttype_name, 'post type general name', 'your-plugin-textdomain' ),
+    'singular_name'      => _x( $posttype_singular_name, 'post type singular name', 'your-plugin-textdomain' ),
+    'menu_name'          => _x( $posttype_name, 'admin menu', 'your-plugin-textdomain' ),
+    'name_admin_bar'     => _x( $posttype_singular_name, 'add new on admin bar', 'your-plugin-textdomain' ),
     'add_new'            => _x( 'Add New', 'ticket', 'your-plugin-textdomain' ),
-    'add_new_item'       => __( 'Add New Ticket', 'your-plugin-textdomain' ),
-    'new_item'           => __( 'New Ticket', 'your-plugin-textdomain' ),
-    'edit_item'          => __( 'Edit Ticket', 'your-plugin-textdomain' ),
-    'view_item'          => __( 'View Ticket', 'your-plugin-textdomain' ),
-    'all_items'          => __( 'All Tickets', 'your-plugin-textdomain' ),
-    'search_items'       => __( 'Search Tickets', 'your-plugin-textdomain' ),
-    'parent_item_colon'  => __( 'Parent Tickets:', 'your-plugin-textdomain' ),
-    'not_found'          => __( 'No tickets found.', 'your-plugin-textdomain' ),
-    'not_found_in_trash' => __( 'No tickets found in Trash.', 'your-plugin-textdomain' )
+    'add_new_item'       => __( 'Add New ' . $posttype_singular_name, 'your-plugin-textdomain' ),
+    'new_item'           => __( 'New ' . $posttype_singular_name, 'your-plugin-textdomain' ),
+    'edit_item'          => __( 'Edit ' . $posttype_singular_name, 'your-plugin-textdomain' ),
+    'view_item'          => __( 'View ' . $posttype_singular_name, 'your-plugin-textdomain' ),
+    'all_items'          => __( 'All ' . $posttype_name, 'your-plugin-textdomain' ),
+    'search_items'       => __( 'Search ' . $posttype_name, 'your-plugin-textdomain' ),
+    'parent_item_colon'  => __( 'Parent ' . $posttype_name . ':', 'your-plugin-textdomain' ),
+    'not_found'          => __( 'No ' . $posttype_name . ' found.', 'your-plugin-textdomain' ),
+    'not_found_in_trash' => __( 'No ' . $posttype_name . ' found in Trash.', 'your-plugin-textdomain' )
   );
 
   $args = array(
@@ -87,10 +89,10 @@ function codex_ticket_init() {
  
 function ticket_edit_columns($columns){
   $columns = array(
-    "title" => "Ticket",
-    "ticket_type" => "Ticket Typ",
-    "device_id" => "Gerät",
-    "duration" => "Ticket dauer",
+    "title" => fablab_get_captions('ticket_caption'),
+    "ticket_type" => $posttype_name . " Typ",
+    "device_id" => fablab_get_captions('device_caption'),
+    "duration" => $posttype_name . " dauer",
     "user_id" => "User",
     "activation_time" => "Activierungs Zeit",
   );
@@ -132,15 +134,15 @@ function ticket_table_content($column_name, $post_id) {
 // Editing Tickets
  
 function ticket_admin_init(){
-  add_meta_box("ticket_meta", "Ticket Details", "ticket_details_meta", "ticket", "normal", "default");
+  add_meta_box("ticket_meta", fablab_get_captions('ticket_caption') . " Details", "ticket_details_meta", "ticket", "normal", "default");
 }
  
 function ticket_details_meta() {
-  echo '<p><label>Gerät:   </label> <input type="text"  disabled value="' . get_device_title_by_id(get_ticket_field("device_id")) . '" ></p>';
+  echo '<p><label>' . fablab_get_captions('device_caption') . ':   </label> <input type="text"  disabled value="' . get_device_title_by_id(get_ticket_field("device_id")) . '" ></p>';
   echo '<p><label>User:   </label> <input type="text" disabled value="' . get_ticket_field("user_id") . '" ></p>';
-  echo '<p><label>Ticket dauer (min):   </label> <input type="text" disabled value="' . get_ticket_field("duration") . '" ></p>';
+  echo '<p><label>' . fablab_get_captions('ticket_caption') . ' dauer (min):   </label> <input type="text" disabled value="' . get_ticket_field("duration") . '" ></p>';
   echo '<p><label>Activireungs Zeit:   </label> <input type="text" disabled value="' . get_ticket_field("activation_time") . '" ></p>';
-  echo '<p><label>Ticket Typ:   </label> <input type="text" disabled value="' . get_ticket_field("ticket_type") . '" ></p>';
+  echo '<p><label>' . fablab_get_captions('ticket_caption') . ' Typ:   </label> <input type="text" disabled value="' . get_ticket_field("ticket_type") . '" ></p>';
 
 }
 
@@ -250,7 +252,7 @@ function insert_ticket() {
   $ticket_query = new WP_Query($query_arg);
   if ($ticket_query->found_posts < $tickets_per_user) {
     $post_information = array(
-      'post_title' => "Ticket, von: " . wp_get_current_user()->display_name,
+      'post_title' => fablab_get_captions('ticket_caption') . ", von: " . wp_get_current_user()->display_name,
       'post_type' => 'ticket',
       'author' => get_current_user_id(),
       'post_status' => 'publish',
@@ -281,7 +283,7 @@ function insert_instruction_ticket() {
   }
 
   $post_information = array(
-    'post_title' => "Einschulungsanfrage, von: " . wp_get_current_user()->display_name,
+    'post_title' => fablab_get_captions('instruction_request_caption') . ', von: ' . wp_get_current_user()->display_name,
     'post_type' => 'ticket',
     'author' => $user_id,
     'post_status' => 'publish',

@@ -23,5 +23,12 @@ jQuery(document).ready(function($){
 		format:'Y-m-d H:i',
   		inline:false,
 	});
+
+	$('.time').datetimepicker({
+		onChangeDateTime:logic,
+		onShow:logic,
+		format:'Y-m-d H:i',
+  		inline:false,
+	});
 	
 });

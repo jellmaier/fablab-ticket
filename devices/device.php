@@ -38,21 +38,23 @@ function my_rewrite_flush() {
  * @link http://codex.wordpress.org/Function_Reference/register_post_type
  */
 function codex_device_init() {
+  $posttype_singular_name = fablab_get_captions('device_caption');
+  $posttype_name = fablab_get_captions('devices_caption');
   $labels = array(
-    'name'               => _x( 'Devices', 'post type general name', 'your-plugin-textdomain' ),
-    'singular_name'      => _x( 'Device', 'post type singular name', 'your-plugin-textdomain' ),
-    'menu_name'          => _x( 'Devices', 'admin menu', 'your-plugin-textdomain' ),
-    'name_admin_bar'     => _x( 'Device', 'add new on admin bar', 'your-plugin-textdomain' ),
-    'add_new'            => _x( 'Add New', 'device', 'your-plugin-textdomain' ),
-    'add_new_item'       => __( 'Add New Device', 'your-plugin-textdomain' ),
-    'new_item'           => __( 'New Device', 'your-plugin-textdomain' ),
-    'edit_item'          => __( 'Edit Device', 'your-plugin-textdomain' ),
-    'view_item'          => __( 'View Device', 'your-plugin-textdomain' ),
-    'all_items'          => __( 'All Devices', 'your-plugin-textdomain' ),
-    'search_items'       => __( 'Search Devices', 'your-plugin-textdomain' ),
-    'parent_item_colon'  => __( 'Parent Devices:', 'your-plugin-textdomain' ),
-    'not_found'          => __( 'No device found.', 'your-plugin-textdomain' ),
-    'not_found_in_trash' => __( 'No device found in Trash.', 'your-plugin-textdomain' )
+    'name'               => _x( $posttype_name, 'post type general name', 'your-plugin-textdomain' ),
+    'singular_name'      => _x( $posttype_singular_name, 'post type singular name', 'your-plugin-textdomain' ),
+    'menu_name'          => _x( $posttype_name, 'admin menu', 'your-plugin-textdomain' ),
+    'name_admin_bar'     => _x( $posttype_singular_name, 'add new on admin bar', 'your-plugin-textdomain' ),
+    'add_new'            => _x( 'Add New', 'ticket', 'your-plugin-textdomain' ),
+    'add_new_item'       => __( 'Add New ' . $posttype_singular_name, 'your-plugin-textdomain' ),
+    'new_item'           => __( 'New ' . $posttype_singular_name, 'your-plugin-textdomain' ),
+    'edit_item'          => __( 'Edit ' . $posttype_singular_name, 'your-plugin-textdomain' ),
+    'view_item'          => __( 'View ' . $posttype_singular_name, 'your-plugin-textdomain' ),
+    'all_items'          => __( 'All ' . $posttype_name, 'your-plugin-textdomain' ),
+    'search_items'       => __( 'Search ' . $posttype_name, 'your-plugin-textdomain' ),
+    'parent_item_colon'  => __( 'Parent ' . $posttype_name . ':', 'your-plugin-textdomain' ),
+    'not_found'          => __( 'No ' . $posttype_name . ' found.', 'your-plugin-textdomain' ),
+    'not_found_in_trash' => __( 'No ' . $posttype_name . ' found in Trash.', 'your-plugin-textdomain' )
   );
 
   $args = array(
@@ -80,11 +82,13 @@ function codex_device_init() {
 // Displaying Device Lists
  
 function device_edit_columns($columns){
-    $columns = array(
+
+  $device_caption = fablab_get_captions('device_caption');
+  $columns = array(
         "cb" => '<input type="checkbox" />',
-        "title" => "Device",
-        "device_status" => "Device Status",
-        "device_color" => "Device Color",
+        "title" => $device_caption,
+        "device_status" => $device_caption . " Status",
+        "device_color" => $device_caption . " Color",
   );
   return $columns;
 }
@@ -108,7 +112,7 @@ function device_table_content( $column_name, $post_id ) {
 // Editing Devices
  
 function device_admin_init(){
-  add_meta_box("device_meta", "Device Details", "device_details_meta", "device", "normal", "default");
+  add_meta_box("device_meta", $device_caption . " Details", "device_details_meta", "device", "normal", "default");
 }
  
 function device_details_meta() {
@@ -116,7 +120,7 @@ function device_details_meta() {
   ?>
    <table>
     <tr>
-      <th>Status:</th>
+      <th><?= fablab_get_captions('device_caption') ?> Status:</th>
       <th>
         <form name="" id="deviceStatus">
         <?php
@@ -135,7 +139,7 @@ function device_details_meta() {
       </th>
     </tr>
      <tr>
-      <th>Device Color:</th>
+      <th><?= fablab_get_captions('device_caption') ?> Color:</th>
       <th> 
         <div id="colorPicker">
           <a class="color"><div class="colorInner" style="background-color: <?= get_timeticket_field("device_color"); ?>;"></div></a>

@@ -2,6 +2,10 @@ jQuery(document).ready(function($){
 
   var max_time = '';
   var time_interval = '';
+  var ticket_caption = '';
+  var device_caption = '';
+  var time_ticket_caption = '';
+  var instruction_caption = '';
   data = {
     action: 'get_fablab_options'
   };
@@ -9,6 +13,16 @@ jQuery(document).ready(function($){
     var options = JSON.parse(response);
     max_time = parseInt(options.ticket_max_time);
     time_interval = parseInt(options.ticket_time_interval);
+  })
+  data = {
+    action: 'get_fablab_captions'
+  };
+  $.post(ajaxurl, data, function(response) {
+    var options = JSON.parse(response);
+    ticket_caption = options.ticket_caption;
+    device_caption = options.device_caption;
+    time_ticket_caption = options.time_ticket_caption;
+    instruction_caption = options.instruction_caption;
   })
 
   var orig_overflow = $( 'body' ).css( 'overflow' );
@@ -46,10 +60,10 @@ jQuery(document).ready(function($){
     };
     $.post(ajaxurl, data, function(response) {
       if(response) {
-        message_success($, "Time-Ticket von: " + time_ticket.data('user') + ", beendet!", true);
+        message_success($, time_ticket_caption + " von: " + time_ticket.data('user') + ", beendet!", true);
         time_ticket.hide();
       } else {
-        message_error($, "Time-Ticket konnte nicht gestoppt werden!");
+        message_error($, time_ticket_caption + " konnte nicht gestoppt werden!");
       }
     })
   })
@@ -65,10 +79,10 @@ jQuery(document).ready(function($){
     };
     $.post(ajaxurl, data, function(response) {
       if(response) {
-        message_success($, "Time-Ticket von: " + time_ticket.data('user') + ", verlängert!", true);
+        message_success($, time_ticket_caption + " von: " + time_ticket.data('user') + ", verlängert!", true);
         time_ticket.hide();
       } else {
-        message_error($, "Time-Ticket konnte nicht verlängert werden, vielleicht ist die maximale Ticketdauer überschritten!");
+        message_error($, time_ticket_caption + " konnte nicht verlängert werden, vielleicht ist die maximale Dauer überschritten!");
       }
     })
   })
@@ -88,7 +102,7 @@ jQuery(document).ready(function($){
     $("#get-ticket-time-select").append( new Option(minutesToHours(max_time), max_time) );
 
     // Set Device Name
-    $('#get-ticket-device-name').replaceWith('<p id="get-ticket-device-name" >Gerät: <b>' + device.data('device-name') + '</b></p>');
+    $('#get-ticket-device-name').replaceWith('<p id="get-ticket-device-name" >' + device_caption + ': <b>' + device.data('device-name') + '</b></p>');
 
     $("#overlay-get-ticket").fadeIn(600);
 
@@ -119,10 +133,10 @@ jQuery(document).ready(function($){
     };
     $.post(ajaxurl, data, function(response) {
       if(response){
-        message_success($, "Einschulungsanfrage für " + device.data('device-name') + ", erfolgreich erstellt!");
+        message_success($, instruction_caption + " für " + device.data('device-name') + ", erfolgreich erstellt!");
         device.hide();
       } else {
-        message_error($, "Ticket konnte nicht erstellt werden!");
+        message_error($, ticket_caption + " konnte nicht erstellt werden!");
       }
     })
   })
@@ -141,10 +155,10 @@ jQuery(document).ready(function($){
     };
     $.post(ajaxurl, data, function(response) {
       if(response){
-        message_success($, "Einschulungs - Ticket wurde gelöscht!");
+        message_success($, instruction_caption + " - " + ticket_caption + " wurde gelöscht!");
         ticket.hide();
       } else {
-        message_error($, "Ticket konnte nicht gelöscht werden!");
+        message_error($, ticket_caption + " konnte nicht gelöscht werden!");
       }
     })
   })
@@ -159,9 +173,9 @@ jQuery(document).ready(function($){
     $.post(ajaxurl, data, function(response) {
       if(response){
         device.hide();
-        message_success($, "Ticket für " + device.data('device-name') + ", erfolgreich erstellt!");
+        message_success($, ticket_caption + " für " + device.data('device-name') + ", erfolgreich erstellt!");
       } else {
-        message_error($, "Ticket konnte nicht erstellt werden!");
+        message_error($, ticket_caption + " konnte nicht erstellt werden!");
       }
     })
     close_overlay($, orig_overflow);
@@ -259,9 +273,9 @@ jQuery(document).ready(function($){
     $.post(ajaxurl, data, function(response) {
       if(response){
         ticket.hide();
-        message_success($, "Ticket für " + device_name + ", erfolgreich geändert!");
+        message_success($, ticket_caption + " für " + device_name + ", erfolgreich geändert!");
       } else {
-        message_error($, "Ticket konnte nicht geändert werden!");
+        message_error($, ticket_caption + " konnte nicht geändert werden!");
       }
     })
     close_overlay($, orig_overflow);
@@ -277,9 +291,9 @@ jQuery(document).ready(function($){
     $.post(ajaxurl, data, function(response) {
       ticket.hide();
       if(response){
-        message_success($, "Ticket wurde gelöscht!");
+        message_success($, ticket_caption + " wurde gelöscht!");
       } else {
-        message_error($, "Ticket konnte nicht gelöscht werden!");
+        message_error($, ticket_caption + " konnte nicht gelöscht werden!");
       }
     })
     close_overlay($, orig_overflow);

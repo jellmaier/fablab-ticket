@@ -65,7 +65,7 @@ function display_user_list() {
     echo '<a style="text-decoration: none;" id="get-fullscreen" href="#">⤢ fullscreen</a>';
     echo '</div>';
     $devices = get_online_devices();
-    echo '<p><b>Ansicht für Geräte:</b></p>';
+    echo '<p><b>Ansicht für ' . fablab_get_captions('devices_caption') . ':</b></p>';
     echo '<div class="device-checkboxes">'; 
     foreach ($devices as $device) {
       if(!isset($_GET['devices']) || in_array($device['id'], $selected_devices)){
@@ -163,7 +163,7 @@ function display_decvice_timeticket($device_id) {
 function display_user_timeticketlist($time_ticket_query) {
   //Time-Tiket listing
   echo '<div class="time-ticket-list">';
-  echo '<p>Hier wird die Person angezeigt, die das Gerät aktuell nutzt:</p>';
+  echo '<p>Hier wird die Person angezeigt, die das ' . fablab_get_captions('device_caption') . ' aktuell nutzt:</p>';
   global $post;
   if ( $time_ticket_query->have_posts() ) {
     while ( $time_ticket_query->have_posts() ) : $time_ticket_query->the_post() ;
@@ -173,7 +173,7 @@ function display_user_timeticketlist($time_ticket_query) {
       <div class="fl-ticket-element" style="border: 4px solid <?= $color ?>;"
         data-user="<?= get_user_by('id', get_post_meta($post->ID, 'timeticket_user', true ))->display_name ?>"
         data-time-ticket-id="<?= $post->ID ?>">
-        <p>Gerät: <b><?=  get_device_title_by_id($device_id) ?></b> </p> 
+        <p><?= fablab_get_captions('device_caption') ?> : <b><?=  get_device_title_by_id($device_id) ?></b> </p> 
         <h2><?= $post->post_title ?></h2>
         <p>Start Zeit: <b><?=  get_timediff_string(get_post_meta($post->ID, 'timeticket_start_time', true )) ?></b></p>
         <p>End Zeit: <b><?=  get_timediff_string(get_post_meta($post->ID, 'timeticket_end_time', true )) ?></b></p>
@@ -181,7 +181,7 @@ function display_user_timeticketlist($time_ticket_query) {
       <?php
     endwhile;
   } else {
-    echo '<p style="margin: 10px;"> Gerät wird nicht genutzt! </p>'; 
+    echo '<p style="margin: 10px;"> ' . fablab_get_captions('device_caption') . ' wird nicht genutzt! </p>'; 
   }
   echo '</div>';
 
@@ -237,7 +237,7 @@ function display_user_ticketlist($ticket_query) {
         style="border-left: 5px solid <?= $color ?>;">
         <p><?= the_time('l, j. F, G:i') ?><p>
         <h2><?= $post->post_title ?></h2>
-        <p>für Gerät: <b><?=  get_device_title_by_id(get_post_meta($post->ID, 'device_id', true )) ?></b> </br> 
+        <p>für <?= fablab_get_captions('device_caption') ?> : <b><?=  get_device_title_by_id(get_post_meta($post->ID, 'device_id', true )) ?></b> </br> 
         Benutzungsdauer: <b><?=  get_post_time_string(get_post_meta($post->ID, 'duration', true )) ?></b></br>
         Vorraussichtlich Wartezeit: <b><?= get_post_time_string($waiting['time'], true) ?></b></p>
       </div>
@@ -270,9 +270,9 @@ function display_manager_ticketlist() {
   <div class="reload">
     <?php 
     if(fablab_get_option('ticket_online') == 1){
-      echo '<a style="text-decoration: none; margin-right: 10px;" id="disable-ticketing" href="#">Disable Ticketing</a>';
+      echo '<a style="text-decoration: none; margin-right: 10px;" id="disable-ticketing" href="#">' . fablab_get_captions('ticket_system_caption') . ' deaktivieren</a>';
     } else {
-      echo '<a style="text-decoration: none; margin-right: 10px;" id="enable-ticketing" href="#">Enable Ticketing</a>';
+      echo '<a style="text-decoration: none; margin-right: 10px;" id="enable-ticketing" href="#">' . fablab_get_captions('ticket_system_caption') . ' aktivieren</a>';
     }
     ?>
     <a style="text-decoration: none;" href="javascript:location.reload();" >&#8634 Reload</a>
@@ -285,11 +285,11 @@ function display_manager_ticketlist() {
 
   print_active_timetickets();
  
-  echo '<h2>Tickets</h2>';
+  echo '<h2>' . fablab_get_captions('tickets_caption') . '</h2>';
   print_deactivatet_tickets();
   print_active_tickets();
 
-  echo '<h2>Einschulungsanfragen</h2>';
+  echo '<h2>' . fablab_get_captions('instruction_requests_caption') . '</h2>';
   $device_list = get_online_devices();
   foreach($device_list as $device) {
     print_device_instruction($device['id']);
@@ -306,7 +306,7 @@ function display_manager_ticketlist() {
 function print_active_tickets() {
   global $post;
 
-  echo '<p>Hier werden dir die aktiven Tickets angezeigt:</p>';
+  echo '<p>Hier werden dir die aktiven ' . fablab_get_captions('tickets_caption') . ' angezeigt:</p>';
 
   $query_arg = array(
     'post_type' => 'ticket',
@@ -338,18 +338,18 @@ function print_active_tickets() {
         data-user="<?=  get_user_by('id', $post->post_author)->display_name ?>" >
         <p><?= the_time('l, j. F, G:i') ?><p>
         <h2><?= $post->post_title ?></h2>
-        <p>für Gerät: <b><?=  get_device_title_by_id($device_id) ?></b> </br> 
+        <p>für <?= fablab_get_captions('device_caption') ?> : <b><?=  get_device_title_by_id($device_id) ?></b> </br> 
         Benutzungsdauer: <b><?=  get_post_time_string(get_post_meta($post->ID, 'duration', true )) ?></b></br>
         Vorraussichtlich Wartezeit: <b><?= get_post_time_string($waiting['time'], true) ?></b></p>
         <input type="submit" <?= $available ? "" :  "disabled"; ?>
-        class="ticket-btn assign-ticket" value="Ticket zuweisen"/>
-        <input type="submit" class="ticket-btn deactivate-ticket" value="Ticket deaktivieren"/>
+        class="ticket-btn assign-ticket" value="<?= fablab_get_captions('ticket_caption') ?> zuweisen"/>
+        <input type="submit" class="ticket-btn deactivate-ticket" value="<?= fablab_get_captions('ticket_caption') ?> deaktivieren"/>
       </div>
       <?php
     endwhile;
     echo '</div>';
   } else {
-    echo '<p style="margin-bottom:40px; opacity: 0.6;"> -- Keine aktiven Tickets! -- </p>';
+    echo '<p style="margin-bottom:40px; opacity: 0.6;"> -- Keine aktiven ' . fablab_get_captions('tickets_caption') . '! -- </p>';
   }
 
   wp_reset_query();
@@ -384,7 +384,7 @@ function print_active_timetickets() {
   );
   $ticket_query = new WP_Query($query_arg);
   echo '<div class="time-ticket-box">';
-  echo '<div ><p class="time-ticket-toggle"><b>Aktive Time-Tickets</b></p></div>';
+  echo '<div ><p class="time-ticket-toggle"><b>Aktive ' . fablab_get_captions('time_tickets_caption') . '</b></p></div>';
   echo '<div id="time-ticket-listing" hidden>';
   if ( $ticket_query->have_posts() ) {
     while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
@@ -394,7 +394,7 @@ function print_active_timetickets() {
       <div class="fl-ticket-element" style="border: 4px solid <?= $color ?>;"
         data-user="<?= get_user_by('id', get_post_meta($post->ID, 'timeticket_user', true ))->display_name ?>"
         data-time-ticket-id="<?= $post->ID ?>">
-        <p>Gerät: <b><?=  get_device_title_by_id($device_id) ?></b> </p> 
+        <p><?= fablab_get_captions('device_caption') ?> : <b><?=  get_device_title_by_id($device_id) ?></b> </p> 
         <h2><?= $post->post_title ?></h2>
         <p>Start Zeit: <b><?=  get_timediff_string(get_post_meta($post->ID, 'timeticket_start_time', true )) ?></b></p>
         <p>End Zeit: <b><?=  get_timediff_string(get_post_meta($post->ID, 'timeticket_end_time', true )) ?></b></p>
@@ -405,7 +405,7 @@ function print_active_timetickets() {
       <?php
     endwhile;
   } else {
-    echo '<p style="margin: 10px;"> No Tickets! </p>'; 
+    echo '<p style="margin: 10px;"> Keine ' . fablab_get_captions('tickets_caption') . '! </p>'; 
   }
   echo '<div ><p class="time-ticket-toggle"><b>x</b> Schließen</br></p></div>';
   echo '</div></div>';
@@ -435,7 +435,7 @@ function print_deactivatet_tickets() {
   $ticket_query = new WP_Query($query_arg);
   if ( $ticket_query->have_posts() ) {
     echo '<div class="draft-box">';
-    echo '<div class="draft-toggle"><p class="draft-title">Deaktivierte Tickets</p></div>';
+    echo '<div class="draft-toggle"><p class="draft-title">Deaktivierte ' . fablab_get_captions('tickets_caption') . '</p></div>';
     echo '<div id="draft-ticket-listing" hidden>';
     while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
       $color = get_post_meta(get_post_meta($post->ID, 'device_id', true ), 'device_color', true );
@@ -450,12 +450,12 @@ function print_deactivatet_tickets() {
         data-user="<?=  get_user_by('id', $post->post_author)->display_name; ?>" >
         <p><?= the_time('l, j. F, G:i') ?><p>
         <h2><?= $post->post_title ?></h2>
-        <p>für Gerät: <b><?=  get_device_title_by_id($device_id) ?></b></br> 
+        <p>für <?= fablab_get_captions('device_caption') ?> : <b><?=  get_device_title_by_id($device_id) ?></b></br> 
         Benutzungsdauer: <b><?=  get_post_time_string(get_post_meta($post->ID, 'duration', true )) ?></b></p>
         <input type="submit" <?= $availabel ? "" :  "disabled"; ?>
-        class="ticket-btn assign-ticket" value="Ticket zuweisen"/>
-        <input type="submit" class="ticket-btn activate-ticket" value="Ticket aktivieren"/>
-        <input type="submit" class="ticket-btn delete-ticket" value="Ticket löschen"/>
+        class="ticket-btn assign-ticket" value="<?= fablab_get_captions('ticket_caption') ?> zuweisen"/>
+        <input type="submit" class="ticket-btn activate-ticket" value="<?= fablab_get_captions('ticket_caption') ?> aktivieren"/>
+        <input type="submit" class="ticket-btn delete-ticket" value="<?= fablab_get_captions('ticket_caption') ?> löschen"/>
       </div>
       <?php
     endwhile;
@@ -478,7 +478,7 @@ function print_device_instruction($device_id) {
   $color = get_post_meta($device_id, 'device_color', true );
   $device_name = get_device_title_by_id($device_id);
 
-  echo '<p>Gerät: <b>' .  $device_name . ',</b> Nächste Einschulung: <b>' . next_instruction($device_id) . '</b></p>';
+  echo '<p>' . fablab_get_captions('device_caption') . ' : <b>' .  $device_name . ',</b> Nächste ' . fablab_get_captions('instruction_caption') . ': <b>' . next_instruction($device_id) . '</b></p>';
 
   $query_arg = array(
     'post_type' => 'ticket',
@@ -508,7 +508,7 @@ function print_device_instruction($device_id) {
         data-user="<?=  get_user_by('id', $post->post_author)->display_name; ?>" >
         <p><?= the_time('l, j. F, G:i') ?><p>
         <h2><?= $post->post_title ?></h2>
-        <p>für Gerät: <b><?= $device_name ?></b></p>
+        <p>für <?= fablab_get_captions('device_caption') ?> : <b><?= $device_name ?></b></p>
         <input type="submit" class="ticket-btn set-permission" value="Berechtigung hinzufügen"/>
         <input type="submit" class="ticket-btn delete-permission" value="Löschen"/>
       </div>
@@ -516,7 +516,7 @@ function print_device_instruction($device_id) {
     endwhile;
     echo '<div style="clear:left;"></div>';
   } else {
-    echo '<p style="margin-bottom:40px; opacity: 0.6;"> -- Keine Einschulungsanfragen! -- </p>';
+    echo '<p style="margin-bottom:40px; opacity: 0.6;"> -- Keine ' . fablab_get_captions('instruction_requests_caption') . '! -- </p>';
   }
 
   wp_reset_query();
@@ -531,12 +531,12 @@ function print_assign_overlay() {
   <div id="overlay" class="fl-overlay" hidden>
     <div id="device-ticket-box" class="device-ticket" hidden>
       <a href="#" class="close">x</a>
-      <h2>Ticket zuweisen</h2>
+      <h2><?= fablab_get_captions('ticket_caption') ?> zuweisen</h2>
       <p id="user-name"></p>
       <p id="device-name"></p>
       <p id="waiting-time"><p>
       <p>Dauer: <select id="time-select"></select></p>
-      <input type="submit" id="submit-ticket" class="button-primary" value="Ticket zuweisen"/>
+      <input type="submit" id="submit-ticket" class="button-primary" value="<?= fablab_get_captions('ticket_caption') ?> zuweisen"/>
       <input type="submit" class="button-primary cancel-overlay" value="Abbrechen"/>
     </div> 
   <div class="fl-overlay-layer"></div>

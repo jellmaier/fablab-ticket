@@ -40,21 +40,23 @@ function my_instruction_rewrite_flush() {
  * @link http://codex.wordpress.org/Function_Reference/register_post_type
  */
 function codex_instruction_init() {
+  $posttype_singular_name = fablab_get_captions('instruction_caption');
+  $posttype_name = fablab_get_captions('instructions_caption');
   $labels = array(
-    'name'               => _x( 'Instructions', 'post type general name', 'your-plugin-textdomain' ),
-    'singular_name'      => _x( 'Instruction', 'post type singular name', 'your-plugin-textdomain' ),
-    'menu_name'          => _x( 'Instructions', 'admin menu', 'your-plugin-textdomain' ),
-    'name_admin_bar'     => _x( 'Instruction', 'add new on admin bar', 'your-plugin-textdomain' ),
-    'add_new'            => _x( 'Add New', 'instruction', 'your-plugin-textdomain' ),
-    'add_new_item'       => __( 'Add New Instruction', 'your-plugin-textdomain' ),
-    'new_item'           => __( 'New Instruction', 'your-plugin-textdomain' ),
-    'edit_item'          => __( 'Edit Instruction', 'your-plugin-textdomain' ),
-    'view_item'          => __( 'View Instruction', 'your-plugin-textdomain' ),
-    'all_items'          => __( 'All Instruction', 'your-plugin-textdomain' ),
-    'search_items'       => __( 'Search Instruction', 'your-plugin-textdomain' ),
-    'parent_item_colon'  => __( 'Parent Instruction:', 'your-plugin-textdomain' ),
-    'not_found'          => __( 'No instruction found.', 'your-plugin-textdomain' ),
-    'not_found_in_trash' => __( 'No instruction found in Trash.', 'your-plugin-textdomain' )
+    'name'               => _x( $posttype_name, 'post type general name', 'your-plugin-textdomain' ),
+    'singular_name'      => _x( $posttype_singular_name, 'post type singular name', 'your-plugin-textdomain' ),
+    'menu_name'          => _x( $posttype_name, 'admin menu', 'your-plugin-textdomain' ),
+    'name_admin_bar'     => _x( $posttype_singular_name, 'add new on admin bar', 'your-plugin-textdomain' ),
+    'add_new'            => _x( 'Add New', 'ticket', 'your-plugin-textdomain' ),
+    'add_new_item'       => __( 'Add New ' . $posttype_singular_name, 'your-plugin-textdomain' ),
+    'new_item'           => __( 'New ' . $posttype_singular_name, 'your-plugin-textdomain' ),
+    'edit_item'          => __( 'Edit ' . $posttype_singular_name, 'your-plugin-textdomain' ),
+    'view_item'          => __( 'View ' . $posttype_singular_name, 'your-plugin-textdomain' ),
+    'all_items'          => __( 'All ' . $posttype_name, 'your-plugin-textdomain' ),
+    'search_items'       => __( 'Search ' . $posttype_name, 'your-plugin-textdomain' ),
+    'parent_item_colon'  => __( 'Parent ' . $posttype_name . ':', 'your-plugin-textdomain' ),
+    'not_found'          => __( 'No ' . $posttype_name . ' found.', 'your-plugin-textdomain' ),
+    'not_found_in_trash' => __( 'No ' . $posttype_name . ' found in Trash.', 'your-plugin-textdomain' )
   );
 
   $args = array(
@@ -80,12 +82,13 @@ function codex_instruction_init() {
 // Displaying Instruction Lists
  
 function instruction_edit_columns($columns){
-    $columns = array(
+  $columns = array(
         "cb" => '<input type="checkbox" />',
-        "title" => "Instruction",
+        "title" => fablab_get_captions('instruction_caption'),
         "instruction_start_time" => "Start Time",
         "instruction_end_time" => "End Time",
-        "instruction_devices" => "Devices",
+        "instruction_devices" => fablab_get_captions('devices_caption'),
+        "instruction_Mode" => "Open Fablab",
   );
   return $columns;
 }
@@ -116,20 +119,20 @@ function instruction_table_content( $column_name, $post_id ) {
 // Editing Instruction
  
 function instruction_admin_init(){
-  add_meta_box("instruction_meta", "Instruction Details", "instruction_details_meta", "instruction", "normal", "default");
+  add_meta_box("instruction_meta", fablab_get_captions('instruction_caption') . " Details", "instruction_details_meta", "instruction", "normal", "default");
 }
  
 function instruction_details_meta() {
   
-  echo '<p><label>Start Instruction: </label><input type="text" name="instruction_start_time" class="start_time" value="'
+  echo '<p><label>Start Zeit: </label><input type="text" name="instruction_start_time" class="start_time" value="'
    . get_instruction_field("instruction_start_time") . '" /></p>';
-  echo '<p><label>End Time: </label><input type="text" name="instruction_end_time"  class="end_time" value="'
+  echo '<p><label>End Zeit: </label><input type="text" name="instruction_end_time"  class="end_time" value="'
   . get_instruction_field("instruction_end_time") . '" /> </p>';
 
   $device_selected = get_instruction_field("instruction_devices");
   $device_list = get_online_devices(); // after this no get_instruction_field working
 
-  echo '<p><label>Devices:</label></br>';
+  echo '<p><label>' . fablab_get_captions('device_caption') . ':</label></br>';
   foreach($device_list as $device) {
     $checked = ($device_selected[0][$device['id']] == '1')? 'checked' : '';
     echo '<input type="checkbox" name="instruction_devices[' . $device['id'] . ']" value="1"' . $checked . '/>' . $device['device'] . '</br>';
@@ -201,7 +204,7 @@ function save_instruction_field($instruction_field) {
 
 function set_instruction_title( $data , $postarr ) {
   if($data['post_type'] == 'instruction') {
-    $title = 'Einschulung am ' . date_i18n('D, d. M', strtotime($_POST['instruction_start_time']));
+    $title = fablab_get_captions('instruction_caption') . ' am ' . date_i18n('D, d. M', strtotime($_POST['instruction_start_time']));
     $data['post_title'] = $title;
     $data['post_name'] = sanitize_title_with_dashes( $title, '', save);
   }

@@ -63,23 +63,24 @@ function get_ticket_shortcode($atts){
   $timeticket_count = $timeticket_query->found_posts;
   $tickets_per_user = fablab_get_option('tickets_per_user');
   $max_tickets = (($ticket_count + $timeticket_count) >= $tickets_per_user);
-
+  $ticket_caption = fablab_get_captions('ticket_caption');
+  $tickets_caption = fablab_get_captions('tickets_caption');
 
   if ( $ticket_query->have_posts() && ($timeticket_count < $tickets_per_user)) {
-    echo '<h2>Tickets</h2>';
+    echo '<h2>' . $tickets_caption . '</h2>';
     display_user_tickets($ticket_query);
   }
 
-  echo '<h2>Geräte</h2>';
+  echo '<h2>' . fablab_get_captions('devices_caption') . '</h2>';
   if (!$ticket_online) {
-    echo '<p class="device-message">Zurzeit können keine Tickets gezogen werden!</p>';
+    echo '<p class="device-message">Zurzeit können keine ' . $tickets_caption . ' gezogen werden!</p>';
   } else if ( !$max_tickets ) {
     display_available_devices($permission_needed);
   } else {
-    echo '<p class="device-message">Du hast die maximale Anzahl von Tickets gezogen!</p>';
+    echo '<p class="device-message">Du hast die maximale Anzahl von ' . $tickets_caption . ' gezogen!</p>';
   }
 
-  echo '<h2>Einschulungsanfragen</h2>';
+  echo '<h2>' . fablab_get_captions('instruction_requests_caption') . '</h2>';
   if ( $instruction_query->have_posts() ) {
     display_user_instructions($instruction_query);
   } 
@@ -103,6 +104,10 @@ function print_user_help() {
       $show = false;
     }
   }
+  $ticket_caption = fablab_get_captions('ticket_caption');
+  $tickets_caption = fablab_get_captions('tickets_caption');
+  $device_caption = fablab_get_captions('device_caption');
+  $devices_caption = fablab_get_captions('devices_caption');
 
   ?>
   <div class="help-container">
@@ -110,39 +115,40 @@ function print_user_help() {
     <input type="submit" class="help-button" value="Erste Schritte" />
 
     <div class="help-box" <?= $show ? "" :  "hidden"; ?> >
-      <div><p class="help-headder">1. Einschulung</p>
+      <div><p class="help-headder">1. <?= fablab_get_captions('instruction_caption') ?></p>
       <div class="help-content" hidden>
-      <p>Geräte für die du noch nicht eingeschult wurdest, werden grau angezeigt.</p>
+      <p><?= $devices_caption ?> für die du noch nicht eingeschult wurdest, werden grau angezeigt.</p>
       <ol>
-        <li>Stelle eine Einschulungsanfrage für dein gewünschtes Gerät</li>
-        <li>Komm zu einem Einschulungstermin</li>
+        <li>Stelle eine <?= fablab_get_captions('instruction_request_caption') ?> für dein gewünschtes <?= $device_caption ?></li>
+        <li>Komm zu einer <?= fablab_get_captions('instruction_caption') ?></li>
       </ol>
       </div></div>
-      <div><p class="help-headder">2. Zugang zu Geräten</p>
+      <div><p class="help-headder">2. Zugang zu einem <?= $device_caption ?></p>
       <div class="help-content" hidden>
-      <p>Für dich verfügbare Geräte werden farbig angezeigt.</p>
+      <p>Für dich verfügbare <?= $devices_caption ?> werden farbig angezeigt.</p>
       <ol>
-        <li>Gewünschtes Gerät auswählen</li>
+        <li>Gewünschtes <?= $device_caption ?> auswählen</li>
         <li>Benutzungsdauer auswählen</li>
-        <li>Ticket ziehen</li>
+        <li><?= $ticket_caption ?> ziehen</li>
       </ol>
       </div></div>
-      <div><p class="help-headder">3. Ticket ändern</p>
+      <div><p class="help-headder">3. <?= $ticket_caption ?> ändern</p>
       <div class="help-content" hidden>
-      <p>Gezogene Tickets werden unter Tickets angezeigt.</p>
+      <p>Gezogene <?= $tickets_caption ?> werden unter <?php $tickets_caption ?> angezeigt.</p>
       <ol>
-        <li>Ticket bearbeiten klicken</li>
-        <li>Gerät oder Dauer ändern</li>
-        <li>Ticket speichern</li>
+        <li><?= $ticket_caption ?> bearbeiten klicken</li>
+        <li><?= $device_caption ?> oder Dauer ändern</li>
+        <li><?= $ticket_caption ?> speichern</li>
       </ol>
       </div></div>
       <div><p class="help-headder">4. Du bist an der Reihe</p>
       <div class="help-content" hidden>
-      <p>Wenn dein gewünschtes Gerät verfügbar ist (Ticket blinkt), melde dich bei dem Manager, er wird dir dein Gerät zuweisen.</p>
+      <p>Wenn dein gewünschtes <?= $device_caption ?> verfügbar ist (<?= $ticket_caption ?> blinkt), 
+        melde dich bei dem Manager, er wird dir dein <?= $device_caption ?> zuweisen.</p>
       </div></div>
-      <div><p class="help-headder">5. Gerät benutzen</p>
+      <div><p class="help-headder">5. <?= $device_caption ?> benutzen</p>
       <div class="help-content" hidden>
-      <p>Wenn dir ein Gerät zugewiesen wurde, wird dir ein Time-Ticket angezeigt.</p>
+      <p>Wenn dir ein <?= $device_caption ?> zugewiesen wurde, wird dir ein <?= fablab_get_captions('time_ticket_caption') ?> angezeigt.</p>
       <ul>
         <li>Du bist früher fertig: <b>"Jetzt Beenden"</b> klicken.</li>
         <li>Du brauchst länger: <b>"+30 Minuten"</b> klicken. (Maximale Benutzungsdauer: 2h)</li>
@@ -162,8 +168,8 @@ function print_active_user_timetickets($ticket_query) {
 
   if ( $ticket_query->have_posts() ) {
     echo '<div id="time-ticket-listing">';
-    echo '<h2>Time-Ticket</h2>';
-    echo '<p>Hier wird dir dein aktives Time-Ticket angezeigt:</p>';
+    echo '<h2>' . fablab_get_captions('time_ticket_caption') . '</h2>';
+    echo '<p>Hier wird dir dein aktives ' . fablab_get_captions('time_ticket_caption') . ' angezeigt:</p>';
     while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
       $device_id = get_post_meta($post->ID, 'timeticket_device', true );
       $color = get_post_meta($device_id, 'device_color', true );
@@ -171,7 +177,7 @@ function print_active_user_timetickets($ticket_query) {
       <div class="fl-ticket-element" style="border: 4px solid <?= $color ?>;"
         data-user="<?= get_user_by('id', get_post_meta($post->ID, 'timeticket_user', true ))->display_name ?>"
         data-time-ticket-id="<?= $post->ID ?>">
-        <p>Gerät: <b><?=  get_device_title_by_id($device_id) ?></b> </p> 
+        <p><?= fablab_get_captions('device_caption') ?> : <b><?=  get_device_title_by_id($device_id) ?></b> </p> 
         <h2><?= $post->post_title ?></h2>
         <p>Start Zeit: <b><?=  get_timediff_string(get_post_meta($post->ID, 'timeticket_start_time', true )) ?></b></p>
         <p>End Zeit: <b><?=  get_timediff_string(get_post_meta($post->ID, 'timeticket_end_time', true )) ?></b></p>
@@ -193,7 +199,7 @@ function display_user_instructions($ticket_query) {
   global $post;
   if ( $ticket_query->have_posts() ) {
   echo '<div class="instruction-list">';
-  echo '<p>Hier werden dir deine Einschulungsanfragen angezeigt:</p>';
+  echo '<p>Hier werden dir deine ' . fablab_get_captions('instruction_requests_caption') . ' angezeigt:</p>';
   while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
     $color = get_post_meta(get_post_meta($post->ID, 'device_id', true ), 'device_color', true );
     $device_id = get_post_meta($post->ID, 'device_id', true );
@@ -201,10 +207,10 @@ function display_user_instructions($ticket_query) {
     <div class="fl-ticket-element instruction-element" style="border-top: 5px solid <?= $color ?>;"
       data-ticket-id="<?= $post->ID ?>"  data-user-id="<?=  $post->post_author ?>"
       <p><?= the_time('l, j. F, G:i') ?><p>
-      <h2>Einschulungsanfrage</h2>
-      <p>für Gerät: <b><?=  get_device_title_by_id($device_id); ?></b></p>
+      <h2><?= fablab_get_captions('instruction_request_caption') ?></h2>
+      <p>für <?= fablab_get_captions('device_caption') ?> : <b><?=  get_device_title_by_id($device_id); ?></b></p>
       <p>Nächster Termin: <b><?= next_instruction($device_id); ?></b></p>
-      <input type="submit" class="ticket-btn delete-instruction" value="Einschulungsanfrage löschen"/>
+      <input type="submit" class="ticket-btn delete-instruction" value="<?= fablab_get_captions('instruction_caption') ?>sanfrage löschen"/>
     </div>
     <?php
   endwhile;
@@ -237,12 +243,12 @@ function display_available_devices($permission_needed) {
 
 
   if ( !($device_query->have_posts()) ) {
-    echo '<p class="device-message">Es sind keine Geräte online!</p>'; 
+    echo '<p class="device-message">Es sind keine ' . fablab_get_captions('devices_caption') . ' online!</p>'; 
     wp_reset_query();
     return;
   }
 
-  echo '<p>Hier werden dir die verfügbaren Geräte angezeigt:</p>';
+  echo '<p>Hier werden dir die verfügbaren ' . fablab_get_captions('devices_caption') . ' angezeigt:</p>';
   echo '<div id="fl-getticket" class="device-list">';
   while ( $device_query->have_posts() ) : $device_query->the_post() ;
     if ((get_user_meta($user_id, $post->ID, true ) || !$permission_needed)
@@ -265,7 +271,7 @@ function display_available_devices($permission_needed) {
   echo '</div>';
 
   if (!$devices_availabel) {
-    echo '<p class="device-message">Zurzeit kannst du keine Tickets ziehen!</p>';
+    echo '<p class="device-message">Zurzeit kannst du keine ' . fablab_get_captions('ticket_caption') . 's ziehen!</p>';
     wp_reset_query();
     return;
   }
@@ -277,12 +283,12 @@ function display_available_devices($permission_needed) {
   <div id="overlay-get-ticket" class="fl-overlay" hidden>
     <div id="device-get-ticket-box" class="device-ticket" hidden action="" metod="POST">
       <a href="#" class="close">x</a>
-      <h2>Ticket bestätigen</h2>
+      <h2><?= fablab_get_captions('ticket_caption') ?> bestätigen</h2>
       <p id="get-ticket-device-name"></p>
       <input type="hidden" id="get-ticket-device-id" value="">
       <div id="get-ticket-device-content"></div>
       <p>Dauer: <select id="get-ticket-time-select"></select></p>
-      <input type="submit" id="submit-ticket" class="button-primary" value="Ticket ziehen"/>
+      <input type="submit" id="submit-ticket" class="button-primary" value="<?= fablab_get_captions('ticket_caption') ?> ziehen"/>
       <input type="submit" id="cancel-ticket" class="button-primary" value="Abbrechen"/>
     </div>
     <div id="overlay-background" class="fl-overlay-background"></div>
@@ -315,7 +321,8 @@ function display_available_instruction_devices() {
 
   get_current_user_id();
   if ( $device_query->have_posts() ) {
-    echo '<p>Hier werden dir die verfügbaren Geräte für Einschulungen angezeigt:</p>';
+    echo '<p>Hier werden dir die verfügbaren ' . fablab_get_captions('devices_caption') . 
+            ' für ' . fablab_get_captions('instructions_caption') . ' angezeigt:</p>';
     echo '<div id="fl-getticket" class="device-list">';
     while ( $device_query->have_posts() ) : $device_query->the_post() ;
       if (!get_user_meta($user_id, $post->ID, true ) 
@@ -325,8 +332,8 @@ function display_available_instruction_devices() {
           data-device-name="<?= get_device_title_by_id($post->ID) ?>">
           <div class="fl-device-element-content">
             <h2><?= $post->post_title ?></h2>
-            <p>Nächster Einschulungstermin: <b><?= next_instruction($post->ID); ?></b></p>
-            <p>Ich möchte für dieses Gerät eine Einschulung</p>
+            <p>Nächste <?= fablab_get_captions('instruction_caption') ?>: <b><?= next_instruction($post->ID); ?></b></p>
+            <p>Ich möchte für dieses <?= fablab_get_captions('device_caption') ?>  eine <?= fablab_get_captions('instruction_caption') ?></p>
           </div>
         </div>
         <?php
@@ -334,7 +341,7 @@ function display_available_instruction_devices() {
       }
     endwhile;
     if (!$devices_availabel) {
-      echo '<p class="device-message">Keine Einschulungsanfragen verfügbar!</p>';
+      echo '<p class="device-message">Keine ' . fablab_get_captions('instruction_requests_caption') . ' verfügbar!</p>';
     }
     echo '</div>';
   } 
@@ -348,7 +355,7 @@ function display_available_instruction_devices() {
 //--------------------------------------------------------
 function display_user_tickets($ticket_query) {
   global $post;
-  echo '<p>Hier wird dir dein gezogenes Ticket angezeigt:</p>';
+  echo '<p>Hier wird dir dein gezogenes ' . fablab_get_captions('ticket_caption') . ' angezeigt:</p>';
   echo '<div id="ticket-listing" class="ticket-list">';
   while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
     $waiting = get_waiting_time_and_persons(get_post_meta($post->ID, 'device_id', true ), $post->ID);
@@ -364,16 +371,16 @@ function display_user_tickets($ticket_query) {
         data-user-id="<?=  $post->post_author ?>" data-device-name="<?= get_device_title_by_id($device_id) ?>"
         data-user="<?=  get_user_by('id', $post->post_author)->display_name; ?>">
         <p><?= the_time('l, j. F, G:i') ?><p>
-        <h2>Ticket</h2>
-        <p>für Gerät: <b><?=  get_device_title_by_id(get_post_meta($post->ID, 'device_id', true )) ?></b> </br> 
+        <h2><?= fablab_get_captions('ticket_caption') ?></h2>
+        <p>für <?= fablab_get_captions('device_caption') ?> : <b><?=  get_device_title_by_id(get_post_meta($post->ID, 'device_id', true )) ?></b> </br> 
         Benutzungsdauer: <b><?=  get_post_time_string(get_post_meta($post->ID, 'duration', true )) ?></b></p>
         <p id="waiting-time">Vor dir wartende Personen: <b><?= $waiting['persons'] ?></b></br>
         Vorraussichtlich Wartezeit: <b><?= get_post_time_string($waiting['time'], true) ?></b></p>
         <?php
         if($opacity == 1) {
-          echo '<input type="submit" class="ticket-btn edit-ticket" value="Ticket bearbeiten"/>';
+          echo '<input type="submit" class="ticket-btn edit-ticket" value="' . fablab_get_captions('ticket_caption') . ' bearbeiten"/>';
         } else {
-          echo '<p></br><b>Dein Ticket ist deaktiviert, bitte melde dich bei dem Manager!</b></p>';
+          echo '<p></br><b>Dein ' . fablab_get_captions('ticket_caption') . ' ist deaktiviert, bitte melde dich bei dem Manager!</b></p>';
         } 
         ?>
       </div>
@@ -389,12 +396,12 @@ function display_user_tickets($ticket_query) {
   <div id="overlay-edit-ticket" class="fl-overlay" hidden>
     <div id="device-edit-ticket-box" class="device-ticket" hidden>
       <a href="#" class="close">x</a>
-      <h2>Ticket bearbeiten</h2>
-      <p>Gerät: <select id="edit-ticket-device-select"></select></p>
+      <h2><?= fablab_get_captions('ticket_caption') ?> bearbeiten</h2>
+      <p><?= fablab_get_captions('device_caption') ?> : <select id="edit-ticket-device-select"></select></p>
       <p id="edit-ticket-waiting-time"><p>
       <div id="edit-ticket-device-content"></div>
       <p>Dauer: <select id="edit-ticket-time-select"></select></p>
-      <input type="submit" id="submit-change-ticket" class="button-primary" value="Ticket speichern"/>
+      <input type="submit" id="submit-change-ticket" class="button-primary" value="<?= fablab_get_captions('ticket_caption') ?> speichern"/>
       <input type="submit" id="delete-change-ticket" class="button-primary" value="Löschen"/>
       <input type="submit" id="cancel-change-ticket" class="button-primary" value="Abbrechen"/>
    </div>

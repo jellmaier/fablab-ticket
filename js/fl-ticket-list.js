@@ -1,7 +1,13 @@
 jQuery(document).ready(function($){
 
+  
   var max_time = '';
   var time_interval = '';
+  var ticket_caption = '';
+  var device_caption = '';
+  var time_system_caption = '';
+  var time_ticket_caption = '';
+  var instruction_request_caption = '';
   data = {
     action: 'get_fablab_options'
   };
@@ -9,6 +15,17 @@ jQuery(document).ready(function($){
     var options = JSON.parse(response);
     max_time = parseInt(options.ticket_max_time);
     time_interval = parseInt(options.ticket_time_interval);
+  })
+  data = {
+    action: 'get_fablab_captions'
+  };
+  $.post(ajaxurl, data, function(response) {
+    var options = JSON.parse(response);
+    ticket_system_caption = options.ticket_system_caption;
+    ticket_caption = options.ticket_caption;
+    device_caption = options.device_caption;
+    time_ticket_caption = options.time_ticket_caption;
+    instruction_request_caption = options.instruction_request_caption;
   })
 
   var orig_overflow = $( 'body' ).css( 'overflow' );
@@ -30,7 +47,7 @@ jQuery(document).ready(function($){
     };
     $.post(ajaxurl, data, function(response) {
       if(response){
-        message_success($, "Ticketing aktiviert!", true);
+        message_success($, ticket_system_caption + " aktiviert!", true);
       }
     })
   })
@@ -42,7 +59,7 @@ jQuery(document).ready(function($){
     };
     $.post(ajaxurl, data, function(response) {
       if(response){
-        message_success($, "Ticketing deaktiviert!", true);
+        message_success($, ticket_system_caption + " deaktiviert!", true);
       }
     })
   })
@@ -65,10 +82,10 @@ jQuery(document).ready(function($){
     };
     $.post(ajaxurl, data, function(response) {
       if(response) {
-        message_success($, "Time-Ticket von: " + time_ticket.data('user') + ", beendet!", true);
+        message_success($, time_ticket_caption + " von: " + time_ticket.data('user') + ", beendet!", true);
         time_ticket.hide();
       } else {
-        message_error($, "Time-Ticket konnte nicht gestoppt werden!");
+        message_error($, time_ticket_caption + " konnte nicht gestoppt werden!");
       }
     })
   })
@@ -83,10 +100,10 @@ jQuery(document).ready(function($){
     };
     $.post(ajaxurl, data, function(response) {
       if(response) {
-        message_success($, "Time-Ticket von: " + time_ticket.data('user') + ", gelöscht!", true);
+        message_success($, time_ticket_caption + " von: " + time_ticket.data('user') + ", gelöscht!", true);
         time_ticket.hide();
       } else {
-        message_error($, "Time-Ticket konnte nicht gelöscht werden!");
+        message_error($, time_ticket_caption + " konnte nicht gelöscht werden!");
       }
     })
   })
@@ -102,10 +119,10 @@ jQuery(document).ready(function($){
     };
     $.post(ajaxurl, data, function(response) {
       if(response) {
-        message_success($, "Time-Ticket von: " + time_ticket.data('user') + ", verlängert!", true);
+        message_success($, time_ticket_caption + " von: " + time_ticket.data('user') + ", verlängert!", true);
         $('#time-ticket-listing').slideToggle(200);
       } else {
-        message_error($, "Time-Ticket konnte nicht verlängert werden!");
+        message_error($, time_ticket_caption + " konnte nicht verlängert werden!");
       }
     })
   })
@@ -120,9 +137,9 @@ jQuery(document).ready(function($){
     };
     $.post(ajaxurl, data, function(response) {
       if(response){
-        message_success($, "Ticket von: " + ticket.data('user') + ", deaktiviert!", true);
+        message_success($, ticket_caption + " von: " + ticket.data('user') + ", deaktiviert!", true);
       } else {
-        message_error($, "Ticket konnte nicht deaktiviert werden!");
+        message_error($, ticket_caption + " konnte nicht deaktiviert werden!");
       }
       ticket.hide();
     })
@@ -136,9 +153,9 @@ jQuery(document).ready(function($){
     };
     $.post(ajaxurl, data, function(response) {
       if(response){
-        message_success($, "Ticket von: " + ticket.data('user') + ", aktiviert!", true);
+        message_success($, ticket_caption + " von: " + ticket.data('user') + ", aktiviert!", true);
       } else {
-        message_error($, "Ticket konnte nicht aktiviert werden!");
+        message_error($, ticket_caption + " konnte nicht aktiviert werden!");
       }
       ticket.hide();
     })
@@ -152,9 +169,9 @@ jQuery(document).ready(function($){
     };
     $.post(ajaxurl, data, function(response) {
       if(response){
-        message_success($, "Ticket von: " + ticket.data('user') + ", gelöscht!", true);
+        message_success($, ticket_caption + " von: " + ticket.data('user') + ", gelöscht!", true);
       } else {
-        message_error($, "Ticket konnte nicht gelöscht werden!");
+        message_error($, ticket_caption + " konnte nicht gelöscht werden!");
       } 
       ticket.hide();
     })
@@ -168,7 +185,7 @@ jQuery(document).ready(function($){
 
     // Set User Name
     $('#user-name').replaceWith('<p id="user-name" >User: <b>' + ticket.data('user') + '</b></p>');
-    $('#device-name').replaceWith('<p id="device-name" >Gerät: <b>' + ticket.data('device-name') + '</b></p>');
+    $('#device-name').replaceWith('<p id="device-name" >' + device_caption + ': <b>' + ticket.data('device-name') + '</b></p>');
 
     //Eddit Time Options
     $("#time-select").empty();
@@ -198,7 +215,7 @@ jQuery(document).ready(function($){
     $.post(ajaxurl, data, function(response) {
       ticket.hide();
       close_overlay($, orig_overflow);
-      message_success($, "Time-Ticket für das Gerät: " + ticket.data('device-name') + ", erfolgreich erstellt!", true);
+      message_success($, time_ticket_caption + " für das " + device_caption + ": " + ticket.data('device-name') + ", erfolgreich erstellt!", true);
     })
   })
 
@@ -220,7 +237,7 @@ jQuery(document).ready(function($){
         if(response){
           ticket.fadeOut(200);
           message_success($, "Berechtigung an " +
-            ticket.data('user') + ", für das Gerät: " + ticket.data('device-name') + ", erteilt!", false);
+            ticket.data('user') + ", für das " + device_caption + ": " + ticket.data('device-name') + ", erteilt!", false);
         } 
       })
       
@@ -237,7 +254,7 @@ jQuery(document).ready(function($){
     $.post(ajaxurl, data, function(response) {
       if(response){
         ticket.fadeOut(200);
-        message_success($, "Einschulungsanfrage von " +
+        message_success($, instruction_request_caption + " von " +
             ticket.data('user') + " gelöscht!");
       } 
     })
