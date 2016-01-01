@@ -2,6 +2,9 @@
 
 //namespace fablab_ticket;
 
+include 'ticketlist-shortcode-admin.php';
+include 'ticketlist-shortcode-user.php';
+
 if (!class_exists('TicketListShortcode'))
 {
   class TicketListShortcode
@@ -26,13 +29,16 @@ function get_ticketlist_shortcode($atts){
   // Display Ticket List or Manager View Tickets
   //--------------------------------------------------------
   if ($is_manager) {
-    display_manager_ticketlist();
+    new TicketListShortcodeAdmin();
+    //display_manager_ticketlist();
   } else {
-    display_user_list();
+    new TicketListShortcodeUser();
+    //display_user_list();
   }
   
 }
 
+/*
 //--------------------------------------------------------
 // Display device List
 //--------------------------------------------------------
@@ -544,5 +550,7 @@ function print_assign_overlay() {
   <div id="overlay-background" class="fl-overlay-background" hidden></div>
   <?php
 }
+
+*/
 
 ?>
