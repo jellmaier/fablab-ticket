@@ -283,8 +283,8 @@
 /* Help Box */
 
 .help-container {
-    position: absolute;
-    right: 0;
+    position: relative;
+    float: right;
 }
 
 .help-container input[type=submit]{
