@@ -36,8 +36,9 @@ function reload_page($, fullscreen) {
   }
 
   var next = '';
-  if($('#next-device').val()) {
-    next = '&next=' + $('#next-device').val();
+  var next_device = $("#next-device").data('next-device');
+  if(next_device) {
+    next = '&next=' + next_device;
   }
 
   window.location = '?' + fullscr + 'width=' + $(document).width() + '&height=' + $(document).height() 

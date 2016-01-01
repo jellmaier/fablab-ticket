@@ -38,8 +38,13 @@ if (!class_exists('TicketListShortcodeUser'))
         $devices = get_online_devices();
         echo '<p><b>Ansicht für ' . fablab_get_captions('devices_caption') . ':</b></p>';
         echo '<div class="device-checkboxes">'; 
+
+        if(!isset($_GET['devices'])){
+          $selected_devices = array_column ( $devices, 'id');
+        }
+
         foreach ($devices as $device) {
-          if(!isset($_GET['devices']) || in_array($device['id'], $selected_devices)){
+          if(in_array($device['id'], $selected_devices)){
             $checked = 'checked';
           } else {
             $checked = '';
@@ -76,7 +81,7 @@ if (!class_exists('TicketListShortcodeUser'))
           $this->display_device($device, $ticket_rows);
           $counter++;
         } else if($showlist) {
-          echo '<input type="text" id="next-device" disabled  hidden value="' . $device . '">';
+          echo '<div id="next-device" data-next-device="' . $device . '"></div>';
           return;
         }
       }
