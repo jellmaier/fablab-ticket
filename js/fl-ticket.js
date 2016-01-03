@@ -50,6 +50,25 @@ jQuery(document).ready(function($){
     $(this).next().slideDown(150);
   })
 
+  // TAC handler
+  $('#tac-show').on('click', function(event) {
+    $('#tac-content').slideDown(150);
+  })
+  
+  $('#accept-tac').on('click', function(event) {
+    data = {
+      action: 'set_user_tac_accaptance'
+    };
+    $.post(ajaxurl, data, function(response) {
+      message_success($, "Du hast den AGBs zugestimmt", true);
+      $('#tac-message').slideUp(150);
+      $('#tac-content').slideUp(150);
+    })
+  })
+  $('#cancel-tac').on('click', function(event) {
+    $('#tac-content').slideUp(150);
+  })
+
   // Time-Ticket stop
   $('.stop-time-ticket').on('click', function(event) {
     //Get Ticket option

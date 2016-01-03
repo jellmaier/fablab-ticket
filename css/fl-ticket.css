@@ -272,6 +272,40 @@
     font-weight: 600;
 }
 
+.tac-box {
+    background: #fefefe;
+    border-left: 10px solid #fc0;
+    -webkit-box-shadow: 0 4px 4px 0 rgba(0,0,0,.1);
+    box-shadow: 0 4px 4px 0 rgba(0,0,0,.1);
+    margin: 20px 6px;
+    padding: 16px 30px;
+    font-size: 16px;
+}
+.tac-box input[type=submit] {
+    margin: 8px 6px 6px 0px;
+    border: 1px solid #fc0;
+    border-radius: 6px;
+    background: none;
+    color: #fc0;
+    text-transform: none;
+    padding: 10px 16px;
+    font-weight: bold;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    display: inline-block;
+    box-shadow: none;
+    text-shadow: none;
+}
+.tac-box input[type=submit]:hover {
+    background: #fc0;
+    color: #fff;
+    cursor: pointer;
+}
+
+
 .success{
     border-left: 10px solid #9c0;
 }

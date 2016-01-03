@@ -29,7 +29,7 @@ if (!class_exists('AdminPage'))
         // fields to it
         add_settings_section(
           'fablab_settings',                          // ID
-          'Fablab Settings',                          // Title
+          'Allgemeine Einstellungen',                          // Title
           'fablab_settings_function',                 // callback
           'fablab_options'                            // Page slug
         );
@@ -89,7 +89,7 @@ if (!class_exists('AdminPage'))
 
         // Register our setting so that $_POST handling is done for us and
         // our callback function just has to echo the <input>
-        register_setting( 'fablab_settings', 'option_fields', 'validate_options');
+        register_setting( 'fablab_settings_section', 'option_fields', 'validate_options');
 
 
         // ------------------------------------------------------------------
@@ -99,8 +99,8 @@ if (!class_exists('AdminPage'))
         // Add the section to reading settings so we can add our
         // fields to it
         add_settings_section(
-          'fablab_settings',                      // ID
-          'Fablab Caption',                       // Title
+          'fablab_settings_capions',                      // ID
+          'Captions',                       // Title
           'fablab_captions_function',             // callback
           'fablab_options'                        // Page slug
         );
@@ -110,7 +110,7 @@ if (!class_exists('AdminPage'))
           'System Caption',                          // Title
           'fablab_ticket_system_caption_function',   // callback
           'fablab_options',                          // page slug
-          'fablab_settings'                          // section
+          'fablab_settings_capions'                          // section
         );
 
         add_settings_field(
@@ -118,7 +118,7 @@ if (!class_exists('AdminPage'))
           'Device (EZ) Caption',                     // Title
           'fablab_device_caption_function',          // callback
           'fablab_options',                          // page slug
-          'fablab_settings'                          // section
+          'fablab_settings_capions'                          // section
         );
 
         add_settings_field(
@@ -126,7 +126,7 @@ if (!class_exists('AdminPage'))
           'Devices (MZ) Caption',                    // Title
           'fablab_devices_caption_function',         // callback
           'fablab_options',                          // page slug
-          'fablab_settings'                          // section
+          'fablab_settings_capions'                          // section
         );
 
         add_settings_field(
@@ -134,7 +134,7 @@ if (!class_exists('AdminPage'))
           'Ticket (EZ) Caption',                     // Title
           'fablab_ticket_caption_function',          // callback
           'fablab_options',                          // page slug
-          'fablab_settings'                          // section
+          'fablab_settings_capions'                          // section
         );
 
         add_settings_field(
@@ -142,7 +142,7 @@ if (!class_exists('AdminPage'))
           'Tickets (MZ) Caption',                    // Title
           'fablab_tickets_caption_function',         // callback
           'fablab_options',                          // page slug
-          'fablab_settings'                          // section
+          'fablab_settings_capions'                          // section
         );
 
         add_settings_field(
@@ -150,7 +150,7 @@ if (!class_exists('AdminPage'))
           'Time-Ticket (EZ) Caption',                   // Title
           'fablab_time_ticket_caption_function',        // callback
           'fablab_options',                             // page slug
-          'fablab_settings'                             // section
+          'fablab_settings_capions'                             // section
         );
 
         add_settings_field(
@@ -158,7 +158,7 @@ if (!class_exists('AdminPage'))
           'Time-Tickets (MZ) Caption',                  // Title
           'fablab_time_tickets_caption_function',       // callback
           'fablab_options',                             // page slug
-          'fablab_settings'                             // section
+          'fablab_settings_capions'                             // section
         );
 
         add_settings_field(
@@ -166,7 +166,7 @@ if (!class_exists('AdminPage'))
           'Instruction (EZ) Caption',                // Title
           'fablab_instruction_caption_function',     // callback
           'fablab_options',                          // page slug
-          'fablab_settings'                          // section
+          'fablab_settings_capions'                          // section
         );
 
         add_settings_field(
@@ -174,7 +174,7 @@ if (!class_exists('AdminPage'))
           'Instructions (MZ) Caption',               // Title
           'fablab_instructions_caption_function',    // callback
           'fablab_options',                          // page slug
-          'fablab_settings'                          // section
+          'fablab_settings_capions'                          // section
         );
 
         add_settings_field(
@@ -182,7 +182,7 @@ if (!class_exists('AdminPage'))
           'Instruction Requet (EZ) Caption',                // Title
           'fablab_instruction_request_caption_function',    // callback
           'fablab_options',                                 // page slug
-          'fablab_settings'                                 // section
+          'fablab_settings_capions'                                 // section
         );
 
         add_settings_field(
@@ -190,12 +190,12 @@ if (!class_exists('AdminPage'))
           'Instruction Requets (MZ) Caption',               // Title
           'fablab_instruction_requests_caption_function',   // callback
           'fablab_options',                                 // page slug
-          'fablab_settings'                                 // section
+          'fablab_settings_capions'                                 // section
         );
 
         // Register our setting so that $_POST handling is done for us and
         // our callback function just has to echo the <input>
-        register_setting( 'fablab_settings', 'caption_fields', 'validate_captions');
+        register_setting( 'fablab_settings_section', 'caption_fields', 'validate_captions');
 
 
 
@@ -206,8 +206,8 @@ if (!class_exists('AdminPage'))
         // Add the section to reading settings so we can add our
         // fields to it
         add_settings_section(
-          'fablab_settings',                     // ID
-          'Fablab AGB',                   // Title
+          'fablab_settings_tac',                // ID
+          'AGBs',                     // Title
           'fablab_tac_function',            // callback
           'fablab_options'                  // Page slug
         );
@@ -217,15 +217,15 @@ if (!class_exists('AdminPage'))
           'AGB Zustimmung erforderlich',           // Title
           'fablab_tac_needed_function',           // callback
           'fablab_options',                       // page slug
-          'fablab_settings'                          // section
+          'fablab_settings_tac'                          // section
         );
 
         add_settings_field(
           'fablab_tac',                           // ID/Name of the field
-          'AGB',                                  // Title
-          'fablab_termsandconditions_function',   // callback
+          'AGB Page',                                  // Title
+          'fablab_tac_pageid_function',   // callback
           'fablab_options',                       // page slug
-          'fablab_settings'                    // section
+          'fablab_settings_tac'                    // section
         );
 
         add_settings_field(
@@ -233,12 +233,12 @@ if (!class_exists('AdminPage'))
           'Änderungsdatum',                     // Title
           'fablab_tac_date_function',           // callback
           'fablab_options',                     // page slug
-          'fablab_settings'                  // section
+          'fablab_settings_tac'                  // section
         );
 
         // Register our setting so that $_POST handling is done for us and
         // our callback function just has to echo the <input>
-        register_setting( 'fablab_settings', 'tac_fields', 'validate_tacs');
+        register_setting( 'fablab_settings_section', 'tac_fields', 'validate_tacs');
 
       
       }
@@ -298,7 +298,7 @@ function fablab_get_captions($key = 'array') {
 function fablab_get_tac($key = 'array') {
   $default_values =  array(
     'tac_needed' => '0',
-    'termsandconditions' => 'Termesss',
+    'tac_pageid' => '0',
     'tac_date' => '1451606400',
   );
 
@@ -311,6 +311,24 @@ function fablab_get_tac($key = 'array') {
   }
 }
 
+function fablab_user_tac_acceptance() {
+  $tac_options = fablab_get_tac();
+  $tac_acceptance_date = get_user_meta(get_current_user_id(), 'tac_acceptance_date', true);
+
+  if(($tac_options['tac_needed'] == 1) 
+    && (empty($tac_acceptance_date) || $tac_acceptance_date < $tac_options['tac_date'])) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function set_user_tac_accaptance() {
+  update_user_meta( get_current_user_id(), 'tac_acceptance_date', current_time( 'timestamp' ) );
+  die();
+}
+add_action( 'wp_ajax_set_user_tac_accaptance', 'set_user_tac_accaptance' );
+
 // ------------------------------------------------------------------
 // Callback functions
 // ------------------------------------------------------------------
@@ -318,11 +336,11 @@ function fablab_get_tac($key = 'array') {
 function fablab_options_page() {
   ?>
   <div class="wrap">
-    <h2><?php fablab_get_captions('ticket_system_caption') ?> Einstellungen<h2>
+    <h2>Einstellungen<h2>
     <?php settings_errors(); ?>
     <form method="post" action="options.php">
       <?php
-      settings_fields('fablab_settings');
+      settings_fields('fablab_settings_section');
       do_settings_sections('fablab_options');
       submit_button();
       ?>
@@ -332,7 +350,6 @@ function fablab_options_page() {
 }
  
 function fablab_settings_function() {
-  //echo '<h3>Fablab Einstellungen</h3>';
 }
  
 function fablab_tickets_per_user_function() {
@@ -358,7 +375,7 @@ function fablab_ticket_permission_function() {
 // Name functions
 
 function fablab_captions_function() {
-  //echo '<h3>Fablab Captions</h3>';
+  echo '<p>Bezeichnungen für die wichtigsten Begriffe im System.</br>Können zu jeder Zeit geändert werden.</p>';
 }
  
 function fablab_ticket_system_caption_function() {
@@ -398,14 +415,29 @@ function fablab_instruction_requests_caption_function() {
 // Terms and Conditions
 
 function fablab_tac_function() {
-  
+  echo '<p>Um die AGBs zu beutzen muss eine Seite angelegt und hier verlinkt werden.</p>';
+  echo '<p>Wenn es änderungen an den AGBs gegeben hat, sollte hier das aktuelle Datum eingetragen werden. </br> Dann müssen die User den AGBs neu zustimmen.</p>';
 }
 
 function fablab_tac_needed_function() {
   echo '<input type="checkbox" name="tac_fields[tac_needed]" value="1"' . checked( 1, fablab_get_tac('tac_needed'), false ) . '/>';
 }
-function fablab_termsandconditions_function() {
-  echo '<textarea rows="5" cols="50" name="tac_fields[termsandconditions]">' . fablab_get_tac('termsandconditions') . '</textarea>';
+function fablab_tac_pageid_function() {
+
+  // from https://codex.wordpress.org/Function_Reference/get_pages
+  $selected = fablab_get_tac('tac_pageid');
+  echo '<select name="tac_fields[tac_pageid]"><option value="0">No Page</option>';
+  $pages = get_pages(); 
+  foreach ( $pages as $page ) {
+    $page_id = $page->ID;
+    $option = '<option value="' . $page_id . (($page_id == $selected) ? ('" selected>') : ('">'));
+    $option .= $page->post_title;
+    $option .= '</option>';
+    echo $option;
+  }
+  echo '</select>';
+
+  //echo '<textarea rows="5" cols="50" name="tac_fields[tac_pageid]">' . fablab_get_tac('tac_pageid') . '</textarea>';
 }
 function fablab_tac_date_function() {
   echo '<input type="text" name="tac_fields[tac_date]" class="time" value="' . date_i18n('Y-m-d H:i', fablab_get_tac('tac_date')) . '"/>';
@@ -461,13 +493,20 @@ function validate_tacs($options) {
           add_settings_error('tac_fields', 'naDate', 'Bitte ein Datum eingeben!');
           $output[$key] = $old_settings[$key];
       } 
+    } else if(($key) == 'tac_pageid') {
+      if(is_pos_int($value)) {
+        $output[$key] = sanitize_text_field($value);
+      } else {
+        add_settings_error('tac_fields', 'naN', 'Bitte eine verfügbare Page auswählen!');
+        $output[$key] = $old_settings[$key];
+      }  
     } else if(is_pos_int($old_settings[$key])) {
       if(is_pos_int($value)) {
-          $output[$key] = sanitize_text_field($value);
-        } else {
-          add_settings_error('tac_fields', 'naN', 'Bitte eine positive Zahl eingeben!');
-          $output[$key] = $old_settings[$key];
-        } 
+        $output[$key] = sanitize_text_field($value);
+      } else {
+        add_settings_error('tac_fields', 'naN', 'Bitte eine positive Zahl eingeben!');
+        $output[$key] = $old_settings[$key];
+      } 
     } else {
       if(!empty($value)) {
           $output[$key] = sanitize_text_field($value);
