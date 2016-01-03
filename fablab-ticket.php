@@ -25,7 +25,7 @@ include 'admin-page.php';
 include 'user-list.php';
 include 'manage-scripts.php';
 
-new AdminPage();
+$options = new AdminPage();
 new UserList();
 new Device();
 new Instruction();
