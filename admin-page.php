@@ -273,7 +273,7 @@ function fablab_get_option($key = 'array') {
 
 function fablab_get_captions($key = 'array') {
   $default_values =  array(
-    'ticket_system_caption' => 'Ticket-Systemi',
+    'ticket_system_caption' => 'Ticket-System',
     'device_caption' => 'Gerät',
     'devices_caption' => 'Geräte',
     'ticket_caption' => 'Ticket',
@@ -282,7 +282,7 @@ function fablab_get_captions($key = 'array') {
     'time_tickets_caption' => 'Time-Tickets',
     'instruction_caption' => 'Einschulung',
     'instructions_caption' => 'Einschulungen',
-    'instruction_request_caption' => 'Einschulunganfrage',
+    'instruction_request_caption' => 'Einschulungsanfrage',
     'instruction_requests_caption' => 'Einschulungsanfragen',
   );
 
