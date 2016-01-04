@@ -76,6 +76,10 @@ if (!class_exists('TicketListShortcodeUser'))
 
       if(isset($_GET['next'])) {
         $next = $_GET['next'];
+        // display first selected device, when "next" not available
+        if(!in_array($next, $selected_devices)){
+          $next = $selected_devices[0];
+        }
       } else {
         $showlist = true;
       }
