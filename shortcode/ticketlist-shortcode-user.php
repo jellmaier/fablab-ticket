@@ -40,17 +40,24 @@ if (!class_exists('TicketListShortcodeUser'))
         echo '<div class="device-checkboxes">'; 
 
         if(!isset($_GET['devices'])){
-          $selected_devices = array_column ( $devices, 'id');
-        }
-
-        foreach ($devices as $device) {
-          if(in_array($device['id'], $selected_devices)){
-            $checked = 'checked';
-          } else {
-            $checked = '';
+          // php 5.5+ version
+          //$selected_devices = array_column ( $devices, 'id');
+          $selected_devices = array(); 
+          foreach ($devices as $device) {
+            echo '<input type="checkbox" class="device-checkbox" id="' . $device['id'] 
+              . '" checked >' . $device['device'] . '   </input>';  
+            array_push ($selected_devices, $device['id']);
           }
-          echo '<input type="checkbox" class="device-checkbox" id="' . $device['id'] 
-            . '"' . $checked . '>' . $device['device'] . '   </input>';  
+        } else {
+          foreach ($devices as $device) {
+            if(in_array($device['id'], $selected_devices)){
+              $checked = 'checked';
+            } else {
+              $checked = '';
+            }
+            echo '<input type="checkbox" class="device-checkbox" id="' . $device['id'] 
+              . '"' . $checked . '>' . $device['device'] . '   </input>';  
+          }
         }
         echo '</div>';
         $this->display_devicelist($selected_devices, $device_colums, $ticket_rows);
