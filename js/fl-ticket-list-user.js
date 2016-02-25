@@ -8,32 +8,56 @@ jQuery(document).ready(function($){
     reload_page($, false);
   })
 
-  var reload = function(){
-    reload_page($, ($('#fullscreen').val() == true));
-  }
+  $('#show-all-devices').on('click', function(event) {
+    window.location = '?width=' + $(document).width() + '&height=' + $(document).height() 
+    + '&alldevices';
+  })
 
-  setTimeout(reload, 15000);
-  
-});
+  $('#show-used-devices').on('click', function(event) {
+    window.location = '?width=' + $(document).width() + '&height=' + $(document).height() 
+    + '&useddevices';
+  })
 
+  $('#show-free-devices').on('click', function(event) {
+    window.location = '?width=' + $(document).width() + '&height=' + $(document).height() 
+    + '&freedevices';
+  })
 
-function reload_page($, fullscreen) {
-  var fullscr = '';
-  var devices = [];
-  var device_string = '';
-  if(fullscreen) {
-    fullscr = 'fullscreen&';
-  }
-  if($('#fullscreen').val()){
-    device_string = $('.fl-fullscreen-layer').data('devices');
-  } else {
+  $('#show-selected-devices').on('click', function(event) {
+    var devices = [];
+    var device_string = '';
     $('.device-checkbox').each(function(){
       if(this.checked){
         devices.push(this.id);
       }
     })
     device_string = devices.join(',');
+    window.location = '?width=' + $(document).width() + '&height=' + $(document).height() 
+    + '&devices=' + device_string;
+  })
+
+  if($('#fullscreen').val() == true) {
+    var reload = function(){
+      reload_page($, true);
+    }
+
+    setTimeout(reload, 15000);
   }
+  
+});
+
+function set_menu_active($) {
+  var device_string = $('#fl-device-string').data('devices-string');
+  if(device_string == '&alldevices') {
+    
+  }
+}
+
+
+function reload_page($, fullscreen) {
+  var fullscr = (fullscreen) ? 'fullscreen&' : '';
+  var device_string = $('#fl-device-string').data('devices-string');
+
 
   var next = '';
   var next_device = $("#next-device").data('next-device');
@@ -42,5 +66,5 @@ function reload_page($, fullscreen) {
   }
 
   window.location = '?' + fullscr + 'width=' + $(document).width() + '&height=' + $(document).height() 
-    + '&devices=' + device_string + next;
+    + device_string + next;
 }

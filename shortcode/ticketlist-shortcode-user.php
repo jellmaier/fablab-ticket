@@ -18,13 +18,15 @@ if (!class_exists('TicketListShortcodeUser'))
       $ticket_height = 200;
       $initial_height = 300;
 
-      $selected_devices = explode(',', $_GET['devices']);
+      $online_devices = get_online_devices();
+      $online_decices_ids = $this->get_online_devices_ids($online_devices);
+      $selected_devices = $this->handle_device_list($online_decices_ids);
 
       if(isset($_GET['fullscreen'])) {
         echo '<input type="text" id="fullscreen" disabled  hidden value="' . isset($_GET['fullscreen']) . '">';
         $device_colums = floor($_GET['width']/ $ticket_width);
-        $ticket_rows = floor(($_GET['height'] - $initial_height) / $ticket_height);
-        echo '<div data-devices="' . $_GET['devices'] . '"class="fl-fullscreen-layer">';
+        $ticket_rows = max(floor(($_GET['height'] - $initial_height) / $ticket_height), 1);
+        echo '<div class="fl-fullscreen-layer">';
         echo '<a href="#" id="close-fullscreen" class="close">x</a>';
         echo '<div class="devices-box" style="width: ' . $device_colums * $ticket_width . 'px;">'; 
         $this->display_devicelist($selected_devices, $device_colums, $ticket_rows);
@@ -35,41 +37,106 @@ if (!class_exists('TicketListShortcodeUser'))
         echo '<div class="reload">';
         echo '<a style="text-decoration: none;" id="get-fullscreen" href="#">⤢ fullscreen</a>';
         echo '</div>';
-        $devices = get_online_devices();
-        echo '<p><b>Ansicht für ' . fablab_get_captions('devices_caption') . ':</b></p>';
-        echo '<div class="device-checkboxes">'; 
+        $this->display_options($online_devices, $selected_devices);
+        $this->display_devicelist($selected_devices, count($selected_devices));
+      }  
 
-        if(!isset($_GET['devices'])){
-          // php 5.5+ version
-          //$selected_devices = array_column ( $devices, 'id');
-          $selected_devices = array(); 
-          foreach ($devices as $device) {
-            echo '<input type="checkbox" class="device-checkbox" id="' . $device['id'] 
-              . '" checked >' . $device['device'] . '   </input>';  
-            array_push ($selected_devices, $device['id']);
-          }
+    }
+
+
+    //--------------------------------------------------------
+    // Display Options Headder
+    //--------------------------------------------------------
+    private function display_options($online_devices, $selected_devices) {
+      $active = 'style="background: #fff;color: #74a4a3;" ';
+
+      echo '<ul class="device-selector">'; 
+      echo '<li><input type="submit" id="show-all-devices" ' . (isset($_GET['alldevices'])?$active:'') . 'value="Alle Geräte"></li>';  
+      echo '<li><input type="submit" id="show-used-devices" ' . (isset($_GET['useddevices'])?$active:'') . 'value="Belegte Geräte"></li>';
+      echo '<li><input type="submit" id="show-free-devices" ' . (isset($_GET['freedevices'])?$active:'') . 'value="Freie Geräte"></li>'; 
+      echo '<li><input type="submit" id="show-devices-selector" ' . (isset($_GET['devices'])?$active:'') . 'value="Geräte auswählen">'; 
+      echo '<ul class="devices-checkbox">';
+      foreach ($online_devices as $device) {
+        if(in_array($device['id'], $selected_devices)){
+          $checked = 'checked';
         } else {
-          foreach ($devices as $device) {
-            if(in_array($device['id'], $selected_devices)){
-              $checked = 'checked';
-            } else {
-              $checked = '';
-            }
-            echo '<input type="checkbox" class="device-checkbox" id="' . $device['id'] 
-              . '"' . $checked . '>' . $device['device'] . '   </input>';  
-          }
+          $checked = '';
         }
-        echo '</div>';
-        $this->display_devicelist($selected_devices, $device_colums, $ticket_rows);
-      }
+        echo '<li><input type="checkbox" class="device-checkbox" id="' . $device['id'] 
+          . '"' . $checked . '>' . $device['device'] . '   </input></li>';  
+      } 
+      echo '<li><input type="submit" id="show-selected-devices" class="option-button" value="Geräte anzeigen"></li>';
+      echo '</ul>';
+      echo '</li>';
+      echo '</ul>';
 
+
+    }
+
+    //--------------------------------------------------------
+    // Online Device IDs
+    //--------------------------------------------------------
+    private function get_online_devices_ids($online_devices) {
+      // php 5.5+ version
+      //$online_devices = array_column ( $devices, 'id');
+      $online_devices_ids = array(); 
+      foreach ($online_devices as $device) {
+        array_push ($online_devices_ids, $device['id']);
+      }
+      return $online_devices_ids;
+    }
+
+    //--------------------------------------------------------
+    // Handles Devices List
+    //--------------------------------------------------------
+    private function handle_device_list($online_devices_ids) {
+      
+      if(isset($_GET['devices'])){
+        $device_list = explode(',', $_GET['devices']);
+        $selected_devices = array(); 
+        foreach ($device_list as $device_id) {
+          if(in_array($device_id, $online_devices_ids)){
+            array_push ($selected_devices, $device_id);
+          }  
+        }
+        echo '<div id="fl-device-string" data-devices-string="' . '&devices=' .  $_GET['devices'] . '"></div>';
+        return $selected_devices;
+
+      } else if(isset($_GET['alldevices'])) {
+        echo '<div id="fl-device-string" data-devices-string="' . '&alldevices' . '"></div>';
+        return $online_devices_ids;
+
+      } else if(isset($_GET['useddevices'])) {
+        $selected_devices = array();
+        foreach ($online_devices_ids as $device_id) {
+          if(!is_device_availabel($device_id)){
+            array_push ($selected_devices, $device_id);
+          }  
+        }
+        echo '<div id="fl-device-string" data-devices-string="' . '&useddevices' . '"></div>';
+        return $selected_devices;
+
+      } else if(isset($_GET['freedevices'])) {
+        $selected_devices = array();
+        foreach ($online_devices_ids as $device_id) {
+          if(is_device_availabel($device_id)){
+            array_push ($selected_devices, $device_id);
+          }  
+        }
+        echo '<div id="fl-device-string" data-devices-string="' . '&freedevices' . '"></div>';
+        return $selected_devices;
+
+      } else {
+        echo '<div id="fl-device-string" data-devices-string="' . '&alldevices' . '"></div>';
+        return $online_devices_ids;
+      }
     }
 
 
     //--------------------------------------------------------
     // Display device List
     //--------------------------------------------------------
-    private function display_devicelist($selected_devices, $device_colums, $ticket_rows) {
+    private function display_devicelist($selected_devices, $device_colums, $ticket_rows = -1) {
       $counter = 0;
 
       $showlist = false;
@@ -84,17 +151,22 @@ if (!class_exists('TicketListShortcodeUser'))
         $showlist = true;
       }
 
-      foreach ($selected_devices as $device) {
-        if($device == $next) {
-          $showlist = true;
+
+      if(count($selected_devices) > 0) {
+        foreach ($selected_devices as $device) {
+          if($device == $next) {
+            $showlist = true;
+          }
+          if(($counter < $device_colums) && $showlist) {
+            $this->display_device($device, $ticket_rows);
+            $counter++;
+          } else if($showlist) {
+            echo '<div id="next-device" data-next-device="' . $device . '"></div>';
+            return;
+          }
         }
-        if(($counter < $device_colums) && $showlist) {
-          $this->display_device($device, $ticket_rows);
-          $counter++;
-        } else if($showlist) {
-          echo '<div id="next-device" data-next-device="' . $device . '"></div>';
-          return;
-        }
+      } else {
+        echo '<div class="device-box"><p>Kein Gerät verfügbar!</p></div>';
       }
 
     }
@@ -142,11 +214,7 @@ if (!class_exists('TicketListShortcodeUser'))
         )
       );
       $time_ticket_query = new WP_Query($query_arg);
-      $this->display_user_timeticketlist($time_ticket_query);
 
-    }
-
-    private function display_user_timeticketlist($time_ticket_query) {
       //Time-Tiket listing
       echo '<div class="time-ticket-list">';
       echo '<p>Hier wird die Person angezeigt, die das ' . fablab_get_captions('device_caption') . ' aktuell nutzt:</p>';
@@ -177,7 +245,7 @@ if (!class_exists('TicketListShortcodeUser'))
     //--------------------------------------------------------
     // Display active Tickets
     //--------------------------------------------------------
-    private function display_device_tickets($device_id, $post_number = 1) {
+    private function display_device_tickets($device_id, $post_number = -1) {
 
       $query_arg = array(
         'post_type' => 'ticket',
@@ -198,17 +266,6 @@ if (!class_exists('TicketListShortcodeUser'))
       );
       $ticket_query = new WP_Query($query_arg);
 
-      global $post;
-
-      $this->display_user_ticketlist($ticket_query);
-
-    }
-
-
-    //--------------------------------------------------------
-    // Display Manager View Tickets
-    //--------------------------------------------------------
-    private function display_user_ticketlist($ticket_query) {
       // Display Tickets
       echo '<div class="ticket-list">';
       echo '<p>Hier werden die wartende Personen angezeigt:</p>';

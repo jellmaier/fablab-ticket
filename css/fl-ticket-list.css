@@ -129,9 +129,6 @@ p {
     cursor: pointer;
     opacity: 0.5;
 }
-input[type="checkbox"] {
-    margin: 10px 6px 18px 10px;
-}
 
 .fl-overlay-background {
     position: fixed;
@@ -383,6 +380,83 @@ input[type="checkbox"] {
     right: 0;
     top: 0;
     z-index: 100011;
+}
+
+.device-selector {
+    background-color: #74a4a3;
+    list-style-type: none;
+    margin: 0;
+    padding: 4px 4px 1px 4px;
+    overflow: hidden;
+    border-radius: 6px;
+    display: inline-block;
+}
+.device-selector li{
+    float: left;
+}
+
+.device-selector ul {
+    display: none;
+    position: absolute;
+    background-color: #eee;
+    list-style-type: none;
+    margin: -1px 0;
+    padding: 5px 5px 2px 5px;
+    border-radius: 4px;
+}
+
+.device-selector ul li{
+    float: none;
+    padding: 2px 6px;
+}
+
+
+.device-selector input[type="checkbox"] {
+    margin: 4px 8px 4px 4px;
+}
+
+.device-selector li:hover > ul {
+    display: block;
+}
+
+.device-selector ul input[type=submit] {
+    border: 2px solid #74a4a3;
+    border-radius: 4px;
+    background: none;
+    color: #74a4a3;
+    margin: 6px 0;
+}
+.device-selector ul input[type=submit]:hover {
+    background: #74a4a3;
+    color: #fff;
+    cursor: pointer;
+}
+
+.device-selector input[type=submit] {
+    border: none;
+    border-radius: 4px;
+    background: none;
+    color: #fff;
+    text-transform: none;
+    padding: 4px 10px;
+    font-weight: bold;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    display: inline-block;
+    box-shadow: none;
+    text-shadow: none;
+}
+.device-selector input[type=submit]:hover {
+    background: #fff;
+    color: #74a4a3;
+    cursor: pointer;
+}
+.active {
+    background: #fff;
+    color: #74a4a3;
 }
 
 .ticket-list .fl-ticket-element {
