@@ -95,6 +95,13 @@
     cursor: pointer;
     opacity: 0.5;
 }
+@media all and (max-width: 600px) {
+    .reload {
+        display: none;
+    }
+}
+
+
 
 p {
     margin-top: 8px;
@@ -386,7 +393,7 @@ p {
     background-color: #74a4a3;
     list-style-type: none;
     margin: 0;
-    padding: 4px 4px 1px 4px;
+    padding: 4px;
     overflow: hidden;
     border-radius: 6px;
     display: inline-block;
