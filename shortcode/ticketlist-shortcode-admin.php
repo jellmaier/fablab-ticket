@@ -33,17 +33,45 @@ if (!class_exists('TicketListShortcodeAdmin'))
       //--------------------------------------------------------
       // Print different Views
       //--------------------------------------------------------
+      $option_captions = array(
+        'devices' => fablab_get_captions('devices_caption'),
+        'tickets' => fablab_get_captions('tickets_caption'),
+        'time-tickets' => fablab_get_captions('time_tickets_caption'),
+        'instruction-tickets' => fablab_get_captions('instruction_requests_caption'),
+      );
+      $this->display_options($option_captions);
 
-      $this->print_active_timetickets();
-     
-      echo '<h2>' . fablab_get_captions('tickets_caption') . '</h2>';
-      $this->print_deactivatet_tickets();
-      $this->print_active_tickets();
+      $option_captions = array(
+        'ticketing' => 'Disable Ticketing',
+        'reload' => '&#8634 Reload',
+      );
+      //$this->display_options($option_captions, '&#9881 Settings');
 
-      echo '<h2>' . fablab_get_captions('instruction_requests_caption') . '</h2>';
-      $device_list = get_online_devices();
-      foreach($device_list as $device) {
-        $this->print_device_instruction($device['id']);
+      if(isset($_GET['devices'])){
+        $this->display_devices_page();
+
+      } else if(isset($_GET['tickets'])) {
+        echo '<h2>' . fablab_get_captions('tickets_caption') . '</h2>';
+        $this->print_deactivatet_tickets();
+        $this->print_active_tickets();
+
+      } else if(isset($_GET['time-tickets'])) {
+        $this->print_active_timetickets();
+
+      } else if(isset($_GET['instruction-tickets'])) {
+        echo '<h2>' . fablab_get_captions('instruction_requests_caption') . '</h2>';
+        
+        $device_list = get_online_devices();
+        if ( count($device_list) != 0 ) {  
+          foreach($device_list as $device) {
+            $this->print_device_instruction($device['id']);
+          }
+        } else {
+          echo '<p style="margin-bottom:40px; opacity: 0.6;"> -- Keine aktiven ' . fablab_get_captions('tickets_caption') . '! -- </p>';
+        }      
+
+      } else {
+        $this->display_devices_page();
       }
 
       $this->print_assign_overlay();
@@ -52,10 +80,112 @@ if (!class_exists('TicketListShortcodeAdmin'))
 
 
     //--------------------------------------------------------
+    // Display Options Headder
+    //--------------------------------------------------------
+    private function display_options($option_captions, $menu_caption = '') {
+
+      $active = 'style="background: #fff;color: #74a4a3;" ';
+
+      echo '<div class="menu">';
+
+      if($menu_caption){
+        echo '<input type="submit" class="menu-option" value="' . $menu_caption . '">'; 
+      } else {
+        foreach ($option_captions as $caption => $value) {
+          if(isset($_GET[$caption])) {
+            echo '<input type="submit" class="menu-option" value="&#9776  ' . $value . '">'; 
+          }
+        }
+      }
+       
+      echo '<ul class="menu-dropdown">';
+      foreach ($option_captions as $caption => $value) {
+        echo '<li><input type="submit" id="' . $caption . '" class="option-button" ' . (isset($_GET[$caption])?$active:'') . 'value="' . $value . '"></li>';
+      }
+      echo '</ul>';
+      echo '</div>';
+
+    }
+
+
+    //--------------------------------------------------------
+    // Display Device
+    //--------------------------------------------------------
+    private function display_devices($device_id = '') {
+
+      $this->print_active_timetickets($device_id);
+     
+      echo '<h2>' . fablab_get_captions('tickets_caption') . '</h2>';
+      $this->print_deactivatet_tickets($device_id);
+      $this->print_active_tickets($device_id);
+
+      echo '<h2>' . fablab_get_captions('instruction_requests_caption') . '</h2>';
+
+      if($device_id) {
+        $this->print_device_instruction($device_id);
+      } else {
+        $device_list = get_online_devices();
+        foreach($device_list as $device) {
+          $this->print_device_instruction($device['id']);
+        }
+      }
+
+    }
+
+    //--------------------------------------------------------
+    // Display Device Page
+    //--------------------------------------------------------
+    private function display_devices_page() {
+
+
+      echo '<h2>' . fablab_get_captions('devices_caption') . '</h2>';
+      echo '<p>Hier werden dir die aktiven ' . fablab_get_captions('devices_caption') . ' angezeigt:</p>';
+      $device_list = get_online_devices();
+
+      if ( count($device_list) != 0 ) {  
+        foreach($device_list as $device) {
+          echo '<div class="device-list-box">';
+          echo '<div class="device-toggle" style="border-left: 4px solid ' . get_post_meta($device['id'], 'device_color', true )
+          . ';"><p><b>' . $device['device'] . '</b></p></div>';
+
+
+          echo '<div class="device-listing" hidden>';
+          $this->display_devices($device['id']);
+          echo '<div class="device-close"><p><b>x</b> Schließen</br></p></div>';
+          echo '</div></div>';
+        }
+      } else {
+        echo '<p style="margin-bottom:40px; opacity: 0.6;"> -- Keine aktiven ' . fablab_get_captions('tickets_caption') . '! -- </p>';
+      }      
+
+    }
+
+
+    //--------------------------------------------------------
     // Display active Tickets
     //--------------------------------------------------------
-    function print_active_tickets() {
+    function print_active_tickets($device_id = '') {
       global $post;
+
+      if($device_id){
+        $meta_array = array(
+          array(
+              'key'=>'ticket_type',
+              'value'=> 'device',
+          ),
+          array(
+            'key'=>'device_id',
+            'value'=> $device_id,
+          )
+        );
+      } else {
+        $meta_array = array(
+          array(
+              'key'=>'ticket_type',
+              'value'=> 'device',
+          )
+        );
+      }
 
       echo '<p>Hier werden dir die aktiven ' . fablab_get_captions('tickets_caption') . ' angezeigt:</p>';
 
@@ -65,12 +195,7 @@ if (!class_exists('TicketListShortcodeAdmin'))
         'orderby' => 'date', 
         'order' => 'ASC',
         'post_status' => 'publish',
-        'meta_query'=>array(
-          array(
-              'key'=>'ticket_type',
-              'value'=> 'device',
-          )
-        )
+        'meta_query'=> $meta_array,
       );
       $ticket_query = new WP_Query($query_arg);
       if ( $ticket_query->have_posts() ) {
@@ -109,17 +234,34 @@ if (!class_exists('TicketListShortcodeAdmin'))
     //--------------------------------------------------------
     // Display active Timeticket
     //--------------------------------------------------------
-    function print_active_timetickets() {
+    function print_active_timetickets($device_id = '') {
       global $post;
 
-      $time_delay = (fablab_get_option('ticket_delay') * 60);
 
-      $query_arg = array(
-        'post_type' => 'timeticket',
-        'posts_per_page' => 10, 
-        'orderby' => 'date', 
-        'order' => 'ASC',
-        'meta_query'=>array(
+      echo '<h2>' . fablab_get_captions('time_tickets_caption') . '</h2>';
+      echo '<p>Hier werden dir die aktiven ' . fablab_get_captions('time_tickets_caption') . ' angezeigt:</p>';
+
+      if($device_id){
+        $meta_array = array(
+        'relation'=>'and',
+          array(
+            'key'=>'timeticket_start_time',
+            'value'=> current_time( 'timestamp' ),
+            'compare' => '<'
+          ),
+          array(
+            'key'=>'timeticket_end_time',
+            'value'=> (current_time( 'timestamp' ) - $time_delay),
+            'compare' => '>'
+          ),
+          array(
+            'key'=>'timeticket_device',
+            'value'=> $device_id,
+            'compare' => '='
+          )
+        );
+      } else {
+        $meta_array = array(
         'relation'=>'and',
           array(
               'key'=>'timeticket_start_time',
@@ -131,12 +273,20 @@ if (!class_exists('TicketListShortcodeAdmin'))
               'value'=> (current_time( 'timestamp' ) - $time_delay),
               'compare' => '>'
           )
-        )
+        );
+      }
+
+      $time_delay = (fablab_get_option('ticket_delay') * 60);
+
+
+      $query_arg = array(
+        'post_type' => 'timeticket',
+        'posts_per_page' => 10, 
+        'orderby' => 'date', 
+        'order' => 'ASC',
+        'meta_query'=> $meta_array,
       );
       $ticket_query = new WP_Query($query_arg);
-      echo '<div class="time-ticket-box">';
-      echo '<div ><p class="time-ticket-toggle"><b>Aktive ' . fablab_get_captions('time_tickets_caption') . '</b></p></div>';
-      echo '<div id="time-ticket-listing" hidden>';
       if ( $ticket_query->have_posts() ) {
         while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
           $device_id = get_post_meta($post->ID, 'timeticket_device', true );
@@ -156,10 +306,8 @@ if (!class_exists('TicketListShortcodeAdmin'))
           <?php
         endwhile;
       } else {
-        echo '<p style="margin: 10px;"> Keine ' . fablab_get_captions('tickets_caption') . '! </p>'; 
+        echo '<p style="margin-bottom:40px; opacity: 0.6;"> -- Keine aktiven ' . fablab_get_captions('time_tickets_caption') . '! -- </p>';
       }
-      echo '<div ><p class="time-ticket-toggle"><b>x</b> Schließen</br></p></div>';
-      echo '</div></div>';
 
       wp_reset_query();
     }
@@ -168,21 +316,37 @@ if (!class_exists('TicketListShortcodeAdmin'))
     //--------------------------------------------------------
     // Display deactivated tickets
     //--------------------------------------------------------
-    function print_deactivatet_tickets() {
+    function print_deactivatet_tickets($device_id = '') {
       global $post;
+
+      if($device_id){
+        $meta_array = array(
+          array(
+              'key'=>'ticket_type',
+              'value'=> 'device',
+          ),
+          array(
+            'key'=>'device_id',
+            'value'=> $device_id,
+          )
+        );
+      } else {
+        $meta_array = array(
+          array(
+              'key'=>'ticket_type',
+              'value'=> 'device',
+          )
+        );
+      }
 
       $query_arg = array(
         'post_type' => 'ticket',
         'orderby' => 'date', 
         'order' => 'ASC',
         'post_status' => 'draft',
-        'meta_query'=>array(
-          array(
-              'key'=>'ticket_type',
-              'value'=> 'device',
-          )
-        )
+        'meta_query'=> $meta_array,
       );
+
       $ticket_query = new WP_Query($query_arg);
       if ( $ticket_query->have_posts() ) {
         echo '<div class="draft-box">';

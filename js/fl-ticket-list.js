@@ -39,6 +39,11 @@ jQuery(document).ready(function($){
     $(this).fadeOut(200);
   });
 
+  // menu handler
+  $('.option-button').click(function(event) {
+    window.location = '?' + this.id;
+  })
+
 
   //enable ticketing
   $('#enable-ticketing').on('click', function(){
@@ -68,8 +73,11 @@ jQuery(document).ready(function($){
     $('#draft-ticket-listing').slideToggle(200);
   })
 
-  $('.time-ticket-toggle').click(function(event) {
-    $('#time-ticket-listing').slideToggle(200);
+  $('.device-toggle').click(function(event) {
+    $(this).parent('div').find('.device-listing').slideToggle(50);
+  })
+  $('.device-close').click(function(event) {
+    $(this).parent('div').slideToggle(50);
   })
 
   // Time-Ticket stop
