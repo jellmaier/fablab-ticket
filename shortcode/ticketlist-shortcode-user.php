@@ -50,11 +50,13 @@ if (!class_exists('TicketListShortcodeUser'))
     private function display_options($online_devices, $selected_devices) {
       $active = 'style="background: #fff;color: #74a4a3;" ';
 
+      $devices_caption = fablab_get_captions('devices_caption');
+
       echo '<ul class="device-selector">'; 
-      echo '<li><input type="submit" id="show-all-devices" ' . (isset($_GET['alldevices'])?$active:'') . 'value="Alle Geräte"></li>';  
-      echo '<li><input type="submit" id="show-used-devices" ' . (isset($_GET['useddevices'])?$active:'') . 'value="Belegte Geräte"></li>';
-      echo '<li><input type="submit" id="show-free-devices" ' . (isset($_GET['freedevices'])?$active:'') . 'value="Freie Geräte"></li>'; 
-      echo '<li><input type="submit" id="show-devices-selector" ' . (isset($_GET['devices'])?$active:'') . 'value="Geräte auswählen">'; 
+      echo '<li><input type="submit" id="show-all-devices" ' . (isset($_GET['alldevices'])?$active:'') . 'value="Alle ' . $devices_caption .'"></li>';  
+      echo '<li><input type="submit" id="show-used-devices" ' . (isset($_GET['useddevices'])?$active:'') . 'value="Belegte ' . $devices_caption .'"></li>';
+      echo '<li><input type="submit" id="show-free-devices" ' . (isset($_GET['freedevices'])?$active:'') . 'value="Freie ' . $devices_caption .'"></li>'; 
+      echo '<li><input type="submit" id="show-devices-selector" ' . (isset($_GET['devices'])?$active:'') . 'value="' . $devices_caption .' auswählen">'; 
       echo '<ul class="devices-checkbox">';
       foreach ($online_devices as $device) {
         if(in_array($device['id'], $selected_devices)){
@@ -65,7 +67,7 @@ if (!class_exists('TicketListShortcodeUser'))
         echo '<li><input type="checkbox" class="device-checkbox" id="' . $device['id'] 
           . '"' . $checked . '>' . $device['device'] . '   </input></li>';  
       } 
-      echo '<li><input type="submit" id="show-selected-devices" class="option-button" value="Geräte anzeigen"></li>';
+      echo '<li><input type="submit" id="show-selected-devices" class="option-button" value="' . $devices_caption .' anzeigen"></li>';
       echo '</ul>';
       echo '</li>';
       echo '</ul>';
