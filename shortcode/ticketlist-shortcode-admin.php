@@ -101,7 +101,8 @@ if (!class_exists('TicketListShortcodeAdmin'))
       if($menu_name) {
         echo '<input type="submit" class="menu-option" value="&#9776  ' . $menu_name . '">';
       } else {
-        echo '<input type="submit" class="menu-option" value="&#9776  ' . (array_values($option_captions)[0]) . '">';
+        $first_name = (array_values($option_captions)[0]);
+        echo '<input type="submit" class="menu-option" value="&#9776  ' . $first_name . '">';
       }
  
        
