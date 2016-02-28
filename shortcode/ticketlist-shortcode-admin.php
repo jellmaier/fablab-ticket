@@ -86,6 +86,7 @@ if (!class_exists('TicketListShortcodeAdmin'))
 
       $active = 'style="background: #fff;color: #74a4a3;" ';
 
+      $menu_name = '';
       echo '<div class="menu">';
 
       if($menu_caption){
@@ -93,10 +94,16 @@ if (!class_exists('TicketListShortcodeAdmin'))
       } else {
         foreach ($option_captions as $caption => $value) {
           if(isset($_GET[$caption])) {
-            echo '<input type="submit" class="menu-option" value="&#9776  ' . $value . '">'; 
+            $menu_name = $value; 
           }
         }
       }
+      if($menu_name) {
+        echo '<input type="submit" class="menu-option" value="&#9776  ' . $menu_name . '">';
+      } else {
+        echo '<input type="submit" class="menu-option" value="&#9776  ' . array_values($option_captions)[0] . '">';
+      }
+ 
        
       echo '<ul class="menu-dropdown">';
       foreach ($option_captions as $caption => $value) {
