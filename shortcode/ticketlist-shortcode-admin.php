@@ -164,9 +164,10 @@ if (!class_exists('TicketListShortcodeAdmin'))
           echo '<div class="device-toggle" style="border-left: 4px solid ' . get_post_meta($device['id'], 'device_color', true )
           . ';"><p><b>' . $device['device'] . '</b></p></div>';
 
-
-          echo '<div class="device-listing" hidden>';
+          echo '<div class="device-dropdown" hidden>';
+          echo '<div class="device-listing">';
           $this->display_devices($device['id']);
+          echo '</div>';
           echo '<div class="device-close"><p><b>x</b> Schließen</br></p></div>';
           echo '</div></div>';
         }
@@ -445,7 +446,7 @@ if (!class_exists('TicketListShortcodeAdmin'))
           </div>
           <?php
         endwhile;
-        echo '<div style="clear:left;"></div>';
+        echo '<div style="clear:left;"></div></div>';
       } else {
         echo '<p style="margin-bottom:40px; opacity: 0.6;"> -- Keine ' . fablab_get_captions('instruction_requests_caption') . '! -- </p>';
       }

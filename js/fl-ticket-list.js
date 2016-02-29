@@ -53,7 +53,7 @@ jQuery(document).ready(function($){
   })
   $('#reload-cancel').click(function(event) {
      $('.reload-layer').slideUp(300);
-     setTimeout(show_reload_notification, 300000);
+     setTimeout(show_reload_notification, 60000);
   })
 
 
@@ -92,7 +92,7 @@ jQuery(document).ready(function($){
   })
 
   $('.device-toggle').click(function(event) {
-    $(this).parent('div').find('.device-listing').slideToggle(50);
+    $(this).parent('div').find('.device-dropdown').slideToggle(50);
   })
   $('.device-close').click(function(event) {
     $(this).parent('div').slideToggle(50);
