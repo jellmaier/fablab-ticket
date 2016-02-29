@@ -303,7 +303,7 @@ p {
     background-color: #aaa;
     font-size: 16px;
     color: #fff;
-    padding: 6px 14px;
+    padding: 8px 16px;
     letter-spacing: 0.5px;
     cursor: pointer;
     margin: 0px;
@@ -311,7 +311,7 @@ p {
 .device-close {
     background-color: #ccc;
     color: #fff;
-    padding: 4px 12px;
+    padding: 6px 14px;
     letter-spacing: 0.5px;
     cursor: pointer;
     margin: 0 -20px -20px -20px;
@@ -419,7 +419,7 @@ p {
     margin: 0 6px 0 0;
     padding: 2px;
     overflow: hidden;
-    border-radius: 8px;
+    border-radius: 6px;
     display: inline-block;
 }
 
@@ -429,7 +429,7 @@ p {
     background: none;
     color: #fff;
     text-transform: none;
-    padding: 4px 10px;
+    padding: 6px 12px;
     margin: 2px;
     font-weight: bold;
     font-size: 14px;
