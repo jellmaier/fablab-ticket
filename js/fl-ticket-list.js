@@ -39,6 +39,24 @@ jQuery(document).ready(function($){
     $(this).fadeOut(200);
   });
 
+  //reload handler
+
+  setTimeout(show_reload_notification, 60000);
+
+  function show_reload_notification(){
+     $('.reload-layer').slideDown(300);
+  }
+
+  $('#reload-reload').click(function(event) {
+     $('.reload-layer').slideUp(300);
+     location.reload();
+  })
+  $('#reload-cancel').click(function(event) {
+     $('.reload-layer').slideUp(300);
+     setTimeout(show_reload_notification, 300000);
+  })
+
+
   // menu handler
   $('.option-button').click(function(event) {
     window.location = '?' + this.id;

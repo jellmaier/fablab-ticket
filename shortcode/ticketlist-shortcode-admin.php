@@ -18,6 +18,16 @@ if (!class_exists('TicketListShortcodeAdmin'))
       ?>
       <div id="message-container"></div>
       <div class="busy" hidden></div>
+      <div class="reload-layer" hidden>;
+        <div class="reload-layer-box">
+          <p>Die Seite wurde vor mehr als 1 Minute geladen und ist nicht mehr aktuell!</p>
+          <div id="reload-reload" class="reload-layer-left"><img src="../wp-content/plugins/fablab-ticket/css/reload.svg"><p>Reload</p></div>
+          <div class="reload-layer-center"><img src="../wp-content/plugins/fablab-ticket/css/line.svg"></div>
+          <div id="reload-cancel" class="reload-layer-left"><img src="../wp-content/plugins/fablab-ticket/css/cancel.svg"><p>Später</p></div>
+        </div>
+        <div class="reload-layer-background"></div>
+      </div>
+
       <div class="reload">
         <?php 
         if(fablab_get_option('ticket_online') == 1){
@@ -26,7 +36,6 @@ if (!class_exists('TicketListShortcodeAdmin'))
           echo '<a style="text-decoration: none; margin-right: 10px;" id="enable-ticketing" href="#">' . fablab_get_captions('ticket_system_caption') . ' aktivieren</a>';
         }
         ?>
-        <a style="text-decoration: none;" href="javascript:location.reload();" >&#8634 Reload</a>
       </div>
       <?php
 
