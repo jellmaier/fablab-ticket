@@ -43,7 +43,11 @@ jQuery(document).ready(function($){
 
     setTimeout(reload, 15000);
   }
-  
+
+  if($('#refreshnow').data('now') == 1) {
+    reload_page($, true);
+  }
+
 });
 
 function set_menu_active($) {

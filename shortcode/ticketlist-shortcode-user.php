@@ -22,7 +22,12 @@ if (!class_exists('TicketListShortcodeUser'))
       $online_decices_ids = $this->get_online_devices_ids($online_devices);
       $selected_devices = $this->handle_device_list($online_decices_ids);
 
+  
+
       if(isset($_GET['fullscreen'])) {
+        if(!isset($_GET['width'])) {
+          echo '<div id="refreshnow" data-now="1"></div>';
+        }
         echo '<input type="text" id="fullscreen" disabled  hidden value="' . isset($_GET['fullscreen']) . '">';
         $device_colums = floor($_GET['width']/ $ticket_width);
         $ticket_rows = max(floor(($_GET['height'] - $initial_height) / $ticket_height), 1);
