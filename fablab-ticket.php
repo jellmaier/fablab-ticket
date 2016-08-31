@@ -8,7 +8,7 @@ Author: Jakob Ellmaier
 Author URI: http://medienbausatz.at
 GitHub Plugin URI: https://github.com/jellmaier/fablab-ticket
 GitHub Branch:     master
-Licence: GPLv3
+License: GPLv3
 */
 
 //namespace fablab_ticket;
