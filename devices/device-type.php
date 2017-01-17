@@ -344,7 +344,6 @@ function get_free_device_of_device_type($term_id, $user_id = 0){
   $post = $temp_post;
 
   return $device_list;
-  //return count($device_list);
 }
 
 
@@ -353,8 +352,10 @@ function get_device_of_device_types_ajax() {
   $ticket_type = sanitize_text_field($_POST['ticket_type']);
   $device_id = sanitize_text_field($_POST['device_id']);
 
-  if($ticket_type == 'device')
-    $device_type_id = wp_get_post_terms($device_id, 'device_type', array("fields" => "ids"))[0];
+  if($ticket_type == 'device'){
+    $device_type_id_array = wp_get_post_terms($device_id, 'device_type', array("fields" => "ids"));
+    $device_type_id = $device_type_id_array[0];
+  }
   else if ($ticket_type == 'device_type')
     $device_type_id = $device_id;
   else

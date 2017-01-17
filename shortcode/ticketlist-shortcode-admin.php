@@ -48,8 +48,8 @@ if (!class_exists('TicketListShortcodeAdmin'))
         'time-tickets' => fablab_get_captions('time_tickets_caption'),
       );
 
-      if (fablab_get_option('tickets_permission') == '1')
-        $option_captions += [ 'instruction-tickets' => fablab_get_captions('instruction_requests_caption') ];
+      //if (fablab_get_option('tickets_permission') == '1')
+      //  $option_captions += ([ 'instruction-tickets' => fablab_get_captions('instruction_requests_caption') ]);
 
         //  array_push($option_captions, ('instruction-tickets' => fablab_get_captions('instruction_requests_caption')));
 

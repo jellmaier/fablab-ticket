@@ -128,9 +128,7 @@ function device_admin_init(){
 function device_details_meta() {
   global $post;
 
-  $device_type_selected_array = wp_get_post_terms($post->ID, 'device_type', array("fields" => "ids"));
-  $device_type_selected = $device_type_selected_array[0];
-  
+  $device_type_selected = wp_get_post_terms($post->ID, 'device_type', array("fields" => "ids"))[0];
   $device_type_list = get_terms('device_type', array(
     'orderby'    => 'name',
     'hide_empty' => '0'
@@ -199,13 +197,11 @@ function get_device_type_color_field($post_id) {
 }
 
 function get_device_type_by_device_id($post_id) {
-  $return_array = wp_get_post_terms($post_id, 'device_type', array("fields" => "ids"));
-  return $return_array[0];
+  return wp_get_post_terms($post_id, 'device_type', array("fields" => "ids"))[0];
 }
 
 function get_device_type_name_by_device_id($post_id) {
-  $return_array = wp_get_post_terms($post_id, 'device_type', array("fields" => "names"));
-  return $return_array[0];
+  return wp_get_post_terms($post_id, 'device_type', array("fields" => "names"))[0];
 }
 
 
