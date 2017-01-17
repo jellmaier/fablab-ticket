@@ -128,7 +128,12 @@ function device_admin_init(){
 function device_details_meta() {
   global $post;
 
-  $device_type_selected = wp_get_post_terms($post->ID, 'device_type', array("fields" => "ids"))[0];
+
+
+  //$device_type_selected_array = wp_get_post_terms($post->ID, 'device_type', array("fields" => "ids"));
+  //$device_type_selected = $device_type_selected_array[0];
+  $device_type_selected = (wp_get_post_terms($post->ID, 'device_type', array("fields" => "ids"))[0]);
+  
   $device_type_list = get_terms('device_type', array(
     'orderby'    => 'name',
     'hide_empty' => '0'
