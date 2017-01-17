@@ -13,8 +13,9 @@ jQuery(document).ready(function($){
   };
   $.post(ajaxurl, data, function(response) {
     var options = JSON.parse(response);
-    max_time = parseInt(options.ticket_max_time);
-    time_interval = parseInt(options.ticket_time_interval);
+    $.max_time = parseInt(options.ticket_max_time);
+    $.time_interval = parseInt(options.ticket_time_interval);
+    $.calc_time = (options.ticket_calcule_waiting_time == '1')? true : false;
   })
   data = {
     action: 'get_fablab_captions'
@@ -205,7 +206,7 @@ jQuery(document).ready(function($){
 
   // on click get device ticket
   // load overlay content
-  $('.assign-ticket').on('click', function(event) {
+  $('.aassign-ticket').on('click', function(event) {
     //Get Ticket option
     ticket = $(this).parent('div');
 
@@ -227,21 +228,90 @@ jQuery(document).ready(function($){
     $("#overlay-background").fadeIn(600);
   })
 
+    // on click edit ticket
+  $('.assign-ticket').on('click', function(event) {
+    $.ticket = $(this).parent('div');
+    $.edit_ticket = true;
+
+    load_assign_ticket();
+    show_overlay($);
+  })
+
+  function load_assign_ticket() {
+
+    ticket_type = $.ticket.data('device-type');
+
+    edit_box = $("#device-ticket-box");
+
+    // Close icon
+    edit_box.append('<a href="#" class="close">x</a>');
+
+    // Title
+    edit_box.append('<h2>'+ fl_ticket.assign_ticket + '</h2>');
+
+    //Body
+
+    //device Select
+    device_select = $('<select id="ticket-device-select"></select>');
+    device_select_p = $('<p>' + fl_ticket.ticket_device + '  : </p>');
+    device_select_p.append(device_select);
+    set_device_select(device_select, $.ticket.data('user-id'), ticket_type, $.ticket.data('device-id'));
+    edit_box.append(device_select_p);
+
+    if($.calc_time) {
+      //Eddit Time Options
+      edit_box.append('<p>' + fl_ticket.ticket_duration + ': <select id="ticket-time-select"></select></p>');
+      $("#ticket-time-select").empty();
+      for (time = $.time_interval; time < $.max_time; time+=$.time_interval) {
+        $("#ticket-time-select").append( new Option(minutesToHours(time), time) );
+      }
+      $("#ticket-time-select").append( new Option(minutesToHours($.max_time), $.max_time) );
+      $("#ticket-time-select").val($.ticket.data('duration'));
+    }
+    
+    //add Buttons
+    edit_box.append('<input type="submit" id="submit-ticket" class="button-primary" value="' + fl_ticket.assign_ticket + '"/>');
+    edit_box.append('<input type="submit" id="cancel-ticket" class="button-primary" value="' + fl_ticket.ticket_cancel + '"/>');  
+  }
+
+  function set_device_select(device_select, user_id, ticket_type, device_id) {
+    // Set Device Name Dropdown
+    data = {
+      action: 'get_device_of_device_types',
+      user_id: user_id,
+      ticket_type: ticket_type,
+      device_id: device_id,
+    };
+    $.post(ajaxurl, data, function(response) {
+      var device_type_list = JSON.parse(response);
+      $.each(device_type_list, function(id, name) {
+        device_select.append( new Option(this.name, this.id) );
+      });
+      if(ticket_type == 'device')
+        device_select.val(device_id);
+    })  
+  }
+
 
   // on click submit ticket
-  $('#submit-ticket').on('click', function(){
+     // on click submit ticket
+  $('body').on('click','#submit-ticket', function(){
+
+    if($.calc_time)
+      duration = $('#ticket-time-select :selected').val();
+    else
+      duration = $.max_time;
 
     data = {
       action: 'add_timeticket',
-      device_id:  ticket.data('device-id'),
-      duration:  $("#time-select").val(),
-      user_id:  ticket.data('user-id'),
-      ticket_id:  ticket.data('ticket-id'),
+      device_id:  $('#ticket-device-select :selected').val(),
+      duration:  duration,
+      user_id:  $.ticket.data('user-id'),
+      ticket_id:  $.ticket.data('ticket-id'),
     };
     $.post(ajaxurl, data, function(response) {
-      ticket.hide();
       close_overlay($, orig_overflow);
-      message_success($, time_ticket_caption + " für das " + device_caption + ": " + ticket.data('device-name') + ", erfolgreich erstellt!", true);
+      message_success($, time_ticket_caption + " für das " + fl_ticket.ticket_device + ": " + $.ticket.data('device-name') + ", erfolgreich erstellt!", true);
     })
   })
 
@@ -288,10 +358,10 @@ jQuery(document).ready(function($){
 
 
   // on click cancle ticket
-  $('.cancel-overlay').on('click', function(){
+  $('body').on('click', '#cancel-ticket', function(){
     close_overlay($, orig_overflow);
   })
-  $('.close').on('click', function() {
+  $('body').on('click', '.close', function() {
     close_overlay($, orig_overflow);
   })
   $('.fl-overlay-layer').on('click', function() {
@@ -310,11 +380,20 @@ function reloadPage(){
 }
 
 // closes overlay
+function show_overlay($){
+  // show container
+  $("#overlay-ticket").fadeIn(600);
+  $("#device-ticket-box").show();
+  $('body').css( 'overflow', 'hidden' );
+}
+
+// closes overlay
 // if message set, display message and reload
 function close_overlay($, orig_overflow){
   $('body').css( 'overflow', orig_overflow );    
   $(".fl-overlay").hide();
   $("#overlay-background").fadeOut(600);
+  $("#device-ticket-box").empty();
 }
 
 // display message

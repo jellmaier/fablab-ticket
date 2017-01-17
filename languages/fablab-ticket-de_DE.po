@@ -1,0 +1,312 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: FabLab Ticket\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-01-13 01:18+0000\n"
+"PO-Revision-Date: Fri Jan 13 2017 11:53:31 GMT+0100 (CET)\n"
+"Last-Translator: admin <admin@medienbausatz.at>\n"
+"Language-Team: \n"
+"Language: German\n"
+"Plural-Forms: nplurals=2; plural=n != 1\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Generator: Loco - https://localise.biz/\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-KeywordsList: _:1;gettext:1;dgettext:2;ngettext:1,2;dngettext:2,3;"
+"__:1;_e:1;_c:1;_n:1,2;_n_noop:1,2;_nc:1,2;__ngettext:1,2;__ngettext_noop:1,2;"
+"_x:1,2c;_ex:1,2c;_nx:1,2,4c;_nx_noop:1,2,3c;_n_js:1,2;_nx_js:1,2,3c;"
+"esc_attr__:1;esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;"
+"esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
+"X-Loco-Target-Locale: de_DE"
+
+#: ../admin-page.php:17
+msgid "delete_others_posts"
+msgstr ""
+
+#: ../admin-page.php:18
+msgid "fablab_options"
+msgstr ""
+
+#. ID/Name of the field
+#: ../admin-page.php:58
+msgid "Calculate waiting time"
+msgstr ""
+
+#: ../devices/device-type.php:15 ../devices/device-type.php:16
+msgid "type"
+msgstr ""
+
+#: ../devices/device-type.php:23
+#, php-format
+msgid "Popular %s"
+msgstr ""
+
+#: ../devices/device-type.php:31
+#, php-format
+msgid "Separate %s with commas"
+msgstr ""
+
+#: ../devices/device-type.php:32
+#, php-format
+msgid "Add or remove %s"
+msgstr ""
+
+#: ../devices/device-type.php:33
+#, php-format
+msgid "Choose from the most used %s"
+msgstr ""
+
+#: ../devices/device-type.php:34 ../devices/device.php:59
+#, php-format
+msgid "No %s found."
+msgstr ""
+
+#: ../devices/device-type.php:81 ../devices/device-type.php:98
+msgid "The color will be shown as device and devicetype color."
+msgstr ""
+
+#: ../devices/device-type.php:111
+msgid "Name"
+msgstr ""
+
+#: ../devices/device-type.php:112
+msgid "Color"
+msgstr ""
+
+#: ../devices/device-type.php:113
+msgid "Slug"
+msgstr ""
+
+#: ../devices/device-type.php:114
+msgid "Posts"
+msgstr ""
+
+#: ../devices/device.php:55
+#, php-format
+msgid "View %s"
+msgstr ""
+
+#: ../devices/device.php:58
+#, php-format
+msgid "Parent %s:"
+msgstr ""
+
+#: ../devices/device.php:60
+#, php-format
+msgid "No %s found in trash."
+msgstr ""
+
+#: ../devices/device.php:65 ../ticket/ticket.php:67 ../timeticket/instruction.php:
+#: 64 ../timeticket/timeticket.php:65
+msgid "Description."
+msgstr ""
+
+#: ../devices/device.php:162
+#, php-format
+msgid "%s qualification"
+msgstr ""
+
+#. URI of the plugin
+msgid "https://github.com/jellmaier/fablab-ticket"
+msgstr ""
+
+#. Description of the plugin
+msgid "Ticketing and Reservation System for FabLabs"
+msgstr ""
+
+#: ../js/strings.php:6
+msgid "You have agreed to the terms and conditions"
+msgstr "Du hast den AGBs zugestimmt"
+
+#: ../js/strings.php:8
+#, php-format
+msgid "Save %s"
+msgstr "%s speichern"
+
+#: ../js/strings.php:12
+msgid "Device"
+msgstr "Gerät"
+
+#: ../js/strings.php:14
+msgid "Duration"
+msgstr "Dauer"
+
+#: ../js/strings.php:16
+msgid "Delete"
+msgstr "Löschen"
+
+#: ../js/strings.php:18
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: ../js/strings.php:20
+#, php-format
+msgid "Confirm the %s"
+msgstr "%s bestätigen"
+
+#: ../js/strings.php:22
+#, php-format
+msgid "Get %s"
+msgstr "%s ziehen"
+
+#: ../js/strings.php:24 ../js/strings.php:71
+#, php-format
+msgid "%s has been deleted!"
+msgstr "%s wurde gelöscht!"
+
+#: ../js/strings.php:26 ../js/strings.php:73
+#, php-format
+msgid "%s could not be deleted!"
+msgstr "%s konnte nicht gelöscht werden!"
+
+#: ../js/strings.php:28 ../js/strings.php:67
+#, php-format
+msgid "%s for {0}, successfully created!"
+msgstr "%s von {0}, erfolgreich geändert!"
+
+#: ../js/strings.php:30 ../js/strings.php:69
+#, php-format
+msgid "Could not create %s!"
+msgstr "%s konnte nicht erstellt werden!"
+
+#: ../js/strings.php:32
+#, php-format
+msgid "%s for {0}, successfully changed!"
+msgstr "%s von {0}, erfolgreich geändert!"
+
+#: ../js/strings.php:34
+#, php-format
+msgid "%s could not be changed!"
+msgstr "%s konnte nicht geändert werden."
+
+#: ../js/strings.php:41
+msgid "{0} Hour"
+msgstr "{0} Stunde"
+
+#: ../js/strings.php:43
+msgid "{0} Hours"
+msgstr "{0} Stunden"
+
+#: ../js/strings.php:45
+msgid "{0} Minute"
+msgstr "{0} Minute"
+
+#: ../js/strings.php:47
+msgid "{0} Minutes"
+msgstr "{0} Minuten"
+
+#: ../js/strings.php:54
+#, php-format
+msgid "%s from: {0}, finished!"
+msgstr "%s von {0}, beendet!"
+
+#: ../js/strings.php:54 ../js/strings.php:56 ../js/strings.php:58 ../js/strings.
+#: php:60
+msgid "Time-Ticket"
+msgstr "Reservierung"
+
+#: ../js/strings.php:56
+#, php-format
+msgid "%s could not be stopped!"
+msgstr "%s konnte nicht gestoppt werden!"
+
+#: ../js/strings.php:58
+#, php-format
+msgid "%s from: {0}, extended!"
+msgstr "%s von {0}, verländert!"
+
+#: ../js/strings.php:60
+#, php-format
+msgid "%s could not be extended, perhaps the maximum duration is exceeded!"
+msgstr ""
+"%s konnte nicht verlängert werden, vielleicht ist die maximale Dauer "
+"überschritten!"
+
+#: ../js/strings.php:67 ../js/strings.php:69 ../js/strings.php:71 ../js/strings.
+#: php:73
+msgid "Instruction-Ticket"
+msgstr "Einschulungsanfrage"
+
+#: ../timeticket/instruction.php:50 ../timeticket/timeticket.php:51
+msgctxt "ticket"
+msgid "Add New"
+msgstr ""
+
+#: ../user-list.php:15 ../user-list.php:16
+msgid "User List"
+msgstr ""
+
+#: ../admin-page.php:15 ../admin-page.php:16
+msgid "Options"
+msgstr "Einstellungen"
+
+#: ../devices/device-type.php:22 ../devices/device.php:57
+#, php-format
+msgid "Search %s"
+msgstr "%s suche"
+
+#: ../devices/device-type.php:24 ../devices/device.php:56
+#, php-format
+msgid "All %s"
+msgstr "Alle %s"
+
+#: ../devices/device-type.php:27 ../devices/device.php:54 ../js/strings.php:10
+#, php-format
+msgid "Edit %s"
+msgstr "%s bearbeiten"
+
+#: ../devices/device-type.php:28
+#, php-format
+msgid "Update %s"
+msgstr "%s aktualisieren"
+
+#: ../devices/device-type.php:29 ../devices/device.php:52 ../ticket/ticket.php:54
+#, php-format
+msgid "Add New %s"
+msgstr "%s hinzufügen"
+
+#: ../devices/device-type.php:30
+#, php-format
+msgid "New %s Name"
+msgstr "Neuer %s Name"
+
+#: ../devices/device.php:51 ../ticket/ticket.php:53
+msgid "Add New"
+msgstr "Hinzufügen"
+
+#: ../devices/device.php:53
+#, php-format
+msgid "New %s"
+msgstr "Neues %s"
+
+#. Name of the plugin
+msgid "FabLab Ticket"
+msgstr "FabLab Ticket"
+
+#. Author of the plugin
+msgid "Jakob Ellmaier"
+msgstr "Jakob Ellmaier"
+
+#. Author URI of the plugin
+msgid "http://medienbausatz.at"
+msgstr "http://medienbausatz.at"
+
+#: ../js/strings.php:8 ../js/strings.php:10 ../js/strings.php:20 ../js/strings.
+#: php:22 ../js/strings.php:24 ../js/strings.php:26 ../js/strings.php:28 ..
+#: js/strings.php:30 ../js/strings.php:32 ../js/strings.php:34 ..
+#: shortcode/ticket-shortcode-tickets.php:130
+msgid "Ticket"
+msgstr "Ticket"
+
+#: ../shortcode/ticket-shortcode-instructions.php:44
+#, php-format
+msgid "<p>Here you can see your %s</p>"
+msgstr "<p>Hier werden dir deine %s angezeigt:</p>"
+
+#: ../shortcode/ticket-shortcode-tickets.php:96
+#, php-format
+msgid "<p>Here you can see the available %s:</p>"
+msgstr "<p>Hier werden dir die verfügbaren %s angezeigt:</p>"

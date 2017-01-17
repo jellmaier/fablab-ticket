@@ -1,0 +1,161 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: FabLab Ticket\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-01-13 01:18+0000\n"
+"PO-Revision-Date: 2017-01-13 01:18+0000\n"
+"Last-Translator: admin <admin@medienbausatz.at>\n"
+"Language-Team: German\n"
+"Language: de-DE\n"
+"Plural-Forms: nplurals=2; plural=n != 1\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Generator: Loco - https://localise.biz/\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-KeywordsList: _:1;gettext:1;dgettext:2;ngettext:1,2;dngettext:2,3;"
+"__:1;_e:1;_c:1;_n:1,2;_n_noop:1,2;_nc:1,2;__ngettext:1,2;__ngettext_noop:1,2;"
+"_x:1,2c;_ex:1,2c;_nx:1,2,4c;_nx_noop:1,2,3c;_n_js:1,2;_nx_js:1,2,3c;"
+"esc_attr__:1;esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;"
+"esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
+"X-Loco-Target-Locale: de_DE"
+
+#: admin-page.php:17
+msgid "delete_others_posts"
+msgstr ""
+
+#: admin-page.php:18
+msgid "fablab_options"
+msgstr ""
+
+#: devices/device-type.php:15 devices/device-type.php:16
+msgid "type"
+msgstr ""
+
+#: devices/device-type.php:23
+#, php-format
+msgid "Popular %s"
+msgstr ""
+
+#: devices/device-type.php:31
+#, php-format
+msgid "Separate %s with commas"
+msgstr ""
+
+#: devices/device-type.php:32
+#, php-format
+msgid "Add or remove %s"
+msgstr ""
+
+#: devices/device-type.php:33
+#, php-format
+msgid "Choose from the most used %s"
+msgstr ""
+
+#: devices/device-type.php:34 devices/device.php:59
+#, php-format
+msgid "No %s found."
+msgstr ""
+
+#: devices/device-type.php:112
+msgid "Color"
+msgstr ""
+
+#: devices/device.php:55
+#, php-format
+msgid "View %s"
+msgstr ""
+
+#: devices/device.php:58
+#, php-format
+msgid "Parent %s:"
+msgstr ""
+
+#: devices/device.php:60
+#, php-format
+msgid "No %s found in trash."
+msgstr ""
+
+#: devices/device.php:65
+msgid "Description."
+msgstr ""
+
+#: devices/device.php:162
+#, php-format
+msgid "%s qualification"
+msgstr ""
+
+#. Description of the plugin
+msgid "Ticketing and Reservation System for FabLabs"
+msgstr ""
+
+#. URI of the plugin
+msgid "https://github.com/jellmaier/fablab-ticket"
+msgstr ""
+
+#: admin-page.php:15 admin-page.php:16
+msgid "Options"
+msgstr "Einstellungennnn"
+
+#: devices/device-type.php:22 devices/device.php:57
+#, php-format
+msgid "Search %s"
+msgstr "%s suche"
+
+#: devices/device-type.php:24 devices/device.php:56
+#, php-format
+msgid "All %s"
+msgstr "Alle %s"
+
+#: devices/device-type.php:27 devices/device.php:54
+#, php-format
+msgid "Edit %s"
+msgstr "%s bearbeiten"
+
+#: devices/device-type.php:28
+#, php-format
+msgid "Update %s"
+msgstr "%s aktualisieren"
+
+#: devices/device-type.php:29 devices/device.php:52 ticket/ticket.php:54
+#, php-format
+msgid "Add New %s"
+msgstr "%s hinzufügen"
+
+#: devices/device-type.php:30
+#, php-format
+msgid "New %s Name"
+msgstr "Neuer %s Name"
+
+#: devices/device.php:51 ticket/ticket.php:53
+msgid "Add New"
+msgstr "Hinzufügen"
+
+#: devices/device.php:53
+#, php-format
+msgid "New %s"
+msgstr "Neues %s"
+
+#: shortcode/ticket-shortcode-instructions.php:44
+#, php-format
+msgid "<p>Here you can see your %s</p>"
+msgstr "<p>Hier werden dir deine %s angezeigt:</p>"
+
+#: shortcode/ticket-shortcode-tickets.php:96
+#, php-format
+msgid "<p>Here you can see the available %s:</p>"
+msgstr "<p>Hier werden dir die verfügbaren %s angezeigt:</p>"
+
+#. Name of the plugin
+msgid "FabLab Ticket"
+msgstr "FabLab Ticket"
+
+#. Author of the plugin
+msgid "Jakob Ellmaier"
+msgstr "Jakob Ellmaier"
+
+#. Author URI of the plugin
+msgid "http://medienbausatz.at"
+msgstr "http://medienbausatz.at"

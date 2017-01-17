@@ -46,8 +46,14 @@ if (!class_exists('TicketListShortcodeAdmin'))
         'devices' => fablab_get_captions('devices_caption'),
         'tickets' => fablab_get_captions('tickets_caption'),
         'time-tickets' => fablab_get_captions('time_tickets_caption'),
-        'instruction-tickets' => fablab_get_captions('instruction_requests_caption'),
       );
+
+      if (fablab_get_option('tickets_permission') == '1')
+        $option_captions += [ 'instruction-tickets' => fablab_get_captions('instruction_requests_caption') ];
+
+        //  array_push($option_captions, ('instruction-tickets' => fablab_get_captions('instruction_requests_caption')));
+
+
       $this->display_options($option_captions);
 
       $option_captions = array(
@@ -57,7 +63,7 @@ if (!class_exists('TicketListShortcodeAdmin'))
       //$this->display_options($option_captions, '&#9881 Settings');
 
       if(isset($_GET['devices'])){
-        $this->display_devices_page();
+        $this->display_device_types_page();
 
       } else if(isset($_GET['tickets'])) {
         echo '<h2>' . fablab_get_captions('tickets_caption') . '</h2>';
@@ -80,10 +86,10 @@ if (!class_exists('TicketListShortcodeAdmin'))
         }      
 
       } else {
-        $this->display_devices_page();
+        $this->display_device_types_page();
       }
 
-      $this->print_assign_overlay();
+      $this->print_overlay_div();
 
     }
 
@@ -122,51 +128,57 @@ if (!class_exists('TicketListShortcodeAdmin'))
       echo '</div>';
 
     }
-
-
+    
     //--------------------------------------------------------
-    // Display Device
+    // Display Device-Types
     //--------------------------------------------------------
-    private function display_devices($device_id = '') {
+    private function display_device_types($device_type_id = '') {
 
-      $this->print_active_timetickets($device_id);
+      $device_list = get_devicees_of_device_type($device_type_id);
+
+
+      $this->print_active_timetickets($device_list);
      
       echo '<h2>' . fablab_get_captions('tickets_caption') . '</h2>';
-      $this->print_deactivatet_tickets($device_id);
-      $this->print_active_tickets($device_id);
+      $this->print_deactivatet_tickets($device_type_id, 'device_type');
+      $this->print_active_tickets($device_type_id, 'device_type');
+
+      if (fablab_get_option('tickets_permission') == '1') {
 
       echo '<h2>' . fablab_get_captions('instruction_requests_caption') . '</h2>';
-
-      if($device_id) {
-        $this->print_device_instruction($device_id);
-      } else {
-        $device_list = get_online_devices();
-        foreach($device_list as $device) {
-          $this->print_device_instruction($device['id']);
+        if($device_id) {
+          $this->print_device_instruction($device_id);
+        } else {
+          $device_list = get_online_devices();
+          foreach($device_list as $device) {
+            $this->print_device_instruction($device['id']);
+          }
         }
       }
 
     }
-
     //--------------------------------------------------------
-    // Display Device Page
+    // Display Device-Type Page
     //--------------------------------------------------------
-    private function display_devices_page() {
+    private function display_device_types_page() {
 
 
       echo '<h2>' . fablab_get_captions('devices_caption') . '</h2>';
       echo '<p>Hier werden dir die aktiven ' . fablab_get_captions('devices_caption') . ' angezeigt:</p>';
-      $device_list = get_online_devices();
+      $device_type_list = get_terms('device_type', array(
+        'orderby'    => 'name',
+        'hide_empty' => '1'
+      ));
 
-      if ( count($device_list) != 0 ) {  
-        foreach($device_list as $device) {
+      if ( count($device_type_list) != 0 ) {  
+        foreach($device_type_list as $device_type) {
           echo '<div class="device-list-box">';
-          echo '<div class="device-toggle" style="border-left: 4px solid ' . get_post_meta($device['id'], 'device_color', true )
-          . ';"><p><b>' . $device['device'] . '</b></p></div>';
+          echo '<div class="device-toggle" style="border-left: 4px solid ' . get_term_meta($device_type->term_id, 'tag_color', true)
+          . ';"><p><b>' . $device_type->name . '</b></p></div>';
 
           echo '<div class="device-dropdown" hidden>';
           echo '<div class="device-listing">';
-          $this->display_devices($device['id']);
+          $this->display_device_types($device_type->term_id);
           echo '</div>';
           echo '<div class="device-close"><p><b>x</b> Schließen</br></p></div>';
           echo '</div></div>';
@@ -181,28 +193,62 @@ if (!class_exists('TicketListShortcodeAdmin'))
     //--------------------------------------------------------
     // Display active Tickets
     //--------------------------------------------------------
-    function print_active_tickets($device_id = '') {
+    function print_active_tickets($device_id = '', $ticket_device_type = 'device') {
       global $post;
 
-      if($device_id){
+
+      if($ticket_device_type == 'device') {
+
+        if($device_id){
+          $meta_array = array(
+            array(
+                'key'=>'ticket_type',
+                'value'=> 'device',
+            ),
+            array(
+              'key'=>'device_id',
+              'value'=> $device_id,
+            )
+          );
+        } else {
+          $meta_array = array(
+            array(
+                'key'=>'ticket_type',
+                'value' => array('device', 'device_type'),
+                'compare' => 'IN'
+            )
+          );
+        }
+      } else if ($ticket_device_type == 'device_type') {
+
+        $device_list = get_devicees_of_device_type($device_id);
         $meta_array = array(
-          array(
-              'key'=>'ticket_type',
-              'value'=> 'device',
-          ),
-          array(
-            'key'=>'device_id',
-            'value'=> $device_id,
-          )
-        );
-      } else {
-        $meta_array = array(
-          array(
-              'key'=>'ticket_type',
-              'value'=> 'device',
-          )
-        );
-      }
+            'relation'=>'OR',
+            array(
+              'relation'=>'and',
+              array(
+                  'key'=>'ticket_type',
+                  'value'=> 'device_type',
+              ),
+              array(
+                'key'=>'device_id',
+                'value'=> $device_id,
+              )
+            ),
+            array(
+              'relation'=>'and',
+              array(
+                  'key'=>'ticket_type',
+                  'value'=> 'device',
+              ),
+              array(
+                'key'=>'device_id',
+                'value'=> $device_list,
+              )
+            )
+          );
+      }  
+
 
       echo '<p>Hier werden dir die aktiven ' . fablab_get_captions('tickets_caption') . ' angezeigt:</p>';
 
@@ -215,25 +261,42 @@ if (!class_exists('TicketListShortcodeAdmin'))
         'meta_query'=> $meta_array,
       );
       $ticket_query = new WP_Query($query_arg);
+
+      if (fablab_get_option('ticket_calcule_waiting_time') == '1')
+          $calc_waiting_time = true;
+        else
+          $calc_waiting_time = false;
+
+
       if ( $ticket_query->have_posts() ) {
         echo '<div id="ticket-listing" class="ticket-list">';
         while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
-          $waiting = get_waiting_time_and_persons(get_post_meta($post->ID, 'device_id', true ), $post->ID);
-          $color = get_post_meta(get_post_meta($post->ID, 'device_id', true ), 'device_color', true );
+          $ticket_type = get_post_meta($post->ID, 'ticket_type', true );
+          $waiting = get_waiting_time_and_persons(get_post_meta($post->ID, 'device_id', true ), $ticket_type, $post->ID);
           $device_id = get_post_meta($post->ID, 'device_id', true );
-          $available = ($waiting['time'] == 0);
+          if ($ticket_type == 'device') {
+            $device_title = get_device_title_by_id($device_id);
+            $color = get_device_type_color_field(get_post_meta($post->ID, 'device_id', true ));
+            $available = is_device_availabel($device_id);
+          } else if ($ticket_type == 'device_type') {
+            $device_title = get_term( $device_id, 'device_type')->name;
+            $color = get_term_meta($device_id, 'tag_color', true);
+            $available = (count(get_free_device_of_device_type($device_id)) > 0);
+          }
           ?>
-          <div class="<?= $available ? "fl-ticket-element blink" :  "fl-ticket-element"; ?>" 
+          <div class="fl-ticket-element<?= $available ? " blink" : ""; ?>" 
             style="border-left: 5px solid <?= $color ?>;"
-            data-ticket-id="<?= $post->ID ?>" data-device-id="<?=  $device_id ?>"
+            data-ticket-id="<?= $post->ID ?>" data-device-id="<?=  $device_id ?>" data-device-type="<?= $ticket_type ?>" 
             data-duration="<?=  get_post_meta($post->ID, 'duration', true ) ?>"
-            data-user-id="<?=  $post->post_author ?>" data-device-name="<?= get_device_title_by_id($device_id) ?>"
-            data-user="<?=  get_user_by('id', $post->post_author)->display_name ?>" >
+            data-user-id="<?=  $post->post_author ?>" data-device-name="<?= $device_title ?>"
+            data-user="<?=  get_user_by('id', $post->post_author)->display_name; ?>">
             <p><?= the_time('l, j. F, G:i') ?><p>
             <h2><?= $post->post_title ?></h2>
-            <p>für <?= fablab_get_captions('device_caption') ?> : <b><?=  get_device_title_by_id($device_id) ?></b> </br> 
-            Benutzungsdauer: <b><?=  get_post_time_string(get_post_meta($post->ID, 'duration', true )) ?></b></br>
+            <p>für <?= fablab_get_captions('device_caption') ?> : <b><?=  $device_title ?></b> </p> 
+            <?php if($calc_waiting_time) { ?>
+            <p>Benutzungsdauer: <b><?=  get_post_time_string(get_post_meta($post->ID, 'duration', true )) ?></b></br>
             Vorraussichtlich Wartezeit: <b><?= get_post_time_string($waiting['time'], true) ?></b></p>
+            <?php } ?>
             <input type="submit" <?= $available ? "" :  "disabled"; ?>
             class="ticket-btn assign-ticket" value="<?= fablab_get_captions('ticket_caption') ?> zuweisen"/>
             <input type="submit" class="ticket-btn deactivate-ticket" value="<?= fablab_get_captions('ticket_caption') ?> deaktivieren"/>
@@ -274,7 +337,7 @@ if (!class_exists('TicketListShortcodeAdmin'))
           array(
             'key'=>'timeticket_device',
             'value'=> $device_id,
-            'compare' => '='
+            'compare' => 'IN'
           )
         );
       } else {
@@ -295,6 +358,11 @@ if (!class_exists('TicketListShortcodeAdmin'))
 
       $time_delay = (fablab_get_option('ticket_delay') * 60);
 
+      if (fablab_get_option('ticket_calcule_waiting_time') == '1')
+          $calc_waiting_time = true;
+        else
+          $calc_waiting_time = false;
+
 
       $query_arg = array(
         'post_type' => 'timeticket',
@@ -307,18 +375,22 @@ if (!class_exists('TicketListShortcodeAdmin'))
       if ( $ticket_query->have_posts() ) {
         while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
           $device_id = get_post_meta($post->ID, 'timeticket_device', true );
-          $color = get_post_meta($device_id, 'device_color', true );
+          $color = get_device_type_color_field($device_id);
           ?>
           <div class="fl-ticket-element" style="border: 4px solid <?= $color ?>;"
             data-user="<?= get_user_by('id', get_post_meta($post->ID, 'timeticket_user', true ))->display_name ?>"
             data-time-ticket-id="<?= $post->ID ?>">
-            <p><?= fablab_get_captions('device_caption') ?> : <b><?=  get_device_title_by_id($device_id) ?></b> </p> 
+            <p><?= fablab_get_captions('device_caption') ?>: <b><?=  get_device_title_by_id($device_id) ?></b> </p> 
             <h2><?= $post->post_title ?></h2>
             <p>Start Zeit: <b><?=  get_timediff_string(get_post_meta($post->ID, 'timeticket_start_time', true )) ?></b></p>
+            <?php if($calc_waiting_time) { ?>
             <p>End Zeit: <b><?=  get_timediff_string(get_post_meta($post->ID, 'timeticket_end_time', true )) ?></b></p>
+            <?php } ?>
             <input type="submit" class="ticket-btn stop-time-ticket" value="Jetzt Beenden"/>
             <input type="submit" class="ticket-btn delete-time-ticket" value="Löschen"/>
+            <?php if($calc_waiting_time) { ?>
             <input type="submit" data-minutes="30" class="ticket-btn extend-time-ticket" value="+30 Minuten"/>
+            <?php } ?>
           </div>
           <?php
         endwhile;
@@ -333,36 +405,73 @@ if (!class_exists('TicketListShortcodeAdmin'))
     //--------------------------------------------------------
     // Display deactivated tickets
     //--------------------------------------------------------
-    function print_deactivatet_tickets($device_id = '') {
+    function print_deactivatet_tickets($device_id = '', $ticket_device_type = 'device') {
       global $post;
 
-      if($device_id){
+      if($ticket_device_type == 'device') {
+
+        if($device_id){
+          $meta_array = array(
+            array(
+                'key'=>'ticket_type',
+                'value'=> 'device',
+            ),
+            array(
+              'key'=>'device_id',
+              'value'=> $device_id,
+            )
+          );
+        } else {
+          $meta_array = array(
+            array(
+                'key'=>'ticket_type',
+                'value' => array('device', 'device_type'),
+                'compare' => 'IN'
+            )
+          );
+        }
+      } else if ($ticket_device_type == 'device_type') {
+
+        $device_list = get_devicees_of_device_type($device_id);
         $meta_array = array(
-          array(
-              'key'=>'ticket_type',
-              'value'=> 'device',
-          ),
-          array(
-            'key'=>'device_id',
-            'value'=> $device_id,
-          )
-        );
-      } else {
-        $meta_array = array(
-          array(
-              'key'=>'ticket_type',
-              'value'=> 'device',
-          )
-        );
-      }
+            'relation'=>'OR',
+            array(
+              'relation'=>'and',
+              array(
+                  'key'=>'ticket_type',
+                  'value'=> 'device_type',
+              ),
+              array(
+                'key'=>'device_id',
+                'value'=> $device_id,
+              )
+            ),
+            array(
+              'relation'=>'and',
+              array(
+                  'key'=>'ticket_type',
+                  'value'=> 'device',
+              ),
+              array(
+                'key'=>'device_id',
+                'value'=> $device_list,
+              )
+            )
+          );
+      }  
 
       $query_arg = array(
         'post_type' => 'ticket',
         'orderby' => 'date', 
-        'order' => 'ASC',
+        'order' => 'DESC',
         'post_status' => 'draft',
         'meta_query'=> $meta_array,
       );
+
+      if (fablab_get_option('ticket_calcule_waiting_time') == '1')
+          $calc_waiting_time = true;
+        else
+          $calc_waiting_time = false;
 
       $ticket_query = new WP_Query($query_arg);
       if ( $ticket_query->have_posts() ) {
@@ -370,20 +479,30 @@ if (!class_exists('TicketListShortcodeAdmin'))
         echo '<div class="draft-toggle"><p class="draft-title">Deaktivierte ' . fablab_get_captions('tickets_caption') . '</p></div>';
         echo '<div id="draft-ticket-listing" hidden>';
         while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
-          $color = get_post_meta(get_post_meta($post->ID, 'device_id', true ), 'device_color', true );
           $device_id = get_post_meta($post->ID, 'device_id', true );
-          $availabel = is_device_availabel($device_id);
           check_and_delete_ticket($post->ID);
+          $ticket_type = get_post_meta($post->ID, 'ticket_type', true );
+          if ($ticket_type == 'device') {
+            $device_title = get_device_title_by_id($device_id);
+            $color = get_device_type_color_field(get_post_meta($post->ID, 'device_id', true ));
+            $availabel = is_device_availabel($device_id);
+          } else if ($ticket_type == 'device_type') {
+            $device_title = get_term( $device_id, 'device_type')->name;
+            $color = get_term_meta($device_id, 'tag_color', true);
+            $availabel = (count(get_free_device_of_device_type($device_id)) > 0);
+          }
           ?>
           <div class="fl-ticket-element draft-content" data-ticket-id="<?= $post->ID ?>" style="border-left: 5px solid <?= $color ?>;"
-            data-ticket-id="<?= $post->ID ?>" data-device-id="<?=  $device_id ?>"
+            data-ticket-id="<?= $post->ID ?>" data-device-id="<?=  $device_id ?>" data-device-type="<?= $ticket_type ?>" 
             data-duration="<?=  get_post_meta($post->ID, 'duration', true ) ?>"
-            data-user-id="<?=  $post->post_author ?>" data-device-name="<?= get_device_title_by_id($device_id) ?>"
-            data-user="<?=  get_user_by('id', $post->post_author)->display_name; ?>" >
+            data-user-id="<?=  $post->post_author ?>" data-device-name="<?= $device_title ?>"
+            data-user="<?=  get_user_by('id', $post->post_author)->display_name; ?>">
             <p><?= the_time('l, j. F, G:i') ?><p>
             <h2><?= $post->post_title ?></h2>
-            <p>für <?= fablab_get_captions('device_caption') ?> : <b><?=  get_device_title_by_id($device_id) ?></b></br> 
-            Benutzungsdauer: <b><?=  get_post_time_string(get_post_meta($post->ID, 'duration', true )) ?></b></p>
+            <p>für <?= fablab_get_captions('device_caption') ?>: <b><?=  $device_title ?></b></p> 
+            <?php if($calc_waiting_time) { ?>
+            <p>Benutzungsdauer: <b><?=  get_post_time_string(get_post_meta($post->ID, 'duration', true )) ?></b></p>
+            <?php } ?>
             <input type="submit" <?= $availabel ? "" :  "disabled"; ?>
             class="ticket-btn assign-ticket" value="<?= fablab_get_captions('ticket_caption') ?> zuweisen"/>
             <input type="submit" class="ticket-btn activate-ticket" value="<?= fablab_get_captions('ticket_caption') ?> aktivieren"/>
@@ -405,7 +524,6 @@ if (!class_exists('TicketListShortcodeAdmin'))
     //--------------------------------------------------------
     function print_device_instruction($device_id) {
       global $post;
-
 
       $color = get_post_meta($device_id, 'device_color', true );
       $device_name = get_device_title_by_id($device_id);
@@ -456,24 +574,16 @@ if (!class_exists('TicketListShortcodeAdmin'))
     }
 
     //--------------------------------------------------------
-    // Display overlay assign Ticket
+    // DIV for Ticket overlay
     //--------------------------------------------------------
-    function print_assign_overlay() {
+
+    private function print_overlay_div(){
+
       ?>
-      <div id="overlay" class="fl-overlay" hidden>
-        <div id="device-ticket-box" class="device-ticket" hidden>
-          <a href="#" class="close">x</a>
-          <h2><?= fablab_get_captions('ticket_caption') ?> zuweisen</h2>
-          <p id="user-name"></p>
-          <p id="device-name"></p>
-          <p id="waiting-time"><p>
-          <p>Dauer: <select id="time-select"></select></p>
-          <input type="submit" id="submit-ticket" class="button-primary" value="<?= fablab_get_captions('ticket_caption') ?> zuweisen"/>
-          <input type="submit" class="button-primary cancel-overlay" value="Abbrechen"/>
-        </div> 
-      <div class="fl-overlay-layer"></div>
+      <div id="overlay-ticket" class="fl-overlay" hidden>
+        <div id="device-ticket-box" class="device-ticket" hidden></div>
+        <div class="fl-overlay-background"></div>
       </div>
-      <div id="overlay-background" class="fl-overlay-background" hidden></div>
       <?php
     }
   }

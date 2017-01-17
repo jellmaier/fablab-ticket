@@ -12,10 +12,10 @@ if (!class_exists('AdminPage'))
 
       function fl_options_page() {
         $parent_slug = 'edit.php?post_type=device';
-        $page_title = __('Options', 'fl');
-        $menu_title = __('Options', 'fl');
-        $capability = 'delete_others_posts';
-        $menu_slug = 'fablab_options';
+        $page_title = __('Options', 'fablab-ticket');
+        $menu_title = __('Options', 'fablab-ticket');
+        $capability = __('delete_others_posts', 'fablab-ticket');
+        $menu_slug = __('fablab_options', 'fablab-ticket');
         $function = 'fablab_options_page';
 
         add_submenu_page( $parent_slug, $page_title, $menu_title, $capability, $menu_slug, $function);
@@ -48,6 +48,15 @@ if (!class_exists('AdminPage'))
           'ticket_permission',                           // ID/Name of the field
           fablab_get_captions('instructions_caption') . ' erforderlich',                    // Title
           'fablab_ticket_permission_function',           // callback
+          'fablab_options',                          // page slug
+          'fablab_settings'                          // section
+        );
+
+        // If user need ticket for permission
+        add_settings_field(
+          'ticket_calcule_waiting_time',             // ID/Name of the field
+          __('Calculate waiting time'),              // Title
+          'fablab_ticket_calcule_waiting_time',      // callback
           'fablab_options',                          // page slug
           'fablab_settings'                          // section
         );
@@ -255,6 +264,7 @@ if (!class_exists('AdminPage'))
 function fablab_get_option($key = 'array') {
   $default_values =  array(
     'tickets_per_user' => '1',
+    'ticket_calcule_waiting_time' => '0',
     'ticket_time_interval' => '15',
     'ticket_max_time' => '120',
     'ticket_online' => '0',
@@ -363,6 +373,9 @@ function fablab_ticket_max_time_function() {
 }
 function fablab_ticket_online_function() {
   echo '<input type="checkbox" name="option_fields[ticket_online]" value="1"' . checked( 1, fablab_get_option('ticket_online'), false ) . '/>';
+}
+function fablab_ticket_calcule_waiting_time() {
+  echo '<input type="checkbox" name="option_fields[ticket_calcule_waiting_time]" value="1"' . checked( 1, fablab_get_option('ticket_calcule_waiting_time'), false ) . '/>';
 }
 function fablab_ticket_delay_function() {
   echo '<input type="text" name="option_fields[ticket_delay]" value="' . fablab_get_option('ticket_delay') . '"/>';

@@ -90,10 +90,15 @@ function get_user_device_permission() {
   $query_arg = array(
     'post_type' => 'device',
     'meta_query' => array(   
-      'relation'=> 'OR',               
+      'relation'=> 'AND',               
       array(
         'key' => 'device_status',                  
         'value' => 'online',               
+        'compare' => '='                 
+      ),
+      array(
+        'key' => 'device_qualification',                  
+        'value' => 'pro',               
         'compare' => '='                 
       )
     ) 

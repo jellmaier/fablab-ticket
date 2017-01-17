@@ -1,5 +1,26 @@
 <?php
 
+
+if (!class_exists('PrintFunctions'))
+{
+  class PrintFunctions
+  {
+    public function __construct()
+    {
+    }
+    //--------------------------------------------------------
+    // Print functions
+    //--------------------------------------------------------
+    public function print_p($text) {
+      printf ($text);
+      esc_html_e( $text );
+      printf (esc_html( $text ));
+      printf (esc_textarea( $text ));
+    }
+
+  }
+}
+
 //namespace fablab_ticket;
 
 if (!class_exists('TicketShortcodeInstructions'))
@@ -8,6 +29,7 @@ if (!class_exists('TicketShortcodeInstructions'))
   {
     public function __construct()
     {
+      
     }
     //--------------------------------------------------------
     // Display User Instruction
@@ -15,10 +37,15 @@ if (!class_exists('TicketShortcodeInstructions'))
     public function display_user_instructions($ticket_query) {
       global $post;
       if ( $ticket_query->have_posts() ) {
-      echo '<div class="instruction-list">';
-      echo '<p>Hier werden dir deine ' . fablab_get_captions('instruction_requests_caption') . ' angezeigt:</p>';
+
+      //$printfunctions = new PrintFunctions();
+
+      // <p>Hier werden dir deine %s angezeigt:</p>
+      printf (__('<p>Here you can see your %s</p>', 'fablab-ticket'), fablab_get_captions('instruction_requests_caption'));
+      //$printfunctions->print_p(__('<p>Here you can see your %s</p>', 'fablab-ticket'), fablab_get_captions('instruction_requests_caption'));
+      //$printfunctions->print_p('<p>Here you can see your</p>');
       while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
-        $color = get_post_meta(get_post_meta($post->ID, 'device_id', true ), 'device_color', true );
+        $color = get_device_type_color_field(get_post_meta($post->ID, 'device_id', true ));
         $device_id = get_post_meta($post->ID, 'device_id', true );
         ?>
         <div class="fl-ticket-element instruction-element" style="border-top: 5px solid <?= $color ?>;"

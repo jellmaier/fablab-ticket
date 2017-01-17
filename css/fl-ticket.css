@@ -192,6 +192,23 @@
     letter-spacing: 0.5px;
 }
 
+.device-ticket .device-name p {
+    margin-right: 8px;
+}
+
+.device-ticket .device-name input[type=submit] {
+    font-size: 10px;
+    padding: 4px 8px;
+    color: #aaa;
+    letter-spacing: 0.8px;
+}
+
+.device-ticket .device-name input[type=submit]:hover {
+    background: #ddd;
+    color: #fff;
+    border: 1px solid #ddd;
+}
+
 .device-ticket input[type=submit] {
     border: 1px solid #aaa;
     background: none;

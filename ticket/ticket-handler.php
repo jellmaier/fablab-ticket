@@ -1,17 +1,27 @@
 <?php
 
-function get_waiting_time_and_persons($device_id, $ticket = 0) {
 
-  $waiting = get_device_ticket_waiting_time($device_id, $ticket);
 
-  $waiting['time'] = device_waiting_time($device_id, $waiting['time']);
+
+function get_waiting_time_and_persons($device_id, $device_type, $ticket = 0) {
+
+  $waiting = get_device_ticket_waiting_time($device_id, $device_type, $ticket);
+
+
+  if($device_type == 'device')
+    $waiting['time'] = device_waiting_time($device_id, $waiting['time']);
+  else if ($device_type == 'device_type') {
+    if (empty(get_free_beginner_device_of_device_type($device_id)))
+      $waiting['time'] += fablab_get_option('ticket_max_time');
+  }
 
   check_and_activate_ticket($ticket, $waiting['time']);
 
   return $waiting;
 }
 
-function get_device_ticket_waiting_time($device_id, $ticket = 0) {
+
+function get_device_ticket_waiting_time($device_id, $ticket_type, $ticket = 0) {
   global $post;
   $temp_post = $post;
   //--------------------------------------------------------
@@ -34,7 +44,7 @@ function get_device_ticket_waiting_time($device_id, $ticket = 0) {
       ),
       array(
           'key'=>'ticket_type',
-          'value'=> 'device',
+          'value'=> $ticket_type,
       )
     ) 
   );
@@ -82,7 +92,7 @@ function check_and_activate_ticket($ticket_id, $waiting_time) {
 
 function get_divice_waiting_time() {
   $device_id = $_POST['device_id'];
-  echo json_encode(get_waiting_time_and_persons($device_id));
+  echo json_encode(get_waiting_time_and_persons($device_id, 'device'));
   die();
 }
 add_action( 'wp_ajax_get_online_devices_select_options', 'get_online_devices_select_options' );

@@ -50,8 +50,8 @@ function codex_ticket_init() {
     'singular_name'      => _x( $posttype_singular_name, 'post type singular name', 'your-plugin-textdomain' ),
     'menu_name'          => _x( $posttype_name, 'admin menu', 'your-plugin-textdomain' ),
     'name_admin_bar'     => _x( $posttype_singular_name, 'add new on admin bar', 'your-plugin-textdomain' ),
-    'add_new'            => _x( 'Add New', 'ticket', 'your-plugin-textdomain' ),
-    'add_new_item'       => __( 'Add New ' . $posttype_singular_name, 'your-plugin-textdomain' ),
+    'add_new'            => __( 'Add New', 'fablab-ticket' ),
+    'add_new_item'       => sprintf(__( 'Add New %s', 'fablab-ticket' ), $posttype_singular_name),
     'new_item'           => __( 'New ' . $posttype_singular_name, 'your-plugin-textdomain' ),
     'edit_item'          => __( 'Edit ' . $posttype_singular_name, 'your-plugin-textdomain' ),
     'view_item'          => __( 'View ' . $posttype_singular_name, 'your-plugin-textdomain' ),
@@ -190,7 +190,8 @@ function get_ticket_query_from_user($user_id) {
     'meta_query'=>array(
       array(
           'key'=>'ticket_type',
-          'value'=> 'device',
+          'value'   => array( 'device', 'device_type'),
+          'compare' => 'IN',
       )
     )
   );
@@ -226,14 +227,27 @@ function get_ticket_device($ID) {
 function insert_ticket() {
   $device_id = sanitize_text_field($_POST['device_id']);
   $duration = sanitize_text_field($_POST['duration']);
+  $ticket_type = sanitize_text_field($_POST['type']);
   $options = fablab_get_option();
   $user_id = get_current_user_id();
 
   //valide input
-  if(($duration > $options['ticket_max_time']) || is_no_device_entry($device_id) 
-                  || user_has_ticket($user_id, $device_id, 'device')) {
+  if(($duration > $options['ticket_max_time']) || user_has_ticket($user_id, $device_id, 'device')) {
     die(false);
   }
+
+  if (($ticket_type == 'device') || ($ticket_type == 'device_type') || ($ticket_type == 'instruction')) {
+    if (($ticket_type == 'device') && is_no_device_entry($device_id)) {
+        die(false);
+    } else if (($ticket_type == 'device_type') && is_no_device_type($device_id)) {
+        die(false);
+    }
+
+  
+  } else
+    die(false);
+
+
 
   //check how many tickets of user
   $tickets_per_user = $options['tickets_per_user'];
@@ -263,7 +277,7 @@ function insert_ticket() {
     if ($ID != 0) {
       add_post_meta($ID, 'device_id', $device_id);
       add_post_meta($ID, 'duration' , $duration);
-      add_post_meta($ID, 'ticket_type' , 'device');
+      add_post_meta($ID, 'ticket_type' , $ticket_type);
     }
     
     die($ID != 0);
@@ -305,6 +319,7 @@ function update_ticket() {
   $device_id = sanitize_text_field($_POST['device_id']);
   $duration = sanitize_text_field($_POST['duration']);
   $ticket_id = sanitize_text_field($_POST['ticket_id']);
+  $ticket_type = sanitize_text_field($_POST['type']);
 
   $user_id = get_current_user_id();
   $options = fablab_get_option();
@@ -316,14 +331,18 @@ function update_ticket() {
 
   //valide input  
   if(($duration > $options['ticket_max_time']) 
-    || is_no_device_entry($device_id) || !is_ticket_entry($ticket_id) 
-    || !has_ticket_update_permission($ticket_id)) {
-    die(false);
+    || !is_ticket_entry($ticket_id) || !has_ticket_update_permission($ticket_id)) {
+        if (($ticket_type == 'device') && is_no_device_entry($device_id)) {
+        die(false);
+    } else if (($ticket_type == 'device_type') && is_no_device_type($device_id)) {
+        die(false);
+    }
   }
 
   if (intval($duration) && intval($ticket_id)) {
     update_post_meta($ticket_id, 'device_id', $device_id);
     update_post_meta($ticket_id, 'duration' , $duration);
+    update_post_meta($ticket_id, 'ticket_type' , $ticket_type);
   } else {
     die('naN');
     return;

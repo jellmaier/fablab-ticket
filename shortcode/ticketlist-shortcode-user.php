@@ -18,8 +18,8 @@ if (!class_exists('TicketListShortcodeUser'))
       $ticket_height = 200;
       $initial_height = 300;
 
-      $online_devices = get_online_devices();
-      $online_decices_ids = $this->get_online_devices_ids($online_devices);
+      $online_devices = get_device_types();
+      $online_decices_ids = $this->get_online_devices_ids($online_devices); 
       $selected_devices = $this->handle_device_list($online_decices_ids);
 
   
@@ -59,8 +59,8 @@ if (!class_exists('TicketListShortcodeUser'))
 
       echo '<ul class="device-selector">'; 
       echo '<li><input type="submit" id="show-all-devices" ' . (isset($_GET['alldevices'])?$active:'') . 'value="Alle ' . $devices_caption .'"></li>';  
-      echo '<li><input type="submit" id="show-used-devices" ' . (isset($_GET['useddevices'])?$active:'') . 'value="Belegte ' . $devices_caption .'"></li>';
-      echo '<li><input type="submit" id="show-free-devices" ' . (isset($_GET['freedevices'])?$active:'') . 'value="Freie ' . $devices_caption .'"></li>'; 
+      //echo '<li><input type="submit" id="show-used-devices" ' . (isset($_GET['useddevices'])?$active:'') . 'value="Belegte ' . $devices_caption .'"></li>';
+      //echo '<li><input type="submit" id="show-free-devices" ' . (isset($_GET['freedevices'])?$active:'') . 'value="Freie ' . $devices_caption .'"></li>'; 
       echo '<li><input type="submit" id="show-devices-selector" ' . (isset($_GET['devices'])?$active:'') . 'value="' . $devices_caption .' auswählen">'; 
       echo '<ul class="devices-checkbox">';
       foreach ($online_devices as $device) {
@@ -70,7 +70,7 @@ if (!class_exists('TicketListShortcodeUser'))
           $checked = '';
         }
         echo '<li><input type="checkbox" class="device-checkbox" id="' . $device['id'] 
-          . '"' . $checked . '>' . $device['device'] . '   </input></li>';  
+          . '"' . $checked . '>' . $device['name'] . '   </input></li>';  
       } 
       echo '<li><input type="submit" id="show-selected-devices" class="option-button" value="' . $devices_caption .' anzeigen"></li>';
       echo '</ul>';
@@ -97,23 +97,25 @@ if (!class_exists('TicketListShortcodeUser'))
     // Handles Devices List
     //--------------------------------------------------------
     private function handle_device_list($online_devices_ids) {
+
+      $devices = sanitize_text_field($_GET['devices']);
       
       if(isset($_GET['devices'])){
-        $device_list = explode(',', $_GET['devices']);
+        $device_list = explode(',', $devices);
         $selected_devices = array(); 
         foreach ($device_list as $device_id) {
           if(in_array($device_id, $online_devices_ids)){
             array_push ($selected_devices, $device_id);
           }  
         }
-        echo '<div id="fl-device-string" data-devices-string="' . '&devices=' .  $_GET['devices'] . '"></div>';
+        echo '<div id="fl-device-string" data-devices-string="' . '&devices=' .  $devices . '"></div>';
         return $selected_devices;
 
       } else if(isset($_GET['alldevices'])) {
         echo '<div id="fl-device-string" data-devices-string="' . '&alldevices' . '"></div>';
         return $online_devices_ids;
 
-      } else if(isset($_GET['useddevices'])) {
+      } /* else if(isset($_GET['useddevices'])) {
         $selected_devices = array();
         foreach ($online_devices_ids as $device_id) {
           if(!is_device_availabel($device_id)){
@@ -133,7 +135,7 @@ if (!class_exists('TicketListShortcodeUser'))
         echo '<div id="fl-device-string" data-devices-string="' . '&freedevices' . '"></div>';
         return $selected_devices;
 
-      } else {
+      } */ else {
         echo '<div id="fl-device-string" data-devices-string="' . '&alldevices' . '"></div>';
         return $online_devices_ids;
       }
@@ -149,7 +151,7 @@ if (!class_exists('TicketListShortcodeUser'))
       $showlist = false;
 
       if(isset($_GET['next'])) {
-        $next = $_GET['next'];
+        $next = sanitize_text_field($_GET['next']);
         // display first selected device, when "next" not available
         if(!in_array($next, $selected_devices)){
           $next = $selected_devices[0];
@@ -183,11 +185,11 @@ if (!class_exists('TicketListShortcodeUser'))
     //--------------------------------------------------------
     private function display_device($device_id, $ticket_number) {
 
-      $color = get_post_meta($device_id, 'device_color', true );
+      $color = get_term_meta($device_id, 'tag_color', true);
       echo '<div class="device-box">';
       echo '<h2 style="border-bottom: 4px solid ' . $color 
-          . '; display: inline-block;" >' . get_device_title_by_id($device_id) . '</h2>';
-      $this->display_decvice_timeticket($device_id);
+          . '; display: inline-block;" >' . get_device_type_title_by_id($device_id) . '</h2>';
+      $this->display_device_timeticket($device_id);
       $this->display_device_tickets($device_id, $ticket_number);
       echo '</div>';
 
@@ -195,18 +197,20 @@ if (!class_exists('TicketListShortcodeUser'))
     //--------------------------------------------------------
     // Display active Tickets
     //--------------------------------------------------------
-    private function display_decvice_timeticket($device_id) {
+    private function display_device_timeticket($device_type_id) {
+
+      $device_list = get_devicees_of_device_type($device_type_id);
 
       $query_arg = array(
         'post_type' => 'timeticket',
         'orderby' => 'date', 
         'order' => 'ASC',
-        'posts_per_page' => 1,
         'meta_query'=>array(
         'relation'=>'and',
           array(
-              'key'=>'timeticket_device',
-              'value'=> $device_id,
+            'key'=>'timeticket_device',
+            'value'=> $device_list,
+            'compare' => 'IN'
           ),
           array(
               'key'=>'timeticket_start_time',
@@ -222,6 +226,13 @@ if (!class_exists('TicketListShortcodeUser'))
       );
       $time_ticket_query = new WP_Query($query_arg);
 
+      $ticket_query = new WP_Query($query_arg);
+
+      if (fablab_get_option('ticket_calcule_waiting_time') == '1')
+          $calc_waiting_time = true;
+        else
+          $calc_waiting_time = false;
+
       //Time-Tiket listing
       echo '<div class="time-ticket-list">';
       echo '<p>Hier wird die Person angezeigt, die das ' . fablab_get_captions('device_caption') . ' aktuell nutzt:</p>';
@@ -229,15 +240,17 @@ if (!class_exists('TicketListShortcodeUser'))
       if ( $time_ticket_query->have_posts() ) {
         while ( $time_ticket_query->have_posts() ) : $time_ticket_query->the_post() ;
           $device_id = get_post_meta($post->ID, 'timeticket_device', true );
-          $color = get_post_meta($device_id, 'device_color', true );
+          $color = get_device_type_color_field($device_id);
           ?>
           <div class="fl-ticket-element" style="border: 4px solid <?= $color ?>;"
             data-user="<?= get_user_by('id', get_post_meta($post->ID, 'timeticket_user', true ))->display_name ?>"
             data-time-ticket-id="<?= $post->ID ?>">
-            <p><?= fablab_get_captions('device_caption') ?> : <b><?=  get_device_title_by_id($device_id) ?></b> </p> 
+            <p><?= fablab_get_captions('device_caption') ?> : <b><?=  get_device_type_title_by_id($device_type_id) ?></b> </p> 
             <h2><?= $post->post_title ?></h2>
             <p>Start Zeit: <b><?=  get_timediff_string(get_post_meta($post->ID, 'timeticket_start_time', true )) ?></b></p>
+            <?php if($calc_waiting_time) { ?> 
             <p>End Zeit: <b><?=  get_timediff_string(get_post_meta($post->ID, 'timeticket_end_time', true )) ?></b></p>
+            <?php } ?> 
           </div>
           <?php
         endwhile;
@@ -254,24 +267,48 @@ if (!class_exists('TicketListShortcodeUser'))
     //--------------------------------------------------------
     private function display_device_tickets($device_id, $post_number = -1) {
 
-      $query_arg = array(
-        'post_type' => 'ticket',
-        'orderby' => 'date', 
-        'order' => 'ASC',
-        'posts_per_page' => $post_number,
-        'meta_query'=>array(
+      $device_list = get_devicees_of_device_type($device_id);
+      $meta_array = array(
+        'relation'=>'OR',
+        array(
+          'relation'=>'and',
+          array(
+              'key'=>'ticket_type',
+              'value'=> 'device_type',
+          ),
+          array(
+            'key'=>'device_id',
+            'value'=> $device_id,
+          )
+        ),
+        array(
           'relation'=>'and',
           array(
               'key'=>'ticket_type',
               'value'=> 'device',
           ),
           array(
-              'key'=>'device_id',
-              'value'=> $device_id,
+            'key'=>'device_id',
+            'value'=> $device_list,
           )
         )
       );
+
+      $query_arg = array(
+        'post_type' => 'ticket',
+        'posts_per_page' => $post_number, 
+        'orderby' => 'date', 
+        'order' => 'ASC',
+        'post_status' => 'publish',
+        'meta_query'=> $meta_array,
+      );
+
       $ticket_query = new WP_Query($query_arg);
+
+      if (fablab_get_option('ticket_calcule_waiting_time') == '1')
+          $calc_waiting_time = true;
+        else
+          $calc_waiting_time = false;
 
       // Display Tickets
       echo '<div class="ticket-list">';
@@ -279,17 +316,28 @@ if (!class_exists('TicketListShortcodeUser'))
       global $post;
       if ( $ticket_query->have_posts() ) {
         while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
-          $waiting = get_waiting_time_and_persons(get_post_meta($post->ID, 'device_id', true ), $post->ID);
-          $color = get_post_meta(get_post_meta($post->ID, 'device_id', true ), 'device_color', true );
-          $available = ($waiting['time'] == 0);
+          $ticket_type = get_post_meta($post->ID, 'ticket_type', true );
+          $waiting = get_waiting_time_and_persons(get_post_meta($post->ID, 'device_id', true ), 'device', $post->ID);
+          $device_id = get_post_meta($post->ID, 'device_id', true );
+          if ($ticket_type == 'device') {
+            $device_title = get_device_title_by_id($device_id);
+            $color = get_device_type_color_field(get_post_meta($post->ID, 'device_id', true ));
+            $available = is_device_availabel($device_id);
+          } else if ($ticket_type == 'device_type') {
+            $device_title = get_term( $device_id, 'device_type')->name;
+            $color = get_term_meta($device_id, 'tag_color', true);
+            $available = (count(get_free_device_of_device_type($device_id)) > 0);
+          }
           ?>
-          <div class="<?= $available ? "fl-ticket-element blink" :  "fl-ticket-element"; ?>" 
+          <div class="fl-ticket-element<?= $available ? " blink" : ""; ?>" 
             style="border-left: 5px solid <?= $color ?>;">
             <p><?= the_time('l, j. F, G:i') ?><p>
             <h2><?= $post->post_title ?></h2>
-            <p>für <?= fablab_get_captions('device_caption') ?> : <b><?=  get_device_title_by_id(get_post_meta($post->ID, 'device_id', true )) ?></b> </br> 
-            Benutzungsdauer: <b><?=  get_post_time_string(get_post_meta($post->ID, 'duration', true )) ?></b></br>
+            <p>für <?= fablab_get_captions('device_caption') ?>: <b><?= $device_title ?></b> </p>
+            <?php if($calc_waiting_time) { ?> 
+            <p>Benutzungsdauer: <b><?=  get_post_time_string(get_post_meta($post->ID, 'duration', true )) ?></b></br>
             Vorraussichtlich Wartezeit: <b><?= get_post_time_string($waiting['time'], true) ?></b></p>
+            <?php } ?>
           </div>
           <?php
         endwhile;

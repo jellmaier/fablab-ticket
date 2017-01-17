@@ -21,6 +21,8 @@ if (!class_exists('ManageScripts'))
       }
       add_action('init', 'fl_load_script');
 
+
+
       function fl_load_admin_script($hook) {
         global $fl_settings;
 
@@ -54,6 +56,12 @@ if (!class_exists('ManageScripts'))
         if ( ! $fl_ticket_script)
           return;
 
+        include 'js/strings.php';
+        wp_localize_script( 'fl_ticket_script', 'fl_minhour', ticket_minhour_array() );
+        wp_localize_script( 'fl_ticket_script', 'fl_ticket', ticket_translation_array() );
+        wp_localize_script( 'fl_ticket_script', 'fl_tticket', tticket_translation_array() );
+        wp_localize_script( 'fl_ticket_script', 'fl_iticket', iticket_translation_array() );
+
         wp_print_scripts('fl_ticket_script');
         wp_print_styles('fl_ticket_style');
       }
@@ -64,6 +72,8 @@ if (!class_exists('ManageScripts'))
         if ( ! $fl_ticketlist_manager)
           return;
 
+        include 'js/strings.php';
+        wp_localize_script( 'fl_ticketlist_script', 'fl_ticket', ticket_assign_translation_array() );
         wp_print_scripts('fl_ticketlist_script');
         wp_print_styles('fl_ticketlist_style');
       }
@@ -93,5 +103,7 @@ function pluginname_ajaxurl() {
 }
 
 add_action('wp_head','pluginname_ajaxurl');
+
+remove_filter('the_content', 'wpautop');
 
 ?>

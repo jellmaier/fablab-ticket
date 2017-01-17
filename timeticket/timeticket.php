@@ -150,14 +150,11 @@ function timeticket_details_meta() {
   echo '</select></p>';
 
   $userlist = get_users( array( 'fields' => array( 'display_name', 'id'  ) ) );
+
   echo '<p><label>User: </label><select name="timeticket_user">';
-  foreach ( $userlist as $user ) {
-    if ($user->id == $timeticket_user) {
-      echo '<option selected value="' . $user->id . '">' . $user->display_name . '</option>';
-    } else {
-      echo '<option value="' . $user->id . '">' . $user->display_name . '</option>';
-    }
-  }
+  foreach ( $userlist as $user )
+      echo '<option '. selected($user->id, $timeticket_user, false) .' value="' . $user->id . '">' . $user->display_name . '</option>';
+
   echo '</select></p>';
 
 }
