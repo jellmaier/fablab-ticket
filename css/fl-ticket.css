@@ -331,6 +331,42 @@
     border-left: 10px solid #b21;
 }
 
+/* Time-Ticket List */
+
+.device-list-box {
+    border-radius: 2px;
+    margin-bottom: 10px;
+    -webkit-box-shadow: 0 0px 4px rgba(0,0,0,.2);
+    box-shadow: 0px 0px 4px rgba(0,0,0,.2);
+}
+
+.device-toggle {
+    background-color: #aaa;
+    font-size: 16px;
+    color: #fff;
+    padding: 8px 16px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    margin: 0px;
+}
+.device-close {
+    background-color: #ccc;
+    color: #fff;
+    padding: 6px 14px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    margin: 0;
+}
+.device-listing {
+    padding: 0 20px;
+}
+.device-toggle p {
+    margin: 0px;
+}
+.device-close p {
+    margin: 0px;
+}
+
 /* Help Box */
 
 .help-container {

@@ -40,6 +40,17 @@ jQuery(document).ready(function($){
     $(this).fadeOut(200);
   });
 
+  $('.draft-toggle').click(function(event) {
+    $('#draft-ticket-listing').slideToggle(200);
+  })
+
+  $('.device-toggle').click(function(event) {
+    $(this).parent('div').find('.device-dropdown').slideToggle(50);
+  })
+  $('.device-close').click(function(event) {
+    $(this).parent('div').slideToggle(50);
+  })
+
 
   // Help handler
   $('.help-button').on('click', function(event) {
