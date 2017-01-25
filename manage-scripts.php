@@ -22,16 +22,16 @@ if (!class_exists('ManageScripts'))
       add_action('init', 'fl_load_script');
 
 
-      function fl_load_leaflet() {
-
-      wp_enqueue_script('leaflet', plugin_dir_url(__FILE__) . 'js/leaflet/leaflet.js');
-      wp_enqueue_style('leaflet', plugin_dir_url(__FILE__) . 'js/leaflet/leaflet.css');
-      wp_enqueue_script('fl_leaflet_script', plugin_dir_url(__FILE__) . 'js/fl-location-edit.js', array('jquery') );
+      function fl_load_leaflet($hook) {
+        if (($hook == 'edit-tags.php' || $hook == 'term.php') && $_GET['taxonomy'] == 'location' ) {   
+          wp_enqueue_script('leaflet', plugin_dir_url(__FILE__) . 'js/leaflet/leaflet.js');
+          wp_enqueue_style('leaflet', plugin_dir_url(__FILE__) . 'js/leaflet/leaflet.css');
+          wp_enqueue_script('fl_leaflet_script', plugin_dir_url(__FILE__) . 'js/fl-location-edit.js', array('jquery') );
+        }         
 
       }
-      add_action('wp_enqueue_scripts', 'fl_load_leaflet');
+      //add_action('wp_enqueue_scripts', 'fl_load_leaflet');
       add_action('admin_enqueue_scripts', 'fl_load_leaflet');
-
 
 
       function fl_load_admin_script($hook) {
@@ -45,9 +45,9 @@ if (!class_exists('ManageScripts'))
         wp_enqueue_style('jquery.tinycolorpicker', plugin_dir_url(__FILE__) . 'css/tinycolorpicker.css');
         wp_enqueue_script('fl_device_edit_script', plugin_dir_url(__FILE__) . 'js/fl-device-edit.js', array('jquery') );
 
-
-        //wp_enqueue_script('leaflet', plugin_dir_url(__FILE__) . 'js/leaflet/leaflet.js');
-        //wp_enqueue_style('leaflet', plugin_dir_url(__FILE__) . 'js/leaflet/leaflet.css');
+        //wp_register_script('leaflet', plugin_dir_url(__FILE__) . 'js/leaflet/leaflet.js');
+        //wp_register_style('leaflet', plugin_dir_url(__FILE__) . 'js/leaflet/leaflet.css');
+        //wp_register_script('fl_leaflet_script', plugin_dir_url(__FILE__) . 'js/fl-location-edit.js', array('jquery') );
 
       }
       add_action('admin_enqueue_scripts', 'fl_load_admin_script');
