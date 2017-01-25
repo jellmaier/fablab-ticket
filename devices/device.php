@@ -12,7 +12,9 @@ if (!class_exists('Device'))
       register_activation_hook( __FILE__, 'my_rewrite_flush' );
       add_action( 'init', 'codex_device_init' );
       // hook into the init action and call create_device_taxonomies when it fires
-      add_action( 'init', 'create_device_taxonomies', 0 );
+      add_action( 'init', 'create_device_type_tax', 0 );
+      add_action( 'init', 'create_location_tax', 0 );
+
 
       // Displaying Device Lists
       add_filter( 'manage_device_posts_columns', 'device_edit_columns' );

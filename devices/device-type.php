@@ -11,7 +11,7 @@
  */
 
 // create two taxonomies, genres and writers for the post type "book"
-function create_device_taxonomies() {
+function create_device_type_tax() {
   $caption_singular_name = fablab_get_captions('device_caption') . ' ' . __( 'type', 'fablab-ticket' );
   $caption_name = fablab_get_captions('devices_caption') . ' ' . __( 'type', 'fablab-ticket' );
 

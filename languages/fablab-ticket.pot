@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: FabLab Ticket\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-01-13 01:18+0000\n"
-"POT-Revision-Date: Fri Jan 13 2017 04:07:36 GMT+0100 (CET)\n"
+"POT-Revision-Date: Thu Jan 19 2017 14:13:05 GMT+0100 (CET)\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -41,13 +41,69 @@ msgstr ""
 msgid "Calculate waiting time"
 msgstr ""
 
-#: ../devices/device-type.php:15 ../devices/device-type.php:16
-msgid "type"
+#: ../device.php:51 ../devices/device.php:51 ../ticket/ticket.php:53
+msgid "Add New"
 msgstr ""
 
-#: ../devices/device-type.php:22 ../devices/device.php:57
+#: ../device.php:52 ../devices/device-type.php:29 ../devices/device.php:52 ..
+#: /ticket/ticket.php:54
+#, php-format
+msgid "Add New %s"
+msgstr ""
+
+#: ../device.php:53 ../devices/device.php:53
+#, php-format
+msgid "New %s"
+msgstr ""
+
+#: ../device.php:54 ../devices/device-type.php:27 ../devices/device.php:54 ..
+#: /js/strings.php:10
+#, php-format
+msgid "Edit %s"
+msgstr ""
+
+#: ../device.php:55 ../devices/device.php:55
+#, php-format
+msgid "View %s"
+msgstr ""
+
+#: ../device.php:56 ../devices/device-type.php:24 ../devices/device.php:56
+#, php-format
+msgid "All %s"
+msgstr ""
+
+#: ../device.php:57 ../devices/device-type.php:22 ../devices/device.php:57
 #, php-format
 msgid "Search %s"
+msgstr ""
+
+#: ../device.php:58 ../devices/device.php:58
+#, php-format
+msgid "Parent %s:"
+msgstr ""
+
+#: ../device.php:59 ../devices/device-type.php:34 ../devices/device.php:59
+#, php-format
+msgid "No %s found."
+msgstr ""
+
+#: ../device.php:60 ../devices/device.php:60
+#, php-format
+msgid "No %s found in trash."
+msgstr ""
+
+#: ../device.php:65 ../devices/device.php:65 ../ticket/ticket.php:67 ..
+#: /timeticket/instruction.php:64 ../timeticket/timeticket.php:65
+msgid "Description."
+msgstr ""
+
+#: ../device.php:162 ../devices/device.php:164
+#, php-format
+msgid "%s qualification"
+msgstr ""
+
+#: ../devices/device-type.php:15 ../devices/device-type.php:16
+msgid "type"
 msgstr ""
 
 #: ../devices/device-type.php:23
@@ -55,24 +111,9 @@ msgstr ""
 msgid "Popular %s"
 msgstr ""
 
-#: ../devices/device-type.php:24 ../devices/device.php:56
-#, php-format
-msgid "All %s"
-msgstr ""
-
-#: ../devices/device-type.php:27 ../devices/device.php:54 ../js/strings.php:10
-#, php-format
-msgid "Edit %s"
-msgstr ""
-
 #: ../devices/device-type.php:28
 #, php-format
 msgid "Update %s"
-msgstr ""
-
-#: ../devices/device-type.php:29 ../devices/device.php:52 ../ticket/ticket.php:54
-#, php-format
-msgid "Add New %s"
 msgstr ""
 
 #: ../devices/device-type.php:30
@@ -95,63 +136,24 @@ msgstr ""
 msgid "Choose from the most used %s"
 msgstr ""
 
-#: ../devices/device-type.php:34 ../devices/device.php:59
-#, php-format
-msgid "No %s found."
-msgstr ""
-
-#: ../devices/device-type.php:81 ../devices/device-type.php:98
+#: ../devices/device-type.php:102 ../devices/device-type.php:119
 msgid "The color will be shown as device and devicetype color."
 msgstr ""
 
-#: ../devices/device-type.php:111
+#: ../devices/device-type.php:132
 msgid "Name"
 msgstr ""
 
-#: ../devices/device-type.php:112
+#: ../devices/device-type.php:133
 msgid "Color"
 msgstr ""
 
-#: ../devices/device-type.php:113
+#: ../devices/device-type.php:134
 msgid "Slug"
 msgstr ""
 
-#: ../devices/device-type.php:114
+#: ../devices/device-type.php:135
 msgid "Posts"
-msgstr ""
-
-#: ../devices/device.php:51 ../ticket/ticket.php:53
-msgid "Add New"
-msgstr ""
-
-#: ../devices/device.php:53
-#, php-format
-msgid "New %s"
-msgstr ""
-
-#: ../devices/device.php:55
-#, php-format
-msgid "View %s"
-msgstr ""
-
-#: ../devices/device.php:58
-#, php-format
-msgid "Parent %s:"
-msgstr ""
-
-#: ../devices/device.php:60
-#, php-format
-msgid "No %s found in trash."
-msgstr ""
-
-#: ../devices/device.php:65 ../ticket/ticket.php:67 ../timeticket/instruction.php:
-#: 64 ../timeticket/timeticket.php:65
-msgid "Description."
-msgstr ""
-
-#: ../devices/device.php:162
-#, php-format
-msgid "%s qualification"
 msgstr ""
 
 #. Name of the plugin
@@ -185,16 +187,16 @@ msgstr ""
 
 #: ../js/strings.php:8 ../js/strings.php:10 ../js/strings.php:20 ../js/strings.
 #: php:22 ../js/strings.php:24 ../js/strings.php:26 ../js/strings.php:28 ..
-#: /js/strings.php:30 ../js/strings.php:32 ../js/strings.php:34 ..
-#: /shortcode/ticket-shortcode-tickets.php:130
+#: /js/strings.php:30 ../js/strings.php:32 ../js/strings.php:34 ../js/strings.php:
+#: 80 ../shortcode/ticket-shortcode-tickets.php:152
 msgid "Ticket"
 msgstr ""
 
-#: ../js/strings.php:12
+#: ../js/strings.php:12 ../js/strings.php:82
 msgid "Device"
 msgstr ""
 
-#: ../js/strings.php:14
+#: ../js/strings.php:14 ../js/strings.php:84
 msgid "Duration"
 msgstr ""
 
@@ -202,7 +204,7 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: ../js/strings.php:18
+#: ../js/strings.php:18 ../js/strings.php:86
 msgid "Cancel"
 msgstr ""
 
@@ -292,12 +294,17 @@ msgstr ""
 msgid "Instruction-Ticket"
 msgstr ""
 
+#: ../js/strings.php:80
+#, php-format
+msgid "Assign %s"
+msgstr ""
+
 #: ../shortcode/ticket-shortcode-instructions.php:44
 #, php-format
 msgid "<p>Here you can see your %s</p>"
 msgstr ""
 
-#: ../shortcode/ticket-shortcode-tickets.php:96
+#: ../shortcode/ticket-shortcode-tickets.php:111
 #, php-format
 msgid "<p>Here you can see the available %s:</p>"
 msgstr ""
