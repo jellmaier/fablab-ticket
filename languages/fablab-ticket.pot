@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: FabLab Ticket\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-01-13 01:18+0000\n"
-"POT-Revision-Date: Thu Jan 19 2017 14:13:05 GMT+0100 (CET)\n"
+"POT-Revision-Date: Wed Jan 25 2017 13:05:01 GMT+0100 (CET)\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -41,63 +41,66 @@ msgstr ""
 msgid "Calculate waiting time"
 msgstr ""
 
-#: ../device.php:51 ../devices/device.php:51 ../ticket/ticket.php:53
+#: ../device.php:51 ../devices/device.php:53 ../ticket/ticket.php:53
 msgid "Add New"
 msgstr ""
 
-#: ../device.php:52 ../devices/device-type.php:29 ../devices/device.php:52 ..
-#: /ticket/ticket.php:54
+#: ../device.php:52 ../devices/device-type.php:29 ../devices/device.php:54 ..
+#: /devices/location.php:29 ../ticket/ticket.php:54
 #, php-format
 msgid "Add New %s"
 msgstr ""
 
-#: ../device.php:53 ../devices/device.php:53
+#: ../device.php:53 ../devices/device.php:55
 #, php-format
 msgid "New %s"
 msgstr ""
 
-#: ../device.php:54 ../devices/device-type.php:27 ../devices/device.php:54 ..
-#: /js/strings.php:10
+#: ../device.php:54 ../devices/device-type.php:27 ../devices/device.php:56 ..
+#: /devices/location.php:27 ../js/strings.php:10
 #, php-format
 msgid "Edit %s"
 msgstr ""
 
-#: ../device.php:55 ../devices/device.php:55
+#: ../device.php:55 ../devices/device.php:57
 #, php-format
 msgid "View %s"
 msgstr ""
 
-#: ../device.php:56 ../devices/device-type.php:24 ../devices/device.php:56
+#: ../device.php:56 ../devices/device-type.php:24 ../devices/device.php:58 ..
+#: /devices/location.php:24
 #, php-format
 msgid "All %s"
 msgstr ""
 
-#: ../device.php:57 ../devices/device-type.php:22 ../devices/device.php:57
+#: ../device.php:57 ../devices/device-type.php:22 ../devices/device.php:59 ..
+#: /devices/location.php:22
 #, php-format
 msgid "Search %s"
 msgstr ""
 
-#: ../device.php:58 ../devices/device.php:58
+#: ../device.php:58 ../devices/device.php:60
 #, php-format
 msgid "Parent %s:"
 msgstr ""
 
-#: ../device.php:59 ../devices/device-type.php:34 ../devices/device.php:59
+#: ../device.php:59 ../devices/device-type.php:34 ../devices/device.php:61 ..
+#: /devices/location.php:34
 #, php-format
 msgid "No %s found."
 msgstr ""
 
-#: ../device.php:60 ../devices/device.php:60
+#: ../device.php:60 ../devices/device.php:62
 #, php-format
 msgid "No %s found in trash."
 msgstr ""
 
-#: ../device.php:65 ../devices/device.php:65 ../ticket/ticket.php:67 ..
+#: ../device.php:65 ../devices/device.php:67 ../ticket/ticket.php:67 ..
 #: /timeticket/instruction.php:64 ../timeticket/timeticket.php:65
 msgid "Description."
 msgstr ""
 
-#: ../device.php:162 ../devices/device.php:164
+#: ../device.php:162 ../devices/device.php:166
 #, php-format
 msgid "%s qualification"
 msgstr ""
@@ -106,32 +109,32 @@ msgstr ""
 msgid "type"
 msgstr ""
 
-#: ../devices/device-type.php:23
+#: ../devices/device-type.php:23 ../devices/location.php:23
 #, php-format
 msgid "Popular %s"
 msgstr ""
 
-#: ../devices/device-type.php:28
+#: ../devices/device-type.php:28 ../devices/location.php:28
 #, php-format
 msgid "Update %s"
 msgstr ""
 
-#: ../devices/device-type.php:30
+#: ../devices/device-type.php:30 ../devices/location.php:30
 #, php-format
 msgid "New %s Name"
 msgstr ""
 
-#: ../devices/device-type.php:31
+#: ../devices/device-type.php:31 ../devices/location.php:31
 #, php-format
 msgid "Separate %s with commas"
 msgstr ""
 
-#: ../devices/device-type.php:32
+#: ../devices/device-type.php:32 ../devices/location.php:32
 #, php-format
 msgid "Add or remove %s"
 msgstr ""
 
-#: ../devices/device-type.php:33
+#: ../devices/device-type.php:33 ../devices/location.php:33
 #, php-format
 msgid "Choose from the most used %s"
 msgstr ""
@@ -140,7 +143,7 @@ msgstr ""
 msgid "The color will be shown as device and devicetype color."
 msgstr ""
 
-#: ../devices/device-type.php:132
+#: ../devices/device-type.php:132 ../devices/location.php:98
 msgid "Name"
 msgstr ""
 
@@ -148,12 +151,20 @@ msgstr ""
 msgid "Color"
 msgstr ""
 
-#: ../devices/device-type.php:134
+#: ../devices/device-type.php:134 ../devices/location.php:100
 msgid "Slug"
 msgstr ""
 
-#: ../devices/device-type.php:135
+#: ../devices/device-type.php:135 ../devices/location.php:101
 msgid "Posts"
+msgstr ""
+
+#: ../devices/location.php:15 ../devices/location.php:16
+msgid "Locations"
+msgstr ""
+
+#: ../devices/location.php:76 ../devices/location.php:99
+msgid "Location:"
 msgstr ""
 
 #. Name of the plugin
