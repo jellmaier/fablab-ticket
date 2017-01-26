@@ -322,12 +322,11 @@ if (!class_exists('TicketListShortcodeUser'))
           if ($ticket_type == 'device') {
             $device_title = get_device_title_by_id($device_id);
             $color = get_device_type_color_field(get_post_meta($post->ID, 'device_id', true ));
-            $available = is_device_availabel($device_id);
           } else if ($ticket_type == 'device_type') {
             $device_title = get_term( $device_id, 'device_type')->name;
             $color = get_term_meta($device_id, 'tag_color', true);
-            $available = (count(get_free_device_of_device_type($device_id)) > 0);
           }
+          $available = ($waiting['time'] == 0);
           ?>
           <div class="fl-ticket-element<?= $available ? " blink" : ""; ?>" 
             style="border-left: 5px solid <?= $color ?>;">

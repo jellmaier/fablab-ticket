@@ -277,12 +277,11 @@ if (!class_exists('TicketListShortcodeAdmin'))
           if ($ticket_type == 'device') {
             $device_title = get_device_title_by_id($device_id);
             $color = get_device_type_color_field(get_post_meta($post->ID, 'device_id', true ));
-            $available = is_device_availabel($device_id);
           } else if ($ticket_type == 'device_type') {
             $device_title = get_term( $device_id, 'device_type')->name;
             $color = get_term_meta($device_id, 'tag_color', true);
-            $available = (count(get_free_device_of_device_type($device_id)) > 0);
           }
+          $available = ($waiting['time'] == 0);
           ?>
           <div class="fl-ticket-element<?= $available ? " blink" : ""; ?>" 
             style="border-left: 5px solid <?= $color ?>;"
@@ -297,8 +296,7 @@ if (!class_exists('TicketListShortcodeAdmin'))
             <p>Benutzungsdauer: <b><?=  get_post_time_string(get_post_meta($post->ID, 'duration', true )) ?></b></br>
             Vorraussichtlich Wartezeit: <b><?= get_post_time_string($waiting['time'], true) ?></b></p>
             <?php } ?>
-            <input type="submit" <?= $available ? "" :  "disabled"; ?>
-            class="ticket-btn assign-ticket" value="<?= fablab_get_captions('ticket_caption') ?> zuweisen"/>
+            <input type="submit" class="ticket-btn assign-ticket" value="<?= fablab_get_captions('ticket_caption') ?> zuweisen"/>
             <input type="submit" class="ticket-btn deactivate-ticket" value="<?= fablab_get_captions('ticket_caption') ?> deaktivieren"/>
           </div>
           <?php
@@ -485,11 +483,9 @@ if (!class_exists('TicketListShortcodeAdmin'))
           if ($ticket_type == 'device') {
             $device_title = get_device_title_by_id($device_id);
             $color = get_device_type_color_field(get_post_meta($post->ID, 'device_id', true ));
-            $availabel = is_device_availabel($device_id);
           } else if ($ticket_type == 'device_type') {
             $device_title = get_term( $device_id, 'device_type')->name;
             $color = get_term_meta($device_id, 'tag_color', true);
-            $availabel = (count(get_free_device_of_device_type($device_id)) > 0);
           }
           ?>
           <div class="fl-ticket-element draft-content" data-ticket-id="<?= $post->ID ?>" style="border-left: 5px solid <?= $color ?>;"

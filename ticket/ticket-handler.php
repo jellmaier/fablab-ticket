@@ -22,6 +22,7 @@ function get_waiting_time_and_persons($device_id, $device_type, $ticket = 0) {
 }
 
 
+
 function get_device_ticket_waiting_time($device_id, $ticket_type, $ticket = 0) {
   global $post;
   $temp_post = $post;
@@ -31,6 +32,18 @@ function get_device_ticket_waiting_time($device_id, $ticket_type, $ticket = 0) {
   $waiting = array();
   $waiting['time'] = 0;
   $waiting['persons'] = 0;
+
+  /* handle device tickets from beginner devices
+  if($ticket_type == 'device') {
+    if(get_post_meta( $device_id, 'device_qualification', true ) == 'beginner') {
+
+      // get device_type
+      // query of devicetype and device
+    }
+  }
+  */
+
+  // query for pro devices and device types
 
   $query_arg = array(
     'post_type' => 'ticket',
