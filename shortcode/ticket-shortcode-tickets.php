@@ -116,8 +116,9 @@ if (!class_exists('TicketShortcodeTicket'))
           //$waiting = get_waiting_time_and_persons($post->ID);
           $color = get_term_meta($device_type->term_id, 'tag_color', true);
           $waiting = get_waiting_time_and_persons($device_type->term_id, 'device_type');
-          $number_devices = count(get_free_beginner_device_of_device_type($device_type->term_id));
-          if($number_devices > 0) {
+          $number_devices = count(get_devicees_of_device_type($device_type->term_id));
+          $number_beginner_devices = count(get_beginner_device_of_device_type($device_type->term_id));
+          if($number_beginner_devices > 0) {
             ?>
             <div class="fl-device-element get-ticket"  style="border: 6px solid <?= $color ?>; background-color: <?= $color ?>;"
               data-device-id="<?= $device_type->term_id ?>" data-device-name="<?= $device_type->name ?>" data-device-type="device_type">

@@ -195,8 +195,6 @@ function get_devicees_of_device_type($term_id)
   if ( $device_query->have_posts() ) {
     while ( $device_query->have_posts() ) : $device_query->the_post() ;
       //if ((get_user_meta($user_id, $post->ID, true ) || !$permission_needed) {
-        $device = array();
-        $device['id'] = $post->ID;
         array_push($device_list, $post->ID);
       //}
     endwhile;
@@ -259,6 +257,105 @@ function get_free_beginner_device_of_device_type($term_id)
   return $device_list;
 }
 
+function get_beginner_device_of_device_type($term_id)
+{
+  global $post;
+  $temp_post = $post;
+
+  $query_arg = array(
+    'post_type' => 'device',
+    'tax_query' => array(
+        array(
+            'taxonomy' => 'device_type',
+            'field' => 'term_id',
+            'terms' => $term_id,
+        )
+    ),
+    'meta_query' => array(   
+      'relation'=> 'AND',               
+        array(
+          'key' => 'device_status',                  
+          'value' => 'online',               
+          'compare' => '='                 
+        ),
+        array(
+          'key' => 'device_qualification',                  
+          'value' => 'beginner',               
+          'compare' => '='                 
+        )
+    )  
+  );
+
+  $device_query = new WP_Query($query_arg);
+  $user_id = get_current_user_id();
+  
+  $device_list = array();
+
+  if ( $device_query->have_posts() ) {
+    while ( $device_query->have_posts() ) : $device_query->the_post() ;
+      //if ((get_user_meta($user_id, $post->ID, true ) || !$permission_needed) {
+          array_push($device_list, $post->ID);
+      //}
+    endwhile;
+  }
+
+  wp_reset_query();
+  $post = $temp_post;
+
+  return $device_list;
+}
+
+
+/*function to develop
+function get_device_of_device_type($term_id, $free=false, $beginner=false, $user=0)
+{
+  global $post;
+  $temp_post = $post;
+
+  $query_arg = array(
+    'post_type' => 'device',
+    'tax_query' => array(
+        array(
+            'taxonomy' => 'device_type',
+            'field' => 'term_id',
+            'terms' => $term_id,
+        )
+    ),
+    'meta_query' => array(   
+      'relation'=> 'AND',               
+        array(
+          'key' => 'device_status',                  
+          'value' => 'online',               
+          'compare' => '='                 
+        ),
+        array(
+          'key' => 'device_qualification',                  
+          'value' => 'beginner',               
+          'compare' => '='                 
+        )
+    )  
+  );
+
+  $device_query = new WP_Query($query_arg);
+  $user_id = get_current_user_id();
+  
+  $device_list = array();
+
+  if ( $device_query->have_posts() ) {
+    while ( $device_query->have_posts() ) : $device_query->the_post() ;
+      //if ((get_user_meta($user_id, $post->ID, true ) || !$permission_needed) {
+        if(is_device_availabel($post->ID));
+          array_push($device_list, $post->ID);
+      //}
+    endwhile;
+  }
+
+  wp_reset_query();
+  $post = $temp_post;
+
+  return $device_list;
+}
+*/
 
 function get_device_type_title_by_id($device_type_id) {
   $device_type = get_term($device_type_id, 'device_type');
@@ -276,7 +373,7 @@ function get_device_types($user_id = 0) {
 
   $available_devicees = array();
   foreach($device_type_list as $device_type) {
-    $number_devices = count(get_free_beginner_device_of_device_type($device_type->term_id));
+    $number_devices = count(get_beginner_device_of_device_type($device_type->term_id));
     if($number_devices > 0) {
       $device = array();
       $device['id'] = $device_type->term_id;
