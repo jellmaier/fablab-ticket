@@ -305,7 +305,7 @@ function get_free_device_of_device_type($term_id, $user_id = 0){
     'post_type' => 'device',
     'orderby' => 'meta_value',
     'meta_key' => 'device_qualification',
-    'order' => 'DESC',
+    'order' => 'ASC',
     'tax_query' => array(
         array(
             'taxonomy' => 'device_type',

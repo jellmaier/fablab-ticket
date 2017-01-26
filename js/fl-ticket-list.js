@@ -89,7 +89,7 @@ jQuery(document).ready(function($){
   })
 
   $('.draft-toggle').click(function(event) {
-    $('#draft-ticket-listing').slideToggle(200);
+    $(this).parent('div').find('.draft-ticket-listing').slideToggle(200);
   })
 
   $('.device-toggle').click(function(event) {

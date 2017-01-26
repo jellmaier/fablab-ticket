@@ -477,7 +477,7 @@ if (!class_exists('TicketListShortcodeAdmin'))
       if ( $ticket_query->have_posts() ) {
         echo '<div class="draft-box">';
         echo '<div class="draft-toggle"><p class="draft-title">Deaktivierte ' . fablab_get_captions('tickets_caption') . '</p></div>';
-        echo '<div id="draft-ticket-listing" hidden>';
+        echo '<div class="draft-ticket-listing" hidden>';
         while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
           $device_id = get_post_meta($post->ID, 'device_id', true );
           check_and_delete_ticket($post->ID);
