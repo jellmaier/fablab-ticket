@@ -251,7 +251,7 @@ function get_devices_of_device_type($term_id, $free=false, $beginner=false, $beg
   if ( $device_query->have_posts() ) {
     while ( $device_query->have_posts() ) : $device_query->the_post() ;
       //if ((get_user_meta($user_id, $post->ID, true ) || !$permission_needed) {
-        if($free && is_device_availabel($post->ID));
+        if(!$free || ($free && is_device_availabel($post->ID))) {
           if($id_and_name) {
             $device = array();
             $device['id'] = $post->ID;
@@ -259,7 +259,7 @@ function get_devices_of_device_type($term_id, $free=false, $beginner=false, $beg
             array_push($device_list, $device);
           } else 
           array_push($device_list, $post->ID);
-      //}
+       }
     endwhile;
   }
 

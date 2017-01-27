@@ -277,7 +277,7 @@ jQuery(document).ready(function($){
   function set_device_select(device_select, user_id, ticket_type, device_id) {
     // Set Device Name Dropdown
     data = {
-      action: 'get_device_of_device_types',
+      action: 'get_devices_of_device_types',
       user_id: user_id,
       ticket_type: ticket_type,
       device_id: device_id,

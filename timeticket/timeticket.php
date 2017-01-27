@@ -268,6 +268,8 @@ function is_device_availabel($device_id){
   );
   $device_query = new WP_Query($query_arg);
   if ( $device_query->have_posts() ) {
+    wp_reset_query();
+    $post = $temp_post;
     return false;
   }
   wp_reset_query();

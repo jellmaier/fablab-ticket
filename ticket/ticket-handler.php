@@ -1,8 +1,6 @@
 <?php
 
 
-
-
 function get_waiting_time_and_persons($device_id, $device_type, $ticket = 0) {
 
   $waiting = get_device_ticket_waiting_time($device_id, $device_type, $ticket);
@@ -12,7 +10,8 @@ function get_waiting_time_and_persons($device_id, $device_type, $ticket = 0) {
     $waiting['time'] = device_waiting_time($device_id, $waiting['time']);
   else if ($device_type == 'device_type') {
     $free_devices = get_free_beginner_device_of_device_type($device_id);
-    if (empty($free_devices))
+    //echo '<p>Count: ' . count($free_devices) . ', ID: ' . $free_devices[0] . ', Waiting: ' . $waiting['persons'] . '</p>';
+    if (count($free_devices) <= $waiting['persons'])
       $waiting['time'] += fablab_get_option('ticket_max_time');
   }
 
