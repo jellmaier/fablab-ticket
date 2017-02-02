@@ -138,6 +138,7 @@ if (!class_exists('TicketShortcode'))
         echo '<p class="device-message">Zurzeit können keine ' . $tickets_caption . ' gezogen werden!</p>';
       } else if ( !$max_tickets ) {
         $tickets->display_available_dtypes($permission_needed);
+        /*
         echo '<div class="device-list-box">';
         echo '<div class="device-toggle" style="border-left: 4px solid #555"><p><b>PRO Devices</b></p></div>';
 
@@ -147,6 +148,7 @@ if (!class_exists('TicketShortcode'))
         echo '</div>';
         echo '<div class="device-close"><p><b>x</b> Schließen</br></p></div>';
         echo '</div></div>';
+        */
       } else {
         echo '<p class="device-message">Du hast die maximale Anzahl von ' . $tickets_caption . ' gezogen!</p>';
       }
