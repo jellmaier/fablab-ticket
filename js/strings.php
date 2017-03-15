@@ -1,4 +1,13 @@
 <?php
+  
+  function angular_translation_array() {
+    return array(
+      // this is the API address of the JSON API plugin
+      'url' => get_bloginfo('wpurl').'/api/',
+      // this is the API address of the JSON API plugin
+      'sharing_url' => get_bloginfo('wpurl').'/wp-json/sharepl/v1/',
+    );
+  }
 
   function ticket_translation_array() {
     return array(

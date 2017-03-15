@@ -91,6 +91,7 @@ function ticket_edit_columns($columns){
   $columns = array(
     "title" => fablab_get_captions('ticket_caption'),
     "ticket_type" => $posttype_name . " Typ",
+    "status" => $posttype_name . " Status",
     "device_id" => fablab_get_captions('device_caption'),
     "duration" => $posttype_name . " dauer",
     "user_id" => "User",
@@ -118,6 +119,10 @@ function ticket_table_content($column_name, $post_id) {
 
       case 'ticket_type' :
         echo get_ticket_field("ticket_type");
+        break;
+
+      case 'status' :
+        echo get_ticket_field("status");
         break;
 
       case 'activation_time' :
@@ -278,6 +283,7 @@ function insert_ticket() {
       add_post_meta($ID, 'device_id', $device_id);
       add_post_meta($ID, 'duration' , $duration);
       add_post_meta($ID, 'ticket_type' , $ticket_type);
+      add_post_meta($ID, 'status' , "5-waiting");
     }
     
     die($ID != 0);
@@ -364,15 +370,11 @@ function delete_ticket() {
 add_action( 'wp_ajax_delete_ticket', 'delete_ticket' );
 
 function deactivate_ticket($ticket_id) {
-  $post_information = array(
-        'ID' => $ticket_id,
-        'post_status' => 'draft',
-    );
-  wp_update_post( $post_information );
+  update_post_meta($ticket_id, 'status', '6-inactive');
   delete_post_meta($ticket_id, 'activation_time');
   return true;
 }
-
+/*
 function deactivate_ticket_ajax() {
   $ticket_id = sanitize_text_field($_POST['ticket_id']);
 
@@ -383,7 +385,8 @@ function deactivate_ticket_ajax() {
   die(deactivate_ticket($ticket_id));
 }
 add_action( 'wp_ajax_deactivate_ticket', 'deactivate_ticket_ajax' );
-
+*/
+/*
 function activate_ticket() {
   $ticket_id = sanitize_text_field($_POST['ticket_id']);
 
@@ -392,22 +395,90 @@ function activate_ticket() {
     die(false);
   }
 
-  $post_information = array(
-    'ID' => $ticket_id,
-    'post_status' => 'publish',
-  );
-  wp_update_post( $post_information );
 
+  update_post_meta($ticket_id, 'status', '5-waiting');
   clear_device_activation_time(get_post_meta( $ticket_id, 'device_id', true ));
 
   die(true);
 }
 add_action( 'wp_ajax_activate_ticket', 'activate_ticket' );
+*/
+
+function rest_deactivate_ticket($data) {
+  $ticket_id = $data['id'];
+  //valide input  
+  if(!is_ticket_entry($ticket_id)) {
+    return WP_Error( 'rest_noticket', __( 'Is not a ticket', 'fablab-ticket' ), array( 'status' => 422 ) );
+  }
+  deactivate_ticket($ticket_id);
+  return new WP_REST_Response( null, 200 );
+}
+
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'sharepl/v1', '/deactivate_ticket/(?P<id>\d+)', array(
+    'methods' => 'PUT',
+    'callback' => 'rest_deactivate_ticket',
+    'permission_callback' => 'rest_has_ticket_update_permission',
+    'sanitize_callback' => 'rest_data_arg_sanitize_callback',
+  ) );
+});
+
+function rest_activate_ticket($data) {
+  $ticket_id = $data['id'];
+  //valide input  
+  if(!is_ticket_entry($ticket_id)) {
+    return WP_Error( 'rest_noticket', __( 'Is not a ticket', 'fablab-ticket' ), array( 'status' => 422 ) );
+  }
+  update_post_meta($ticket_id, 'status', '5-waiting');
+  set_activation_time($ticket_id);
+  //clear_device_activation_time(get_post_meta( $ticket_id, 'device_id', true ));
+  //delete_post_meta($ticket_id, 'activation_time');
+  return new WP_REST_Response( null, 200 );
+}
+
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'sharepl/v1', '/activate_ticket/(?P<id>\d+)', array(
+    'methods' => 'PUT',
+    'callback' => 'rest_activate_ticket',
+    'permission_callback' => 'rest_has_ticket_update_permission',
+    'sanitize_callback' => 'rest_data_arg_sanitize_callback',
+  ) );
+});
+
+function rest_delete_ticket($data) {
+  $ticket_id = $data['id'];
+  //valide input  
+  if(!is_ticket_entry($ticket_id)) {
+    return WP_Error( 'rest_noticket', __( 'Is not a ticket', 'fablab-ticket' ), array( 'status' => 422 ) );
+  }
+
+  if (wp_delete_post($ticket_id) == false)
+    return WP_Error( 'rest_notdeleted', __( 'Ticket not deleted', 'fablab-ticket' ), array( 'status' => 423 ) );
+  
+  return new WP_REST_Response( null, 200 );
+}
+
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'sharepl/v1', '/delete_ticket/(?P<id>\d+)', array(
+    'methods' => 'DELETE',
+    'callback' => 'rest_delete_ticket',
+    'permission_callback' => 'rest_has_ticket_update_permission',
+    'sanitize_callback' => 'rest_data_arg_sanitize_callback',
+  ) );
+});
 
 
 function is_ticket_entry($ID) {
   $post_object = get_post($ID);
   return (!empty($post_object) && ($post_object->post_type == 'ticket'));
+}
+
+function rest_has_ticket_update_permission() {
+
+  if ( has_ticket_update_permission())
+    return true;
+  
+  return new WP_Error( 'rest_forbidden', __( 'OMG you can not view private data.', 'fablab-ticket' ), array( 'status' => 401 ) );
 }
 
 function has_ticket_update_permission($post_id = 0) {

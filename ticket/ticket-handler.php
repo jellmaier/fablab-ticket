@@ -58,6 +58,10 @@ function get_device_ticket_waiting_time($device_id, $ticket_type, $ticket = 0) {
       array(
           'key'=>'ticket_type',
           'value'=> $ticket_type,
+      ),
+      array(
+          'key'=>'status',
+          'value'=> '5-waiting',
       )
     ) 
   );
@@ -67,7 +71,7 @@ function get_device_ticket_waiting_time($device_id, $ticket_type, $ticket = 0) {
 
       //------------------------------------------
       // start deactivation handler
-      check_and_deactivate_ticket($post->ID);
+      //check_and_deactivate_ticket($post->ID);
 
       if ($post->ID == $ticket) {
         return $waiting;

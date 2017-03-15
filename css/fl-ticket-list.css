@@ -290,6 +290,25 @@ p {
     background-color: #f7f7f7;
 }
 
+.inactive {
+    background-color: #f7f7f7;
+    opacity: 0.95;
+} 
+
+.inactive input[type=submit].assign-ticket{
+    display: none;
+}
+.inactive input[type=submit].deactivate-ticket{
+    display: none;
+}
+
+.waiting input[type=submit].activate-ticket {
+    display: none;
+} 
+.waiting input[type=submit].delete-ticket {
+    display: none;
+}
+
 /* Time-Ticket List */
 
 .device-list-box {
