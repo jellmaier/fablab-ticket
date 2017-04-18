@@ -86,11 +86,6 @@ angular.module('ticketListAdmin').controller('ticketListAdminCtrl', function($sc
     if (force)
       device_type.ticketshash = 0;
 
-    
-    console.log($scope.api_url + 'ticket' +
-      '?device_id=' + device_type.term_id +
-      '&hash=' + device_type.ticketshash);
-
     $http.get($scope.api_url + 'ticket' +
       '?device_id=' + device_type.term_id +
       '&hash=' + device_type.ticketshash)

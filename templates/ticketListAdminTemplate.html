@@ -20,7 +20,14 @@ src="../wp-content/plugins/fablab-ticket/css/reload2.svg" align="right"></p>
       <h2>{{ ticket.post_title }}</h2>
       <p class="ticket-content">{{LOCAssign.for_device}}: <b>{{ ticket.device_title }}</b></p>
       <div class="status-icon"></div>
-      <ng-include ng-class="{'hover-buttons': show_as_tabel }" src="device_type.button_template_url"></ng-include>
+      <!--div ng-switch="usage_type" ng-class="{'hover-buttons': show_as_tabel }">
+        <ng-include ng-switch-when="ticket_direct_use" src="templates_url + 'ticketListAdminButtonsDirectUse.html'"></ng-include>
+        <ng-include ng-switch-when="ticket_schedule" src="templates_url + 'ticketListAdminButtonsSchedule.html'"></ng-include>
+      </div-->
+      <div ng-class="{'hover-buttons': show_as_tabel }">
+        <ng-include src="device_type.button_template_url"></ng-include>
+      </div>
+      <!--ng-include ng-class="{'hover-buttons': show_as_tabel }" src="device_type.button_template_url"></ng-include-->
     </div>
   </div>
 <div class="device-close" ng-click="device_type.show = false" ><p><b>x</b> Schließen</br></p></div>

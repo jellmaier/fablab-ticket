@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: FabLab Ticket
-Version: 0.8.6
+Version: 0.9.0
 Plugin URI: https://github.com/jellmaier/fablab-ticket
 Description: Ticketing and Reservation System for FabLabs
 Author: Jakob Ellmaier
@@ -34,7 +34,7 @@ include 'user-list.php';
 include 'js/strings.php';
 include 'manage-scripts.php';
 include 'restapi/ticketlist-user.php';
-//include 'restapi/pinplugin.php';
+include 'restapi/pinplugin.php';
 
 
 $options = new AdminPage();
