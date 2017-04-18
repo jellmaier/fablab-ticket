@@ -1,0 +1,41 @@
+<div class="reload"><a style="text-decoration: none;" ng-click="showFullscreen()">⤢ fullscreen</a></div>
+<div ng-hide="fullscreen" data-ng-repeat="device_type in device_types track by $index" ng-init="deviceIndex = $index" 
+  ng-show="device_type.completed" ng-cloak >
+  <h2 style="border-bottom: 4px solid {{ device_type.color }}; display: inline-block;">{{ device_type.name }}</h2>
+  <p ng-if="!device_type.tickets && !device_type.notickets">Loading... </p>
+  <p ng-if="device_type.notickets">Notickets</p>
+  <div data-ng-repeat="ticket in device_type.tickets track by ticket.ID" ng-init="ticketIndex = $index"
+    ng-class="{'fl-ticket-row': show_as_tabel }" > <!-- | orderBy : 'status' -->
+    <div class="fl-ticket-element {{ticket.status}}" ng-class="{blink: ticket.available, highlight: ticket.changed }" 
+    style="border-color: {{device_type.color}}" ng-cloak>
+      <p class="ticket-content">{{ formatDate(ticket.post_date) | date : "fullDate" }}<p>
+      <h2>{{ ticket.post_title }}</h2>
+      <p class="ticket-content">{{LOCAssign.for_device}}: <b>{{ ticket.device_title }}</b></p>
+      <div class="status-icon"></div>
+    </div>
+  </div>
+</div>
+<!-- fullscreen view -->
+<div ng-show="fullscreen" class="fl-fullscreen-layer">
+  <a ng-click="hideFullscreen()" class="close">x</a>
+  <div class="devices-box" style="width: {{number_cols*600}}px;">
+          <!-- $this->display_devicelist($selected_devices, $device_colums, $ticket_rows) -->
+      <div data-ng-repeat="device_type in device_types | limitTo: - neg_index | limitTo: number_cols track by $index" 
+      ng-init="deviceIndex = $index" ng-show="device_type.completed" class="device-box" ng-cloak >
+      <h2 style="border-bottom: 4px solid {{ device_type.color }}; display: inline-block;">{{ device_type.name }}</h2>
+      <p ng-if="!device_type.tickets && !device_type.notickets">Loading... </p>
+      <p ng-if="device_type.notickets">Notickets</p>
+      <div data-ng-repeat="ticket in device_type.tickets | limitTo:number_rows track by ticket.ID" ng-init="ticketIndex = $index"
+        ng-class="{'fl-ticket-row': show_as_tabel }" > <!-- | orderBy : 'status' -->
+        <div class="fl-ticket-element {{ticket.status}}" ng-class="{blink: ticket.available, highlight: ticket.changed }" 
+        style="border-color: {{device_type.color}}" ng-cloak>
+          <p class="ticket-content">{{ formatDate(ticket.post_date) | date : "fullDate" }}<p>
+          <h2>{{ ticket.post_title }}</h2>
+          <p class="ticket-content">{{LOCAssign.for_device}}: <b>{{ ticket.device_title }}</b></p>
+          <div class="status-icon"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div ng-show="fullscreen" class="fl-fullscreen-background"></div>

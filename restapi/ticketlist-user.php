@@ -13,11 +13,58 @@ if (!class_exists('TicketListShortcodeUser'))
     }
 */
     //--------------------------------------------------------
-    // get active Tickets
+    // Get Tickets by Query
+    //--------------------------------------------------------
+
+     function rest_get_tickets($ticket_query, $old_hash) {
+      
+      $ticket_list = array();
+
+      global $post;
+
+      if ( $ticket_query->have_posts() ) {
+        while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
+          $ticket = array();
+          $ticket['ID'] = $post->ID;
+          $ticket['post_title'] = $post->post_title;
+          $ticket['post_date'] = $post->post_date;
+
+
+          //$ticket['ticket_type'] = get_post_meta($ticket_id, 'ticket_type', true );
+          $ticket_status = get_post_meta($post->ID, 'status', true );
+          $ticket['status'] = substr($ticket_status, 2);
+          //$ticket['device_id'] = get_post_meta($ticket_id, 'device_id', true );
+
+          array_push($ticket_list, $ticket);
+
+        endwhile;
+
+      } else {
+        $result = array();
+        $result['hash'] = 'empty';
+        return $result;
+      }
+
+      wp_reset_query();     
+    
+
+      $result = array();
+      $result['tickets'] = $ticket_list;
+      $result['hash'] = wp_hash(serialize($ticket_list));
+
+      if($result['hash'] == $old_hash)
+        return new WP_Error( 'rest_notmodified', __( 'Data has not changed.', 'fablab-ticket' ), array( 'status' => 304 ) );
+  
+      return $result;
+    }
+   
+    //--------------------------------------------------------
+    // get active Tickets of device
     //--------------------------------------------------------
     function rest_device_tickets($data) {
+      $device_id = sanitize_text_field($data['device_id']);
+      $old_hash = sanitize_text_field($data['hash']);
 
-      $device_id = $data['id'];
       $post_number = -1;
 
       $device_list = get_devicees_of_device_type($device_id);
@@ -47,12 +94,6 @@ if (!class_exists('TicketListShortcodeUser'))
         )
       );
 
-      /*
-          array(
-          'key'=>'status',
-          'value'=> array('5-waiting', '6-inactive')
-        )
-        */
 /*
       $query_arg = array(
         'post_type' => 'ticket',
@@ -78,25 +119,27 @@ if (!class_exists('TicketListShortcodeUser'))
         'meta_query'=> $meta_array,
       );
 
+/*
+      // without meta values
       $posts = get_posts( $query_arg);
-     
       if ( empty( $posts ) ) {
+         $result = array();
         $result['hash'] = 'empty';
         return $result;
       }
-      $result = array();
-      $result['tickets'] = $posts;
-      $result['hash'] = wp_hash(serialize($posts));
-     
-      return $result;
+      */
+
+      // query with meta values
+
+      $ticket_query = new WP_Query($query_arg);
+
+      return rest_get_tickets($ticket_query, $old_hash);
     }
-   
 
     function rest_data_arg_sanitize_callback( $value, $request, $param ) {
         // It is as simple as returning the sanitized value.
         return sanitize_text_field( $value );
     }
-
 
     /*
 
@@ -105,7 +148,7 @@ if (!class_exists('TicketListShortcodeUser'))
 */
 
 add_action( 'rest_api_init', function () {
-  register_rest_route( 'sharepl/v1', '/ticket/(?P<id>\d+)', array(
+  register_rest_route( 'sharepl/v1', '/ticket', array(
     'methods' => 'GET',
     'callback' => 'rest_device_tickets',
     'sanitize_callback' => 'rest_data_arg_sanitize_callback',
@@ -113,6 +156,45 @@ add_action( 'rest_api_init', function () {
 } );
 
 
+//--------------------------------------------------------
+// Rest get Tickets from curent User
+//--------------------------------------------------------
+
+function rest_current_user_tickets($data) {
+  $old_hash = sanitize_text_field($data['hash']);
+  
+  return rest_get_tickets(get_ticket_query_from_user(get_current_user_id()), $old_hash);
+
+
+/*
+  while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
+    $ticket_type = get_post_meta($post->ID, 'ticket_type', true );
+    $waiting = get_waiting_time_and_persons(get_post_meta($post->ID, 'device_id', true ), $ticket_type, $post->ID);
+    $device_id = get_post_meta($post->ID, 'device_id', true );
+    $calc_time = fablab_get_option('ticket_calcule_waiting_time');
+
+    if ($ticket_type == 'device') {
+      $device_title = get_device_title_by_id($device_id);
+      $color = get_device_type_color_field(get_post_meta($post->ID, 'device_id', true ));
+    } else if ($ticket_type == 'device_type') {
+      $device_title = get_term( $device_id, 'device_type')->name;
+      $color = get_term_meta($device_id, 'tag_color', true);
+    }
+    $available = ($waiting['time'] == 0);
+  endwhile;
+
+  wp_reset_query();
+*/
+}
+
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'sharepl/v1', '/tickets_current_user', array(
+    'methods' => 'GET',
+    'callback' => 'rest_current_user_tickets',
+    'permission_callback' => 'rest_private_data_permissions_check',
+    'sanitize_callback' => 'rest_data_arg_sanitize_callback',
+  ) );
+} );
 
 
 //--------------------------------------------------------
@@ -139,11 +221,12 @@ function rest_ticket_values($data) {
   
   if ($ticket_type == 'device') {
     $ticket['device_title'] = get_device_title_by_id($device_id);
-    $ticket['color'] = get_device_type_color_field($device_id);
+    $ticket['color'] = get_device_type_color_field(get_post_meta($ticket_id, 'device_id', true ));
   } else if ($ticket_type == 'device_type') {
     $ticket['device_title'] = get_term( $device_id, 'device_type')->name;
     $ticket['color'] = get_term_meta($device_id, 'tag_color', true);
   }
+  $ticket['device_id'] = $device_id;
  
   if ( empty( $ticket ) ) {
     return null;
@@ -174,6 +257,11 @@ add_action( 'rest_api_init', function () {
 } );
 
 
+
+//--------------------------------------------------------
+// Rest get Device Types
+//--------------------------------------------------------
+
 function rest_device_types($data) {
   $device_type_list = get_terms('device_type', array(
     'orderby'    => 'name',
@@ -197,24 +285,6 @@ add_action( 'rest_api_init', function () {
     'sanitize_callback' => 'rest_data_arg_sanitize_callback',
   ) );
 } );
-
-
-function rest_device_type_color($data) {
-  $device_type_id = $data['id'];
-  
-  return get_term_meta($device_type_id, 'tag_color', true);
-}
-add_action( 'rest_api_init', function () {
-  register_rest_route( 'sharepl/v1', '/device_type_color/(?P<id>\d+)', array(
-    'methods' => 'GET',
-    'callback' => 'rest_device_type_color',
-    'sanitize_callback' => 'rest_data_arg_sanitize_callback',
-  ) );
-} );
-
-
-
-
 
 
 ?>

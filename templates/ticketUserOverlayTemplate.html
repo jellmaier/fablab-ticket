@@ -1,0 +1,25 @@
+<div ng-switch="overlay.mode">
+
+  <div ng-switch-when="add">    
+    <h2>{{LOCAssign.add_ticket}}</h2>
+    <div ng-bind-html="overlay.device_type.content"></div>
+    <input type="submit" ng-click="addTicket()" class="button-primary" value="{{LOCAssign.add_ticket}}">
+    <input type="submit" ng-click="overlay.show=false" class="button-primary" value="{{LOCAssign.ticket_cancel}}">
+  </div>
+
+  <div ng-switch-when="edit">
+    <h2>{{LOCAssign.edit_ticket}}</h2>
+    <p>{{LOCAssign.ticket_device}}: 
+      
+      <select ng-model="overlay.deviceSelect" ng-options="device.name for device in device_types track by device.id"> </select> 
+    </p>
+    <!--div ng-bind-html="overlay.deviceSelect.content"></div-->
+    <div ng-repeat="device in device_types | filter:overlay.deviceSelect"><div ng-bind-html="device.content"></div></div>
+    <input type="submit" ng-click="editTicket()" class="button-primary" value="{{LOCAssign.edit_ticket}}">
+    <input type="submit" ng-click="deleteTicket()" class="button-primary" value="{{LOCAssign.delete_ticket}}">
+    <input type="submit" ng-click="overlay.show=false" class="button-primary" value="{{LOCAssign.ticket_cancel}}">
+  </div>
+
+  <div ng-switch-default></div>
+  
+</div>

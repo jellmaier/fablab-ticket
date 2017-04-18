@@ -81,13 +81,23 @@ function add_form_fields_description($term, $taxonomy){
     <?php
 } 
 
+function get_usage_types() {
+  $usage_types = array();
+  $usage_types['ticket_schedule'] = sprintf(__('Schedule %s', 'fablab-ticket' ), __( 'Tickets', 'fablab-ticket' ));
+  $usage_types['ticket_direct_use'] = __('Direct use', 'fablab-ticket');
+  return $usage_types;
+
+}
+
  
-function tax_metabox_add($tag) { ?>
-  <div class="form-field">
+function tax_metabox_add($tag) { 
+
+  ?>
+  <div class="form-field">  
     <table>
      <tr>
       <th>
-        <label for="device_type"><?= fablab_get_captions('device_caption') ?> Color:</label>
+        <label for="tag_color"><?= sprintf(__('%s Color', 'fablab-ticket' ), __( 'Devices', 'fablab-ticket' )) ?>:</label>
       </th>
       <th> 
         <div id="colorPicker">
@@ -101,13 +111,32 @@ function tax_metabox_add($tag) { ?>
   </table> 
   <p class="description"><?php _e('The color will be shown as device and devicetype color.'); ?></p>
   </div>
+
+  <div class="form-field">  
+    <table>
+    <tr>
+      <th>
+        <label for="usage_type"><?= __('Usage Type', 'fablab-ticket') ?>:</label>
+      </th>
+      <th> 
+        <select name="usage_type">
+        <?php
+        foreach(get_usage_types() as $slug => $name)
+          echo '<option value="' . $slug . '">' . $name . '</option>';
+        ?>
+        </select>
+      </th>
+    </tr>
+  </table> 
+  <p class="description"><?php _e('Description missing.'); ?></p>
+  </div>
 <?php 
 }   
  
 function tax_metabox_edit($tag) { ?>
    <tr class="form-field">
     <th scope="row" valign="top">
-      <label for="device_type"><?= fablab_get_captions('device_caption') ?> Color:</label>
+      <label for="device_type"><?= sprintf(__('%s Color', 'fablab-ticket' ), __( 'Devices', 'fablab-ticket' )) ?>:</label>
     </th>
     <td> 
       <div id="colorPicker">
@@ -119,6 +148,25 @@ function tax_metabox_edit($tag) { ?>
       <p class="description"><?php _e('The color will be shown as device and devicetype color.'); ?></p>
     </td>
   </tr>
+  <?=
+
+  $usage_type_selected = get_term_meta($tag->term_id, 'usage_type', true); 
+
+  ?>
+  <tr class="form-field">
+    <th scope="row" valign="top">
+      <label for="device_type"><?= __('Usage Type', 'fablab-ticket') ?>:</label>
+    </th>
+    <td> 
+      <select name="usage_type">
+        <?php
+        foreach(get_usage_types() as $slug => $name)
+          echo '<option '. selected($slug, $usage_type_selected, false) .' value="' . $slug . '">' . $name . '</option>';
+        ?>
+        </select>
+      <p class="description"><?php _e('Description missing.'); ?></p>
+    </td>
+  </tr>
 <?php 
 } 
 
@@ -127,27 +175,33 @@ function tax_metabox_edit($tag) { ?>
 
  
 function device_type_edit_columns($columns) {
-    $new_columns = array(
-        'cb' => '<input type="checkbox" />',
-        'name' => __('Name'),
-        'device_type_color' => __('Color', 'fablab-ticket'),
-        'slug' => __('Slug'),
-        'posts' => __('Posts')
-        );
-    return $new_columns;
+  $new_columns = array(
+      'cb' => '<input type="checkbox" />',
+      'name' => __('Name'),
+      'device_type_color' => __('Color', 'fablab-ticket'),
+      'device_usage_type' => __('Usage Type', 'fablab-ticket'),
+      'posts' => __('Posts')
+      );
+  return $new_columns;
 }  
  
 function manage_device_type_columns($out, $column_name, $term_id) {
-    switch ($column_name) {
-        case 'device_type_color' :
-            echo '<div style="background-color: ' . get_term_meta($term_id, 'tag_color', true) 
-            . '; width: 30px; height: 30px; border-radius: 15px;"><div>';
-            break;
- 
-        default:
-            break;
-    }
-    return $out;    
+  switch ($column_name) {
+      case 'device_type_color' :
+          echo '<div style="background-color: ' . get_term_meta($term_id, 'tag_color', true) 
+          . '; width: 30px; height: 30px; border-radius: 15px;"><div>';
+          break;
+
+      case 'device_usage_type' :
+          $usage_type = get_usage_types();
+          echo '<p>' . $usage_type[get_term_meta($term_id, 'usage_type', true)]
+          . '</p>';
+          break;
+
+      default:
+          break;
+  }
+  return $out;    
 }
 
 
@@ -155,8 +209,14 @@ function manage_device_type_columns($out, $column_name, $term_id) {
 
 function save_device_type_field($term_id)
 {
-    if (isset($_POST['tag_color'])) 
-      update_term_meta( $term_id, 'tag_color', $_POST['tag_color']);              
+  if (isset($_POST['tag_color'])) 
+    update_term_meta( $term_id, 'tag_color', $_POST['tag_color']);
+  
+  // if (isset($_POST['location'])) 
+    // update_term_meta( $term_id, 'tag_color', $_POST['tag_color']);
+  
+  if (isset($_POST['usage_type'])) 
+    update_term_meta( $term_id, 'usage_type', $_POST['usage_type']);              
 }
 
 
@@ -329,6 +389,105 @@ function get_device_type_description() {
   die(term_description($device_type_id, 'device_type'));
 }
 add_action( 'wp_ajax_get_device_type_description', 'get_device_type_description' );
+
+
+// ----------------------------------
+// Rest API Methods
+// ----------------------------------
+
+function rest_user_device_types($data) {
+  // user_id has no effect
+  if(isset($data['id']))
+    $user_id = $data['id'];
+  else
+    $user_id = 0;
+  return get_device_types($user_id);
+}
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'sharepl/v1', '/user_device_types/(?P<id>\d+)', array(
+    'methods' => 'GET',
+    'callback' => 'rest_user_device_types',
+    'sanitize_callback' => 'rest_data_arg_sanitize_callback',
+  ) );
+});
+
+function rest_device_type_content($data) {
+  $device_type_id = $data['id'];
+  return term_description($device_type_id, 'device_type');
+}
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'sharepl/v1', '/device_type_content/(?P<id>\d+)', array(
+    'methods' => 'GET',
+    'callback' => 'rest_device_type_content',
+    'sanitize_callback' => 'rest_data_arg_sanitize_callback',
+  ) );
+});
+
+//--------------------------------------------------------
+// get Device-Type values
+//--------------------------------------------------------
+function rest_device_type_values($data) {
+  $device_type_id = $data['id'];
+
+  //is_ticket_entry($ticket_id);
+
+  $device_type = array();
+  $device_type['color'] = get_term_meta($device_type_id, 'tag_color', true);
+  $device_type['usage_type'] = get_term_meta($device_type_id, 'usage_type', true);
+
+  if ( empty( $device_type ) ) {
+    return null;
+  }
+ 
+  return $device_type; 
+}
+
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'sharepl/v1', '/device_type_values/(?P<id>\d+)', array(
+    'methods' => 'GET',
+    'callback' => 'rest_device_type_values',
+    'sanitize_callback' => 'rest_data_arg_sanitize_callback',
+  ) );
+} );
+
+
+function rest_devices_for_ticket($data) {
+  $user_id = sanitize_text_field($data['user_id']);
+  $ticket_id = sanitize_text_field($data['ticket_id']);
+  //$device_id = sanitize_text_field($data['device_id']);
+
+  $ticket_type = get_post_meta($ticket_id, 'ticket_type', true );
+  $device_id = get_post_meta($ticket_id, 'device_id', true );
+
+  if($ticket_type == 'device'){
+    $device_type_id_array = wp_get_post_terms($device_id, 'device_type', array("fields" => "ids"));
+    $device_type_id = $device_type_id_array[0];
+  }
+  else if ($ticket_type == 'device_type')
+    $device_type_id = $device_id;
+  else
+    return null;
+
+  return get_free_device_of_device_type($device_type_id, $user_id);
+
+}
+
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'sharepl/v1', '/devices_for_ticket', array(
+    'methods' => 'GET',
+    'callback' => 'rest_devices_for_ticket',
+    'permission_callback' => 'rest_has_ticket_update_permission',
+    'sanitize_callback' => 'rest_data_arg_sanitize_callback',
+  ) );
+});
+
+/*
+function rest_device_type_description() {
+  $device_type_id = sanitize_text_field($_POST['device_type_id']);
+  die(term_description($device_type_id, 'device_type'));
+}
+add_action( 'wp_ajax_get_device_type_description', 'get_device_type_description' );
+*/
 
 
 ?>

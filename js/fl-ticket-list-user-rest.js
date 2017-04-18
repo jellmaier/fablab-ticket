@@ -1,36 +1,38 @@
-angular.module('ticketListUser', []);
+angular.module('ticketListUser', ['ngRoute', 'ngSanitize']);
+angular.module('ticketListUser').controller('ticketListUserCtrl', function($scope, $http, $interval, $q, $timeout, $location, $window) {
 
+  $scope.api_url = AppAPI.sharing_url;
+  $scope.templates_url = AppAPI.templates_url;
+  $scope.LOCAssign = assign_loc;
 
-angular.module('ticketListUser').controller('ticketListUserCtrl', function($scope, $http, $interval, $q) {
-
-
-  var api_url = AppAPI.sharing_url;
-
-  $scope.dattte = '20140313T00:00:00';
 
   //------------------------------
   // Load Data from API
   //------------------------------
 
-   $scope.loadDeviceTypes = function() {
-    $http.get(api_url + 'device_types')
+  $scope.formatDate = function(date){
+    return new Date(date);
+  }
+
+  $scope.loadDeviceTypes = function() {
+    $http.get($scope.api_url + 'device_types')
     .then(function successCallback(response) {
-      $scope.decvicetypehash = response.data.hash;
       $scope.device_types = response.data.devices;
-      $scope.loadDeviceColor();
-      $scope.loadDeviceTickets();
-      $interval($scope.loadDeviceTickets, 15000);    
+      $scope.neg_index = $scope.device_types.length;
+      console.log($scope.device_types);
+      $scope.loadDeviceValues();
+      $scope.loadDeviceTickets();    
     }, function errorCallback(response) {
-      console.log('load ticket error: ' + response.status);
+      console.log('load device error: ' + response.status);
     }); 
 
   }
 
-   $scope.loadDeviceColor = function() {
+   $scope.loadDeviceValues = function() {
     angular.forEach($scope.device_types, function(device_type) {
-      $http.get(api_url + 'device_type_color/' + device_type.term_id)
+      $http.get($scope.api_url + 'device_type_values/' + device_type.term_id)
       .then(function successCallback(response) {
-        device_type.color = response.data;
+        device_type.color = response.data.color;
         device_type.completed = true;
       }, function errorCallback(response) {
         console.log('load device color error: ' + response.status);
@@ -46,20 +48,20 @@ angular.module('ticketListUser').controller('ticketListUserCtrl', function($scop
   }
 
 
-  //var device_id = '12';
-  $scope.loadDeviceTicket = function(device_type, force = false) {
-    $http.get(api_url + 'ticket/' + device_type.term_id)
+  $scope.loadDeviceTicket = function(device_type) {
+
+    $http.get($scope.api_url + 'ticket' +
+      '?device_id=' + device_type.term_id +
+      '&hash=' + device_type.ticketshash)
     .then(function successCallback(response) {
-      if(force || (device_type.ticketshash != response.data.hash)) {
-        //console.log(response.data.hash);
-        device_type.ticketshash = response.data.hash;
-        device_type.notickets = false;
-        $scope.loadTicketValues(response.data.tickets);
-        device_type.tickets = response.data.tickets;
-      } else if(response.data.hash == 'empty') {
+      if(response.status == 304)
+        return;
+      device_type.ticketshash = response.data.hash;
+      device_type.notickets = false;
+      $scope.loadTicketValues(device_type, response.data.tickets);
+      device_type.tickets = response.data.tickets;
+      if(response.data.hash == 'empty')
         device_type.notickets = true;
-      } else 
-        console.log('notchanged');
       
     }, function errorCallback(response) {
       console.log('load ticket error: ' + response.status);
@@ -67,14 +69,17 @@ angular.module('ticketListUser').controller('ticketListUserCtrl', function($scop
 
   }
 
-  $scope.loadTicketValues = function(tickets) {
+  $scope.loadTicketValues = function(device_type, tickets) {
     angular.forEach(tickets, function(ticket) {
-      $http.get(api_url + 'ticket_values/' + ticket.ID)
+      $http.get($scope.api_url + 'ticket_values/' + ticket.ID)
       .then(function successCallback(response) {
-        ticket.color = response.data.color;
         ticket.device_title = response.data.device_title;
         ticket.available = response.data.available;
-        ticket.status = response.data.status;
+        //ticket.status = response.data.status;
+
+        if(device_type.changedID == ticket.ID) 
+          $scope.setChangeHignlight(device_type, ticket);
+
         ticket.completed = true;
       }, function errorCallback(response) {
         console.log('load ticket_values error: ' + response.status);
@@ -83,106 +88,79 @@ angular.module('ticketListUser').controller('ticketListUserCtrl', function($scop
   }
 
 
-  // Ticket Handling 
-  $scope.deactivateTicket = function(device_type, ticket) {
-    $http.put(api_url + 'deactivate_ticket/' + ticket.ID)
-    .then(function successCallback(response) {
-      ticket.status = 'inactive';
-      $scope.loadDeviceTicket(device_type, true);
-    }, function errorCallback(response) {
-      console.log('load deactivateTicket error: ' + response.status);
-    });  
+  // ---------------------
+  // fullscreen Methods
+  // ---------------------
+
+
+  var get_param = new URLSearchParams(window.location.search);
+  if(get_param.has('fullscreen'))
+    $scope.fullscreen = true;
+  else
+    $scope.fullscreen = false;
+
+  $scope.showFullscreen = function() {
+    $scope.fullscreen = true;
+    //console.log($window.location.search);
+    //$window.location.search = ''; works but reloads
   }
 
-  $scope.deleteTicket = function (device_type, ticket, index) {
-    $http.delete(api_url + 'delete_ticket/' + ticket.ID)
-    .then(function successCallback(response) {
-      device_type.tickets.splice(index, 1);
-      $scope.loadDeviceTicket(device_type, true);
-    }, function errorCallback(response) {
-      console.log('load deactivateTicket error: ' + response.status);
-    }); 
+  $scope.hideFullscreen = function() {
+    $scope.fullscreen = false;
   }
 
-  $scope.activateTicket = function(device_type, ticket) {
-    $http.put(api_url + 'activate_ticket/' + ticket.ID)
-    .then(function successCallback(response) { 
-      ticket.status = 'waiting';
-      $scope.loadDeviceTicket(device_type, true);
-    }, function errorCallback(response) {
-      console.log('load activateTicket error: ' + response.status);
-    }); 
+  $scope.calcColsAndRows = function() {
+    $scope.number_rows = Math.floor(($window.innerHeight - 115)/151);
+    $scope.number_cols = Math.floor($window.innerWidth/600);
   }
 
-  // ------------------------------------
-  // handle overlay
-/*
+  
+  $scope.calcColsAndRows();
 
-   // on click edit ticket
-  $('.assign-ticket').on('click', function(event) {
-    $.ticket = $(this).parent('div');
-    $.edit_ticket = true;
+  $scope.reloadPage = function() {
 
-    load_assign_ticket();
-    show_overlay($);
-  })
+    if($scope.fullscreen) {
+      $scope.calcColsAndRows();
 
-  function load_assign_ticket() {
+      var index = $scope.neg_index - $scope.number_cols;
+      if (index <= 0)
+        index = $scope.device_types.length;
 
-    ticket_type = $.ticket.data('device-type');
+      var next_first_index = $scope.device_types.length - index;
+      for (var i = 0; (i < $scope.number_cols && next_first_index+i < $scope.device_types.length); i++)
+        $scope.loadDeviceTicket($scope.device_types[next_first_index+i]);
 
-    edit_box = $("#device-ticket-box");
+      //wait 5sec to load content
+      $timeout(function() {
+        $scope.neg_index = index;
+      }, 5000);
+    } else 
+      $scope.loadDeviceTickets();
 
-    // Close icon
-    edit_box.append('<a href="#" class="close">x</a>');
-
-    // Title
-    edit_box.append('<h2>'+ fl_ticket.assign_ticket + '</h2>');
-
-    //Body
-
-    //device Select
-    device_select = $('<select id="ticket-device-select"></select>');
-    device_select_p = $('<p>' + fl_ticket.ticket_device + '  : </p>');
-    device_select_p.append(device_select);
-    set_device_select(device_select, $.ticket.data('user-id'), ticket_type, $.ticket.data('device-id'));
-    edit_box.append(device_select_p);
-
-    if($.calc_time) {
-      //Eddit Time Options
-      edit_box.append('<p>' + fl_ticket.ticket_duration + ': <select id="ticket-time-select"></select></p>');
-      $("#ticket-time-select").empty();
-      for (time = $.time_interval; time < $.max_time; time+=$.time_interval) {
-        $("#ticket-time-select").append( new Option(minutesToHours(time), time) );
-      }
-      $("#ticket-time-select").append( new Option(minutesToHours($.max_time), $.max_time) );
-      $("#ticket-time-select").val($.ticket.data('duration'));
-    }
-    
-    //add Buttons
-    edit_box.append('<input type="submit" id="submit-ticket" class="button-primary" value="' + fl_ticket.assign_ticket + '"/>');
-    edit_box.append('<input type="submit" id="cancel-ticket" class="button-primary" value="' + fl_ticket.ticket_cancel + '"/>');  
   }
 
-  function set_device_select(device_select, user_id, ticket_type, device_id) {
-    // Set Device Name Dropdown
-    data = {
-      action: 'get_devices_of_device_types',
-      user_id: user_id,
-      ticket_type: ticket_type,
-      device_id: device_id,
-    };
-    $.post(ajaxurl, data, function(response) {
-      var device_type_list = JSON.parse(response);
-      $.each(device_type_list, function(id, name) {
-        device_select.append( new Option(this.name, this.id) );
-      });
-      if(ticket_type == 'device')
-        device_select.val(device_id);
-    })  
-  }
-
-*/
+  $interval($scope.reloadPage, 10000);
 
 
 });
+
+//------------------------------
+// Nonce Handling
+//------------------------------
+
+angular.module('ticketListUser').config(['$routeProvider', '$locationProvider', '$httpProvider', 
+  function($routeProvider, $locationProvider, $httpProvider) {
+  // ...
+
+  $httpProvider.interceptors.push([function() {
+    return {
+      'request': function(config) {
+        config.headers = config.headers || {};
+        //add nonce to avoid CSRF issues
+        config.headers['X-WP-Nonce'] = AppAPI.nonce;
+
+        return config;
+      }
+    };
+  }]);
+}]);

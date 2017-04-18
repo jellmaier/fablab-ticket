@@ -189,9 +189,12 @@ function get_ticket_query_from_user($user_id) {
   $query_arg = array(
     'post_type' => 'ticket',
     'author' => $user_id,
-    'orderby' => 'date', 
-    'order' => 'ASC',
-    'post_status' => array('publish', 'draft'),
+    'orderby' => array( 
+      'meta_value' => 'ASC', 
+      'date' => 'DESC' 
+    ),
+    'meta_key' => 'status',
+    'post_status' => 'publish',
     'meta_query'=>array(
       array(
           'key'=>'ticket_type',
@@ -404,6 +407,116 @@ function activate_ticket() {
 add_action( 'wp_ajax_activate_ticket', 'activate_ticket' );
 */
 
+function rest_continue_ticket($data) {
+
+  $ticket_id = sanitize_text_field($data['id']);
+
+  //valide input  
+  if(!is_ticket_entry($ticket_id)) 
+    return WP_Error( 'rest_noticket', __( 'Is not a ticket', 'fablab-ticket' ), array( 'status' => 422 ) );
+
+  update_post_meta($ticket_id, 'status', '1-assigned');
+
+  return new WP_REST_Response( null, 200 );
+}
+
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'sharepl/v1', '/continue_ticket/(?P<id>\d+)', array(
+    'methods' => 'POST',
+    'callback' => 'rest_continue_ticket',
+    'permission_callback' => 'rest_has_ticket_update_permission',
+    'sanitize_callback' => 'rest_data_arg_sanitize_callback',
+  ) );
+});
+
+
+function rest_finish_ticket($data) {
+
+  $ticket_id = sanitize_text_field($data['id']);
+
+  //valide input  
+  if(!is_ticket_entry($ticket_id)) 
+    return WP_Error( 'rest_noticket', __( 'Is not a ticket', 'fablab-ticket' ), array( 'status' => 422 ) );
+
+  update_post_meta($ticket_id, 'status', '0-finished');
+
+  return new WP_REST_Response( null, 200 );
+}
+
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'sharepl/v1', '/finish_ticket/(?P<id>\d+)', array(
+    'methods' => 'POST',
+    'callback' => 'rest_finish_ticket',
+    'permission_callback' => 'rest_has_ticket_update_permission',
+    'sanitize_callback' => 'rest_data_arg_sanitize_callback',
+  ) );
+});
+
+function rest_assign_ticket($data) {
+
+  $ticket_id = sanitize_text_field($data['ticket_id']);
+  $device_id = sanitize_text_field($data['device_id']);
+  $duration = sanitize_text_field($data['duration']);
+
+  //valide input  
+  if(!is_ticket_entry($ticket_id)) 
+    return WP_Error( 'rest_noticket', __( 'Is not a ticket', 'fablab-ticket' ), array( 'status' => 422 ) );
+
+
+  if (intval($duration)) {
+    update_post_meta($ticket_id, 'device_id', $device_id);
+    update_post_meta($ticket_id, 'duration' , $duration);
+    update_post_meta($ticket_id, 'ticket_type' , 'device');
+    update_post_meta($ticket_id, 'status', '1-assigned');
+  } else 
+    return WP_Error( 'rest_noticket', __( 'Please, set duration!', 'fablab-ticket' ), array( 'status' => 422 ) );
+  
+  
+  return new WP_REST_Response( null, 200 );
+}
+
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'sharepl/v1', '/assign_ticket', array(
+    'methods' => 'POST',
+    'callback' => 'rest_assign_ticket',
+    'permission_callback' => 'rest_has_ticket_update_permission',
+    'sanitize_callback' => 'rest_data_arg_sanitize_callback',
+  ) );
+});
+
+function rest_schedule_ticket($data) {
+
+  $ticket_id = sanitize_text_field($data['ticket_id']);
+  $device_id = sanitize_text_field($data['device_id']);
+  $ticket_type = sanitize_text_field($data['device_type']);
+  $duration = sanitize_text_field($data['duration']);
+
+  //valide input  
+  if(!is_ticket_entry($ticket_id)) 
+    return WP_Error( 'rest_noticket', __( 'Is not a ticket', 'fablab-ticket' ), array( 'status' => 422 ) );
+
+
+  if (intval($duration)) {
+    update_post_meta($ticket_id, 'device_id', $device_id);
+    update_post_meta($ticket_id, 'duration' , $duration);
+    update_post_meta($ticket_id, 'ticket_type' , $ticket_type);
+    update_post_meta($ticket_id, 'status', '3-scheduled');
+  } else 
+    return WP_Error( 'rest_noticket', __( 'Please, set duration!', 'fablab-ticket' ), array( 'status' => 422 ) );
+  
+  
+  return new WP_REST_Response( null, 200 );
+}
+
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'sharepl/v1', '/schedule_ticket', array(
+    'methods' => 'POST',
+    'callback' => 'rest_schedule_ticket',
+    'permission_callback' => 'rest_has_ticket_update_permission',
+    'sanitize_callback' => 'rest_data_arg_sanitize_callback',
+  ) );
+});
+
 function rest_deactivate_ticket($data) {
   $ticket_id = $data['id'];
   //valide input  
@@ -467,15 +580,140 @@ add_action( 'rest_api_init', function () {
   ) );
 });
 
+function rest_edit_ticket($data) {
+
+  $ticket_id = sanitize_text_field($data['ticket_id']);
+  $device_id = sanitize_text_field($data['device_id']);
+  //$duration = sanitize_text_field($data['duration']);
+
+  //valide input  
+  if(!is_ticket_entry($ticket_id)) 
+    return WP_Error( 'rest_noticket', __( 'Is not a ticket', 'fablab-ticket' ), array( 'status' => 422 ) );
+
+
+  //if (intval($duration)) {
+    update_post_meta($ticket_id, 'device_id', $device_id);
+    //update_post_meta($ticket_id, 'duration' , $duration);
+    //update_post_meta($ticket_id, 'ticket_type' , 'device');
+  //} else 
+    //return WP_Error( 'rest_noticket', __( 'Please, set duration!', 'fablab-ticket' ), array( 'status' => 422 ) );
+  return new WP_REST_Response( null, 200 );
+}
+
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'sharepl/v1', '/edit_ticket', array(
+    'methods' => 'POST',
+    'callback' => 'rest_edit_ticket',
+    'permission_callback' => 'rest_has_ticket_update_permission',
+    'sanitize_callback' => 'rest_data_arg_sanitize_callback',
+  ) );
+});
+
+function rest_add_ticket($data) {
+
+  $device_id = sanitize_text_field($data['device_id']);
+  //$duration = sanitize_text_field($data['duration']);
+  $ticket_type = sanitize_text_field($data['type']);
+  $options = fablab_get_option();
+  $user_id = get_current_user_id();
+
+  $duration = $options['ticket_max_time'];
+  /*
+  //valide input
+  if(($duration > $options['ticket_max_time']) || user_has_ticket($user_id, $device_id, 'device')) {
+    die(false);
+  }
+*/
+
+  if (($ticket_type == 'device') && is_no_device_entry($device_id))
+    return new WP_Error( 'rest_nodevice', __( 'Is not a device', 'fablab-ticket' ), array( 'status' => 422 ) );
+  else if (($ticket_type == 'device_type') && is_no_device_type($device_id))
+    return new WP_Error( 'rest_nodevice_type', __( 'Is not a device_type', 'fablab-ticket' ), array( 'status' => 422 ) );
+  
+
+/*
+  //check how many tickets of user
+  $tickets_per_user = $options['tickets_per_user'];
+  $query_arg = array(
+        'post_type' => 'ticket',
+        'author' => $user_id,
+        'post_status' => array('publish', 'draft'),
+        'meta_query'=>array(
+          array(
+            'key'=>'ticket_type',
+            'value'=> 'device',
+      )
+    )
+  );
+
+  $ticket_query = new WP_Query($query_arg);
+
+  if ($ticket_query->found_posts >= $tickets_per_user) 
+    return WP_Error( 'rest_max_tickets', __( 'Max number of Tickets', 'fablab-ticket' ), array( 'status' => 422 ) );
+
+  */
+
+  $post_information = array(
+    'post_title' => sprintf(__( '%s,from : ', 'fablab-ticket' ), __( 'Ticket', 'fablab-ticket' )) . wp_get_current_user()->display_name,//fablab_get_captions('ticket_caption') . ", von: " . 
+    'post_type' => 'ticket',
+    'author' => $user_id,
+    'post_status' => 'publish',
+  );
+
+  $ID = wp_insert_post( $post_information );
+
+
+  if ($ID != 0) {
+    add_post_meta($ID, 'device_id', $device_id);
+    add_post_meta($ID, 'duration' , $duration);
+    add_post_meta($ID, 'ticket_type' , $ticket_type);
+    add_post_meta($ID, 'status' , "5-waiting");
+  }
+
+
+  return new WP_REST_Response( null, 200 );
+}
+
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'sharepl/v1', '/add_ticket', array(
+    'methods' => 'PUT',
+    'callback' => 'rest_add_ticket',
+    'permission_callback' => 'rest_has_ticket_add_permission',
+    'sanitize_callback' => 'rest_data_arg_sanitize_callback',
+  ) );
+});
+
 
 function is_ticket_entry($ID) {
   $post_object = get_post($ID);
   return (!empty($post_object) && ($post_object->post_type == 'ticket'));
 }
 
-function rest_has_ticket_update_permission() {
+function rest_has_ticket_add_permission() {
 
-  if ( has_ticket_update_permission())
+  if (current_user_can('edit_posts'))
+    return true;
+  
+  return new WP_Error( 'rest_forbidden', __( 'OMG you can not view private data.', 'fablab-ticket' ), array( 'status' => 401 ) );
+}
+
+function rest_has_ticket_update_permission($data) {
+  if (isset($data['id']))
+    $ticket_id = sanitize_text_field($data['id']);
+  else if (isset($data['ticket_id']))
+    $ticket_id = sanitize_text_field($data['ticket_id']);
+  else
+    $ticket_id = 0;
+
+  if (has_ticket_update_permission($ticket_id))
+    return true;
+  
+  return new WP_Error( 'rest_forbidden', __( 'OMG you can not view private data.', 'fablab-ticket' ), array( 'status' => 401 ) );
+}
+
+function rest_is_manager() {
+
+  if (is_manager())
     return true;
   
   return new WP_Error( 'rest_forbidden', __( 'OMG you can not view private data.', 'fablab-ticket' ), array( 'status' => 401 ) );

@@ -1,0 +1,25 @@
+<div ng-switch="ticket.status">
+  <div ng-switch-when="finished">
+    <input type="submit" ng-click="continueTicket(device_type, ticket)" value="{{LOCAssign.continue_ticket}}"/>
+    <input type="submit" ng-click="deleteTicket(device_type, ticket, $ticketIndex)" value="{{LOCAssign.delete_ticket}}"/>
+  </div>
+  <div ng-switch-when="assigned">
+    <input type="submit" ng-click="finishTicket(device_type, ticket)" value="{{LOCAssign.finish_ticket}}"/>
+    <input type="submit" ng-click="activateTicket(device_type, ticket)" value="{{LOCAssign.ticket_cancel}}"/>
+  </div>
+  <div ng-switch-when="scheduled">
+    <input type="submit" ng-click="assignTicketOverlay(device_type, ticket)" value="{{LOCAssign.assign_ticket}}"/>
+    <input type="submit" ng-click="scheduleTicketOverlay(device_type, ticket)" value="{{LOCAssign.ticket_edit}}"/>
+    <input type="submit" ng-click="activateTicket(device_type, ticket)" value="{{LOCAssign.ticket_cancel}}"/>
+  </div>
+  <div ng-switch-when="waiting">
+    <input type="submit" ng-click="assignTicketOverlay(device_type, ticket)" value="{{LOCAssign.assign_ticket}}"/>
+    <input type="submit" ng-click="scheduleTicketOverlay(device_type, ticket)" value="{{LOCAssign.schedule_ticket}}"/>
+    <input type="submit" ng-click="deactivateTicket(device_type, ticket)" value="{{LOCAssign.deactivate_ticket}}"/>
+  </div>
+  <div ng-switch-when="inactive">
+    <input type="submit" ng-click="activateTicket(device_type, ticket)" value="{{LOCAssign.activate_ticket}}"/>
+    <input type="submit" ng-click="deleteTicket(device_type, ticket, $ticketIndex)" value="{{LOCAssign.delete_ticket}}"/>
+  </div>
+  <div ng-switch-default></div>
+</div>

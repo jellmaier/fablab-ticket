@@ -1,0 +1,78 @@
+<!-- Menu -->
+
+<div class="tab">
+  <button class="tablinks" ng-class="{active: menuTab=='devices'}"ng-click="setMenuTab('devices')">{{LOCAssign.ticket_devices}}</button>
+  <button class="tablinks" ng-class="{active: menuTab=='tickets'}" ng-click="setMenuTab('tickets')">Meine Tickets</button> <!-- totoranslate -->
+  <button class="tablinks" ng-class="{active: menuTab=='location'}" ng-click="setMenuTab('location')">Standorte</button> <!-- totoranslate -->
+</div>
+
+<!-- Tab Content -->
+
+<div ng-switch="menuTab">
+
+  <!-- Tickets -->
+
+  <div ng-switch-when="tickets" class="tabcontent">
+    <h2>Meine Tickets</h2>
+      <div id="ticket-listing" class="ticket-list">
+        <p ng-if="!tickets && !notickets">Loading... </p>
+        <p ng-if="notickets && !unauthorized">Keine Tickets</p>      <!-- totoranslate -->
+        <p ng-if="notickets && unauthorized">Keine Berechtigung</p>     <!-- totoranslate -->
+        <div data-ng-repeat="ticket in tickets track by ticket.ID" ng-init="ticketIndex = $index"
+          ng-class="{'fl-ticket-row': show_as_tabel }" > <!-- | orderBy : 'status' -->
+          <div class="fl-ticket-element {{ticket.status}}" ng-class="{blink: ticket.available, highlight: ticket.changed }" 
+          style="border-color: {{ticket.color}}" ng-cloak>
+            <p class="ticket-content">{{ formatDate(ticket.post_date) | date : "fullDate" }}<p>
+            <h2>{{ ticket.post_title }}</h2>
+            <p class="ticket-content">{{LOCAssign.for_device}}: <b>{{ ticket.device_title }}</b></p>
+            <div class="status-icon"></div>
+            <ng-include src="templates_url + 'ticketUserButtons.html'"></ng-include>
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <!-- Devices -->
+
+  <div ng-switch-when="devices" class="tabcontent">
+    <h2>{{LOCAssign.ticket_devices}}</h2>
+    <div id="fl-getticket" class="device-list">
+      <div data-ng-repeat="device_type in device_types track by $index"  class="fl-device-element get-ticket"  
+      style="border: 6px solid {{device_type.color}}; background-color: {{device_type.color}}"
+      ng-click="addTicketOverlay(device_type)" ng-show="device_type.completed" ng-cloak >
+        <div class="fl-device-element-content">
+          <h2>{{device_type.name}}</h2>
+          <!--p>Verfügbare Geräte: <b><?= $number_devices ?></b></br>Wartende Personen: <b><?= $waiting['persons'] ?></b></p-->
+          <!--p id="waiting-time">Vorraussichtlich Wartezeit: <b><?= get_post_time_string($waiting['time'], true) ?></b></p-->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Location -->
+
+  <div ng-switch-when="location" class="tabcontent">
+    <h2>Standorte</h2>                      <!-- totoranslate -->
+    <!--leaflet id="map-simple-map"></leaflet-->
+  </div>
+</div>
+
+<!-- END Tab Content -->
+
+<!-- Overlay -->
+
+<div id="overlay-ticket" class="fl-overlay" ng-show="overlay.show">
+  <div id="device-ticket-box" class="device-ticket" ng-show="overlay.show">
+  <a ng-click="overlay.show=false" class="close">x</a>
+  <ng-include src="templates_url + 'ticketUserOverlayTemplate.html'"></ng-include>
+  </div>
+  <div class="fl-overlay-background" ng-click="overlay.show=false"></div>
+</div>
+
+<!--
+<?php if($calc_waiting_time) { ?>
+<p>Benutzungsdauer: <b><?=  get_post_time_string(get_post_meta($post->ID, 'duration', true )) ?></b></p>
+<p id="waiting-time">Vorraussichtlich Wartezeit: <b><?= get_post_time_string($waiting['time'], true) ?></b></p>
+<?php } ?>
+<p>Vor dir wartende Personen: <b><?= $waiting['persons'] ?></b></p>
+-->

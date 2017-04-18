@@ -1,0 +1,19 @@
+<h2>{{LOCAssign.schedule_ticket}}</h2>
+<p>{{LOCAssign.ticket_device}}: 
+  <select ng-model="overlay.deviceSelect" ng-options="device.id as device.name for device in overlay.select"> </select> 
+</p>
+<p>{{LOCAssign.ticket_duration}}:
+  <input type="range" name="range" ng-model="over.duration" ng-change="setMinHour()" min="0"  step="15" max="{{max}}">
+  <span ng-click="incrementMax()" style="margin-right:10px;">+</span>
+  <span ng-show="over.duration==0" >Select duration!</span>
+  <ng-pluralize count="hours" when="{'0': '',
+                                     '1': LOCMinHour.hour,
+                                     'other': LOCMinHour.hours}">
+  </ng-pluralize>
+  <ng-pluralize count="minutes" when="{'0': '',
+                                     '1': LOCMinHour.minute,
+                                     'other': LOCMinHour.minutes}">
+  </ng-pluralize>
+</p>  
+<input type="submit" ng-click="scheduleTicket()" class="button-primary" value="{{LOCAssign.schedule_ticket}}">
+<input type="submit" ng-click="overlay.show=false" class="button-primary" value="{{LOCAssign.ticket_cancel}}">

@@ -1,0 +1,39 @@
+Die Todo-Liste mit Prioritäten:
+
++ Überarbeitung Admin-Ticket
+ + Umbau auf Angular // Done
+ + Umbau auf Ticketstatus (wartend, geplant, Reservierung) // Done
+ + Ticket planen Ansicht // done
+ + Umbau Ticket logik // done
+
++ Persönliche Ansicht //done
+ + Umbau auf Angular //done
+ + Adaptierung auf Ticketstatus //done
+ + Standortansicht // later
+
++ Admin Ansicht auf Tabelle überarbeiten //done
+
+------ current implementaton --------
+
++ Rebuild and Test all Functuialities
+ + Device availability Check
+ + TAC accapance
+ + Login Info
+
++ PIN-REST-Request for Device Handlineg
+
++ Code Cleanup
+
++ Standortmanagement
+ + Standortansicht User
+ + Standortoptionen (info/ticketing)
+ + Umbau des Ticketing-Systems auf Standorte
+ + Berechtigungssystem
+ + Erstellen von Standorten durch User
+
++ QR-Login
+
++ User Statistik
+ + zusätzliche Abfragen für Benutzereigenschaften
+
++ Feedback Plugin

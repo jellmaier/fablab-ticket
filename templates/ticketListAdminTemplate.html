@@ -1,0 +1,35 @@
+<!--div ng-app="ticketListUser" ng-controller="ticketListUserCtrl" class="ticket-list" -->
+<p>Tabellen Ansicht: </p><label class="switch"><input type="checkbox" ng-model="show_as_tabel"><div class="slider round"></div></label>
+<h2>{{LOCAssign.ticket_devices}}</h2>
+<div class="device-list-box" data-ng-repeat="device_type in device_types track by $index" ng-init="deviceIndex = $index" 
+ng-show="device_type.completed" ng-cloak >
+<div class="device-toggle" style="border-left: 4px solid {{device_type.color}};" ng-click="device_type.show = !device_type.show">
+<p><b> {{ device_type.name }} </b>
+<img ng-click="loadDeviceTicket(device_type, true); $event.stopPropagation();" 
+ng-if="device_type.show"
+src="../wp-content/plugins/fablab-ticket/css/reload2.svg" align="right"></p>
+</div>
+<div class="device-dropdown" ng-show="device_type.show">  
+  <p ng-if="!device_type.tickets && !device_type.notickets">Loading... </p>
+  <p ng-if="device_type.notickets">Notickets</p>
+  <div data-ng-repeat="ticket in device_type.tickets track by ticket.ID" ng-init="ticketIndex = $index"
+    ng-class="{'fl-ticket-row': show_as_tabel }" > <!-- | orderBy : 'status' -->
+    <div class="fl-ticket-element {{ticket.status}}" ng-class="{blink: ticket.available, highlight: ticket.changed }" 
+    style="border-color: {{device_type.color}}" ng-cloak>
+      <p class="ticket-content">{{ formatDate(ticket.post_date) | date : "fullDate" }}<p>
+      <h2>{{ ticket.post_title }}</h2>
+      <p class="ticket-content">{{LOCAssign.for_device}}: <b>{{ ticket.device_title }}</b></p>
+      <div class="status-icon"></div>
+      <ng-include ng-class="{'hover-buttons': show_as_tabel }" src="device_type.button_template_url"></ng-include>
+    </div>
+  </div>
+<div class="device-close" ng-click="device_type.show = false" ><p><b>x</b> Schließen</br></p></div>
+</div></div>
+<div id="overlay-ticket" class="fl-overlay" ng-show="overlay.show">
+  <div id="device-ticket-box" class="device-ticket" ng-show="overlay.show">
+  <a ng-click="overlay.show=false" class="close">x</a>
+  <ng-include src="overlay.url"></ng-include>
+  </div>
+  <div class="fl-overlay-background" ng-click="overlay.show=false"></div>
+</div>
+<!-- /div -->

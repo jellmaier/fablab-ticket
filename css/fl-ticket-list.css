@@ -1,8 +1,74 @@
 h2 {
     margin-top: 14px;
 }
+/* ------------------------------------------------------------ */
+/* Checkbox toggle */
+/* source: https://www.w3schools.com/howto/howto_css_switch.asp */
+/* ------------------------------------------------------------ */
 
+ /* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 34px;
+  height: 19px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 13px;
+  width: 13px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  -webkit-transition: .2s;
+  transition: .2s;
+}
+
+input:checked + .slider {
+  background-color: #AEDE1A;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #AEDE1A;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(15px);
+  -ms-transform: translateX(15px);
+  transform: translateX(15px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 19px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+
+/* ------------------------------------------------------------ */
 /* Ticket Element */
+/* ------------------------------------------------------------ */
 
 .fl-ticket-element {
     font-family: Helvetica, Arial, Sans-Serif;
@@ -63,7 +129,9 @@ h2 {
     margin-bottom: 34px;
 }
 
+/* ------------------------------------------------------------ */
 /* Instruction Element */
+/* ------------------------------------------------------------ */
 
 .get-instruction {
     background-color: #ddd;
@@ -86,7 +154,9 @@ h2 {
 }
 
 
+/* ------------------------------------------------------------ */
 /* Reload icon */
+/* ------------------------------------------------------------ */
 
 .reload {
     margin: 10px;
@@ -110,7 +180,9 @@ p {
     margin-bottom: 8px;
 }
 
+/* ------------------------------------------------------------ */
 /* overlay style */
+/* ------------------------------------------------------------ */
 
 .fl-overlay {
     position: fixed;
@@ -236,88 +308,299 @@ p {
     margin: 14px 0;
 }
 
-/* Draft Ticket List */
-
-.draft-box {
-    border-radius: 6px;
-    margin-bottom: 14px;
-    transition: all 0.4s ease;
-    -webkit-transition: all 0.4s ease;
-    -moz-transition: all 0.4s ease;
-}
-.draft-box:hover {
-    background-color: #f3f3f3;
+.ticket-list .fl-ticket-element {
+    margin: 16px 8px;
+    border-width: 0 0 0 5px;
+    border-style: solid;
+    border-color: #ccc;
+    
 }
 
-.draft-toggle {
-    cursor: pointer;
+.ticket-list .fl-ticket-row .fl-ticket-element {
+    margin: 0;
+    border-width: 0 0 0 5px;
+    border-style: solid;
+    border-color: #ccc;
+    padding: 10px 12px;
+    box-shadow: none;
+    
 }
 
-.draft-title {
-    letter-spacing: 0.5px;
-    text-align: center;
-    font-weight: 600;
-    font-size: 18px;
-    transition: all 0.4s ease;
-    -webkit-transition: all 0.4s ease;
-    -moz-transition: all 0.4s ease;
-    color: #999;
-    padding-top: 6px;
-}
-.draft-title:hover {
-    letter-spacing: 0.6px;
+.ticket-list .fl-ticket-row {
+    border-width: 0 0 1px 0;
+    border-style: solid;
+    border-color: #eee;
+    
 }
 
-.arrow-down:hover {
-    border-left: 36px solid transparent;
-    border-right: 36px solid transparent;
+.fl-ticket-row .ticket-content {
+    display: none;
 }
 
-.arrow-down {
-    width: 0; 
-    height: 0; 
-    border-left: 32px solid transparent;
-    border-right: 32px solid transparent;
-    border-top: 16px solid #ddd;
-    margin: auto;
-    transition: all 0.4s ease;
-    -webkit-transition: all 0.4s ease;
-    -moz-transition: all 0.4s ease;
-    padding-bottom: 8px;
+@media all and (min-width: 800px) {
+    .fl-ticket-row .hover-buttons{
+        position: absolute;
+        bottom: 10px;
+        padding: 2px;
+        display: none;
+    }
+    .fl-ticket-row:hover .hover-buttons{
+        display: inline-block;
+    }
+
+    .hover-buttons input[type=submit]{
+        margin: 0;
+    }
 }
 
-.draft-content {
-    background-color: #f7f7f7;
+/*
+
+.content-area {
+  border: 1px solid black;
+  margin-top: 10px;
+  padding: 10px;
+}
+
+.sample-show-hide {
+  transition: all linear 0.5s;
+}
+.sample-show-hide.ng-hide {
+  opacity: 0;
+}
+
+
+
+.fl-ticket-element.ng-move {
+  transition:all linear 1s;
+}
+*/
+/* ------------------------------------------------------------ */
+/* Ticket List Type - Button handling */
+/* ------------------------------------------------------------ */
+
+/* Blink */
+
+.blink{
+    animation: blink 600ms infinite alternate;
+    -webkit-animation: blink 600ms infinite alternate;
+    -moz-animation: blink 600ms infinite alternate;
+}
+@-webkit-keyframes blink {
+    from { opacity:0.3; }
+    to { opacity:1; }
+}
+@-moz-keyframes blink {
+    from { opacity:0.3; }
+    to { opacity:1; }
+}
+@keyframes blink {
+    from { opacity:0.3; }
+    to { opacity:1; }
+}
+
+
+.status-icon {
+    right: 10px;
+    top: 10px;
+    width: 100px;
+    height: 100px;
+    position: absolute;
+}
+
+.fl-ticket-row .status-icon {
+    right: 10px;
+    top: 8px;
+    width: 50px;
+    height: 50px;
+}
+
+
+/* Inactive */
+
+.inactive h2 {
+    color: #9c9c9c;
+}
+
+.inactive input[type=submit]{
+    border: 1px solid #9c9c9c;
+    color: #9c9c9c;
+    background: #fff;
+}
+
+.inactive input[type=submit]:enabled:hover{
+    background: #9c9c9c;
 }
 
 .inactive {
-    background-color: #f7f7f7;
-    opacity: 0.95;
+    /* border-style: solid; */
+    /* background-color: #f7f7f7; */
+    background: repeating-linear-gradient(-45deg, transparent, transparent 15px, rgba(100,100,100,0.1)  15px, rgba(100,100,100,0.1)  30px );
+    /* opacity: 0.95; */
 } 
 
-.inactive input[type=submit].assign-ticket{
-    display: none;
-}
-.inactive input[type=submit].deactivate-ticket{
-    display: none;
-}
-
-.waiting input[type=submit].activate-ticket {
-    display: none;
+.inactive .status-icon {
+    background: url('status_icons.svg') 0 0;
 } 
-.waiting input[type=submit].delete-ticket {
-    display: none;
+
+.fl-ticket-row .inactive .status-icon {
+    background: url('status_icons_tabel.svg') 0 0;
+} 
+
+
+/* Waiting */
+
+.waiting h2 {
+    color: #24B8CD;
 }
 
+.waiting input[type=submit]{
+    border: 1px solid #24B8CD;
+    color: #24B8CD;
+    background: #fff;
+}
+
+.waiting input[type=submit]:enabled:hover{
+    background: #24B8CD;
+}
+
+.waiting {
+    /* border-style: solid; */
+    background-color: #fff;
+}
+
+.waiting .status-icon {
+    background: url('status_icons.svg') -100px 0;
+} 
+.fl-ticket-row .waiting .status-icon {
+    background: url('status_icons_tabel.svg') -50px 0;
+} 
+
+
+/* Scheduled */
+
+.scheduled h2 {
+    color: #FF9A00;
+}
+
+.scheduled input[type=submit]{
+    border: 1px solid #FF9A00;
+    color: #FF9A00;
+    background: #fff;
+}
+
+.scheduled input[type=submit]:enabled:hover{
+    background: #FF9A00;
+}
+
+.scheduled {
+    /* border-style: dotted; */
+    background: linear-gradient(rgba(100,100,100,.1) 2px, transparent 1px),
+                linear-gradient(90deg, rgba(100,100,100,.1) 2px, transparent 1px);
+    background-size: 16px 16px;
+    background-color: #fff;
+}
+
+.scheduled .status-icon {
+    background: url('status_icons.svg') -200px 0;
+} 
+.fl-ticket-row .scheduled .status-icon {
+    background: url('status_icons_tabel.svg') -100px 0;
+} 
+
+/* Assigned */
+
+.assigned h2 {
+    color: #93C23B;
+}
+
+.assigned input[type=submit]{
+    border: 1px solid #93C23B;
+    color: #93C23B;
+    background: #fff;
+}
+
+.assigned input[type=submit]:enabled:hover{
+    background: #93C23B;
+}
+
+
+.assigned {
+    /* border-style: solid; */
+    background:
+    linear-gradient(135deg, transparent 22px, #eee 22px, #eee 24px, transparent 24px, transparent 67px, #eee 67px, #eee 69px, transparent 69px),
+    linear-gradient(225deg, transparent 22px, #eee 22px, #eee 24px, transparent 24px, transparent 67px, #eee 67px, #eee 69px, transparent 69px)0 64px;
+    background-size: 64px 128px;
+    background-color: #fff;
+}
+
+.assigned .status-icon {
+    background: url('status_icons.svg') -300px 0;
+} 
+.fl-ticket-row .assigned .status-icon {
+    background: url('status_icons_tabel.svg') -150px 0;
+} 
+
+/* Finished */
+
+.finished h2 {
+    color: #94C9AE;
+}
+
+.finished input[type=submit]{
+    border: 1px solid #94C9AE;
+    color: #94C9AE;
+    background: #fff;
+}
+
+.finished input[type=submit]:enabled:hover{
+    background: #94C9AE;
+}
+
+
+
+
+.finished {
+    /* border-style: solid; */
+    background-image: linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee ), 
+                      linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee );
+    background-size: 40px 40px;
+    background-position:0 0, 20px 20px
+}
+
+.finished .status-icon {
+    background: url('status_icons.svg') -400px 0;
+} 
+.fl-ticket-row .finished .status-icon {
+    background: url('status_icons_tabel.svg') -200px 0;
+} 
+
+.highlight {
+    background-color: rgba(255,220,0,.3); 
+}
+
+.highlight:hover {
+    background-color: rgba(255,220,0,.1); 
+}
+/* ------------------------------------------------------------ */
 /* Time-Ticket List */
+/* ------------------------------------------------------------ */
 
 .device-list-box {
     border-radius: 2px;
     margin-bottom: 10px;
     -webkit-box-shadow: 0 0px 4px rgba(0,0,0,.2);
     box-shadow: 0px 0px 4px rgba(0,0,0,.2);
+    transition: all linear 0.5s;
 }
-
+/*
+Fade in but blinking first.
+.device-list-box {
+    transition: all linear 0.5s;
+}
+.device-list-box.ng-hide {
+    opacity: 0;
+}
+*/
 .device-toggle {
     background-color: #aaa;
     font-size: 16px;
@@ -345,27 +628,10 @@ p {
     margin: 0px;
 }
 
-/* Blink */
 
-.blink{
-    animation: blink 600ms infinite alternate;
-    -webkit-animation: blink 600ms infinite alternate;
-    -moz-animation: blink 600ms infinite alternate;
-}
-@-webkit-keyframes blink {
-    from { opacity:0.3; }
-    to { opacity:1; }
-}
-@-moz-keyframes blink {
-    from { opacity:0.3; }
-    to { opacity:1; }
-}
-@keyframes blink {
-    from { opacity:0.3; }
-    to { opacity:1; }
-}
-
+/* ------------------------------------------------------------ */
 /* Message */
+/* ------------------------------------------------------------ */
 
 .message-box p{
     margin: 4px;
@@ -629,10 +895,6 @@ p {
     color: #74a4a3;
 }
 
-.ticket-list .fl-ticket-element {
-    margin: 8px 8px 16px 8px;
-}
-
 .time-ticket-list .fl-ticket-element {
     margin: 8px 8px 10px 8px;
 }
@@ -668,4 +930,95 @@ p {
     .fl-fullscreen-layer .tickets-box {
         width: 600px;
     }
+}
+
+/* -------------------- */
+/* Tab menu             */
+/* from https://www.w3schools.com/howto/howto_js_tabs.asp */
+/* -------------------- */
+
+ /* Style the tab */
+div.tab {
+    overflow: hidden;
+    border-left: 1px solid #ddd;
+}
+
+/* Style the buttons inside the tab */
+div.tab button {
+    background-color: #f4f4f4;
+    float: left;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    border: none;
+    border-right: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    color: #999;
+    z-index:1;
+    padding: 10px 30px;
+}
+
+/* Change background color of buttons on hover */
+div.tab button:hover {
+    background-color: #eee;
+}
+
+/* Create an active/current tablink class */
+div.tab button.active {
+    background-color: #fff;
+    border-bottom: 1px solid #fff;
+    color: #333;
+}
+
+/* Style the tab content */
+.tabcontent {
+    margin-top:-1px;
+    display: block;
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 8px rgba(50, 50, 50, 0.1);
+}
+
+
+/* -------------------- */
+/* Device Element */
+/* -------------------- */
+
+.fl-device-element {
+    border: 6px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+.fl-device-element-content{
+    transition: background-color 0.3s ease;
+    -webkit-transition: background-color 0.3s ease;
+    -moz-transition: background-color 0.3s ease;
+    background-color: rgba(0,0,0,0.15);
+    padding: 14px 18px;
+    color: #fff;
+}
+.fl-device-element-content:hover{
+    background-color: rgba(0,0,0,0);
+}
+.fl-device-element-content h2{
+    margin-top: 6px;
+    margin-bottom: 14px;
+    color: rgba(256,256,256,0.9);
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+.fl-device-element-content p{
+    color: rgba(256,256,256,0.7);
+    margin-bottom: 5px;
+}
+.fl-device-element-content:hover p{
+    color: rgba(256,256,256,1);
+}
+
+.device-list {
+    margin-bottom: 24px;
 }

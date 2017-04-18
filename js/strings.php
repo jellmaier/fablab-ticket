@@ -2,10 +2,16 @@
   
   function angular_translation_array() {
     return array(
+      // this is the address of the blog
+      'blog_url' => get_bloginfo('wpurl'),
+      // this is the address of the blog
+      'templates_url' => get_bloginfo('wpurl') . '/wp-content/plugins/fablab-ticket/templates/',
       // this is the API address of the JSON API plugin
-      'url' => get_bloginfo('wpurl').'/api/',
+      'api_url' => get_bloginfo('wpurl') . '/api/',
       // this is the API address of the JSON API plugin
-      'sharing_url' => get_bloginfo('wpurl').'/wp-json/sharepl/v1/',
+      'sharing_url' => get_bloginfo('wpurl') . '/wp-json/sharepl/v1/',
+      // user nonce
+      'nonce' => wp_create_nonce( 'wp_rest' )
     );
   }
 
@@ -57,6 +63,19 @@
     );
   }
 
+  function ticket_ng_minhour_array() {
+    return array(
+      // %d Stunde
+      'hour' => __('{} Hour', 'fablab-ticket' ),
+      // %d Stunden
+      'hours' => __('{} Hours', 'fablab-ticket' ),
+      // %d Minute
+      'minute' => __('{} Minute', 'fablab-ticket' ),
+      // %d Minuten
+      'minutes' => __('{} Minutes', 'fablab-ticket' ),
+    );
+  }
+
   function tticket_translation_array() {
     return array(
       // Time-Ticket von: %s, beendet!
@@ -85,10 +104,35 @@
 
   function ticket_assign_translation_array() {
     return array(
-      // Ticket bearbeiten
+
+      // für Gerät
+      'for_device' => sprintf(__('for %s', 'fablab-ticket' ), __( 'Device', 'fablab-ticket' )),
+
+      // Ticket beenden
+      'finish_ticket' => sprintf(__( 'Finish %s', 'fablab-ticket' ), __( 'Ticket', 'fablab-ticket' )),
+      // Ticket verlängern
+      'continue_ticket' => sprintf(__( 'Continue %s', 'fablab-ticket' ), __( 'Ticket', 'fablab-ticket' )),
+      // Ticket zuweisen
       'assign_ticket' => sprintf(__( 'Assign %s', 'fablab-ticket' ), __( 'Ticket', 'fablab-ticket' )),
+      // Ticket planen
+      'schedule_ticket' => sprintf(__( 'Schedule %s', 'fablab-ticket' ), __( 'Ticket', 'fablab-ticket' )),
+      // Ticket Aktivieren
+      'activate_ticket' => sprintf(__( 'Activate %s', 'fablab-ticket' ), __( 'Ticket', 'fablab-ticket' )),
+      // Ticket Deaktivieren
+      'deactivate_ticket' => sprintf(__( 'Deactivate %s', 'fablab-ticket' ), __( 'Ticket', 'fablab-ticket' )),
+      // Ticket löschen
+      'delete_ticket' => sprintf(__( 'Delete %s', 'fablab-ticket' ), __( 'Ticket', 'fablab-ticket' )),
+      // Ticket bearbeiten
+      'edit_ticket' => sprintf(__( 'Edit %s', 'fablab-ticket' ), __( 'Ticket', 'fablab-ticket' )),
+      // Ticket hinzufügen
+      'add_ticket' => sprintf(__( 'Add %s', 'fablab-ticket' ), __( 'Ticket', 'fablab-ticket' )),
+
+      // Bearbeiten
+      'ticket_edit' => __( 'Edit', 'fablab-ticket' ),
       // Gerät
       'ticket_device' => __('Device', 'fablab-ticket' ),
+      // Geräte
+      'ticket_devices' => __('Devices', 'fablab-ticket' ),
       // Dauer
       'ticket_duration' => __('Duration', 'fablab-ticket' ),
       // Abbrechen

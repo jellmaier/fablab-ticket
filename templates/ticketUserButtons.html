@@ -1,0 +1,9 @@
+<div ng-switch="ticket.status">
+  <div ng-switch-when="waiting">
+    <input type="submit" ng-click="editTicketOverlay(ticket, $index)" value="{{LOCAssign.edit_ticket}}"/>
+  </div>
+  <div ng-switch-when="inactive">
+    <input type="submit" ng-click="editTicketOverlay(ticket, $index)" value="{{LOCAssign.edit_ticket}}"/>
+  </div>
+  <div ng-switch-default></div>
+</div>

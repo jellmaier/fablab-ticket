@@ -1,0 +1,6 @@
+<h2>{{LOCAssign.assign_ticket}}</h2>
+<p>{{LOCAssign.ticket_device}}: 
+  <select ng-model="overlay.deviceSelect" ng-options="device.id as device.name for device in overlay.select"> </select> 
+</p>     
+<input type="submit" ng-click="assignTicket()" class="button-primary" value="{{LOCAssign.assign_ticket}}">
+<input type="submit" ng-click="overlay.show=false" class="button-primary" value="{{LOCAssign.ticket_cancel}}">
