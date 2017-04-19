@@ -16,7 +16,7 @@
       ng-class="{'fl-ticket-row': show_as_tabel }" > <!-- | orderBy : 'status' -->
       <div class="fl-ticket-element {{ticket.status}}" ng-class="{blink: ticket.available, highlight: ticket.changed }" 
       style="border-color: {{device_type.color}}" ng-cloak>
-        <p class="ticket-content">{{ formatDate(ticket.post_date) | date : "fullDate" }}<p>
+        <p class="ticket-content">{{ formatDate(ticket.post_date) | date : "EEEE, d. MMMM y, HH:mm" }}<p>
         <h2>{{ ticket.post_title }}</h2>
         <p class="ticket-content">{{LOCAssign.for_device}}: <b>{{ ticket.device_title }}</b></p>
         <div class="status-icon"></div>

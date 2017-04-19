@@ -191,7 +191,7 @@ function get_ticket_query_from_user($user_id) {
     'author' => $user_id,
     'orderby' => array( 
       'meta_value' => 'ASC', 
-      'date' => 'DESC' 
+      'date' => 'ASC',
     ),
     'meta_key' => 'status',
     'post_status' => 'publish',
@@ -543,7 +543,18 @@ function rest_activate_ticket($data) {
     return WP_Error( 'rest_noticket', __( 'Is not a ticket', 'fablab-ticket' ), array( 'status' => 422 ) );
   }
   update_post_meta($ticket_id, 'status', '5-waiting');
-  set_activation_time($ticket_id);
+
+  $ticket_type = get_post_meta( $ticket_id, 'ticket_type', true );
+  if($ticket_type == 'device') {
+    $device_id = get_post_meta( $ticket_id, 'device_id', true );
+    $device_type_selected_array = wp_get_post_terms($device_id, 'device_type', array("fields" => "ids"));
+    $device_type_selected = $device_type_selected_array[0];
+    update_post_meta($ticket_id, 'device_id', $device_type_selected);
+    update_post_meta($ticket_id, 'ticket_type' , 'device_type');
+  }
+
+
+  //set_activation_time($ticket_id);
   //clear_device_activation_time(get_post_meta( $ticket_id, 'device_id', true ));
   //delete_post_meta($ticket_id, 'activation_time');
   return new WP_REST_Response( null, 200 );

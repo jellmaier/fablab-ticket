@@ -13,14 +13,20 @@ Die Todo-Liste mit Prioritäten:
 
 + Admin Ansicht auf Tabelle überarbeiten //done
 
------- current implementaton --------
++ PIN-REST-Request for Device Handlineg
+ + Test Http Request // done
+ + generate Ticket Pin
+ + Ticket Pin view
+ + Ticket Pin Check
 
 + Rebuild and Test all Functuialities
- + Device availability Check
+ + Device availability Check // done
+ + Check max Ticket for Device
  + TAC accapance
  + Login Info
 
-+ PIN-REST-Request for Device Handlineg
+
+------ current implementaton --------
 
 + Code Cleanup
 

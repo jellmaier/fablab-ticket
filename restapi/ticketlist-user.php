@@ -112,8 +112,8 @@ if (!class_exists('TicketListShortcodeUser'))
         'posts_per_page' => $post_number, 
         'orderby' => array( 
           'meta_value' => 'ASC', 
-          'date' => 'ASC' 
-          ),
+          'date' => 'ASC',
+        ),
         'meta_key' => 'status',
         'post_status' => 'publish',
         'meta_query'=> $meta_array,
@@ -213,8 +213,7 @@ function rest_ticket_values($data) {
   $device_id = get_post_meta($ticket_id, 'device_id', true );
 
   if ($ticket_status == '5-waiting') {
-    $waiting = get_waiting_time_and_persons($device_id, $ticket_type , $ticket_id);
-    $ticket['available'] = ($waiting['time'] == 0);
+    $ticket['available'] = device_type_available($device_id, $ticket_type , $ticket_id);
   } else {
     $ticket['available'] = false;
   }
