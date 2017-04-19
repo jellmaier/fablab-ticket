@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: FabLab Ticket
-Version: 0.9.0
+Version: 0.9.1
 Plugin URI: https://github.com/jellmaier/fablab-ticket
 Description: Ticketing and Reservation System for FabLabs
 Author: Jakob Ellmaier
@@ -27,7 +27,7 @@ include 'ticket/ticket-handler.php';
 include 'shortcode/ticket-shortcode.php';
 include 'shortcode/ticketlist-shortcode.php';
 include 'shortcode/ticketlist-shortcode-admin-rest.php';
-include 'shortcode/ticketlist-shortcode-user-rest.php';
+include 'shortcode/ticket-shortcode-user-rest.php';
 include 'shortcode/calendar-shortcode.php';
 include 'admin-page.php';
 include 'user-list.php';

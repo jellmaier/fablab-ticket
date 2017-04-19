@@ -23,7 +23,7 @@ Die Todo-Liste mit Prioritäten:
  + Device availability Check // done
  + Check max Ticket for Device
  + TAC accapance
- + Login Info
+ + Login Info // done
 
 
 ------ current implementaton --------
