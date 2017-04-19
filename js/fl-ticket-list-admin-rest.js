@@ -59,12 +59,7 @@ angular.module('ticketListAdmin').controller('ticketListAdminCtrl', function($sc
       $http.get($scope.api_url + 'device_type_values/' + device_type.term_id)
       .then(function successCallback(response) {
         device_type.color = response.data.color;
-
-        if(response.data.usage_type == 'ticket_direct_use')
-          device_type.button_template_url = $scope.templates_url + 'ticketListAdminButtonsDirectUse.html';
-        else if(response.data.usage_type == 'ticket_schedule')
-          device_type.button_template_url = $scope.templates_url + 'ticketListAdminButtonsSchedule.html';
-
+        device_type.usage_type = response.data.usage_type;
         device_type.completed = true;
       }, function errorCallback(response) {
         console.log('load device color error: ' + response.status);
