@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: FabLab Ticket\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-01-13 01:18+0000\n"
-"POT-Revision-Date: Fri Apr 14 2017 11:51:43 GMT+0200 (CEST)\n"
+"POT-Revision-Date: Wed Apr 19 2017 02:52:05 GMT+0200 (CEST)\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -57,7 +57,7 @@ msgid "New %s"
 msgstr ""
 
 #: ../device.php:54 ../devices/device-type.php:27 ../devices/device.php:56 ..
-#: /devices/location.php:27 ../js/strings.php:23
+#: /devices/location.php:27 ../js/strings.php:25 ../js/strings.php:126
 #, php-format
 msgid "Edit %s"
 msgstr ""
@@ -139,7 +139,7 @@ msgstr ""
 msgid "Choose from the most used %s"
 msgstr ""
 
-#: ../devices/device-type.php:86 ../js/strings.php:116
+#: ../devices/device-type.php:86 ../js/strings.php:118
 #, php-format
 msgid "Schedule %s"
 msgstr ""
@@ -158,7 +158,7 @@ msgid "%s Color"
 msgstr ""
 
 #: ../devices/device-type.php:100 ../devices/device-type.php:139 ../js/strings.
-#: php:129
+#: php:135
 msgid "Devices"
 msgstr ""
 
@@ -219,184 +219,193 @@ msgstr ""
 msgid "http://medienbausatz.at"
 msgstr ""
 
-#: ../js/strings.php:19
+#: ../js/strings.php:21
 msgid "You have agreed to the terms and conditions"
 msgstr ""
 
-#: ../js/strings.php:21
+#: ../js/strings.php:23
 #, php-format
 msgid "Save %s"
 msgstr ""
 
-#: ../js/strings.php:21 ../js/strings.php:23 ../js/strings.php:33 ../js/strings.
-#: php:35 ../js/strings.php:37 ../js/strings.php:39 ../js/strings.php:41 ..
-#: /js/strings.php:43 ../js/strings.php:45 ../js/strings.php:47 ../js/strings.php:
-#: 110 ../js/strings.php:112 ../js/strings.php:114 ../js/strings.php:116 ..
-#: /js/strings.php:118 ../js/strings.php:120 ../js/strings.php:122 ../js/strings.
-#: php:124 ../restapi/userticket.php:31 ../shortcode/ticket-shortcode-tickets.php:
-#: 153
+#: ../js/strings.php:23 ../js/strings.php:25 ../js/strings.php:35 ../js/strings.
+#: php:37 ../js/strings.php:39 ../js/strings.php:41 ../js/strings.php:43 ..
+#: /js/strings.php:45 ../js/strings.php:47 ../js/strings.php:49 ../js/strings.php:
+#: 112 ../js/strings.php:114 ../js/strings.php:116 ../js/strings.php:118 ..
+#: /js/strings.php:120 ../js/strings.php:122 ../js/strings.php:124 ../js/strings.
+#: php:126 ../js/strings.php:128 ../shortcode/ticket-shortcode-tickets.php:153 ..
+#: /ticket/ticket.php:657
 msgid "Ticket"
 msgstr ""
 
-#: ../js/strings.php:25 ../js/strings.php:107 ../js/strings.php:127
+#: ../js/strings.php:27 ../js/strings.php:109 ../js/strings.php:133
 msgid "Device"
 msgstr ""
 
-#: ../js/strings.php:27 ../js/strings.php:131
+#: ../js/strings.php:29 ../js/strings.php:137
 msgid "Duration"
 msgstr ""
 
-#: ../js/strings.php:29
+#: ../js/strings.php:31
 msgid "Delete"
 msgstr ""
 
-#: ../js/strings.php:31 ../js/strings.php:133
+#: ../js/strings.php:33 ../js/strings.php:139
 msgid "Cancel"
-msgstr ""
-
-#: ../js/strings.php:33
-#, php-format
-msgid "Confirm the %s"
 msgstr ""
 
 #: ../js/strings.php:35
 #, php-format
-msgid "Get %s"
+msgid "Confirm the %s"
 msgstr ""
 
-#: ../js/strings.php:37 ../js/strings.php:97
+#: ../js/strings.php:37
 #, php-format
-msgid "%s has been deleted!"
+msgid "Get %s"
 msgstr ""
 
 #: ../js/strings.php:39 ../js/strings.php:99
 #, php-format
-msgid "%s could not be deleted!"
+msgid "%s has been deleted!"
 msgstr ""
 
-#: ../js/strings.php:41 ../js/strings.php:93
+#: ../js/strings.php:41 ../js/strings.php:101
 #, php-format
-msgid "%s for {0}, successfully created!"
+msgid "%s could not be deleted!"
 msgstr ""
 
 #: ../js/strings.php:43 ../js/strings.php:95
 #, php-format
-msgid "Could not create %s!"
+msgid "%s for {0}, successfully created!"
 msgstr ""
 
-#: ../js/strings.php:45
+#: ../js/strings.php:45 ../js/strings.php:97
 #, php-format
-msgid "%s for {0}, successfully changed!"
+msgid "Could not create %s!"
 msgstr ""
 
 #: ../js/strings.php:47
 #, php-format
+msgid "%s for {0}, successfully changed!"
+msgstr ""
+
+#: ../js/strings.php:49
+#, php-format
 msgid "%s could not be changed!"
 msgstr ""
 
-#: ../js/strings.php:54
+#: ../js/strings.php:56
 msgid "{0} Hour"
 msgstr ""
 
-#: ../js/strings.php:56
+#: ../js/strings.php:58
 msgid "{0} Hours"
 msgstr ""
 
-#: ../js/strings.php:58
+#: ../js/strings.php:60
 msgid "{0} Minute"
 msgstr ""
 
-#: ../js/strings.php:60
+#: ../js/strings.php:62
 msgid "{0} Minutes"
 msgstr ""
 
-#: ../js/strings.php:67
+#: ../js/strings.php:69
 msgid "{} Hour"
 msgstr ""
 
-#: ../js/strings.php:69
+#: ../js/strings.php:71
 msgid "{} Hours"
 msgstr ""
 
-#: ../js/strings.php:71
+#: ../js/strings.php:73
 msgid "{} Minute"
 msgstr ""
 
-#: ../js/strings.php:73
+#: ../js/strings.php:75
 msgid "{} Minutes"
-msgstr ""
-
-#: ../js/strings.php:80
-#, php-format
-msgid "%s from: {0}, finished!"
-msgstr ""
-
-#: ../js/strings.php:80 ../js/strings.php:82 ../js/strings.php:84 ../js/strings.
-#: php:86
-msgid "Time-Ticket"
 msgstr ""
 
 #: ../js/strings.php:82
 #, php-format
-msgid "%s could not be stopped!"
+msgid "%s from: {0}, finished!"
+msgstr ""
+
+#: ../js/strings.php:82 ../js/strings.php:84 ../js/strings.php:86 ../js/strings.
+#: php:88
+msgid "Time-Ticket"
 msgstr ""
 
 #: ../js/strings.php:84
 #, php-format
-msgid "%s from: {0}, extended!"
+msgid "%s could not be stopped!"
 msgstr ""
 
 #: ../js/strings.php:86
 #, php-format
+msgid "%s from: {0}, extended!"
+msgstr ""
+
+#: ../js/strings.php:88
+#, php-format
 msgid "%s could not be extended, perhaps the maximum duration is exceeded!"
 msgstr ""
 
-#: ../js/strings.php:93 ../js/strings.php:95 ../js/strings.php:97 ../js/strings.
-#: php:99
+#: ../js/strings.php:95 ../js/strings.php:97 ../js/strings.php:99 ../js/strings.
+#: php:101
 msgid "Instruction-Ticket"
 msgstr ""
 
-#: ../js/strings.php:107
+#: ../js/strings.php:109
 #, php-format
 msgid "for %s"
 msgstr ""
 
-#: ../js/strings.php:110
+#: ../js/strings.php:112
 #, php-format
 msgid "Finish %s"
 msgstr ""
 
-#: ../js/strings.php:112
+#: ../js/strings.php:114
 #, php-format
 msgid "Continue %s"
 msgstr ""
 
-#: ../js/strings.php:114
+#: ../js/strings.php:116
 #, php-format
 msgid "Assign %s"
 msgstr ""
 
-#: ../js/strings.php:118
+#: ../js/strings.php:120
 #, php-format
 msgid "Activate %s"
 msgstr ""
 
-#: ../js/strings.php:120
+#: ../js/strings.php:122
 #, php-format
 msgid "Deactivate %s"
 msgstr ""
 
-#: ../js/strings.php:122
+#: ../js/strings.php:124
 #, php-format
 msgid "Delete %s"
 msgstr ""
 
-#: ../js/strings.php:124
+#: ../js/strings.php:128
+#, php-format
+msgid "Add %s"
+msgstr ""
+
+#: ../js/strings.php:131
 msgid "Edit"
 msgstr ""
 
-#: ../restapi/ticketlist-user.php:157 ../restapi/userticket.php:101 ..
-#: /ticket/ticket.php:546
+#: ../restapi/pinplugin.php:11 ../restapi/ticketlist-user.php:56
+msgid "Data has not changed."
+msgstr ""
+
+#: ../restapi/ticketlist-user.php:242 ../ticket/ticket.php:697 ../ticket/ticket.
+#: php:711 ../ticket/ticket.php:719
 msgid "OMG you can not view private data."
 msgstr ""
 
@@ -410,17 +419,31 @@ msgstr ""
 msgid "<p>Here you can see the available %s:</p>"
 msgstr ""
 
-#: ../ticket/ticket.php:415 ../ticket/ticket.php:448 ../ticket/ticket.php:476 ..
-#: /ticket/ticket.php:495 ../ticket/ticket.php:517
+#: ../ticket/ticket.php:416 ../ticket/ticket.php:439 ../ticket/ticket.php:463 ..
+#: /ticket/ticket.php:496 ../ticket/ticket.php:524 ../ticket/ticket.php:543 ..
+#: /ticket/ticket.php:565 ../ticket/ticket.php:591
 msgid "Is not a ticket"
 msgstr ""
 
-#: ../ticket/ticket.php:424 ../ticket/ticket.php:457
+#: ../ticket/ticket.php:472 ../ticket/ticket.php:505
 msgid "Please, set duration!"
 msgstr ""
 
-#: ../ticket/ticket.php:521
+#: ../ticket/ticket.php:569
 msgid "Ticket not deleted"
+msgstr ""
+
+#: ../ticket/ticket.php:629
+msgid "Is not a device"
+msgstr ""
+
+#: ../ticket/ticket.php:631
+msgid "Is not a device_type"
+msgstr ""
+
+#: ../ticket/ticket.php:657
+#, php-format
+msgid "%s, from: "
 msgstr ""
 
 #: ../timeticket/instruction.php:50 ../timeticket/timeticket.php:51

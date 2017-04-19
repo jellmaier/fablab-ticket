@@ -654,7 +654,7 @@ function rest_add_ticket($data) {
   */
 
   $post_information = array(
-    'post_title' => sprintf(__( '%s,from : ', 'fablab-ticket' ), __( 'Ticket', 'fablab-ticket' )) . wp_get_current_user()->display_name,//fablab_get_captions('ticket_caption') . ", von: " . 
+    'post_title' => sprintf(__( '%s, from: ', 'fablab-ticket' ), __( 'Ticket', 'fablab-ticket' )) . wp_get_current_user()->display_name,//fablab_get_captions('ticket_caption') . ", von: " . 
     'post_type' => 'ticket',
     'author' => $user_id,
     'post_status' => 'publish',
