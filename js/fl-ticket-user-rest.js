@@ -17,8 +17,7 @@ angular.module('ticketUser').controller('ticketUserCtrl', function($scope, $http
 
     if (force)
       $scope.ticketshash = 0;
-
-    if(($scope.menuTab != 'tickets') && angular.isDefined($scope.ticketshash))
+    else if(($scope.menuTab != 'tickets') && angular.isDefined($scope.ticketshash))
       return;
 
     $http.get($scope.api_url + 'tickets_current_user' +
@@ -53,6 +52,7 @@ angular.module('ticketUser').controller('ticketUserCtrl', function($scope, $http
         ticket.device_id = response.data.device_id;
 
         //ticket.status = response.data.status;
+        console.log(ticket.available);
 
         //if($scope.changedID == ticket.ID) 
           //$scope.setChangeHignlight(ticket);
@@ -66,8 +66,6 @@ angular.module('ticketUser').controller('ticketUserCtrl', function($scope, $http
 
   loadTickets();
   $interval(loadTickets, 10000);
-
-
 
 
   //------------------------------

@@ -28,6 +28,8 @@ Die Todo-Liste mit Prioritäten:
 
 ------ current implementaton --------
 
++ TimeTicket Handling
+
 + Code Cleanup
 
 + Standortmanagement

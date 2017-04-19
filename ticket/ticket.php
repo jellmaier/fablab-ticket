@@ -72,8 +72,8 @@ function codex_ticket_init() {
     'query_var'          => true,
     'rewrite'            => array( 'slug' => 'ticket' ),
     'capability_type'    => 'post',
-    'capabilities' => array( 'create_posts' => false, ),
-    'map_meta_cap' => false, //  if users are allowed to edit/delete existing posts
+    'capabilities'       => array( 'create_posts' => false, ),
+    'map_meta_cap'       => true, //  if users are allowed to edit/delete existing posts
     'has_archive'        => true,
     'hierarchical'       => false,
     'menu_position'      => null,
@@ -84,11 +84,11 @@ function codex_ticket_init() {
   register_post_type( 'ticket', $args );
 
 }
-
 // Displaying Ticket Lists
  
 function ticket_edit_columns($columns){
   $columns = array(
+    "cb" => '<input type="checkbox" />',
     "title" => fablab_get_captions('ticket_caption'),
     "ticket_type" => $posttype_name . " Typ",
     "status" => $posttype_name . " Status",

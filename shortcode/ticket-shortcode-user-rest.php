@@ -43,9 +43,11 @@ function html_login_info(){
   global $post;
 
   $html .= '<div id="message" class="message-box">';
-    $html .= '<p>Du bist nicht eingeloggt!</br>';
-    $html .= 'Du kannst dich <a href="' . get_bloginfo('wpurl') . '/wp-login.php?redirect_to=' . get_permalink($post->ID) . '">hier</a>';
-    $html .= ' einloggen, oder <a href="' . get_bloginfo('wpurl') . '/wp-login.php?action=register">hier</a> registrieren!</p>';
+    $html .= '<p>Du bist nicht eingeloggt!</p>';
+    $html .= '<a href="' . get_bloginfo('wpurl') . '/login?redirect_to=' . get_permalink($post->ID) . '">';
+    $html .= '<input type="submit"  value="' . __('Login', 'fablab-ticket') . '"/></a>';
+    $html .= '<a href="' . get_bloginfo('wpurl') . '/wp-login.php?action=register">';
+    $html .= '<input type="submit"  value="' . __('Register', 'fablab-ticket') . '"/></a>';
   $html .= '</div>';
 
   return $html;

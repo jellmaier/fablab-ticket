@@ -88,13 +88,13 @@ function get_device_ticket_waiting_time($device_id, $ticket_type, $ticket = 0) {
   return $waiting;
 }
 
-function device_type_available($device_id, $device_type, $ticket = 0) {
+function device_available($device_id, $device_type = 'device', $ticket = 0, $include_waiting = true) {
 
-  $waiting = get_device_ticket_waiting_person($device_id, $device_type, $ticket);
+  $waiting = get_device_waiting_persons($device_id, $device_type, $ticket, $include_waiting);
 
   $number_devices = get_beginner_device_of_device_type($device_id);
-
-  /*
+/*
+  // just for testing
   $waiting['devices'] = count($number_devices);
 
   if (count($number_devices) > $waiting['persons'])
@@ -110,9 +110,7 @@ function device_type_available($device_id, $device_type, $ticket = 0) {
   return false;
 }
 
-
-
-function get_device_ticket_waiting_person($device_id, $ticket_type, $ticket = 0) {
+function get_device_waiting_persons($device_id, $ticket_type, $ticket = 0, $include_waiting = true) {
   global $post;
   $temp_post = $post;
   //--------------------------------------------------------
@@ -122,60 +120,73 @@ function get_device_ticket_waiting_person($device_id, $ticket_type, $ticket = 0)
   $waiting['time'] = 0;
   $waiting['persons'] = 0;
 
+  //$waiting['ticket_type'] = $ticket_type;
+  //$waiting['ticket_id'] = $ticket;
+  //$waiting['include_waiting'] = $include_waiting;
+
+
+  if($include_waiting)
+    $status = array('5-waiting','1-assigned');
+  else
+    $status = '1-assigned';
+
+
   // query for pro devices and device types
 
 
-  $device_list = get_devicees_of_device_type($device_id);
-  $meta_array = array(
-    'relation'=>'AND',
-    array(
-      'relation'=>'OR',
-        array(
-        'relation'=>'AND',
-        array(
-            'key'=>'ticket_type',
-            'value'=> 'device_type',
+
+  if($ticket_type == 'device_type') {
+    $device_list = get_devicees_of_device_type($device_id);
+    $meta_array = array(
+      'relation'=>'AND',
+      array(
+        'relation'=>'OR',
+          array(
+          'relation'=>'AND',
+          array(
+              'key'=>'ticket_type',
+              'value'=> 'device_type',
+          ),
+          array(
+            'key'=>'device_id',
+            'value'=> $device_id,
+          )
         ),
         array(
-          'key'=>'device_id',
-          'value'=> $device_id,
+          'relation'=>'AND',
+          array(
+              'key'=>'ticket_type',
+              'value'=> 'device',
+          ),
+          array(
+            'key'=>'device_id',
+            'value'=> $device_list,
+          )
         )
       ),
       array(
-        'relation'=>'AND',
-        array(
-            'key'=>'ticket_type',
-            'value'=> 'device',
-        ),
-        array(
-          'key'=>'device_id',
-          'value'=> $device_list,
-        )
+          'key'=>'status',
+          'value'=> $status,
       )
-    ),
-    array(
-        'key'=>'status',
-        'value'=> array('5-waiting','1-assigned'),
-    )
-  );
-/*
-  $meta_array = array(  
-    'relation'=> 'AND',               
-    array(
-      'key' => 'device_id',                  
-      'value' => $device_id,               
-      'compare' => '='                 
-    ),
-    array(
-        'key'=>'ticket_type',
-        'value'=> $ticket_type,
-    ),
-    array(
-        'key'=>'status',
-        'value'=> array('5-waiting','1-assigned'),
-    )
-  );
-*/
+    );
+  } else {
+    $meta_array = array(  
+      'relation'=> 'AND',               
+      array(
+        'key' => 'device_id',                  
+        'value' => $device_id,               
+        'compare' => '='                 
+      ),
+      array(
+          'key'=>'ticket_type',
+          'value'=> $ticket_type,
+      ),
+      array(
+          'key'=>'status',
+          'value'=> $status,
+      )
+    );
+  }
 
   $query_arg = array(
     'post_type' => 'ticket',

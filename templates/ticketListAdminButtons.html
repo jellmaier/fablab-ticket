@@ -14,8 +14,8 @@
   </div>
   <div ng-switch-when="waiting">
     <input type="submit" ng-click="assignTicketOverlay(device_type, ticket)" value="{{LOCAssign.assign_ticket}}"/>
-    <input type="submit" ng-show="device_type.usage_type=='ticket_schedule'" 
-    ng-click="scheduleTicketOverlay(device_type, ticket)" value="{{LOCAssign.schedule_ticket}}"/>
+    <input type="submit" ng-click="scheduleTicketOverlay(device_type, ticket)" value="{{LOCAssign.schedule_ticket}}" 
+    ng-show="device_type.usage_type=='ticket_schedule'"/>
     <input type="submit" ng-click="deactivateTicket(device_type, ticket)" value="{{LOCAssign.deactivate_ticket}}"/>
   </div>
   <div ng-switch-when="inactive">
