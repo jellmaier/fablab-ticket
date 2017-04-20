@@ -11,7 +11,8 @@
     <h2>{{LOCAssign.edit_ticket}}</h2>
     <p>{{LOCAssign.ticket_device}}: 
       
-      <select ng-model="overlay.deviceSelect" ng-options="device.name for device in device_types track by device.id"> </select> 
+      <select ng-model="overlay.deviceSelect" 
+      ng-options="device.name for device in device_types | availableDevice:overlay.deviceSelect.id track by device.id" > </select> 
     </p>
     <!--div ng-bind-html="overlay.deviceSelect.content"></div-->
     <div ng-repeat="device in device_types | filter:overlay.deviceSelect"><div ng-bind-html="device.content"></div></div>

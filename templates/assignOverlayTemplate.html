@@ -2,5 +2,5 @@
 <p>{{LOCAssign.ticket_device}}: 
   <select ng-model="overlay.deviceSelect" ng-options="device.id as device.name for device in overlay.select"> </select> 
 </p>     
-<input type="submit" ng-click="assignTicket()" class="button-primary" value="{{LOCAssign.assign_ticket}}">
-<input type="submit" ng-click="overlay.show=false" class="button-primary" value="{{LOCAssign.ticket_cancel}}">
+<input type="submit" ng-hide="overlay.no_device" ng-click="assignTicket()" class="button-primary" value="{{LOCAssign.assign_ticket}}">
+<input type="submit" ng-click="hideOverlay()" class="button-primary" value="{{LOCAssign.ticket_cancel}}">

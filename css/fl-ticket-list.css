@@ -12,6 +12,9 @@ h2 {
   display: inline-block;
   width: 34px;
   height: 19px;
+  margin-bottom: -4px;
+  margin-left: 2px;
+  margin-right: 10px;
 }
 
 /* Hide default HTML checkbox */
@@ -56,6 +59,18 @@ input:checked + .slider:before {
   transform: translateX(15px);
 }
 
+/* for Angular methodes */
+
+.active .slider {
+  background-color: #AEDE1A;
+}
+
+.active .slider:before {
+  -webkit-transform: translateX(15px);
+  -ms-transform: translateX(15px);
+  transform: translateX(15px);
+}
+
 /* Rounded sliders */
 .slider.round {
   border-radius: 19px;
@@ -64,7 +79,6 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
-
 
 /* ------------------------------------------------------------ */
 /* Ticket Element */
@@ -127,6 +141,12 @@ input:checked + .slider:before {
 
 .ticket-list {
     margin-bottom: 34px;
+}
+
+ /* Ticket Infobox */
+.info-text p {
+    color: #999;
+    margin-top: 14px;  
 }
 
 /* ------------------------------------------------------------ */
@@ -398,6 +418,16 @@ p {
     to { opacity:1; }
 }
 
+
+
+.info-icon {
+    right: 14px;
+    top: 14px;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    background: url('status_icons.svg') -500px 0;
+}
 
 .status-icon {
     right: 10px;
@@ -956,8 +986,10 @@ div.tab button {
     border-top: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
     color: #999;
-    z-index:1;
-    padding: 10px 30px;
+    z-index: 1;
+    padding: 10px 20px;
+    position: relative;
+    min-width: 140px;
 }
 
 /* Change background color of buttons on hover */
@@ -976,6 +1008,7 @@ div.tab button.active {
 .tabcontent {
     margin-top:-1px;
     display: block;
+    position: relative;
     padding: 6px 12px;
     border: 1px solid #ddd;
     box-shadow: 0 0 8px rgba(50, 50, 50, 0.1);

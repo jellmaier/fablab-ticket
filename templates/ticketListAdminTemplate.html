@@ -1,5 +1,8 @@
 <!--div ng-app="ticketListUser" ng-controller="ticketListUserCtrl" class="ticket-list" -->
-<p>Tabellen Ansicht: </p><label class="switch"><input type="checkbox" ng-model="show_as_tabel"><div class="slider round"></div></label>
+
+<caption>Tabellen Ansicht: </caption><label class="switch"><input type="checkbox" ng-model="show_as_tabel"><div class="slider round"></div></label>
+<caption>Ticket System Online: </caption>
+<label class="switch" ng-click="setTicketSystemOnline()" ng-class="{active: ticketSystemOnline}" ><div class="slider round"></div></label>
 <h2>{{LOCAssign.ticket_devices}}</h2>
 <div class="device-list-box" data-ng-repeat="device_type in device_types track by $index" ng-init="deviceIndex = $index" 
   ng-show="device_type.completed" ng-cloak >

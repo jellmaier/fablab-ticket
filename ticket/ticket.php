@@ -185,7 +185,7 @@ function save_ticket_field($ticket_field) {
     }
 }
 
-function get_ticket_query_from_user($user_id) {
+function get_ticket_query_from_user($user_id, $device_id = '-1') {
   $query_arg = array(
     'post_type' => 'ticket',
     'author' => $user_id,
@@ -621,12 +621,15 @@ add_action( 'rest_api_init', function () {
 });
 
 function rest_add_ticket($data) {
-
   $device_id = sanitize_text_field($data['device_id']);
   //$duration = sanitize_text_field($data['duration']);
   $ticket_type = sanitize_text_field($data['type']);
   $options = fablab_get_option();
   $user_id = get_current_user_id();
+
+
+  if ($options['ticket_online'] != 1)
+    return new WP_Error( 'rest_ticket_offline', __( 'Ticket-System offline', 'fablab-ticket' ), array( 'status' => 423 ) );
 
   $duration = $options['ticket_max_time'];
   /*

@@ -311,7 +311,9 @@ function get_devices_of_device_type($term_id, $free=false, $beginner=false, $beg
   if ( $device_query->have_posts() ) {
     while ( $device_query->have_posts() ) : $device_query->the_post() ;
       //if ((get_user_meta($user_id, $post->ID, true ) || !$permission_needed) {
-        if(!$free || ($free && is_device_availabel($post->ID))) {
+    // device_available($device_id, $device_type = 'device', $ticket = 0, $include_waiting = true)
+      if(!$free || ($free && is_device_availabel($post->ID))) { // debricated check 
+        //if(!$free || ($free && device_available($post->ID, $device_type = 'device', $ticket = 0, $include_waiting = false))) {
           if($id_and_name) {
             $device = array();
             $device['id'] = $post->ID;
@@ -401,10 +403,14 @@ function rest_user_device_types($data) {
     $user_id = $data['id'];
   else
     $user_id = 0;
+
+  if (fablab_get_option('ticket_online') != 1)
+    return new WP_Error( 'rest_ticket_offline', __( 'Ticket-System offline', 'fablab-ticket' ), array( 'status' => 423 ) );
+
   return get_device_types($user_id);
 }
 add_action( 'rest_api_init', function () {
-  register_rest_route( 'sharepl/v1', '/user_device_types/(?P<id>\d+)', array(
+  register_rest_route( 'sharepl/v1', '/user_device_types', array(
     'methods' => 'GET',
     'callback' => 'rest_user_device_types',
     'sanitize_callback' => 'rest_data_arg_sanitize_callback',
@@ -435,11 +441,66 @@ function rest_device_type_values($data) {
   $device_type['color'] = get_term_meta($device_type_id, 'tag_color', true);
   $device_type['usage_type'] = get_term_meta($device_type_id, 'usage_type', true);
 
+  // check total user ticket count
+  $query_arg = array( 'post_type' => 'ticket', 'author' => get_current_user_id(), 'post_status' => 'publish');
+  $user_ticket_count =  count(get_posts($query_arg));
+  $tickets_per_user = fablab_get_option('tickets_per_user');
+  $device_type['max_available'] = ($user_ticket_count < $tickets_per_user);
+
+
+  // check user device ticket count
+  $device_ticket_count = get_number_of_tickets_by_device_type_and_user($device_type_id, get_current_user_id());
+  $tickets_per_device = fablab_get_option('tickets_per_device');
+  $ticket_device_available = ($device_ticket_count < $tickets_per_device);
+  $device_type['available'] = ($ticket_user_available || $ticket_device_available );
+  
   if ( empty( $device_type ) ) {
     return null;
   }
  
   return $device_type; 
+}
+
+
+function get_number_of_tickets_by_device_type_and_user($device_id, $user_id) {
+
+  $device_list = get_devicees_of_device_type($device_id);
+  $meta_array = array(
+    'relation'=>'OR',
+      array(
+      'relation'=>'AND',
+      array(
+          'key'=>'ticket_type',
+          'value'=> 'device_type',
+      ),
+      array(
+        'key'=>'device_id',
+        'value'=> $device_id,
+      )
+    ),
+    array(
+      'relation'=>'AND',
+      array(
+          'key'=>'ticket_type',
+          'value'=> 'device',
+      ),
+      array(
+        'key'=>'device_id',
+        'value'=> $device_list,
+      )
+    )
+  );
+  
+  $query_arg = array(
+    'post_type' => 'ticket',
+    'author' => $user_id,
+    'post_status' => 'publish',
+    'meta_query' => $meta_array
+  );
+
+  $posts = get_posts( $query_arg);
+  return count( $posts ) ;
+
 }
 
 add_action( 'rest_api_init', function () {

@@ -15,18 +15,34 @@ Die Todo-Liste mit Prioritäten:
 
 + PIN-REST-Request for Device Handlineg
  + Test Http Request // done
- + generate Ticket Pin
- + Ticket Pin view
- + Ticket Pin Check
+ - generate Ticket Pin
+ - Ticket Pin view
+ - Ticket Pin Check
 
 + Rebuild and Test all Functuialities
  + Device availability Check // done
- + Check max Ticket for Device
- + TAC accapance
+ + Check max Ticket for Device // done
+ - TAC accapance
  + Login Info // done
+ + Add Ticket Help-Text //done
+ + Add Ticket-System online Toggle
+ + Add Login/Register Buttons
+ - Auto delete finished Ticket
+ - rename devce_type to device_groupe
+ - planned ticket calculate waiting time
+ - planned ticket waiting without assigned ticket 
+
+
 
 
 ------ current implementaton --------
+
++ admin option dissable Ticket-Background Blink
+
++ Get Ticket Only on FL-Terminal
+
++ Fast-Track Login (email, phone)
+ + wording different to pin
 
 + TimeTicket Handling
 

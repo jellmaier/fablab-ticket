@@ -50,13 +50,6 @@ angular.module('ticketUser').controller('ticketUserCtrl', function($scope, $http
         ticket.available = response.data.available;
         ticket.color = response.data.color;
         ticket.device_id = response.data.device_id;
-
-        //ticket.status = response.data.status;
-        console.log(ticket.available);
-
-        //if($scope.changedID == ticket.ID) 
-          //$scope.setChangeHignlight(ticket);
-
         ticket.completed = true;
       }, function errorCallback(response) {
         console.log('load ticket_values error: ' + response.status);
@@ -91,7 +84,6 @@ angular.module('ticketUser').controller('ticketUserCtrl', function($scope, $http
   }
 
   $scope.editTicketOverlay = function(ticket, index) {
-    //console.log('hallo');
     $scope.overlay = [];
     $scope.overlay.mode = 'edit';
     $scope.overlay.ticket = ticket;
@@ -113,23 +105,26 @@ angular.module('ticketUser').controller('ticketUserCtrl', function($scope, $http
       loadTickets(0, force=true);
       $scope.overlay.show = false;
       $scope.setMenuTab('tickets');
+      $scope.loadDeviceValues($scope.overlay.device_type);
     }, function errorCallback(response) {
       console.log('load assignTicket error: ' + response.status);
+      if (response.status == 423){
+        $scope.ticket_system_offline = true;
+        $scope.device_types = null;
+        $scope.overlay.show = false;
+      }  
     });
     
   }
 
   $scope.editTicket = function(){
-
-    console.log($scope.api_url + 'edit_ticket'
-      + '?ticket_id=' + $scope.overlay.ticket.ID
-      + '&device_id=' + $scope.overlay.deviceSelect.id)
     $http.post($scope.api_url + 'edit_ticket'
       + '?ticket_id=' + $scope.overlay.ticket.ID
       + '&device_id=' + $scope.overlay.deviceSelect.id)
     .then(function successCallback(response) { 
       loadTickets(0, force=true);
       $scope.overlay.show = false;
+      $scope.loadDevicesValues();
     }, function errorCallback(response) {
       console.log('load assignTicket error: ' + response.status);
     });
@@ -142,6 +137,7 @@ angular.module('ticketUser').controller('ticketUserCtrl', function($scope, $http
       $scope.tickets.splice( $scope.overlay.ticket.index, 1);
       loadTickets(0, force=true);
       $scope.overlay.show = false;
+      $scope.loadDevicesValues();
     }, function errorCallback(response) {
       console.log('load deactivateTicket error: ' + response.status);
     }); 
@@ -153,25 +149,32 @@ angular.module('ticketUser').controller('ticketUserCtrl', function($scope, $http
   //------------------------------
 
   $scope.loadDeviceTypes = function() {
-    $http.get($scope.api_url + 'user_device_types/0')
+    $http.get($scope.api_url + 'user_device_types')
     .then(function successCallback(response) {
       $scope.device_types = response.data;
-      $scope.loadDeviceValues(); 
+      $scope.loadDevicesValues(); 
     }, function errorCallback(response) {
       console.log('load device error: ' + response.status);
+      if (response.status == 423)
+        $scope.ticket_system_offline = true;
     }); 
-
   }
 
-  $scope.loadDeviceValues = function() {
+  $scope.loadDevicesValues = function() {
     angular.forEach($scope.device_types, function(device_type) {
-      $http.get($scope.api_url + 'device_type_values/' + device_type.id)
-      .then(function successCallback(response) {
-        device_type.color = response.data.color;
-        device_type.completed = true;
-      }, function errorCallback(response) {
-        console.log('load device color error: ' + response.status);
-      }); 
+      $scope.loadDeviceValues(device_type);
+    });
+  }
+
+  $scope.loadDeviceValues = function(device_type) {
+    $http.get($scope.api_url + 'device_type_values/' + device_type.id)
+    .then(function successCallback(response) {
+      device_type.color = response.data.color;
+      device_type.available = response.data.available;
+      $scope.max_available = response.data.max_available;
+      console.log(response.data.ticketcount);
+    }, function errorCallback(response) {
+      console.log('load device color error: ' + response.status);
     });
   }
 
@@ -189,7 +192,6 @@ angular.module('ticketUser').controller('ticketUserCtrl', function($scope, $http
   $timeout(function() {$scope.loadDeviceContent()}, 5000);
 
 
-
   //------------------------------
   // Map handling
   //------------------------------
@@ -203,6 +205,23 @@ angular.module('ticketUser').controller('ticketUserCtrl', function($scope, $http
  
 
 });
+
+//------------------------------
+// Filter Devices
+//------------------------------
+
+angular.module('ticketUser').filter('availableDevice', function() {
+  return function(device, selected) {
+    var results = [];
+     for(var i = 0; i < device.length; i++){
+      if(device[i].available)
+        results.push(device[i]);
+      else if (device[i].id == selected) 
+        results.push(device[i]);
+    }
+    return results;
+  };
+})
 
 //------------------------------
 // Nonce Handling

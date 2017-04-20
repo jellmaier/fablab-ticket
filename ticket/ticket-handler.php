@@ -110,6 +110,8 @@ function device_available($device_id, $device_type = 'device', $ticket = 0, $inc
   return false;
 }
 
+
+
 function get_device_waiting_persons($device_id, $ticket_type, $ticket = 0, $include_waiting = true) {
   global $post;
   $temp_post = $post;
@@ -125,9 +127,12 @@ function get_device_waiting_persons($device_id, $ticket_type, $ticket = 0, $incl
   //$waiting['include_waiting'] = $include_waiting;
 
 
-  if($include_waiting)
-    $status = array('5-waiting','1-assigned');
-  else
+  if($include_waiting) {
+    //if (get_term_meta($device_id, 'usage_type', true) == 'ticket_schedule')
+      //$status = '5-waiting';
+    //else
+      $status = array('5-waiting','1-assigned');
+  }else
     $status = '1-assigned';
 
 

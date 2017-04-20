@@ -286,4 +286,33 @@ add_action( 'rest_api_init', function () {
 } );
 
 
+
+//--------------------------------------------------------
+// Rest Activate/Deactivate Ticket-System
+//--------------------------------------------------------
+
+function rest_ticket_system_online($data) {
+  $set_online = sanitize_text_field($data['set_online']);
+
+  $options = fablab_get_option();
+  
+  if($set_online == 'online')
+    $options['ticket_online'] = 1; 
+  else if($set_online == 'offline')
+    $options['ticket_online'] = 0; 
+
+  update_option( 'option_fields', $options);
+     
+  return $options['ticket_online'];
+}
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'sharepl/v1', '/ticket_system_online', array(
+    'methods' => 'POST',
+    'callback' => 'rest_ticket_system_online',
+    'permission_callback' => 'rest_is_manager',
+    'sanitize_callback' => 'rest_data_arg_sanitize_callback',
+  ) );
+} );
+
+
 ?>

@@ -1,0 +1,23 @@
+<div class="info-text" ng-switch="ticket.status">
+  <div ng-switch-when="finished">
+    <p>Deine Arbeit ist beendet!</p>
+  </div>
+  <div ng-switch-when="assigned">
+    <p>Dein Ticket ist in arbeit".</p>
+  </div>
+  <div ng-switch-when="scheduled">
+    <p>Dein Ticket ist geplant, sobald ein Gerät frei ist, wird dein Auftrag bearbeitet!</p>
+  </div>
+  <div ng-switch-when="waiting">
+    <div ng-switch="ticket.available">
+      <div ng-switch-when="true">
+        <p>Dein Gerät ist verfügbar, melde dich bei einem Betreuer!</p></div>
+      <div ng-switch-when="false">
+        <p>Dein Ticket ist erstellt, sobald es blinkt bist du an der Reihe!</p></div>
+    </div>
+  </div>
+  <div ng-switch-when="inactive">
+    <p>Dein Ticket ist deaktiviert, melde dich bei einem Betreuer!</p>
+  </div>
+  <div ng-switch-default></div>
+</div>

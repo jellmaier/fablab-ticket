@@ -44,7 +44,6 @@ angular.module('ticketListAdmin').controller('ticketListAdminCtrl', function($sc
     $http.get($scope.api_url + 'device_types')
     .then(function successCallback(response) {
       $scope.device_types = response.data.devices;
-      console.log($scope.device_types);
       $scope.loadDeviceValues();
       $scope.loadDeviceTickets();
       $interval($scope.loadDeviceTickets, 15000);    
@@ -110,6 +109,8 @@ angular.module('ticketListAdmin').controller('ticketListAdminCtrl', function($sc
         ticket.available = response.data.available;
         //ticket.status = response.data.status;
 
+        console.log(ticket.available);
+
         if(device_type.changedID == ticket.ID) 
           $scope.setChangeHignlight(device_type, ticket);
 
@@ -141,6 +142,39 @@ angular.module('ticketListAdmin').controller('ticketListAdminCtrl', function($sc
   alternative
   // http://codepen.io/mmmeff/pen/spbfl
 */
+
+
+  // --------------------
+  // Ticket System Online Methodes 
+  // --------------------
+
+  var loadTicketSystemOnline = function() {
+    $http.post($scope.api_url + 'ticket_system_online')
+    .then(function successCallback(response) {
+      $scope.ticketSystemOnline = (response.data == '1');
+      //console.log($scope.ticketSystemOnline);
+    }, function errorCallback(response) {
+      console.log('loadTicketSystemOnline error: ' + response.status);
+    });  
+  }
+  loadTicketSystemOnline();
+
+
+  $scope.setTicketSystemOnline = function() {
+    $scope.ticketSystemOnline = !$scope.ticketSystemOnline;
+
+    if($scope.ticketSystemOnline)
+      var param = '?set_online=online';
+    else
+      var param = '?set_online=offline';
+
+    $http.post($scope.api_url + 'ticket_system_online' + param)
+    .then(function successCallback(response) {
+      $scope.ticketSystemOnline = (response.data == '1');
+    }, function errorCallback(response) {
+      console.log('loadTicketSystemOnline error: ' + response.status);
+    });  
+  }
 
   // --------------------
   // Ticket Handling 
@@ -217,9 +251,14 @@ angular.module('ticketListAdmin').controller('ticketListAdminCtrl', function($sc
     $http.get($scope.api_url + 'devices_for_ticket'
       + '?user_id=' + $scope.overlay.ticket.post_author
       + '&ticket_id=' + $scope.overlay.ticket.ID)
-    .then(function successCallback(response) { 
-      $scope.overlay.select = response.data;
-      $scope.overlay.deviceSelect =  $scope.overlay.select[0].id;
+    .then(function successCallback(response) {
+      console.log(response.data);
+      if(response.data.length == 0) {
+        $scope.overlay.no_device = true;
+      } else {
+        $scope.overlay.select = response.data;
+        $scope.overlay.deviceSelect =  $scope.overlay.select[0].id;
+      }
     }, function errorCallback(response) {
       console.log('load devices error: ' + response.status);
     });
@@ -268,6 +307,9 @@ angular.module('ticketListAdmin').controller('ticketListAdminCtrl', function($sc
     });
   }
 
+  $scope.hideOverlay = function() {
+    $scope.overlay = null;
+  }
 
 });
 

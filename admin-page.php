@@ -264,6 +264,7 @@ if (!class_exists('AdminPage'))
 function fablab_get_option($key = 'array') {
   $default_values =  array(
     'tickets_per_user' => '1',
+    'tickets_per_device' => '4',
     'ticket_calcule_waiting_time' => '0',
     'ticket_time_interval' => '15',
     'ticket_max_time' => '120',
