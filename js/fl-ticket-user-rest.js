@@ -98,7 +98,7 @@ angular.module('ticketUser').controller('ticketUserCtrl', function($scope, $http
 
 
   $scope.addTicket = function(){
-    $http.put($scope.api_url + 'add_ticket'
+    $http.post($scope.api_url + 'add_ticket'
       + '?device_id=' + $scope.overlay.device_type.id
       + '&type=device_type' )
     .then(function successCallback(response) { 
@@ -132,7 +132,7 @@ angular.module('ticketUser').controller('ticketUserCtrl', function($scope, $http
   }
 
   $scope.deleteTicket = function () {
-    $http.delete($scope.api_url + 'delete_ticket/' + $scope.overlay.ticket.ID)
+    $http.post($scope.api_url + 'delete_ticket/' + $scope.overlay.ticket.ID)
     .then(function successCallback(response) {
       $scope.tickets.splice( $scope.overlay.ticket.index, 1);
       loadTickets(0, force=true);
@@ -172,7 +172,7 @@ angular.module('ticketUser').controller('ticketUserCtrl', function($scope, $http
       device_type.color = response.data.color;
       device_type.available = response.data.available;
       $scope.max_available = response.data.max_available;
-      console.log(response.data.ticketcount);
+      console.log(device_type);
     }, function errorCallback(response) {
       console.log('load device color error: ' + response.status);
     });

@@ -74,7 +74,6 @@ angular.module('ticketListAdmin').controller('ticketListAdminCtrl', function($sc
   }
 
 
-  //var device_id = '12';
   $scope.loadDeviceTicket = function(device_type, force = false) {
 
     if (force)
@@ -182,7 +181,7 @@ angular.module('ticketListAdmin').controller('ticketListAdminCtrl', function($sc
 
 
   $scope.deactivateTicket = function(device_type, ticket) {
-    $http.put($scope.api_url + 'deactivate_ticket/' + ticket.ID)
+    $http.post($scope.api_url + 'deactivate_ticket/' + ticket.ID)
     .then(function successCallback(response) {
       device_type.changedID = ticket.ID;
       ticket.status = 'inactive';
@@ -193,7 +192,7 @@ angular.module('ticketListAdmin').controller('ticketListAdminCtrl', function($sc
   }
 
   $scope.activateTicket = function(device_type, ticket) {
-    $http.put($scope.api_url + 'activate_ticket/' + ticket.ID)
+    $http.post($scope.api_url + 'activate_ticket/' + ticket.ID)
     .then(function successCallback(response) { 
       ticket.status = 'waiting';
       device_type.changedID = ticket.ID;
@@ -204,7 +203,7 @@ angular.module('ticketListAdmin').controller('ticketListAdminCtrl', function($sc
   }
 
   $scope.deleteTicket = function (device_type, ticket, index) {
-    $http.delete($scope.api_url + 'delete_ticket/' + ticket.ID)
+    $http.post($scope.api_url + 'delete_ticket/' + ticket.ID)
     .then(function successCallback(response) {
       device_type.tickets.splice(index, 1);
       $scope.loadDeviceTicket(device_type, true);

@@ -529,7 +529,7 @@ function rest_deactivate_ticket($data) {
 
 add_action( 'rest_api_init', function () {
   register_rest_route( 'sharepl/v1', '/deactivate_ticket/(?P<id>\d+)', array(
-    'methods' => 'PUT',
+    'methods' => 'POST',
     'callback' => 'rest_deactivate_ticket',
     'permission_callback' => 'rest_has_ticket_update_permission',
     'sanitize_callback' => 'rest_data_arg_sanitize_callback',
@@ -562,7 +562,7 @@ function rest_activate_ticket($data) {
 
 add_action( 'rest_api_init', function () {
   register_rest_route( 'sharepl/v1', '/activate_ticket/(?P<id>\d+)', array(
-    'methods' => 'PUT',
+    'methods' => 'POST',
     'callback' => 'rest_activate_ticket',
     'permission_callback' => 'rest_has_ticket_update_permission',
     'sanitize_callback' => 'rest_data_arg_sanitize_callback',
@@ -584,7 +584,7 @@ function rest_delete_ticket($data) {
 
 add_action( 'rest_api_init', function () {
   register_rest_route( 'sharepl/v1', '/delete_ticket/(?P<id>\d+)', array(
-    'methods' => 'DELETE',
+    'methods' => 'POST',
     'callback' => 'rest_delete_ticket',
     'permission_callback' => 'rest_has_ticket_update_permission',
     'sanitize_callback' => 'rest_data_arg_sanitize_callback',
@@ -690,7 +690,7 @@ function rest_add_ticket($data) {
 
 add_action( 'rest_api_init', function () {
   register_rest_route( 'sharepl/v1', '/add_ticket', array(
-    'methods' => 'PUT',
+    'methods' => 'POST',
     'callback' => 'rest_add_ticket',
     'permission_callback' => 'rest_has_ticket_add_permission',
     'sanitize_callback' => 'rest_data_arg_sanitize_callback',
