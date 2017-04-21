@@ -191,7 +191,7 @@ add_action( 'rest_api_init', function () {
   register_rest_route( 'sharepl/v1', '/tickets_current_user', array(
     'methods' => 'GET',
     'callback' => 'rest_current_user_tickets',
-    'permission_callback' => 'rest_private_data_permissions_check',
+    'permission_callback' => 'rest_ticket_user_permission',
     'sanitize_callback' => 'rest_data_arg_sanitize_callback',
   ) );
 } );
@@ -234,7 +234,7 @@ function rest_ticket_values($data) {
   return $ticket; 
 }
 
-
+/*
 function rest_private_data_permissions_check() {
   // Restrict endpoint to only users who have the edit_posts capability.
   if ( ! current_user_can( 'edit_posts' ) ) {
@@ -244,7 +244,7 @@ function rest_private_data_permissions_check() {
   // This is a black-listing approach. You could alternatively do this via white-listing, by returning false here and changing the permissions check.
   return true;
 }
-   
+   */
 
 
 add_action( 'rest_api_init', function () {

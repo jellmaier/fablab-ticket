@@ -692,7 +692,7 @@ add_action( 'rest_api_init', function () {
   register_rest_route( 'sharepl/v1', '/add_ticket', array(
     'methods' => 'POST',
     'callback' => 'rest_add_ticket',
-    'permission_callback' => 'rest_has_ticket_add_permission',
+    'permission_callback' => 'rest_ticket_user_permission',
     'sanitize_callback' => 'rest_data_arg_sanitize_callback',
   ) );
 });
@@ -703,12 +703,12 @@ function is_ticket_entry($ID) {
   return (!empty($post_object) && ($post_object->post_type == 'ticket'));
 }
 
-function rest_has_ticket_add_permission() {
+function rest_ticket_user_permission() {
 
-  if (current_user_can('edit_posts'))
-    return true;
+  if ( ! is_user_logged_in() )
+    return new WP_Error( 'rest_not_logged_in', 'You are not currently logged in.', array( 'status' => 401 ) );
   
-  return new WP_Error( 'rest_forbidden', __( 'OMG you can not view private data.', 'fablab-ticket' ), array( 'status' => 401 ) );
+  return true;
 }
 
 function rest_has_ticket_update_permission($data) {

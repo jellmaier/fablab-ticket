@@ -73,6 +73,14 @@ if (!class_exists('AdminPage'))
         );
 
         add_settings_field(
+          'tickets_per_device',                           // ID/Name of the field
+          fablab_get_captions('tickets_caption') . ' pro Device',                            // Title
+          'fablab_tickets_per_device_function',           // callback
+          'fablab_options',                             // page slug
+          'fablab_settings'                             // section
+        );
+
+        add_settings_field(
           'ticket_time_interval',                           // ID/Name of the field
           'Zeit Intervall (min)',                           // Title
           'fablab_ticket_time_interval_function',           // callback
@@ -264,7 +272,7 @@ if (!class_exists('AdminPage'))
 function fablab_get_option($key = 'array') {
   $default_values =  array(
     'tickets_per_user' => '1',
-    'tickets_per_device' => '4',
+    'tickets_per_device' => '1',
     'ticket_calcule_waiting_time' => '0',
     'ticket_time_interval' => '15',
     'ticket_max_time' => '120',
@@ -365,6 +373,9 @@ function fablab_settings_function() {
  
 function fablab_tickets_per_user_function() {
   echo '<input type="text" name="option_fields[tickets_per_user]" value="' . fablab_get_option('tickets_per_user') . '"/>';
+}
+function fablab_tickets_per_device_function() {
+  echo '<input type="text" name="option_fields[tickets_per_device]" value="' . fablab_get_option('tickets_per_device') . '"/>';
 }
 function fablab_ticket_time_interval_function() {
   echo '<input type="text" name="option_fields[ticket_time_interval]" value="' . fablab_get_option('ticket_time_interval') . '"/>';
