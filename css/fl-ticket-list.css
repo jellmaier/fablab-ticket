@@ -1,6 +1,43 @@
 h2 {
     margin-top: 14px;
 }
+
+/* ------------------------------------------------------------ */
+/* Logout Button */
+/* ------------------------------------------------------------ */
+
+ /* The switch - the box around the slider */
+.logout-button {
+  position: absolute;
+  top: 20px;
+  right : 20px;
+}
+
+.logout-button input[type=submit] {
+    border: 1px solid #ccc;
+    background: #ccc;
+    color: #fff;
+    text-transform: none;
+    padding: 6px 12px;
+    font-weight: normal;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    display: inline-block;
+    margin-right: 2px;
+    margin-bottom: 4px;
+    box-shadow: none;
+    text-shadow: none;
+}
+
+.logout-button input[type=submit]:hover {
+    border: 1px solid #888;
+    background: none;
+    color: #888;
+    cursor: pointer;
+}
+
 /* ------------------------------------------------------------ */
 /* Checkbox toggle */
 /* source: https://www.w3schools.com/howto/howto_css_switch.asp */
