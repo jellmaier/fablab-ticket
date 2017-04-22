@@ -21,7 +21,7 @@ a:focus, select:focus, input[type="file"]:focus, input[type="radio"]:focus, inpu
     cursor: pointer !important;
     position: absolute;
     padding-top: 60px;
-    padding-right: 60px;
+    padding-right: 66px;
     top: 0;
     right: 0;
 }
