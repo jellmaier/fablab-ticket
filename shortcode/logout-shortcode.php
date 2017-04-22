@@ -28,10 +28,8 @@ if (!class_exists('LogoutShortcode'))
 
     private function html_logout_button(){
 
-      $html .= '<div class="logout-button" id="css-element">';
-      $html .= '<a href="' . wp_logout_url( get_permalink() ) .'">';
-//      $html .= '<a href="' . get_bloginfo('wpurl') . '/wp-login.php?action=logout&_wpnonce=' . wp_create_nonce( 'wp_rest' ) .'">';
-      $html .= '<input type="submit" value="Logout"/></a>';
+      $html .= '<div class="logout-button">';
+      $html .= '<a href="' . wp_logout_url( get_permalink() ) .'"><p>Log out</p></a>';
       $html .= '</div>';
       return $html;
         
