@@ -59,7 +59,7 @@ angular.module('ticketListAdmin').controller('ticketListAdminCtrl', function($sc
       .then(function successCallback(response) {
         device_type.color = response.data.color;
         device_type.usage_type = response.data.usage_type;
-        device_type.completed = true;
+        device_type.completed = response.data.online; // only show when there are online devices
       }, function errorCallback(response) {
         console.log('load device color error: ' + response.status);
       }); 

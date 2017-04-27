@@ -453,6 +453,9 @@ function rest_device_type_values($data) {
   $tickets_per_device = fablab_get_option('tickets_per_device');
   $ticket_device_available = ($device_ticket_count < $tickets_per_device);
   $device_type['available'] = ($ticket_user_available || $ticket_device_available );
+
+  // count online Devices
+  $device_type['online'] = (count(get_devicees_of_device_type($device_type_id)) > 0);
   
   if ( empty( $device_type ) ) {
     return null;

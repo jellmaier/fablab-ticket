@@ -1,9 +1,9 @@
 <div class="reload"><a style="text-decoration: none;" ng-click="showFullscreen()">⤢ fullscreen</a></div>
-<div ng-hide="fullscreen" data-ng-repeat="device_type in device_types track by $index" ng-init="deviceIndex = $index" 
-  ng-show="device_type.completed" ng-cloak >
+<div ng-hide="fullscreen" data-ng-repeat="device_type in device_types | filter:{ completed: true }  track by $index" 
+  ng-init="deviceIndex = $index" ng-cloak >
   <h2 style="border-bottom: 4px solid {{ device_type.color }}; display: inline-block;">{{ device_type.name }}</h2>
-  <p ng-if="!device_type.tickets && !device_type.notickets">Loading... </p>
-  <p ng-if="device_type.notickets">Notickets</p>
+  <p ng-if="!device_type.tickets && !device_type.notickets">Loading... </p>  <!-- totoranslate -->
+  <p ng-if="device_type.notickets">Keine wartenden Personen!</p>    <!-- totoranslate -->
   <div data-ng-repeat="ticket in device_type.tickets track by ticket.ID" ng-init="ticketIndex = $index"
     ng-class="{'fl-ticket-row': show_as_tabel }" > <!-- | orderBy : 'status' -->
     <div class="fl-ticket-element {{ticket.status}}" ng-class="{blink: ticket.available, highlight: ticket.changed }" 
@@ -20,11 +20,11 @@
   <a ng-click="hideFullscreen()" class="close">x</a>
   <div class="devices-box" style="width: {{number_cols*600}}px;">
           <!-- $this->display_devicelist($selected_devices, $device_colums, $ticket_rows) -->
-      <div data-ng-repeat="device_type in device_types | limitTo: - neg_index | limitTo: number_cols track by $index" 
-      ng-init="deviceIndex = $index" ng-show="device_type.completed" class="device-box" ng-cloak >
+      <div data-ng-repeat="device_type in device_types | filter:{ completed: true }  | limitTo: - neg_index | limitTo: number_cols track by $index" 
+      ng-init="deviceIndex = $index" class="device-box" ng-cloak >
       <h2 style="border-bottom: 4px solid {{ device_type.color }}; display: inline-block;">{{ device_type.name }}</h2>
-      <p ng-if="!device_type.tickets && !device_type.notickets">Loading... </p>
-      <p ng-if="device_type.notickets">Notickets</p>
+      <p ng-if="!device_type.tickets && !device_type.notickets">Loading... </p>  <!-- totoranslate -->
+      <p ng-if="device_type.notickets">Keine wartenden Personen!</p>  <!-- totoranslate -->
       <div data-ng-repeat="ticket in device_type.tickets | limitTo:number_rows track by ticket.ID" ng-init="ticketIndex = $index"
         ng-class="{'fl-ticket-row': show_as_tabel }" > <!-- | orderBy : 'status' -->
         <div class="fl-ticket-element {{ticket.status}}" ng-class="{blink: ticket.available, highlight: ticket.changed }" 
