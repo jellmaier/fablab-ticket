@@ -67,7 +67,11 @@ if (!class_exists('TicketListShortcodeUser'))
 
       $post_number = -1;
 
-      $device_list = get_devicees_of_device_type($device_id);
+      $device_list = get_devicees_of_device_type($device_id); 
+
+      if (!$device_list) // handle empty array
+        $device_list = null;
+
       $meta_array = array(
         'relation'=>'OR',
           array(
