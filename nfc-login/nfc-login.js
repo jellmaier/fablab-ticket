@@ -15,11 +15,14 @@ angular.module('nfcLogin').controller('nfcLoginCtrl', function($scope, $http, $w
     console.log($scope.overlay.submitcode);
     $http.get($scope.api_url + 'check_nfc_token?token=' + $scope.overlay.submitcode)
     .then(function successCallback(response) {
+      $scope.overlay.login_message = "Karte gefunden!";
       $scope.overlay.submitcode = "";
       $scope.overlay.show=false;
       $window.location.reload();
     }, function errorCallback(response) {
       console.log('load set token: ' + response.status);
+      $scope.overlay.submitcode = "";
+      $scope.overlay.login_message = "Karte nicht gefunden, bitte versuche es erneut!";
     }); 
   }
 /*
