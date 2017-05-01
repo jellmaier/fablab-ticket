@@ -45,18 +45,37 @@ if (!class_exists('AdminPage'))
 
         // If user need ticket for permission
         add_settings_field(
-          'ticket_permission',                           // ID/Name of the field
-          fablab_get_captions('instructions_caption') . ' erforderlich',                    // Title
-          'fablab_ticket_permission_function',           // callback
+          'login_with_nfc',                          // ID/Name of the field
+          'Login with NFC',                          // Title
+          'fablab_login_with_nfc',                   // callback
           'fablab_options',                          // page slug
           'fablab_settings'                          // section
         );
 
         // If user need ticket for permission
         add_settings_field(
-          'ticket_calcule_waiting_time',             // ID/Name of the field
-          __('Calculate waiting time'),              // Title
-          'fablab_ticket_calcule_waiting_time',      // callback
+          'terminal_token',                         // ID/Name of the field
+          'Login Terminal Token',                    // Title
+          'fablab_terminal_token_function',       // callback
+          'fablab_options',                          // page slug
+          'fablab_settings'                          // section
+        );
+
+
+        // If user need ticket for permission
+        add_settings_field(
+          'ticket_terminals_only',                   // ID/Name of the field
+          __('Ticket only on Terminals'),            // Title
+          'fablab_ticket_terminals_only',            // callback
+          'fablab_options',                          // page slug
+          'fablab_settings'                          // section
+        );
+
+        // If user need ticket for permission
+        add_settings_field(
+          'auto_logout',                   // ID/Name of the field
+          'Auto Logout on Terminals (min)',            // Title
+          'fablab_auto_logout',            // callback
           'fablab_options',                          // page slug
           'fablab_settings'                          // section
         );
@@ -107,7 +126,7 @@ if (!class_exists('AdminPage'))
         // Register our setting so that $_POST handling is done for us and
         // our callback function just has to echo the <input>
         register_setting( 'fablab_settings_section', 'option_fields', 'validate_options');
-
+/*
 
         // ------------------------------------------------------------------
         // Add all your sections, fields and settings during admin_menu
@@ -214,7 +233,7 @@ if (!class_exists('AdminPage'))
         // our callback function just has to echo the <input>
         register_setting( 'fablab_settings_section', 'caption_fields', 'validate_captions');
 
-
+*/
 
         // ------------------------------------------------------------------
         // Add all your sections, fields and settings during admin_menu
@@ -273,12 +292,14 @@ function fablab_get_option($key = 'array') {
   $default_values =  array(
     'tickets_per_user' => '1',
     'tickets_per_device' => '1',
-    'ticket_calcule_waiting_time' => '0',
     'ticket_time_interval' => '15',
     'ticket_max_time' => '120',
     'ticket_online' => '0',
     'ticket_delay' => '10',
-    'ticket_permission' => '0',
+    'login_with_nfc' => '0',
+    'terminal_token' => '123456789',
+    'ticket_terminals_only' => '0',
+    'auto_logout' => '30',
   );
 
   $options = wp_parse_args(get_option('option_fields'), $default_values);
@@ -386,14 +407,20 @@ function fablab_ticket_max_time_function() {
 function fablab_ticket_online_function() {
   echo '<input type="checkbox" name="option_fields[ticket_online]" value="1"' . checked( 1, fablab_get_option('ticket_online'), false ) . '/>';
 }
-function fablab_ticket_calcule_waiting_time() {
-  echo '<input type="checkbox" name="option_fields[ticket_calcule_waiting_time]" value="1"' . checked( 1, fablab_get_option('ticket_calcule_waiting_time'), false ) . '/>';
+function fablab_login_with_nfc() {
+  echo '<input type="checkbox" name="option_fields[login_with_nfc]" value="1"' . checked( 1, fablab_get_option('login_with_nfc'), false ) . '/>';
+}
+function fablab_ticket_terminals_only() {
+  echo '<input type="checkbox" name="option_fields[ticket_terminals_only]" value="1"' . checked( 1, fablab_get_option('ticket_terminals_only'), false ) . '/>';
 }
 function fablab_ticket_delay_function() {
   echo '<input type="text" name="option_fields[ticket_delay]" value="' . fablab_get_option('ticket_delay') . '"/>';
 }
-function fablab_ticket_permission_function() {
-  echo '<input type="checkbox" name="option_fields[tickets_permission]" value="1"' . checked( 1, fablab_get_option('tickets_permission'), false ) . '"/>';
+function fablab_terminal_token_function() {
+  echo '<input type="text" name="option_fields[terminal_token]" value="' . fablab_get_option('terminal_token') . '"/>'; //'<label> Token erneuern: </label><input type="checkbox" name="option_fields[terminal_token]" />';
+}
+function fablab_auto_logout() {
+  echo '<input type="text" name="option_fields[auto_logout]" value="' . fablab_get_option('auto_logout') . '"/>';
 }
 
 

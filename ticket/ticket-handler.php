@@ -1,6 +1,6 @@
 <?php
 
-
+/*
 function get_waiting_time_and_persons($device_id, $device_type, $ticket = 0) {
 
   $waiting = get_device_ticket_waiting_time($device_id, $device_type, $ticket);
@@ -21,7 +21,6 @@ function get_waiting_time_and_persons($device_id, $device_type, $ticket = 0) {
 }
 
 
-
 function get_device_ticket_waiting_time($device_id, $ticket_type, $ticket = 0) {
   global $post;
   $temp_post = $post;
@@ -32,15 +31,18 @@ function get_device_ticket_waiting_time($device_id, $ticket_type, $ticket = 0) {
   $waiting['time'] = 0;
   $waiting['persons'] = 0;
 
-  /* handle device tickets from beginner devices
-  if($ticket_type == 'device') {
-    if(get_post_meta( $device_id, 'device_qualification', true ) == 'beginner') {
+  handle device tickets from beginner devices
+  //if($ticket_type == 'device') {
+    //if(get_post_meta( $device_id, 'device_qualification', true ) == 'beginner') {
 
       // get device_type
       // query of devicetype and device
     }
-  }
-  */
+  //}
+
+
+  
+
 
   // query for pro devices and device types
 
@@ -88,6 +90,10 @@ function get_device_ticket_waiting_time($device_id, $ticket_type, $ticket = 0) {
   return $waiting;
 }
 
+*/
+
+
+// method for rest request
 function device_available($device_id, $device_type = 'device', $ticket = 0, $include_waiting = true) {
 
   $waiting = get_device_waiting_persons($device_id, $device_type, $ticket, $include_waiting);
@@ -226,6 +232,8 @@ function get_device_waiting_persons($device_id, $ticket_type, $ticket = 0, $incl
   return $waiting;
 }
 
+/*
+
 function check_and_deactivate_ticket($ticket_id) {
   $activation_time = get_activation_time($ticket_id);
   if( !empty($activation_time) && (( current_time( 'timestamp' ) - $activation_time) >= (60 * fablab_get_option('ticket_delay')))) {
@@ -245,11 +253,15 @@ function check_and_activate_ticket($ticket_id, $waiting_time) {
   }
 }
 
+*/
+
+/*
+
 function get_divice_waiting_time() {
   $device_id = $_POST['device_id'];
   echo json_encode(get_waiting_time_and_persons($device_id, 'device'));
   die();
 }
 add_action( 'wp_ajax_get_online_devices_select_options', 'get_online_devices_select_options' );
-
+*/
 ?>

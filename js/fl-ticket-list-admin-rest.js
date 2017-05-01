@@ -85,8 +85,7 @@ angular.module('ticketListAdmin').controller('ticketListAdminCtrl', function($sc
     .then(function successCallback(response) {
       if(response.status == 304)
         return;
-     // if(force || (device_type.ticketshash != response.data.hash)) {
-        //console.log(response.data.hash);
+
       device_type.ticketshash = response.data.hash;
       device_type.notickets = false;
       $scope.loadTicketValues(device_type, response.data.tickets);
@@ -107,8 +106,6 @@ angular.module('ticketListAdmin').controller('ticketListAdminCtrl', function($sc
         ticket.device_title = response.data.device_title;
         ticket.available = response.data.available;
         //ticket.status = response.data.status;
-
-        console.log(ticket.available);
 
         if(device_type.changedID == ticket.ID) 
           $scope.setChangeHignlight(device_type, ticket);
@@ -151,7 +148,6 @@ angular.module('ticketListAdmin').controller('ticketListAdminCtrl', function($sc
     $http.post($scope.api_url + 'ticket_system_online')
     .then(function successCallback(response) {
       $scope.ticketSystemOnline = (response.data == '1');
-      //console.log($scope.ticketSystemOnline);
     }, function errorCallback(response) {
       console.log('loadTicketSystemOnline error: ' + response.status);
     });  
@@ -251,7 +247,6 @@ angular.module('ticketListAdmin').controller('ticketListAdminCtrl', function($sc
       + '?user_id=' + $scope.overlay.ticket.post_author
       + '&ticket_id=' + $scope.overlay.ticket.ID)
     .then(function successCallback(response) {
-      console.log(response.data);
       if(response.data.length == 0) {
         $scope.overlay.no_device = true;
       } else {

@@ -1,0 +1,15 @@
+<input ng-click="overlay.show=true" type="submit"  value="Login with TU Graz-Card"/>
+<p></p>
+
+<!-- Overlay -->
+<div class="nfc-overlay" ng-if="overlay.show">
+  <div class="nfc-overlay-content" ng-show="overlay.show">
+    <a ng-click="overlay.show=false" class="close">x</a>
+    <h2>Jetzt Karte auflegen</h2>
+      <img ng-src="{{blog_url}}/wp-content/plugins/fablab-ticket/nfc-login/tucard.png"/>
+      <form ng-submit="submitCheckToken()" style="opacity:1; position:absolute;">
+        ID:<input type="password" ng-model="overlay.submitcode" focus="true" style="opacity:1">
+      </form> 
+  </div>
+  <div class="nfc-overlay-background" ng-click="overlay.show=false"></div>
+</div>

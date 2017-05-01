@@ -2,6 +2,11 @@ h2 {
     margin-top: 14px;
 }
 
+h4 {
+    margin-top: 6px;
+    margin-bottom: 4px;
+}
+
 
 
 /* ------------------------------------------------------------ */
@@ -26,6 +31,17 @@ a:focus, select:focus, input[type="file"]:focus, input[type="radio"]:focus, inpu
     overflow: hidden;
 }
 
+@media all and (max-width: 800px) {
+    .user-headder {
+        padding-top: 36px;
+        padding-right: 42px;
+    }
+}
+
+.user-headder p{
+    margin-top: 12px;
+}
+
 .user-info {
     float: left;
     position: relative;
@@ -34,18 +50,26 @@ a:focus, select:focus, input[type="file"]:focus, input[type="radio"]:focus, inpu
 
 }
 
+.logout-icon {
+    background: url('status_icons.svg') -500px 50px;
+    margin-right: 8px;
+    width: 50px;
+    height: 50px;
+}
+
 .logout-button {
     float: left;
     position: relative;
     cursor: pointer !important;
 }
+
 .logout-button:hover {
     opacity: 0.7;
 }
 .logout-button p {
     color: #888;
 }
-
+/*
 .logout-button p::before {
     content: "";
     background: url('status_icons.svg') -500px 50px;
@@ -55,7 +79,7 @@ a:focus, select:focus, input[type="file"]:focus, input[type="radio"]:focus, inpu
     margin-top: -12px;
     padding-left: 6px;
 }
-
+*/
 /* ------------------------------------------------------------ */
 /* Checkbox toggle */
 /* source: https://www.w3schools.com/howto/howto_css_switch.asp */
@@ -1064,7 +1088,7 @@ div.tab button.active {
     margin-top:-1px;
     display: block;
     position: relative;
-    padding: 6px 12px;
+    padding: 10px 12px;
     border: 1px solid #ddd;
     box-shadow: 0 0 8px rgba(50, 50, 50, 0.1);
 }
@@ -1108,5 +1132,5 @@ div.tab button.active {
 }
 
 .device-list {
-    margin-bottom: 24px;
+    margin-top: 8px;
 }

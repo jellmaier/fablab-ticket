@@ -21,6 +21,14 @@
     <input type="submit" ng-click="overlay.show=false" class="button-primary" value="{{LOCAssign.ticket_cancel}}">
   </div>
 
+  <div ng-switch-when="set_nfc_token">    
+     <h2>Jetzt Karte auflegen</h2>
+     <img ng-src="{{blog_url}}/wp-content/plugins/fablab-ticket/nfc-login/tucard.png"/>
+    <form ng-submit="submitSetToken()" style="opacity:1; position:absolute;">
+    <input type="password" ng-model="overlay.submitcode" focus="true" >
+    </form> 
+  </div>
+
   <div ng-switch-default></div>
   
 </div>

@@ -319,4 +319,38 @@ add_action( 'rest_api_init', function () {
 } );
 
 
+//--------------------------------------------------------
+// Get Terminal Login Token
+//--------------------------------------------------------
+
+function rest_check_terminal_token($data) {  
+  $token = sanitize_text_field($data['token']);
+  $return = array();
+  $return['is_terminal'] = ($token == fablab_get_option('terminal_token'));
+  $return['login_terminal_only'] = (fablab_get_option('ticket_terminals_only') == '1');
+  $return['auto_logout'] = fablab_get_option('auto_logout');
+  $return['is_admin'] = is_manager();
+  $return['user_display_name'] = wp_get_current_user()->display_name;
+  return $return;
+}
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'sharepl/v1', '/check_terminal_token', array(
+    'methods' => 'GET',
+    'callback' => 'rest_check_terminal_token',
+  ) );
+} );
+
+function rest_get_terminal_token($data) {     
+  return fablab_get_option('terminal_token');
+}
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'sharepl/v1', '/get_terminal_token', array(
+    'methods' => 'GET',
+    'callback' => 'rest_get_terminal_token',
+    'permission_callback' => 'rest_is_manager',
+  ) );
+} );
+
+
+
 ?>

@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: FabLab Ticket
-Version: 0.9.8
+Version: 1.9.1
 Plugin URI: https://github.com/jellmaier/fablab-ticket
 Description: Ticketing and Reservation System for FabLabs
 Author: Jakob Ellmaier
@@ -21,11 +21,7 @@ include 'devices/device.php';
 include 'devices/device-type.php';
 include 'devices/location.php';
 include 'timeticket/timeticket.php';
-include 'timeticket/instruction.php';
 include 'ticket/ticket.php';
-include 'ticket/ticket-handler.php';
-include 'shortcode/ticket-shortcode.php';
-include 'shortcode/ticketlist-shortcode.php';
 include 'shortcode/ticketlist-shortcode-admin-rest.php';
 include 'shortcode/ticket-shortcode-user-rest.php';
 include 'shortcode/calendar-shortcode.php';
@@ -36,16 +32,17 @@ include 'js/strings.php';
 include 'manage-scripts.php';
 include 'restapi/ticketlist-user.php';
 include 'restapi/pinplugin.php';
+include 'nfc-login/login-shortcode.php';
+
+
 
 
 $options = new AdminPage();
+//new NFCLoginShortcode();
 new UserList();
 new Device();
-new Instruction();
 new TimeTicket();
 new Ticket();
-new TicketShortcode();
-new TicketListShortcode();
 new TicketShortcodeRest();
 new TicketListShortcodeRest();
 new CalendarShortcode();

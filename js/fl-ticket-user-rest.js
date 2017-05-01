@@ -1,7 +1,8 @@
-angular.module('ticketUser', ['ngRoute', 'ngSanitize']);
-angular.module('ticketUser').controller('ticketUserCtrl', function($scope, $http, $interval, $q, $timeout) {
+angular.module('ticketUser', ['ngRoute', 'ngCookies', 'ngSanitize', 'angular-svg-round-progressbar']);
+angular.module('ticketUser').controller('ticketUserCtrl', function($scope, $http, $document, $window, $cookies, $interval, $q, $timeout) {
 
   $scope.api_url = AppAPI.sharing_url;
+  $scope.blog_url = AppAPI.blog_url;
   $scope.templates_url = AppAPI.templates_url;
   $scope.LOCAssign = assign_loc;
 
@@ -172,7 +173,6 @@ angular.module('ticketUser').controller('ticketUserCtrl', function($scope, $http
       device_type.color = response.data.color;
       device_type.available = response.data.available;
       $scope.max_available = response.data.max_available;
-      console.log(device_type);
     }, function errorCallback(response) {
       console.log('load device color error: ' + response.status);
     });
@@ -202,6 +202,133 @@ angular.module('ticketUser').controller('ticketUserCtrl', function($scope, $http
     $scope.menuTab = tab;
   }
 
+  //------------------------------
+  // NFC set Token
+  //------------------------------
+
+    $scope.setTokenOverlay = function() {
+    $scope.overlay = [];
+    $scope.overlay.mode = 'set_nfc_token';
+    $scope.overlay.submitcode = "";
+    $scope.overlay.show = true;
+
+  }
+
+
+  $scope.submitSetToken = function(){
+    $http.post($scope.api_url + 'set_nfc_token?token=' + $scope.overlay.submitcode)
+    .then(function successCallback(response) {
+      $scope.overlay.submitcode = "";
+      $scope.overlay.message = "Karte erfolgreich hinzugefügt!";
+      $scope.overlay.show=false;
+    }, function errorCallback(response) {
+      $scope.overlay.submitcode = "";
+      console.log('load set token: ' + response.status);
+    }); 
+  }
+
+  //------------------------------
+  // Login Terminal 
+  //------------------------------
+
+  $scope.checkTerminalToken = function(){
+    var get_cookie = $cookies.get('terminal_token');
+    $http.get($scope.api_url + 'check_terminal_token?token=' + get_cookie)
+    .then(function successCallback(response) {
+      $scope.page_info = response.data;
+      $scope.get_ticket_allowed = ($scope.page_info.is_terminal || !$scope.page_info.login_terminal_only);
+      initTinterval();
+    }, function errorCallback(response) {
+      console.log('load check token: ' + response.status);
+    }); 
+  }
+  $scope.checkTerminalToken();
+
+  $scope.terminalToggle = function(){
+    if($scope.page_info.is_terminal)
+      $scope.unsetTerminal();
+    else {
+      $scope.setTerminal();
+      $scope.page_info.is_terminal = true;
+    }
+    $scope.get_ticket_allowed = ($scope.page_info.is_terminal || !$scope.page_info.login_terminal_only);
+  }
+
+  $scope.setTerminal = function(){
+    $http.get($scope.api_url + 'get_terminal_token')
+    .then(function successCallback(response) {   
+      $cookies.put('terminal_token', response.data);
+      $scope.checkTerminalToken();
+    }, function errorCallback(response) {
+      console.log('load check token: ' + response.status);
+    }); 
+    //$scope.overlay.message = "Terminal erfolgreich hinzugefügt!";
+  }
+
+  $scope.unsetTerminal = function(){
+    $cookies.remove('terminal_token');
+    $scope.page_info.is_terminal = false;
+  }
+
+  //------------------------------
+  // Logout Interval
+  // from: http://www.adamthings.com/post/2015/01/27/simple-angularjs-countdown-timer/
+  //------------------------------
+
+
+  var initTinterval = function(){
+    $scope.timerCount = $scope.page_info.auto_logout;
+
+    var countDown = function () {
+      if ($scope.timerCount > 0) {
+        $scope.countDownLeft = $scope.timerCount;
+        $scope.timerCount--;
+        if($scope.page_info.is_terminal)
+          $timeout(countDown, 1000);
+      } else {
+        //Any desired function upon countdown end.
+        console.log('logout');
+        $scope.logOut();
+      } 
+    };
+    countDown();
+  }
+
+  $scope.logOut = function () {
+    $http.get($scope.api_url + 'logout')
+    .then(function successCallback(response) {   
+      $window.location.reload();
+    }, function errorCallback(response) {
+      console.log('load check token: ' + response.status);
+    }); 
+  }
+
+  $document.on('click', function(){
+    $scope.timerCount = $scope.page_info.auto_logout;
+  });
+
+
+
+  // --------------------
+  // Ticket System Online Methodes 
+  // --------------------
+
+
+  $scope.setTicketSystemOnline = function() {
+    $scope.ticket_system_offline = !$scope.ticket_system_offline;
+
+    if($scope.ticket_system_offline)
+      var param = '?set_online=offline';
+    else
+      var param = '?set_online=online';
+
+    $http.post($scope.api_url + 'ticket_system_online' + param)
+    .then(function successCallback(response) {
+      $scope.ticketSystemOnline = (response.data != '1');
+    }, function errorCallback(response) {
+      console.log('loadTicketSystemOnline error: ' + response.status);
+    });  
+  }
  
 
 });
@@ -243,6 +370,29 @@ angular.module('ticketUser').config(['$routeProvider', '$locationProvider', '$ht
     };
   }]);
 }]);
+
+//------------------------------
+// Common directive for Focus
+// from: http://www.angulartutorial.net/2014/04/angular-js-auto-focus-for-input-box.html
+//------------------------------
+
+angular.module('ticketUser').directive('focus',
+function($timeout) {
+ return {
+ scope : {
+   trigger : '@focus'
+ },
+ link : function(scope, element) {
+  scope.$watch('trigger', function(value) {
+    if (value === "true") {
+      $timeout(function() {
+       element[0].focus();
+      });
+   }
+ });
+ }
+};
+}); 
 
 
 /*

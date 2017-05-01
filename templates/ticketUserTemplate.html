@@ -1,9 +1,13 @@
 <!-- Menu -->
 
+
+<ng-include src="templates_url + 'userHeadderTemplate.html'"></ng-include>
+
+
 <div class="tab">
   <button class="tablinks" ng-class="{active: menuTab=='devices'}"ng-click="setMenuTab('devices')">{{LOCAssign.ticket_devices}}</button>
   <button class="tablinks" ng-class="{active: menuTab=='tickets'}" ng-click="setMenuTab('tickets')">Meine Tickets</button> <!-- totoranslate -->
-  <button class="tablinks" ng-class="{active: menuTab=='location'}" ng-click="setMenuTab('location')">Standorte</button> <!-- totoranslate -->
+  <button class="tablinks" ng-class="{active: menuTab=='settings'}" ng-click="setMenuTab('settings')">Einstellungen</button> <!-- totoranslate -->
 </div>
 
 <!-- Tab Content -->
@@ -13,8 +17,7 @@
   <!-- Tickets -->
 
   <div ng-switch-when="tickets" class="tabcontent">
-    <h2>Meine Tickets</h2>
-    <div ng-click="ticket_info=!ticket_info" class="info-icon"></div>
+    <div ng-click="ticket_info=!ticket_info" ></div> <!-- class="info-icon" -->
       <div id="ticket-listing" class="ticket-list">
         <p ng-if="!tickets && !notickets">Loading... </p>
         <p ng-if="notickets && !unauthorized">Keine Tickets</p>      <!-- totoranslate -->
@@ -38,12 +41,12 @@
 
   <div ng-switch-when="devices" class="tabcontent">
     <p ng-if="ticket_system_offline">Ticket-System offline!</p>  <!-- totoranslate -->
-    <h2 ng-hide="ticket_system_offline">{{LOCAssign.ticket_devices}}</h2>
-    <p ng-hide="max_available">Du hast die maximale Anzahl von Tickets gezogen!</p>  <!-- totoranslate -->
+    <p ng-hide="max_available || ticket_system_offline || get_ticket_allowed">Du hast die maximale Anzahl von Tickets gezogen!</p>  <!-- totoranslate -->
+    <p ng-hide="get_ticket_allowed || ticket_system_offline">Tickets können nur am Terminal gezogen werden!</p>  <!-- totoranslate -->
     <div id="fl-getticket" class="device-list">
       <div data-ng-repeat="device_type in device_types track by $index"  class="fl-device-element get-ticket"  
       style="border: 6px solid {{device_type.color}}; background-color: {{device_type.color}}"
-      ng-click="addTicketOverlay(device_type)" ng-show="max_available && device_type.available" ng-cloak >
+      ng-click="addTicketOverlay(device_type)" ng-show="!ticket_system_offline && get_ticket_allowed && max_available && device_type.available" ng-cloak >
         <div class="fl-device-element-content">
           <h2>{{device_type.name}}</h2>
           <!--p>Verfügbare Geräte: <b><?= $number_devices ?></b></br>Wartende Personen: <b><?= $waiting['persons'] ?></b></p-->
@@ -59,14 +62,35 @@
     <h2>Standorte</h2>                      <!-- totoranslate -->
     <!--leaflet id="map-simple-map"></leaflet-->
   </div>
+
+  <!-- Settings -->
+
+  <div ng-switch-when="settings" class="tabcontent">
+    <p ng-show="overlay.message">{{overlay.message}}</p>
+    <div ng-if="page_info.is_admin">
+      <h4>Admin Optionen</h4>   <!-- totoranslate -->
+      <a ng-href="{{blog_url}}/wp-admin/edit.php?post_type=device&page=fablab_options">   
+      <input type="submit" value="Einstellungen" style="margin-bottom:12px"></a>
+      <caption> </br>This is a Login Terminal: </caption>                      <!-- totoranslate -->
+      <label class="switch" ng-click="terminalToggle()" ng-class="{active: page_info.is_terminal}" ><div class="slider round"></div></label>
+      <caption></br>Ticket System Online: </caption>                      <!-- totoranslate -->
+      <label class="switch" ng-click="setTicketSystemOnline()" ng-class="{active: !ticket_system_offline}" ><div class="slider round"></div></label>
+    </div>
+    <h4>Persönliche Daten</h4>   <!-- totoranslate -->
+    <a  ng-href="{{blog_url}}/wp-admin/profile.php">
+    <input type="submit" value="{{LOCAssign.ticket_edit}}"></a>
+    <h4>TU Karte</h4>                      <!-- totoranslate -->
+    <input type="submit" ng-click="setTokenOverlay()" value="Karte hinzufügen">  <!-- totoranslate -->
+    <!--leaflet id="map-simple-map"></leaflet-->
+  </div>
 </div>
 
 <!-- END Tab Content -->
 
 <!-- Overlay -->
 
-<div id="overlay-ticket" class="fl-overlay" ng-show="overlay.show">
-  <div id="device-ticket-box" class="device-ticket" ng-show="overlay.show">
+<div class="fl-overlay" ng-if="overlay.show">
+  <div class="device-ticket" ng-show="overlay.show">
   <a ng-click="overlay.show=false" class="close">x</a>
   <ng-include src="templates_url + 'ticketUserOverlayTemplate.html'"></ng-include>
   </div>
