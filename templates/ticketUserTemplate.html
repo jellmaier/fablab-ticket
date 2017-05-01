@@ -41,7 +41,7 @@
 
   <div ng-switch-when="devices" class="tabcontent">
     <p ng-if="ticket_system_offline">Ticket-System offline!</p>  <!-- totoranslate -->
-    <p ng-hide="max_available || ticket_system_offline || get_ticket_allowed">Du hast die maximale Anzahl von Tickets gezogen!</p>  <!-- totoranslate -->
+    <p ng-hide="max_available || ticket_system_offline || !get_ticket_allowed">Du hast die maximale Anzahl von Tickets gezogen!</p>  <!-- totoranslate -->
     <p ng-hide="get_ticket_allowed || ticket_system_offline">Tickets können nur am Terminal gezogen werden!</p>  <!-- totoranslate -->
     <div id="fl-getticket" class="device-list">
       <div data-ng-repeat="device_type in device_types track by $index"  class="fl-device-element get-ticket"  

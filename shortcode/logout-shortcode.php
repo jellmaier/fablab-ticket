@@ -1,7 +1,7 @@
 <?php
 
 //namespace fablab_ticket;
-
+/*
 if (!class_exists('LogoutShortcode'))
 {
   class LogoutShortcode
@@ -43,6 +43,8 @@ if (!class_exists('LogoutShortcode'))
 
   }
 }
+
+*/
 
 function rest_logout($data) {
   wp_logout();
