@@ -3,7 +3,8 @@
     <p>{{page_info.user_display_name}}</p>
   </div>
   <div ng-click="logOut()" class="logout-icon logout-button">
-    <round-progress ng-if="page_info.is_terminal" max="page_info.auto_logout" current="timerCount" color="#028F76" bgcolor="#eaeaea" rounded="true" radius="25" stroke="3"></round-progress>
+    <round-progress ng-if="page_info.is_terminal" max="page_info.auto_logout" current="timerCount" 
+    color="{{ (timerCount > 7) ? '#028F76' : '#cd3333' }}" bgcolor="#eaeaea" rounded="true" radius="25" stroke="3"></round-progress>
   </div>
      
   <div ng-click="logOut()" class="logout-button">
