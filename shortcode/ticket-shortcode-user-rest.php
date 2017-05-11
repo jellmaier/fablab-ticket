@@ -42,12 +42,12 @@ if (!class_exists('TicketShortcodeRest'))
 
       $html .= '<div id="message" class="message-box">';
         $html .= '<p>Du bist nicht eingeloggt!</p>';
-        if (fablab_get_option('login_with_nfc') == '1')
-          $html .= $this->html_nfc_login();
         $html .= '<a href="' . get_bloginfo('wpurl') . '/login?redirect_to=' . get_permalink($post->ID) . '" style="margin-right:20px;">';
         $html .= '<input type="submit"  value="' . __('Login', 'fablab-ticket') . '"/></a>';
         $html .= '<a href="' . get_bloginfo('wpurl') . '/wp-login.php?action=register">';
         $html .= '<input type="submit"  value="' . __('Register', 'fablab-ticket') . '"/></a>';
+        if (fablab_get_option('login_with_nfc') == '1')
+          $html .= $this->html_nfc_login();
       $html .= '</div>';
 
       return $html;
