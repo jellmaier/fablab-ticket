@@ -3,6 +3,18 @@
 /* overlay style */
 /* ------------------------------------------------------------ */
 
+.nfc-token {
+    opacity: 0; 
+    position: absolute;
+}
+
+.nfc-overlay p {
+    margin: 0;
+    margin-bottom: 6px;
+    color: #028F76;
+}
+
+
 .nfc-overlay {
     position: fixed;
     top: 0;

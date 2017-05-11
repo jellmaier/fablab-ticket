@@ -1,4 +1,4 @@
-<input ng-click="overlay.show=true" type="submit"  value="Login with NFC-Card"/>
+<input  style="margin-top:10px;" ng-click="overlay.show=true" type="submit"  value="Login with NFC-Card"/>
 <p></p>
 
 <!-- Overlay -->
@@ -6,10 +6,10 @@
   <div class="nfc-overlay-content" ng-show="overlay.show">
     <a ng-click="overlay.show=false" class="close">x</a>
     <h2>Jetzt Karte auflegen</h2>     
-      <p style="margin:0">Achtung: Du musst die Karte zuerst zu deinem Account hinzufügen!</p>  <!-- totoranslate -->
-      <p style="margin:0">{{overlay.login_message}}</p>
+      <p>Achtung: Du musst die Karte zuerst zu deinem Account hinzufügen!</p>  <!-- totoranslate -->
+      <p>{{overlay.login_message}}</p>
       <img ng-src="{{blog_url}}/wp-content/plugins/fablab-ticket/nfc-login/tucard.jpg"/>
-      <form ng-submit="submitCheckToken()" style="opacity:0; position:absolute;">
+      <form ng-submit="submitCheckToken()" class="nfc-token">
         ID:<input type="password" ng-model="overlay.submitcode" focus="true">
       </form> 
   </div>

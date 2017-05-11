@@ -24,7 +24,7 @@
   <div ng-switch-when="set_nfc_token">    
      <h2>Jetzt Karte auflegen</h2>
      <img ng-src="{{blog_url}}/wp-content/plugins/fablab-ticket/nfc-login/tucard.jpg"/>
-    <form ng-submit="submitSetToken()" style="opacity:0; position:absolute;">
+    <form ng-submit="submitSetToken()" class="nfc-token">
     <input type="password" ng-model="overlay.submitcode" focus="true" >
     </form> 
   </div>
