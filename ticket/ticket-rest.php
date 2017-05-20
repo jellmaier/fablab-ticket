@@ -317,6 +317,9 @@ function rest_add_ticket($data) {
     add_post_meta($ID, 'duration' , $duration);
     add_post_meta($ID, 'ticket_type' , $ticket_type);
     add_post_meta($ID, 'status' , "5-waiting");
+    $pin = wp_rand(1000,9999);
+    add_post_meta($ID, 'pin' , $pin);
+    //send_email_to_current_user();
   }
 
 
@@ -337,6 +340,13 @@ function is_ticket_entry($ID) {
   $post_object = get_post($ID);
   return (!empty($post_object) && ($post_object->post_type == 'ticket'));
 }
-
+/*
+function send_email_to_current_user() {
+  $to = "jakob.ellmaier@gmx.at";
+  $subject = "Learning how to send an Email in WordPress";
+  $content = "WordPress knowledge";
+  $status = wp_mail($to, $subject, $content);
+}
+*/
 
 ?>

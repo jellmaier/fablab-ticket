@@ -10,7 +10,11 @@ angular.module('nfcLogin').controller('nfcLoginCtrl', function($scope, $http, $w
   //------------------------------
   $scope.overlay = [];
   $scope.overlay.submitcode = "";
-  
+
+  var get_param = new URLSearchParams(window.location.search);
+    if(get_param.has('nfclogin'))
+      $scope.overlay.show = true;
+    
   $scope.submitCheckToken = function(){
     console.log($scope.overlay.submitcode);
     $http.get($scope.api_url + 'check_nfc_token?token=' + $scope.overlay.submitcode)

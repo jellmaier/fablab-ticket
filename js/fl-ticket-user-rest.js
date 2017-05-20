@@ -51,6 +51,7 @@ angular.module('ticketUser').controller('ticketUserCtrl', function($scope, $http
         ticket.available = response.data.available;
         ticket.color = response.data.color;
         ticket.device_id = response.data.device_id;
+        ticket.pin = response.data.pin;
         ticket.completed = true;
       }, function errorCallback(response) {
         console.log('load ticket_values error: ' + response.status);

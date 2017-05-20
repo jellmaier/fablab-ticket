@@ -28,7 +28,8 @@
           style="border-color: {{ticket.color}}" ng-cloak>
             <p class="ticket-content">{{ formatDate(ticket.post_date) | date : "EEEE, d. MMMM y, HH:mm" }}<p>
             <h2>{{ ticket.post_title }}</h2>
-            <p class="ticket-content">{{LOCAssign.for_device}}: <b>{{ ticket.device_title }}</b></p>
+            <p class="ticket-content">{{LOCAssign.for_device}}: <b>{{ ticket.device_title }}</b>
+              <span ng-if="ticket.pin"> | {{LOCAssign.ticket_devices}}-Pin: <b>{{ ticket.pin }}</b></span></p>
             <div class="status-icon"></div>
             <ng-include src="templates_url + 'ticketUserButtons.html'"></ng-include>
             <ng-include ng-if="!ticket_info" src="templates_url + 'ticketUserTicketInfo.html'"></ng-include>

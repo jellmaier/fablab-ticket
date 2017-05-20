@@ -230,6 +230,10 @@ function rest_ticket_values($data) {
     $ticket['color'] = get_term_meta($device_id, 'tag_color', true);
   }
   $ticket['device_id'] = $device_id;
+
+  if (get_post_field( 'post_author', $ticket_id ) == get_current_user_id()) {
+    $ticket['pin'] = get_post_meta($ticket_id, 'pin', true );
+  }
  
   if ( empty( $ticket ) ) {
     return null;
