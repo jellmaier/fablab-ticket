@@ -42,6 +42,10 @@ function rest_finish_ticket($data) {
 
   update_post_meta($ticket_id, 'status', '0-finished');
 
+  // set Time-Ticket end time
+  $timeticket_id = get_post_meta( $ticket_id, 'timeticket_id', true );
+  set_timeticket_end_time($timeticket_id);
+
   return new WP_REST_Response( null, 200 );
 }
 
@@ -76,6 +80,20 @@ function rest_assign_ticket($data) {
     update_post_meta($ticket_id, 'status', '1-assigned');
   } else 
     return WP_Error( 'rest_noticket', __( 'Please, set duration!', 'fablab-ticket' ), array( 'status' => 422 ) );
+
+  // create Time-Ticket entry
+
+  $timeticket_id = get_post_meta( $ticket_id, 'timeticket_id', true );
+  $user_id = get_post_field( 'post_author', $ticket_id );
+
+  if( ! $timeticket_id ) {
+    $timeticket_id = add_ticket_timeticket($device_id, $user_id, $ticket_id);
+
+     if ($timeticket_id != 0) {
+      update_post_meta($ticket_id, 'timeticket_id', $timeticket_id);
+    }
+  } else   // set start time
+    set_timeticket_start_time($timeticket_id);
   
   
   return new WP_REST_Response( null, 200 );
@@ -204,7 +222,22 @@ function rest_delete_ticket($data) {
     return WP_Error( 'rest_noticket', __( 'Is not a ticket', 'fablab-ticket' ), array( 'status' => 422 ) );
   }
 
-  if (wp_delete_post($ticket_id) == false)
+  //
+  $ticket_status = get_post_meta( $ticket_id, 'status', true ); 
+  $timeticket_id = get_post_meta( $ticket_id, 'timeticket_id', true ); 
+
+  // if linked to timeticket
+  if ($timeticket_id) 
+  {
+    if ($ticket_status == '0-finished')
+      disconnect_ticket_of_timeticket($timeticket_id);
+    else if($ticket_status == '6-inactive')  
+      if (wp_delete_post($timeticket_id) == false) // delete Time-Ticket
+       return WP_Error( 'rest_notdeleted', __( 'Time-Ticket not deleted', 'fablab-ticket' ), array( 'status' => 423 ) );
+  }
+ 
+
+  if (wp_delete_post($ticket_id) == false)  // delete Ticket
     return WP_Error( 'rest_notdeleted', __( 'Ticket not deleted', 'fablab-ticket' ), array( 'status' => 423 ) );
   
   return new WP_REST_Response( null, 200 );
@@ -305,7 +338,7 @@ function rest_add_ticket($data) {
   $post_information = array(
     'post_title' => sprintf(__( '%s, from: ', 'fablab-ticket' ), __( 'Ticket', 'fablab-ticket' )) . wp_get_current_user()->display_name,//fablab_get_captions('ticket_caption') . ", von: " . 
     'post_type' => 'ticket',
-    'author' => $user_id,
+    'post_author' => $user_id,
     'post_status' => 'publish',
   );
 

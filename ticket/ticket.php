@@ -102,6 +102,7 @@ function ticket_edit_columns($columns){
     "duration" => $posttype_name . " dauer",
     "user_id" => "User",
     "activation_time" => "Activierungs Zeit",
+    "timeticket_id" => fablab_get_captions('time_ticket_caption'),
   );
   return $columns;
 }
@@ -116,7 +117,7 @@ function ticket_table_content($column_name, $post_id) {
         break;
 
       case 'duration' :
-        echo get_post_time_string(get_ticket_field("duration"),true);
+        echo get_ticket_field("duration");
         break;
 
       case 'user_id' :
@@ -139,6 +140,10 @@ function ticket_table_content($column_name, $post_id) {
         }
         break;
 
+      case 'timeticket_id' :
+        echo get_the_title(get_ticket_field("timeticket_id"));
+        break;
+
     }
 }
 
@@ -154,7 +159,7 @@ function ticket_details_meta() {
   echo '<p><label>' . fablab_get_captions('ticket_caption') . ' dauer (min):   </label> <input type="text" disabled value="' . get_ticket_field("duration") . '" ></p>';
   echo '<p><label>Activireungs Zeit:   </label> <input type="text" disabled value="' . get_ticket_field("activation_time") . '" ></p>';
   echo '<p><label>' . fablab_get_captions('ticket_caption') . ' Typ:   </label> <input type="text" disabled value="' . get_ticket_field("ticket_type") . '" ></p>';
-
+  
 }
 
 function get_ticket_field($ticket_field) {

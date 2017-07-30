@@ -2,6 +2,9 @@
 
 //namespace fablab_ticket;
 
+ 
+include 'timeticket-statistic.php';
+
 
 if (!class_exists('TimeTicket'))
 {
@@ -93,6 +96,7 @@ function timeticket_edit_columns($columns){
         "timeticket_end_time" => "End Zeit",
         "timeticket_device" => fablab_get_captions('device_caption'),
         "timeticket_user" => "User",
+        "ticket_id" => fablab_get_captions('ticket_caption'),
   );
   return $columns;
 }
@@ -102,11 +106,14 @@ function timeticket_table_content( $column_name, $post_id ) {
   switch ( $column_name ) {
 
     case 'timeticket_device' :
-      echo get_device_title_by_id(get_post_meta( $post_id, 'timeticket_device', true ));
+      $device_type = get_post_meta( $post_id, 'timeticket_device', true );
+      echo '<p style="border-bottom: 3px solid ' . get_device_type_color_field($device_type) 
+          . '; display: inline-block;" >' . get_device_title_by_id($device_type) . '</p>';
+      //echo get_device_title_by_id(get_post_meta( $post_id, 'timeticket_device', true ));
       break;
 
     case 'timeticket_user' :
-      echo get_user_by('id', get_post_meta( $post_id, 'timeticket_user', true ))->display_name;
+      echo get_ticket_field("user_id");
       break;
 
     case 'timeticket_start_time' :
@@ -114,7 +121,15 @@ function timeticket_table_content( $column_name, $post_id ) {
       break;
 
     case 'timeticket_end_time' :
-      echo date_i18n('Y-m-d H:i', get_post_meta( $post_id, 'timeticket_end_time', true ));
+      $end_time = get_post_meta( $post_id, 'timeticket_end_time', true );
+      if($end_time)
+        echo date_i18n('Y-m-d H:i', get_post_meta( $post_id, 'timeticket_end_time', true ));
+      else
+        echo 'not set';
+      break;
+
+    case 'ticket_id' :
+      echo get_the_title(get_ticket_field("ticket_id"));
       break;
 
     default :
@@ -136,7 +151,7 @@ function timeticket_details_meta() {
   echo '<p><label>End Zeit: </label><input type="text" name="timeticket_end_time"  class="end_time" value="' . get_timeticket_field("timeticket_end_time") . '" /> </p>';
 
   $device_selected = get_timeticket_field("timeticket_device");
-  $timeticket_user = get_timeticket_field("timeticket_user");
+  //$timeticket_user = get_timeticket_field("timeticket_user");
   $device_list = get_online_devices(); // after this no get_timeticket_field working
 
   echo '<p><label>' . fablab_get_captions('device_caption') . ': </label><select name="timeticket_device">';
@@ -153,7 +168,7 @@ function timeticket_details_meta() {
 
   echo '<p><label>User: </label><select name="timeticket_user">';
   foreach ( $userlist as $user )
-      echo '<option '. selected($user->id, $timeticket_user, false) .' value="' . $user->id . '">' . $user->display_name . '</option>';
+      echo '<option '. selected($user->id, $post->post_author, false) .' value="' . $user->id . '">' . $user->display_name . '</option>';
 
   echo '</select></p>';
 
@@ -170,6 +185,10 @@ function get_timeticket_field($timeticket_field) {
       } else {
         return $custom[$timeticket_field][0];
       }
+    } else if ( strcmp($timeticket_field, 'user_id') == 0 ) {
+      return get_user_by('id', $post->post_author)->display_name;
+    } else {
+      return 'not set';
     }
 }
 
@@ -197,6 +216,8 @@ function save_timeticket_field($timeticket_field) {
     if(isset($_POST[$timeticket_field])) {
       if (($timeticket_field == "timeticket_start_time") || ($timeticket_field == "timeticket_end_time")) {
           update_post_meta($post->ID, $timeticket_field, strtotime($_POST[$timeticket_field]));
+      } else if ($timeticket_field == "timeticket_user") {
+          //update_post_meta($post->ID, $timeticket_field, strtotime($_POST[$timeticket_field]));
       } else {
         update_post_meta($post->ID, $timeticket_field, $_POST[$timeticket_field]);
       }
@@ -212,6 +233,51 @@ function set_timeticket_title( $data , $postarr ) {
   return $data;
 }
 
+// ------------------------------------------------------------------------------------
+
+
+function add_ticket_timeticket($device_id, $user_id, $ticket_id) {
+
+  $start_time = current_time( 'timestamp' );
+  //$end_time = (current_time( 'timestamp' ) + (60 * $duration)) ;
+
+  $post_information = array(
+        'post_title' => fablab_get_captions('time_ticket_caption') . ' von: ' . get_user_by('id', $user_id)->display_name,
+        'post_type' => 'timeticket',
+        'post_author' => $user_id,
+        'post_status' => 'publish',
+    );
+ 
+  $ID = wp_insert_post( $post_information );
+
+  if ($ID != 0) {
+    add_post_meta($ID, 'timeticket_device', $device_id);
+    set_timeticket_start_time($ID);
+    //add_post_meta($ID, 'timeticket_end_time' , $end_time);
+    add_post_meta($ID, 'ticket_id' , $ticket_id);
+  }
+
+  return $ID;
+
+}
+
+function set_timeticket_start_time($timeticket_id) {
+  $time = current_time( 'timestamp' );
+  update_post_meta($timeticket_id, 'timeticket_start_time' , $time);
+}
+
+function set_timeticket_end_time($timeticket_id) {
+  $time = current_time( 'timestamp' );
+  update_post_meta($timeticket_id, 'timeticket_end_time' , $time);
+}
+
+function disconnect_ticket_of_timeticket($timeticket_id) {
+  delete_post_meta($timeticket_id, 'ticket_id');
+}
+
+// -----------------------------------------------------------------------------
+
+/*
 function get_active_user_ticket($user_id) {
   $time_delay = (fablab_get_option('ticket_delay') * 60);
   
@@ -240,7 +306,7 @@ function get_active_user_ticket($user_id) {
   );
   return new WP_Query($query_arg);
 }
-
+*/
 function is_device_availabel($device_id){
   global $post;
   $temp_post = $post;
