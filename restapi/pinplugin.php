@@ -3,21 +3,43 @@
 
 function rest_check_ticket_pin($data) {
   $pin = sanitize_text_field($data['pin']);
+  $device_id = sanitize_text_field($data['device']);
 
-  if($pin < 1000)
-    return new WP_Error( 'rest_notmodified', __( 'Data has not changed.', 'fablab-ticket' ), array( 'status' => 304 ) );
+  if($pin < 10000)
+    return false;
 
-  $query_arg = array(
-    'post_type' => 'ticket',
-    'meta_query' => array(   
-      'relation'=> 'OR',               
-      array(
-        'key' => 'pin',                  
-        'value' => $pin,               
-        'compare' => '='                 
-      )
-    ) 
-  );
+  if(empty($device_id)) {
+    $query_arg = array(
+      'post_type' => 'ticket',
+      'meta_query' => array(   
+        'relation'=> 'OR',               
+        array(
+          'key' => 'pin',                  
+          'value' => $pin,               
+          'compare' => '='                 
+        )
+      ) 
+    );
+  } else {
+    $query_arg = array(
+      'post_type' => 'ticket',
+      'meta_query' => array(   
+        'relation'=> 'AND',               
+        array(
+          'key' => 'pin',                  
+          'value' => $pin,               
+          'compare' => '='                 
+        ),
+        array(
+          'key' => 'device_id',                  
+          'value' => $device_id,               
+          'compare' => '='                 
+        )
+      ) 
+    );
+  }
+
+
 
 
   $result = array();
@@ -45,6 +67,8 @@ add_action( 'rest_api_init', function () {
     'sanitize_callback' => 'rest_data_arg_sanitize_callback',
   ) );
 } );
+
+
 
 
 ?>

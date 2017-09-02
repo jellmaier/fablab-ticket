@@ -350,7 +350,7 @@ function rest_add_ticket($data) {
     add_post_meta($ID, 'duration' , $duration);
     add_post_meta($ID, 'ticket_type' , $ticket_type);
     add_post_meta($ID, 'status' , "5-waiting");
-    $pin = wp_rand(1000,9999);
+    $pin = wp_rand(10000,99999);
     add_post_meta($ID, 'pin' , $pin);
     //send_email_to_current_user();
   }

@@ -318,6 +318,17 @@ function get_online_devices() {
   return $device_list;
 }
 
+
+
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'sharepl/v1', '/online_devices', array(
+    'methods' => 'GET',
+    'callback' => 'get_online_devices'
+  ) );
+} );
+
+
+
 function get_online_pro_devices() {
   $temp_post = $post;
   global $post;
