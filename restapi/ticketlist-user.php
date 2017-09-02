@@ -293,7 +293,44 @@ add_action( 'rest_api_init', function () {
   ) );
 } );
 
+//--------------------------------------------------------
+// Rest get ancd check TAC
+//--------------------------------------------------------
 
+function rest_check_and_get_tac() {
+
+  $agb_page = get_post( fablab_get_tac('tac_pageid'), ARRAY_A );
+  $result = array();
+  $result['accepted'] = fablab_user_tac_acceptance();
+  //$result['tac_needed'] = fablab_get_tac('tac_needed');
+  $result['tac'] = apply_filters("the_content", $agb_page['post_content']);
+
+  //update_user_meta( get_current_user_id(), 'tac_acceptance_date', '' );
+  return $result;
+}
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'sharepl/v1', '/check_and_get_tac', array(
+    'methods' => 'GET',
+    'callback' => 'rest_check_and_get_tac',
+    'permission_callback' => 'rest_ticket_user_permission',
+  ) );
+} );
+
+//--------------------------------------------------------
+// Rest get ancd check TAC
+//--------------------------------------------------------
+
+function rest_set_user_tac_accaptance($data) {
+  update_user_meta( get_current_user_id(), 'tac_acceptance_date', current_time( 'timestamp' ) );
+  return rest_check_and_get_tac(); 
+}
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'sharepl/v1', '/set_user_tac_accaptance', array(
+    'methods' => 'POST',
+    'callback' => 'rest_set_user_tac_accaptance',
+    'permission_callback' => 'rest_ticket_user_permission',
+  ) );
+} );
 
 //--------------------------------------------------------
 // Rest Activate/Deactivate Ticket-System

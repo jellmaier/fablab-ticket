@@ -21,8 +21,10 @@ function rest_has_ticket_update_permission($data) {
   else
     $ticket_id = 0;
 
-  //$post_object = get_post($ticket_id);
-  //if (($post_object->post_author == get_current_user_id()) || current_user_can( 'delete_others_posts' ));
+
+  // Chech TAC Accaptance
+  if(!fablab_user_tac_acceptance())
+    return new WP_Error( 'rest_forbidden', __( 'OMG you have not accapted TAC.', 'fablab-ticket' ), array( 'status' => 403 ) );
 
   if (has_ticket_update_permission($ticket_id))
     return true;

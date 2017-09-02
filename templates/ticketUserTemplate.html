@@ -1,9 +1,18 @@
-<!-- Menu -->
+<!-- TAC -->
+<div ng-if="tac.accepted==false" ng-click="tac.showbox=!tac.showbox" class="message-box">
+  <p class="tac-toggle">Um ein Gerät zu nutzen, bitte den AGBs zustimmen! <a >Anzeigen</a></p> <!-- totoranslate -->
+</div>
+<div ng-if="tac.showbox" class="tac-box">
+  <p>{{tac.tac}}</p>
+    <input type="submit" class="button-primary" ng-click="setTAC()" value="Zustimmen"/>
+    <input type="submit" class="button-primary" ng-click="tac.showbox=false" value="Abbrechen"/>
+    <!--p>Keine AGBs vorhanden!</br>Bitte kontaktiere den Administrator!</p-->
+</div>
 
-
+<!-- Logout/Headder -->
 <ng-include src="templates_url + 'userHeadderTemplate.html'"></ng-include>
 
-
+<!-- Menu -->
 <div class="tab">
   <button class="tablinks" ng-class="{active: menuTab=='devices'}"ng-click="setMenuTab('devices')">{{LOCAssign.ticket_devices}}</button>
   <button class="tablinks" ng-class="{active: menuTab=='tickets'}" ng-click="setMenuTab('tickets')">Meine Tickets</button> <!-- totoranslate -->
@@ -43,11 +52,13 @@
   <div ng-switch-when="devices" class="tabcontent">
     <p ng-if="ticket_system_offline">Ticket-System offline!</p>  <!-- totoranslate -->
     <p ng-hide="max_available || ticket_system_offline || !get_ticket_allowed">Du hast die maximale Anzahl von Tickets gezogen!</p>  <!-- totoranslate -->
+    <p ng-hide="tac.accepted">Du hast die AGB nicht betätigt!</p>  <!-- totoranslate -->
     <p ng-hide="get_ticket_allowed || ticket_system_offline">Tickets können nur am Terminal gezogen werden!</p>  <!-- totoranslate -->
     <div id="fl-getticket" class="device-list">
       <div data-ng-repeat="device_type in device_types track by $index"  class="fl-device-element get-ticket"  
       style="border: 6px solid {{device_type.color}}; background-color: {{device_type.color}}"
-      ng-click="addTicketOverlay(device_type)" ng-show="!ticket_system_offline && get_ticket_allowed && max_available && device_type.available" ng-cloak >
+      ng-click="addTicketOverlay(device_type)" ng-show="!ticket_system_offline 
+        && get_ticket_allowed && max_available && device_type.available && tac.accepted" ng-cloak >
         <div class="fl-device-element-content">
           <h2>{{device_type.name}}</h2>
           <!--p>Verfügbare Geräte: <b><?= $number_devices ?></b></br>Wartende Personen: <b><?= $waiting['persons'] ?></b></p-->

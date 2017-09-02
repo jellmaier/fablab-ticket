@@ -363,7 +363,7 @@ add_action( 'rest_api_init', function () {
   register_rest_route( 'sharepl/v1', '/add_ticket', array(
     'methods' => 'POST',
     'callback' => 'rest_add_ticket',
-    'permission_callback' => 'rest_ticket_user_permission',
+    'permission_callback' => 'rest_has_ticket_update_permission',
     'sanitize_callback' => 'rest_data_arg_sanitize_callback',
   ) );
 });

@@ -353,10 +353,13 @@ function fablab_get_tac($key = 'array') {
 
 function fablab_user_tac_acceptance() {
   $tac_options = fablab_get_tac();
-  $tac_acceptance_date = get_user_meta(get_current_user_id(), 'tac_acceptance_date', true);
+  $tac_acceptance_date = (int) get_user_meta(get_current_user_id(), 'tac_acceptance_date', true);
 
   if(($tac_options['tac_needed'] == 1) 
-    && (empty($tac_acceptance_date) || $tac_acceptance_date < $tac_options['tac_date'])) {
+    && ($tac_acceptance_date > $tac_options['tac_date'])) {
+    //&& (empty($tac_acceptance_date) || $tac_acceptance_date < $tac_options['tac_date'])) {
+    return true;
+  } else if($tac_options['tac_needed'] == 0) {
     return true;
   } else {
     return false;

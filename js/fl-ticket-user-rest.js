@@ -14,6 +14,25 @@ angular.module('ticketUser').controller('ticketUserCtrl', function($scope, $http
     return new Date(date);
   }
 
+  var loadTAC = function() {
+    $http.get($scope.api_url + 'check_and_get_tac')
+    .then(function successCallback(response) {
+      $scope.tac = response.data;
+    }, function errorCallback(response) {
+      console.log('load tac error: ' + response.status);
+    }); 
+  }
+  loadTAC();
+
+  $scope.setTAC = function() {
+    $http.post($scope.api_url + 'set_user_tac_accaptance')
+    .then(function successCallback(response) {
+      $scope.tac = response.data;
+    }, function errorCallback(response) {
+      console.log('load tac error: ' + response.status);
+    }); 
+  }
+
   var loadTickets = function(interval_number = 0, force = false) { // interval overrides the first value 
 
     if (force)
@@ -114,7 +133,9 @@ angular.module('ticketUser').controller('ticketUserCtrl', function($scope, $http
         $scope.ticket_system_offline = true;
         $scope.device_types = null;
         $scope.overlay.show = false;
-      }  
+      } else if (response.status == 403){
+        $scope.overlay.show = false;
+      } 
     });
     
   }
