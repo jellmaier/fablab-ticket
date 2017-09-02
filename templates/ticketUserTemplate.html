@@ -3,9 +3,9 @@
   <p class="tac-toggle">Um ein Gerät zu nutzen, bitte den AGBs zustimmen! <a >Anzeigen</a></p> <!-- totoranslate -->
 </div>
 <div ng-if="tac.showbox" class="tac-box">
-  <p>{{tac.tac}}</p>
-    <input type="submit" class="button-primary" ng-click="setTAC()" value="Zustimmen"/>
-    <input type="submit" class="button-primary" ng-click="tac.showbox=false" value="Abbrechen"/>
+  <div ng-bind-html="tac.tac"></div>
+  <input type="submit" class="button-primary" ng-click="setTAC()" value="Zustimmen"/>
+  <input type="submit" class="button-primary" ng-click="tac.showbox=false" value="Abbrechen"/>
     <!--p>Keine AGBs vorhanden!</br>Bitte kontaktiere den Administrator!</p-->
 </div>
 
