@@ -232,6 +232,44 @@ function get_device_waiting_persons($device_id, $ticket_type, $ticket = 0, $incl
   return $waiting;
 }
 
+
+function check_and_delete_finished_tickets() {
+
+  global $post;
+
+  $query_arg = array(
+    'post_type' => 'ticket',
+    'orderby' => array( 
+      'meta_value' => 'ASC', 
+      'date' => 'ASC',
+    ),
+    'meta_key' => 'status',
+    'meta_query' => array( 
+      'key'=>'status',
+      'value'=> '0-finished',
+    )
+  );
+
+
+  $ticket_query = new WP_Query($query_arg);
+
+  if ( $ticket_query->have_posts() ) {
+    while ( $ticket_query->have_posts() ) : $ticket_query->the_post();
+      
+      $timeticket_id = get_post_meta( $post->ID, 'timeticket_id', true );
+      $finishtime = get_post_meta( $timeticket_id, 'timeticket_end_time', true );
+
+      
+      if( !empty($finishtime) && (( current_time( 'timestamp' ) - $finishtime) >= (60 * fablab_get_option('ticket_delay')))) {
+        disconnect_ticket_of_timeticket($timeticket_id);
+        wp_delete_post($post->ID);
+      }
+
+    endwhile;
+  } 
+
+}
+
 /*
 
 function check_and_deactivate_ticket($ticket_id) {

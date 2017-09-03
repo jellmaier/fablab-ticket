@@ -137,6 +137,9 @@ if (!class_exists('TicketListShortcodeUser'))
 
       $ticket_query = new WP_Query($query_arg);
 
+      // handle finished tickets
+      check_and_delete_finished_tickets();
+
       return rest_get_tickets($ticket_query, $old_hash);
     }
 

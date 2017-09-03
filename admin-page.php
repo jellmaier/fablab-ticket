@@ -117,7 +117,7 @@ if (!class_exists('AdminPage'))
 
         add_settings_field(
           'ticket_delay',                                           // ID/Name of the field
-          'Zeit bis zur automatischen Deaktivierung (min)',         // Title
+          'Zeit bis zum automatischen Löschen (min)',         // Title
           'fablab_ticket_delay_function',                           // callback
           'fablab_options',                                         // page slug
           'fablab_settings'                                         // section

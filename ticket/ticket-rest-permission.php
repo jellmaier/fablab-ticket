@@ -13,6 +13,18 @@ function rest_ticket_user_permission() {
   return true;
 }
 
+function rest_tac_permission() {
+
+  if ( ! is_user_logged_in() )
+    return new WP_Error( 'rest_not_logged_in', 'You are not currently logged in.', array( 'status' => 401 ) );
+
+  // Chech TAC Accaptance
+  if(!fablab_user_tac_acceptance())
+    return new WP_Error( 'rest_forbidden', __( 'OMG you have not accapted TAC.', 'fablab-ticket' ), array( 'status' => 403 ) );
+  
+  return true;
+}
+
 function rest_has_ticket_update_permission($data) {
   if (isset($data['id']))
     $ticket_id = sanitize_text_field($data['id']);
