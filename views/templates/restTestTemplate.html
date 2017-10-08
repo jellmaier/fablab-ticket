@@ -1,0 +1,12 @@
+<div ng-repeat="route in routes" class="div-container">
+  <div ng-click="loadRestResponse(route);" class="rest-status-icon{{route.class}}">
+    <p style="color: {{ route.color }};">
+      {{ route.route }}, Response: {{ route.code }} -> {{ route.response }}
+    </p> 
+  </div>
+</div>
+
+
+<!--ul>
+    <li ng-repeat='route in routes'>{{ route.route }}, Response: {{ route.code }} -> {{ route.response }}</li>
+</ul-->

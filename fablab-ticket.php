@@ -14,39 +14,36 @@ License: GPLv3
 
 //namespace fablab_ticket;
 
-load_plugin_textdomain( 'fablab-ticket', false, dirname( plugin_basename( __FILE__ ) ) . '/languages'  );
+load_plugin_textdomain( 'fablab-ticket', false, dirname( plugin_basename( __FILE__ ) ) . 'system/languages'  );
 
 
-include 'devices/device.php';
-include 'devices/device-type.php';
-include 'devices/location.php';
-include 'timeticket/timeticket.php';
-include 'ticket/ticket.php';
-include 'shortcode/ticketlist-shortcode-admin-rest.php';
-include 'shortcode/ticket-shortcode-user-rest.php';
-include 'shortcode/calendar-shortcode.php';
-include 'shortcode/logout-shortcode.php';
-include 'admin-page.php';
-include 'user-list.php';
-include 'js/strings.php';
+include 'plugins/pinplugin.php';
+include 'plugins/nfc-login/login-shortcode.php';
+include 'plugins/resttest/resttest-shortcode.php';
+include 'posttypes/devices/device.php';
+include 'posttypes/timeticket/timeticket.php';
+include 'posttypes/ticket/ticket.php';
+include 'views/app-shortcode.php';
+include 'views/ticketlist/ticketlist-shortcode-rest.php';
+include 'views/getticket/getticket-shortcode-rest.php';
+include 'system/admin-page.php';
+include 'system/strings.php';
+include 'system/user-list.php';
+include 'system/rest/ticketlist-user.php';
 include 'manage-scripts.php';
-include 'restapi/ticketlist-user.php';
-include 'restapi/pinplugin.php';
-include 'nfc-login/login-shortcode.php';
 
 
 
 
 $options = new AdminPage();
-//new NFCLoginShortcode();
 new UserList();
 new Device();
 new TimeTicket();
 new Ticket();
+new FlNgAppShortcodeRest();
 new TicketShortcodeRest();
 new TicketListShortcodeRest();
-new CalendarShortcode();
 new ManageScripts();
-//new LogoutShortcode();
+new RestTestShortcode();
 
 ?>

@@ -1,0 +1,22 @@
+.rest-status-icon {
+    background: url('resticons.svg') 0px 0px;
+    background-repeat: no-repeat;
+    margin-right: 10px;
+    margin-bottom: 15px;
+    height: 20px;
+    display: block;
+}
+
+.rest-status-icon-ok {
+    background: url('resticons.svg') 0px -40px;
+    background-repeat: no-repeat;
+}
+
+.rest-status-icon-error {
+    background: url('resticons.svg') 0px -20px;
+    background-repeat: no-repeat;
+}
+
+.rest-status-icon p{
+    margin-left: 26px;
+}

@@ -13,38 +13,33 @@ Die Todo-Liste mit Prioritäten:
 
 + Admin Ansicht auf Tabelle überarbeiten //done
 
-+ PIN-REST-Request for Device Handlineg
++ PIN-REST-Request for Device Handling // done
  + Test Http Request // done
- - generate Ticket Pin
- - Ticket Pin view
- - Ticket Pin Check
+ - generate Ticket Pin // done
+ - Ticket Pin view // done
+ - Ticket Pin Check // done
 
 + Rebuild and Test all Functuialities
  + Device availability Check // done
  + Check max Ticket for Device // done
- - TAC accapance
+ - TAC accapance // done
  + Login Info // done
  + Add Ticket Help-Text //done
- + Add Ticket-System online Toggle
- + Add Login/Register Buttons
- - Auto delete finished Ticket
+ + Add Ticket-System online Toggle // done
+ + Add Login/Register Buttons // done
+ + Auto delete finished Ticket // done
  - rename devce_type to device_groupe
  - planned ticket calculate waiting time
  - planned ticket waiting without assigned ticket 
 
 
-
-
------- current implementaton --------
-
 + admin option dissable Ticket-Background Blink
 
-+ Get Ticket Only on FL-Terminal
++ Get Ticket Only on FL-Terminal // done
 
-+ Fast-Track Login (email, phone)
- + wording different to pin
++ Fast-Track Login NFC // done
 
-+ TimeTicket Handling
++ TimeTicket Handling // done
 
 + Code Cleanup
 
@@ -55,9 +50,9 @@ Die Todo-Liste mit Prioritäten:
  + Berechtigungssystem
  + Erstellen von Standorten durch User
 
-+ QR-Login
 
 + User Statistik
+ + Rest-api // done
+ + View 
  + zusätzliche Abfragen für Benutzereigenschaften
 
-+ Feedback Plugin
