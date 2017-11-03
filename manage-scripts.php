@@ -47,7 +47,6 @@ if (!class_exists('ManageScripts'))
         wp_register_script('ui-leaflet', plugin_dir_url(__FILE__) . 'system/js/leaflet/ui-leaflet.min.js');
 
 
-        //wp_enqueue_script('angular-animate');
 
       }
       add_action('init', 'fl_load_script');
@@ -190,32 +189,28 @@ if (!class_exists('ManageScripts'))
 
 
       //add_action('init', array($this, '_init'));
+      //register_activation_hook( __FILE__, 'pmg_rewrite_activation' );
+
+
+      add_action('init', array($this, 'angular_rewrite_url'));
+      add_action('wp_head', array($this, 'hook_base_href'));
     }
-    /*
-    //Dissable auto rewrite for angular app
-    public function _init()
-    {
-        $slug = 'app';
-        $id = get_option('page_on_front');
-        add_rewrite_rule("^app.*$", "index.php?page_id=$id", 'top');
+    
+    // configute navigation for angular routing
+
+    public function angular_rewrite_url() {
+      //add_rewrite_rule("^$app.*$", "index.php?page_id=1296", 'top');
+      add_rewrite_rule('^app/?', 'index.php?page_id=1296', 'top');
     }
-    */
+
+    public function hook_base_href() {
+        global $post;
+        echo '<base href="' . get_permalink($post->ID) . '">';
+    }
+    
   }
 }
 
-/*
-
-function pluginname_ajaxurl() {
-  ?>
-  <script type="text/javascript">
-    var ajaxurl = '<?php echo admin_url('admin-ajax.php'); ?>';
-  </script>
-  <?php
-}
-
-add_action('wp_head','pluginname_ajaxurl');
-
-*/
 
 remove_filter('the_content', 'wpautop');
 
