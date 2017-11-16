@@ -1,9 +1,10 @@
+<ng-progress [color]="'#028F76'" [showSpinner]="false"></ng-progress>
 <h1>Statistic</h1>  
 <div class="statistic-box box">
   <div class="box-header">
   	<h3>Wochennutzung</h3>
-    <button (click)="setData(false)">Vorwoche </button>
-    <button (click)="setData(true)">nächte Woche </button>
+    <button (click)="checkLoadAndSetData(false)">-</button>
+    <button (click)="checkLoadAndSetData(true)">+</button>
   </div>
   <div class="box-content">
   	 <nvd3 [options]="options" [data]="data"></nvd3>

@@ -1,13 +1,17 @@
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule }   from '@angular/forms';
-import { HttpModule }    from '@angular/http';
+import { BrowserXhr, HttpModule } from '@angular/http';
+import { NgProgressModule, NgProgressBrowserXhr } from 'ngx-progressbar';
 
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent }         from './app.component';
 import { StatisticService }          from './statistic/statistic.service';
 import { StatisticComponent } from './statistic/statistic.component';
+import { ChartService } from './statistic/chart.service';
+
+import { DatePipe } from '@angular/common';
 
 import { NvD3Module } from 'ng2-nvd3';
 
@@ -17,11 +21,32 @@ import 'nvd3';
 
 
 
+/* for angular 4.3 and later
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { NgProgressModule, NgProgressInterceptor } from 'ngx-progressbar';
+
+@NgModule({
+ providers: [
+   // ...
+   { provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true }
+ ],
+ imports: [
+   // ...
+   HttpClientModule,
+   NgProgressModule
+ ]
+})
+*/
+
+
+
 @NgModule({
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
+    HttpModule,
+    NgProgressModule,
     AppRoutingModule,
     NvD3Module
   ],
@@ -29,7 +54,11 @@ import 'nvd3';
     AppComponent,
     StatisticComponent
   ],
-  providers: [ StatisticService ],
+  providers: [ 
+    StatisticService, 
+    ChartService,
+    DatePipe,
+    { provide: BrowserXhr, useClass: NgProgressBrowserXhr } ],
   bootstrap: [ AppComponent ]
 })
 

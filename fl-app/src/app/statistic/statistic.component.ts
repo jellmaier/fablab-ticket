@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
 
 import { StatisticService } from './statistic.service';
+import { ChartService } from './chart.service';
+
+import { DatePipe } from '@angular/common';
 
 declare let d3: any;
-
 
 
 interface Week {
@@ -22,9 +24,13 @@ interface Week {
   encapsulation: ViewEncapsulation.None
 })
 
+
 export class StatisticComponent implements OnInit {
 
-  constructor(private statisticService: StatisticService) { }
+  constructor(private statisticService: StatisticService,
+              private chartService: ChartService,
+              private datePipe: DatePipe) { }
+
 
   options;
   data;
@@ -32,16 +38,29 @@ export class StatisticComponent implements OnInit {
 
   linechartoptions
   datatrend;
-  showchart;
+  showchart;  
 
-  index = 100;
+  index = 0;
 
-  private setData(increment:boolean) {
+  private checkLoadAndSetData(increment:boolean) {
 
     if (increment)
       this.index++;
     else
       this.index--;
+
+    if(this.datatrend[0].values.find(x => x.x == this.index))
+      this.setData();
+    else {
+      console.log('noentry');
+      let weeknuber:number = - this.index;
+      this.loadStatistic(this.getWeek(weeknuber), weeknuber, true);
+      return;
+    }
+
+  }
+
+  private setData() {
 
     let data = [];
     console.log(this.datatrend);
@@ -56,10 +75,8 @@ export class StatisticComponent implements OnInit {
       this.currentWeek = dataentry.label;
     }
     this.data = data;
+    
   }
-
-
-  @ViewChild('linechart') linechart;
 
   private getWeek(earlierWeeks:number):Week {
 
@@ -77,16 +94,26 @@ export class StatisticComponent implements OnInit {
 
 	  return week;
   }
+/*
+  private getDateString2(date:Date):String {
+    return "" + date.getFullYear() + date.getMonth() + date.getDate();
+  }
+*/
 
+  @ViewChild('linechart') linechart;
 
   private addStatisticData(data:Array<any>, week:Week, offset:number):void {
- 
+
+
+    let string = Number(this.datePipe.transform(week.monday, 'yyMMdd'));
+  // week.monday | date :'fullDate');
+
     for (let entry of data) {
 
       if (this.datatrend.find(x => x.key == entry.name)) {
         // push data to existing entry
         this.datatrend.find(x => x.key == entry.name).values
-            .push({ x: 100-offset, y: entry.number, label: this.getWeekString(week)});
+            .push({ x: -offset, y: entry.number, label: this.getWeekString(week)});
         this.datatrend.find(x => x.key == entry.name).values.sort(function (a, b) {
           return d3.ascending(a.x, b.x);
         });
@@ -94,7 +121,7 @@ export class StatisticComponent implements OnInit {
         //create new entry
         this.datatrend.push({
               key: entry.name,
-              values: [ {x: 100-offset, y: entry.number , //week.monday.valueOf()
+              values: [ {x: -offset, y: entry.number , //week.monday.valueOf()
                       
                       label: this.getWeekString(week)
               } ],
@@ -105,21 +132,20 @@ export class StatisticComponent implements OnInit {
 
     this.linechart.chart.update();
 
-
-
   }
 
   private getWeekString(week:Week):String {
     return week.monday.toDateString() + ' - ' + week.sunday.toDateString();
   }
 
-  private loadStatistic(week:Week, offset:number):void {
+  private loadStatistic(week:Week, offset:number, setData:boolean = false):void {
     this.statisticService.getStatisticOfWeek(week)
     .then(statisticdata => {
       this.data = statisticdata;
       this.addStatisticData(statisticdata, week, offset);
+      if (setData)
+        this.setData();
     });
-
   }
 
 
@@ -127,86 +153,13 @@ export class StatisticComponent implements OnInit {
   ngOnInit() {
 
     this.datatrend = [];
- 
-    
+    this.options = this.chartService.getOptions();
+    this.data = this.chartService.getData();
+    this.linechartoptions = this.chartService.getlinechartoptions();  
+
     for (let i:number = 0; i < 12; i++)
       this.loadStatistic(this.getWeek(i), i);
 
-
-    // from 
-    // https://github.com/krispo/ng2-nvd3
-    // http://krispo.github.io/ng2-nvd3/
-    // http://krispo.github.io/angular-nvd3/#/pieChart
-
-    this.options = {
-      chart: {
-        type: 'pieChart',
-        height: 300,
-        donut: true,
-        x: function(d){return d.name;},
-        y: function(d){return d.number;},
-        color: function(d){return d.color;},
-        showLabels: false,
-        labelsOutside: true,
-        donutRatio: 0.65,
-        duration: 500,
-        labelThreshold: 0.01,
-        labelSunbeamLayout: true,
-        legend: {
-          margin: {
-            top: 5,
-            right: 0,
-            bottom: 10,
-            left: 0
-          },
-          rightAlign: false
-        }
-      },
-    };
-
-  	this.data = [{"id":29,"name":"3D Drucker","color":"#AEDE1A","number":1,"duration":1},
-      {"id":28,"name":"CNC-Fr\u00e4se","color":"#2B79DE","number":1,"duration":1},
-      {"id":27,"name":"Lasercutter","color":"#F6831E","number":1,"duration":1},
-      {"id":31,"name":"Sandstrahlmaschine","color":"#449ACD","number":1,"duration":1},
-      {"id":30,"name":"Vinylcutter","color":"#860090","number":1,"duration":1}
-    ];
-
-    this.linechartoptions = {
-      chart: {
-          type: 'lineChart',
-          height: 450,
-          margin : {
-              top: 20,
-              right: 20,
-              bottom: 40,
-              left: 55
-          },
-          x: function(d){ return d.x; },
-          y: function(d){ return d.y; },
-          useInteractiveGuideline: true,
-          refreshDataOnly: true,
-          deepWatchOptions: true,
-          deepWatchData: true,
-          dispatch: {
-              stateChange: function(e){ console.log("stateChange"); },
-              changeState: function(e){ console.log("changeState"); },
-              tooltipShow: function(e){ console.log("tooltipShow"); },
-              tooltipHide: function(e){ console.log("tooltipHide"); }
-          },
-          xAxis: {
-              axisLabel: 'Woche'
-          },
-          yAxis: {
-              axisLabel: 'User',
-              axisLabelDistance: -10
-          }
-      },
-      title: {
-          enable: true,
-          text: 'Title for Line Chart'
-      }
-    };
-    
   };
   
 
