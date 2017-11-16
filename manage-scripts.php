@@ -192,7 +192,7 @@ if (!class_exists('ManageScripts'))
       //register_activation_hook( __FILE__, 'pmg_rewrite_activation' );
 
 
-      add_action('init', array($this, 'angular_rewrite_url'));
+      //add_action('init', array($this, 'angular_rewrite_url'));
       add_action('wp_head', array($this, 'hook_base_href'));
     }
     
