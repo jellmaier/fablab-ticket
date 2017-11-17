@@ -278,8 +278,13 @@ angular.module('ticketUser').controller('ticketUserCtrl', function($scope, $http
 
   $scope.setTerminal = function(){
     $http.get($scope.api_url + 'get_terminal_token')
-    .then(function successCallback(response) {   
-      $cookies.put('terminal_token', response.data);
+    .then(function successCallback(response) {
+      // from https://stackoverflow.com/questions/12624181/how-to-set-expiration-date-for-cookie-in-angularjs
+      // Find tomorrow's date.
+      var expireDate = new Date();
+      expireDate.setDate(expireDate.getDate() + 180);
+      // Setting a cookie
+      $cookies.put('terminal_token', response.data, {'expires': expireDate});
       $scope.checkTerminalToken();
     }, function errorCallback(response) {
       console.log('load check token: ' + response.status);
