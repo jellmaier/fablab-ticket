@@ -53,7 +53,7 @@
     <p ng-if="ticket_system_offline">Ticket-System offline!</p>  <!-- totoranslate -->
     <p ng-hide="max_available || ticket_system_offline || !get_ticket_allowed">Du hast die maximale Anzahl von Tickets gezogen!</p>  <!-- totoranslate -->
     <p ng-hide="tac.accepted">Du hast die AGB nicht betätigt!</p>  <!-- totoranslate -->
-    <p ng-hide="get_ticket_allowed || ticket_system_offline">Tickets können nur am Terminal gezogen werden!</p>  <!-- totoranslate -->
+    <p ng-hide="get_ticket_allowed || ticket_system_offline">Tickets können nur am Terminal im FabLab gezogen werden!</p>  <!-- totoranslate -->
     <div id="fl-getticket" class="device-list">
       <div data-ng-repeat="device_type in device_types track by $index"  class="fl-device-element get-ticket"  
       style="border: 6px solid {{device_type.color}}; background-color: {{device_type.color}}"

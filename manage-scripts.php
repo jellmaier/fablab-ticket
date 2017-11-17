@@ -11,8 +11,8 @@ if (!class_exists('ManageScripts'))
         wp_register_script('fl_ticket_script_user_rest', plugin_dir_url(__FILE__) . 'views/getticket/js/fl-ticket-user-rest.js', array() );
         wp_register_script('fl_ticketlist_script_user_rest', plugin_dir_url(__FILE__) . 'views/ticketlist/js/fl-ticket-list-user-rest.js', array() );
         wp_register_script('fl_ticketlist_script_admin_rest', plugin_dir_url(__FILE__) . 'views/ticketlist/js/fl-ticket-list-admin-rest.js', array() );
-        //wp_register_script('nfc_login_scrypt', plugin_dir_url(__FILE__) . 'plugins/nfc-login/nfc-login.js', array() );
-        //wp_register_style('nfc_login_style', plugin_dir_url(__FILE__) . 'plugins/nfc-login/nfc-login.css');
+        wp_register_script('nfc_login_scrypt', plugin_dir_url(__FILE__) . 'plugins/nfc-login/nfc-login.js', array() );
+        wp_register_style('nfc_login_style', plugin_dir_url(__FILE__) . 'plugins/nfc-login/nfc-login.css');
         wp_register_script('resttest_script', plugin_dir_url(__FILE__) . 'plugins/resttest/resttest.js', array() );
         wp_register_style('resttest_script', plugin_dir_url(__FILE__) . 'plugins/resttest/resttest.css');
         wp_register_script('fl_calendar_script', plugin_dir_url(__FILE__) . 'system/js/fl-calendar.js', array('jquery') );
