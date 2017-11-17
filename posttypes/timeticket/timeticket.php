@@ -94,6 +94,7 @@ function timeticket_edit_columns($columns){
         "title" => $posttype_name,
         "timeticket_start_time" => "Start Zeit",
         "timeticket_end_time" => "End Zeit",
+        "timeticket_waiting_start_time" => "Waiting Start Zeit",
         "timeticket_device" => fablab_get_captions('device_caption'),
         "timeticket_user" => "User",
         "ticket_id" => fablab_get_captions('ticket_caption'),
@@ -128,6 +129,14 @@ function timeticket_table_content( $column_name, $post_id ) {
         echo 'not set';
       break;
 
+    case 'timeticket_waiting_start_time' :
+      $waiting_start_time = get_post_meta( $post_id, 'timeticket_waiting_start_time', true );
+      if($waiting_start_time)
+        echo date_i18n('Y-m-d H:i', get_post_meta( $post_id, 'timeticket_waiting_start_time', true ));
+      else
+        echo 'not set';
+      break;
+
     case 'ticket_id' :
       echo get_the_title(get_ticket_field("ticket_id"));
       break;
@@ -146,9 +155,12 @@ function timeticket_admin_init(){
 }
  
 function timeticket_details_meta() {
+
+  echo '<p><label>Start Wartezeit: </label><input type="text" name="timeticket_waiting_start_time"  class="start_waiting_time" value="' . get_timeticket_field("timeticket_waiting_start_time") . '" /> </p>';
   
   echo '<p><label>Start Zeit: </label><input type="text" name="timeticket_start_time" class="start_time" value="' . get_timeticket_field("timeticket_start_time") . '" /></p>';
   echo '<p><label>End Zeit: </label><input type="text" name="timeticket_end_time"  class="end_time" value="' . get_timeticket_field("timeticket_end_time") . '" /> </p>';
+
 
   $device_selected = get_timeticket_field("timeticket_device");
   //$timeticket_user = get_timeticket_field("timeticket_user");
@@ -180,7 +192,10 @@ function get_timeticket_field($timeticket_field) {
     $custom = get_post_custom($post->ID);
  
     if (isset($custom[$timeticket_field])) {
-      if (($timeticket_field == "timeticket_start_time") || ($timeticket_field == "timeticket_end_time")) {
+      if (($timeticket_field == "timeticket_start_time") 
+        || ($timeticket_field == "timeticket_end_time")
+        || ($timeticket_field == "timeticket_waiting_start_time")
+      ) {
         return date_i18n('Y-m-d H:i', $custom[$timeticket_field][0]);
       } else {
         return $custom[$timeticket_field][0];
@@ -205,6 +220,7 @@ function save_timeticket_details(){
 
    save_timeticket_field("timeticket_start_time");
    save_timeticket_field("timeticket_end_time");
+   save_timeticket_field("timeticket_waiting_start_time");
    save_timeticket_field("timeticket_device");
    save_timeticket_field("timeticket_user");
 
@@ -214,7 +230,9 @@ function save_timeticket_field($timeticket_field) {
     global $post;
  
     if(isset($_POST[$timeticket_field])) {
-      if (($timeticket_field == "timeticket_start_time") || ($timeticket_field == "timeticket_end_time")) {
+      if (($timeticket_field == "timeticket_start_time") 
+          || ($timeticket_field == "timeticket_end_time")
+          || ($timeticket_field == "timeticket_waiting_start_time") ) {
           update_post_meta($post->ID, $timeticket_field, strtotime($_POST[$timeticket_field]));
       } else if ($timeticket_field == "timeticket_user") {
           //update_post_meta($post->ID, $timeticket_field, strtotime($_POST[$timeticket_field]));
@@ -241,6 +259,7 @@ function add_ticket_timeticket($device_id, $user_id, $ticket_id) {
   $start_time = current_time( 'timestamp' );
   //$end_time = (current_time( 'timestamp' ) + (60 * $duration)) ;
 
+
   $post_information = array(
         'post_title' => fablab_get_captions('time_ticket_caption') . ' von: ' . get_user_by('id', $user_id)->display_name,
         'post_type' => 'timeticket',
@@ -253,7 +272,7 @@ function add_ticket_timeticket($device_id, $user_id, $ticket_id) {
   if ($ID != 0) {
     add_post_meta($ID, 'timeticket_device', $device_id);
     set_timeticket_start_time($ID);
-    //add_post_meta($ID, 'timeticket_end_time' , $end_time);
+    add_post_meta($ID, 'timeticket_waiting_start_time' , get_the_time('U', $ticket_id)); 
     add_post_meta($ID, 'ticket_id' , $ticket_id);
   }
 
