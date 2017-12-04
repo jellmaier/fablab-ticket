@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: FabLab Ticket 3.1.3
+Plugin Name: FabLab Ticket 3.1.4
 Version: 3.0.1
 Plugin URI: https://github.com/jellmaier/fablab-ticket
 Description: Ticketing and Reservation System for FabLabs
@@ -20,6 +20,7 @@ load_plugin_textdomain( 'fablab-ticket', false, dirname( plugin_basename( __FILE
 include 'plugins/pinplugin.php';
 include 'plugins/nfc-login/login-shortcode.php';
 include 'plugins/resttest/resttest-shortcode.php';
+include 'plugins/menu/edit-menu.php';
 include 'posttypes/devices/device.php';
 include 'posttypes/timeticket/timeticket.php';
 include 'posttypes/ticket/ticket.php';
@@ -45,5 +46,8 @@ new TicketShortcodeRest();
 new TicketListShortcodeRest();
 new ManageScripts();
 new RestTestShortcode();
+
+
+
 
 ?>
