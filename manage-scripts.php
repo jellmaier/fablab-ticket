@@ -197,12 +197,12 @@ if (!class_exists('ManageScripts'))
     }
     
     // configute navigation for angular routing
-
+/*
     public function angular_rewrite_url() {
       //add_rewrite_rule("^$app.*$", "index.php?page_id=1296", 'top');
       add_rewrite_rule('^app/?', 'index.php?page_id=1296', 'top');
     }
-
+*/
     public function hook_base_href() {
         global $post;
         echo '<base href="' . get_permalink($post->ID) . '">';

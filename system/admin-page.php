@@ -123,6 +123,14 @@ if (!class_exists('AdminPage'))
           'fablab_settings'                                         // section
         );
 
+        add_settings_field(
+          'base_page',                         // ID/Name of the field
+          'Base Page',                         // Title
+          'fablab_base_page_function',         // callback
+          'fablab_options',                    // page slug
+          'fablab_settings'                    // section
+        );
+
         // Register our setting so that $_POST handling is done for us and
         // our callback function just has to echo the <input>
         register_setting( 'fablab_settings_section', 'option_fields', 'validate_options');
@@ -280,7 +288,19 @@ if (!class_exists('AdminPage'))
       }
       add_action('admin_menu', 'fl_options_page');
 
+
+      add_action('init', array($this, 'angular_rewrite_url'));
     }
+    
+    // configute navigation for angular routing
+
+    public function angular_rewrite_url() {
+      $rewrite_page_id = fablab_get_option('base_page');
+      $rewrite_base_url = '^' . get_page_uri( $rewrite_page_id ) . '/?';
+      $rewrite_index_url = 'index.php?page_id=' . $rewrite_page_id;
+      add_rewrite_rule($rewrite_base_url, $rewrite_index_url , 'top');
+    }
+
   }
 }
 
@@ -300,6 +320,7 @@ function fablab_get_option($key = 'array') {
     'terminal_token' => '123456789',
     'ticket_terminals_only' => '0',
     'auto_logout' => '30',
+    'base_page' => '0',
   );
 
   $options = wp_parse_args(get_option('option_fields'), $default_values);
@@ -425,6 +446,36 @@ function fablab_terminal_token_function() {
 function fablab_auto_logout() {
   echo '<input type="text" name="option_fields[auto_logout]" value="' . fablab_get_option('auto_logout') . '"/>';
 }
+function fablab_base_page_function() {
+
+  // from https://codex.wordpress.org/Function_Reference/get_pages
+  $selected = fablab_get_option('base_page');
+  
+  echo '<select name="option_fields[base_page]">';
+  if ($selected == '0')
+    echo '<option value="0">No Page</option>';
+
+  $pages = get_pages(); 
+  foreach ( $pages as $page ) {
+    $page_id = $page->ID;
+    $option = '<option value="' . $page_id . (($page_id == $selected) ? ('" selected>') : ('">'));
+    $option .= $page->post_title;
+    $option .= '</option>';
+    echo $option;
+  }
+  echo '</select>';
+  echo '<p>IMPORTANT: Do not forget to flush and regenerate the rewrite rules database after modifying rules. ' .
+       '<a href=" ' . get_admin_url( null, 'options-permalink.php') . 
+       '">From WordPress Administration Screens, Select Settings -> Permalinks</a> and just click Save Changes without any changes.</p>';
+/*
+  $rewrite_page_id = fablab_get_option('base_page');
+  $rewrite_base_url = '^' . get_page_uri( $rewrite_page_id ) . '/?';
+  $rewrite_index_url = 'index.php?page_id=' . $rewrite_page_id;
+      //add_rewrite_rule('^app/?', 'index.php?page_id=' . fablab_get_option('base_page') , 'top');
+  echo '<textarea rows="5" cols="50">' . $rewrite_base_url . ', to: '. $rewrite_index_url . '</textarea>';
+*/
+  //echo '<textarea rows="5" cols="50" name="option_fields[base_page]">' . fablab_get_option('base_page') . '</textarea>';
+}
 
 
 // Name functions
@@ -481,7 +532,9 @@ function fablab_tac_pageid_function() {
 
   // from https://codex.wordpress.org/Function_Reference/get_pages
   $selected = fablab_get_tac('tac_pageid');
-  echo '<select name="tac_fields[tac_pageid]"><option value="0">No Page</option>';
+  echo '<select name="tac_fields[tac_pageid]">';
+  if ($selected == '0')
+    echo '<option value="0">No Page</option>';
   $pages = get_pages(); 
   foreach ( $pages as $page ) {
     $page_id = $page->ID;
@@ -508,13 +561,22 @@ function validate_options($options) {
 
   foreach ($options as $key => $value) {
 
-    if(is_pos_int($value)) {
+    if(($key) == 'base_page') {
+      if(is_pos_int($value)) {
         $output[$key] = sanitize_text_field($value);
+      } else {
+        add_settings_error('option_fields', 'naN', 'Bitte eine verfügbare Page auswählen!');
+        $output[$key] = $old_settings[$key];
+      }  
     } else {
-      add_settings_error('option_fields', 'naN', 'Bitte eine positive Zahl eingeben!');
-      $output[$key] = $old_settings[$key];
-    } 
-  }
+      if(is_pos_int($value)) {
+          $output[$key] = sanitize_text_field($value);
+      } else {
+        add_settings_error('option_fields', 'naN', 'Bitte eine positive Zahl eingeben!');
+        $output[$key] = $old_settings[$key];
+      } 
+    }  
+  } 
   return $output;
 }
 
@@ -529,7 +591,9 @@ function validate_captions($options) {
     } else {
       add_settings_error('caption_fields', 'empty', 'Leeres Feld ist nicht erlaubt!');
       $output[$key] = $old_settings[$key];
-    } 
+    }
+
+    
   }
   return $output;
 }
