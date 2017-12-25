@@ -40,6 +40,7 @@ if (!class_exists('ManageScripts'))
         wp_register_script('fl-styles', plugin_dir_url(__FILE__) . 'fl-app/dist/styles.bundle.js', array(), false, true);
         wp_register_script('fl-vendor', plugin_dir_url(__FILE__) . 'fl-app/dist/vendor.bundle.js', array(), false, true);
         wp_register_script('fl-main', plugin_dir_url(__FILE__) . 'fl-app/dist/main.bundle.js', array(), false, true);
+        wp_localize_script( 'fl-main', 'AppAPI', angular_translation_array() );
        
 
         wp_register_script('leaflet', plugin_dir_url(__FILE__) . 'system/js/leaflet/leaflet.js');
