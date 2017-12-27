@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-
-declare var AppAPI: any;
+import { Component, OnInit, isDevMode, enableProdMode } from '@angular/core';
+import { HttpService } from 'app/services/http.service';
 
 
 @Component({
@@ -10,17 +9,10 @@ declare var AppAPI: any;
 })
 export class LoginComponent implements OnInit {
 
-
-  
-  private app_api: any;
-
-  constructor() {
-    this.app_api = AppAPI;
-  }
+  constructor(private httpService: HttpService) {}
 
   ngOnInit() {
-    console.log("URLa: " + this.app_api.sharing_url);
-    console.log(this.app_api);
+    this.httpService.getTerminalToken();
   }
 
 }

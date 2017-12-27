@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http }       from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
 import { Observable }     from 'rxjs/Observable';
 import 'rxjs/add/operator/toPromise';
@@ -16,7 +16,7 @@ export class StatisticService {
 
   private statisticUrl = 'http://fablab.tugraz.at/wp-json/sharepl/v1/statistic';  // URL to web api
 
-  constructor(private http: Http) { }
+  constructor(private http: HttpClient) { }
 
   getStatisticOfWeek(week:Week): Promise<any[]> {
     
@@ -25,7 +25,6 @@ export class StatisticService {
             + "&end_date=" + this.getDateString(week.sunday);
     //console.log(url);
     return this.http.get(url).toPromise()
-             .then(response => response.json() as any[])
              .catch(this.handleError);
     }
 

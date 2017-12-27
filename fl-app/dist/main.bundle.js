@@ -97,13 +97,14 @@ var AppComponent = (function () {
     AppComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-root',
-            template: "\n    <nav>\n      <a routerLink=\"/login\" routerLinkActive=\"active\">Login</a>\n      <a routerLink=\"/statistic\" routerLinkActive=\"active\">Statistic</a>\n    </nav>\n    <router-outlet></router-outlet>\n  ",
+            template: "\n    <ng-progress [color]=\"'#028F76'\" [spinner]=\"false\"></ng-progress>\n    <nav>\n      <a routerLink=\"/login\" routerLinkActive=\"active\">Login</a>\n      <a routerLink=\"/statistic\" routerLinkActive=\"active\">Statistic</a>\n    </nav>\n    <router-outlet></router-outlet>\n  ",
             styles: [__webpack_require__("../../../../../src/app/app.component.css")]
         })
     ], AppComponent);
     return AppComponent;
 }());
 
+//<ng-progress [color]="'#028F76'" [showSpinner]="false"></ng-progress> 
 
 
 /***/ }),
@@ -116,21 +117,25 @@ var AppComponent = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__ = __webpack_require__("../../../platform-browser/esm5/platform-browser.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__("../../../forms/esm5/forms.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__("../../../http/esm5/http.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ngx_progressbar__ = __webpack_require__("../../../../ngx-progressbar/modules/ngx-progressbar.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_routing_module__ = __webpack_require__("../../../../../src/app/app-routing.module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_component__ = __webpack_require__("../../../../../src/app/app.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__statistic_statistic_service__ = __webpack_require__("../../../../../src/app/statistic/statistic.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__statistic_statistic_component__ = __webpack_require__("../../../../../src/app/statistic/statistic.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__statistic_chart_service__ = __webpack_require__("../../../../../src/app/statistic/chart.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__angular_common__ = __webpack_require__("../../../common/esm5/common.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_ng2_nvd3__ = __webpack_require__("../../../../ng2-nvd3/build/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_ng2_nvd3___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11_ng2_nvd3__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_d3__ = __webpack_require__("../../../../d3/d3.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_d3___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_12_d3__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_nvd3__ = __webpack_require__("../../../../nvd3/build/nv.d3.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_nvd3___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_13_nvd3__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__login_login_component__ = __webpack_require__("../../../../../src/app/login/login.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ngx_progressbar_core__ = __webpack_require__("../../../../@ngx-progressbar/core/esm5/ngx-progressbar-core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ngx_progressbar_http_client__ = __webpack_require__("../../../../@ngx-progressbar/http-client/esm5/ngx-progressbar-http-client.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_routing_module__ = __webpack_require__("../../../../../src/app/app-routing.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__app_component__ = __webpack_require__("../../../../../src/app/app.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__statistic_statistic_service__ = __webpack_require__("../../../../../src/app/statistic/statistic.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__statistic_statistic_component__ = __webpack_require__("../../../../../src/app/statistic/statistic.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__statistic_chart_service__ = __webpack_require__("../../../../../src/app/statistic/chart.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__services_http_service__ = __webpack_require__("../../../../../src/app/services/http.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__services_http_interceptor_service__ = __webpack_require__("../../../../../src/app/services/http-interceptor.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__services_app_api_service__ = __webpack_require__("../../../../../src/app/services/app-api.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__angular_common__ = __webpack_require__("../../../common/esm5/common.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_ng2_nvd3__ = __webpack_require__("../../../../ng2-nvd3/build/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_ng2_nvd3___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_15_ng2_nvd3__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_d3__ = __webpack_require__("../../../../d3/d3.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_d3___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_16_d3__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17_nvd3__ = __webpack_require__("../../../../nvd3/build/nv.d3.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17_nvd3___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_17_nvd3__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__login_login_component__ = __webpack_require__("../../../../../src/app/login/login.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -149,26 +154,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
+
+
+
 // d3 and nvd3 should be included somewhere
 
 
 
-/* for angular 4.3 and later
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NgProgressModule, NgProgressInterceptor } from 'ngx-progressbar';
-
-@NgModule({
- providers: [
-   // ...
-   { provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true }
- ],
- imports: [
-   // ...
-   HttpClientModule,
-   NgProgressModule
- ]
-})
-*/
 var AppModule = (function () {
     function AppModule() {
     }
@@ -177,24 +170,26 @@ var AppModule = (function () {
             imports: [
                 __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["a" /* BrowserModule */],
                 __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormsModule */],
-                __WEBPACK_IMPORTED_MODULE_3__angular_http__["c" /* HttpModule */],
-                __WEBPACK_IMPORTED_MODULE_3__angular_http__["c" /* HttpModule */],
-                __WEBPACK_IMPORTED_MODULE_4_ngx_progressbar__["b" /* NgProgressModule */],
-                __WEBPACK_IMPORTED_MODULE_5__app_routing_module__["a" /* AppRoutingModule */],
-                __WEBPACK_IMPORTED_MODULE_11_ng2_nvd3__["NvD3Module"]
+                __WEBPACK_IMPORTED_MODULE_3__angular_common_http__["c" /* HttpClientModule */],
+                __WEBPACK_IMPORTED_MODULE_4__ngx_progressbar_core__["b" /* NgProgressModule */].forRoot(),
+                __WEBPACK_IMPORTED_MODULE_5__ngx_progressbar_http_client__["a" /* NgProgressHttpClientModule */],
+                __WEBPACK_IMPORTED_MODULE_6__app_routing_module__["a" /* AppRoutingModule */],
+                __WEBPACK_IMPORTED_MODULE_15_ng2_nvd3__["NvD3Module"]
             ],
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_6__app_component__["a" /* AppComponent */],
-                __WEBPACK_IMPORTED_MODULE_8__statistic_statistic_component__["a" /* StatisticComponent */],
-                __WEBPACK_IMPORTED_MODULE_14__login_login_component__["a" /* LoginComponent */],
+                __WEBPACK_IMPORTED_MODULE_7__app_component__["a" /* AppComponent */],
+                __WEBPACK_IMPORTED_MODULE_9__statistic_statistic_component__["a" /* StatisticComponent */],
+                __WEBPACK_IMPORTED_MODULE_18__login_login_component__["a" /* LoginComponent */],
             ],
             providers: [
-                __WEBPACK_IMPORTED_MODULE_7__statistic_statistic_service__["a" /* StatisticService */],
-                __WEBPACK_IMPORTED_MODULE_9__statistic_chart_service__["a" /* ChartService */],
-                __WEBPACK_IMPORTED_MODULE_10__angular_common__["d" /* DatePipe */],
-                { provide: __WEBPACK_IMPORTED_MODULE_3__angular_http__["a" /* BrowserXhr */], useClass: __WEBPACK_IMPORTED_MODULE_4_ngx_progressbar__["a" /* NgProgressBrowserXhr */] }
+                __WEBPACK_IMPORTED_MODULE_8__statistic_statistic_service__["a" /* StatisticService */],
+                __WEBPACK_IMPORTED_MODULE_10__statistic_chart_service__["a" /* ChartService */],
+                __WEBPACK_IMPORTED_MODULE_11__services_http_service__["a" /* HttpService */],
+                { provide: __WEBPACK_IMPORTED_MODULE_3__angular_common_http__["a" /* HTTP_INTERCEPTORS */], useClass: __WEBPACK_IMPORTED_MODULE_12__services_http_interceptor_service__["a" /* HttpInterceptorService */], multi: true },
+                __WEBPACK_IMPORTED_MODULE_13__services_app_api_service__["a" /* AppApiService */],
+                __WEBPACK_IMPORTED_MODULE_14__angular_common__["d" /* DatePipe */],
             ],
-            bootstrap: [__WEBPACK_IMPORTED_MODULE_6__app_component__["a" /* AppComponent */]]
+            bootstrap: [__WEBPACK_IMPORTED_MODULE_7__app_component__["a" /* AppComponent */]]
         })
     ], AppModule);
     return AppModule;
@@ -235,6 +230,7 @@ module.exports = "<p>\n  login works!\n</p>\n"
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_app_services_http_service__ = __webpack_require__("../../../../../src/app/services/http.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -245,13 +241,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
 var LoginComponent = (function () {
-    function LoginComponent() {
-        this.app_api = AppAPI;
+    function LoginComponent(httpService) {
+        this.httpService = httpService;
     }
     LoginComponent.prototype.ngOnInit = function () {
-        console.log("URLa: " + this.app_api.sharing_url);
-        console.log(this.app_api);
+        this.httpService.getTerminalToken();
     };
     LoginComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
@@ -259,9 +255,183 @@ var LoginComponent = (function () {
             template: __webpack_require__("../../../../../src/app/login/login.component.html"),
             styles: [__webpack_require__("../../../../../src/app/login/login.component.css")]
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_app_services_http_service__["a" /* HttpService */]])
     ], LoginComponent);
     return LoginComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/services/AppAPI.json":
+/***/ (function(module, exports) {
+
+module.exports = {"blog_url":"http://127.0.0.1/wordpress","templates_url":"http://127.0.0.1/wordpress/wp-content/plugins/fablab-ticket/views/templates/","api_url":"http://127.0.0.1/wordpress/api/","sharing_url":"http://127.0.0.1/wordpress/wp-json/sharepl/v1/","nonce":"c694a76626","username":"admin","password":"10202911"}
+
+/***/ }),
+
+/***/ "../../../../../src/app/services/app-api.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppApiService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__AppAPI_json__ = __webpack_require__("../../../../../src/app/services/AppAPI.json");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__AppAPI_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__AppAPI_json__);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var AppApiService = (function () {
+    function AppApiService() {
+        this.loadApiData();
+    }
+    AppApiService.prototype.loadApiData = function () {
+        this.is_dev_mode = (typeof AppAPI === 'undefined');
+        if (this.is_dev_mode) {
+            this.app_api = __WEBPACK_IMPORTED_MODULE_1__AppAPI_json__;
+        }
+        else {
+            console.log('Runing in Embadded-Mode');
+            this.app_api = AppAPI;
+        }
+    };
+    // getter Methods
+    AppApiService.prototype.getBlogUrl = function () {
+        return this.app_api.blog_url;
+    };
+    AppApiService.prototype.getTemplatesUrl = function () {
+        return this.app_api.templates_url;
+    };
+    AppApiService.prototype.getApiUrl = function () {
+        return this.app_api.api_url;
+    };
+    AppApiService.prototype.getPluginApiUrl = function () {
+        return this.app_api.sharing_url;
+    };
+    AppApiService.prototype.getNonce = function () {
+        return this.app_api.nonce;
+    };
+    AppApiService.prototype.isDevMode = function () {
+        return this.is_dev_mode;
+    };
+    AppApiService.prototype.getAutentificationToken = function () {
+        return btoa(this.app_api.username + ":" + this.app_api.password);
+    };
+    AppApiService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [])
+    ], AppApiService);
+    return AppApiService;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/services/http-interceptor.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HttpInterceptorService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_api_service__ = __webpack_require__("../../../../../src/app/services/app-api.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var HttpInterceptorService = (function () {
+    function HttpInterceptorService(appApiService) {
+        this.appApiService = appApiService;
+    }
+    HttpInterceptorService.prototype.intercept = function (req, next) {
+        // Clone the request to add the new header.
+        var authReq = req.clone({ setHeaders: this.httpAuthHeader() });
+        // Pass on the cloned request instead of the original request.
+        return next.handle(authReq);
+    };
+    HttpInterceptorService.prototype.httpAuthHeader = function () {
+        if (this.appApiService.isDevMode()) {
+            return { 'Authorization': "Basic " + this.appApiService.getAutentificationToken() };
+        }
+        else {
+            return { 'X-WP-Nonce': this.appApiService.getNonce() };
+        }
+    };
+    HttpInterceptorService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__app_api_service__["a" /* AppApiService */]])
+    ], HttpInterceptorService);
+    return HttpInterceptorService;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/services/http.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HttpService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_api_service__ = __webpack_require__("../../../../../src/app/services/app-api.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var HttpService = (function () {
+    function HttpService(http, appApiService) {
+        this.http = http;
+        this.appApiService = appApiService;
+    }
+    //--------  get_terminal_token  -----------------------
+    HttpService.prototype.getTerminalToken = function () {
+        var _this = this;
+        this.http.get(this.appApiService.getPluginApiUrl() + 'get_terminal_token', {}).subscribe(function (data) { console.log(data); }, function (err) { return _this.handleHttpError(err); });
+    };
+    // -------  handleErrors  ------------------------
+    HttpService.prototype.handleHttpError = function (err) {
+        if (err.error instanceof Error) {
+            // A client-side or network error occurred. Handle it accordingly.
+            console.log('An error occurred:', err.error.message);
+        }
+        else {
+            // The backend returned an unsuccessful response code.
+            // The response body may contain clues as to what went wrong,
+            console.log("Backend returned code " + err.status + ", body was: " + err.error);
+        }
+    };
+    HttpService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_common_http__["b" /* HttpClient */],
+            __WEBPACK_IMPORTED_MODULE_2__app_api_service__["a" /* AppApiService */]])
+    ], HttpService);
+    return HttpService;
 }());
 
 
@@ -398,7 +568,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/statistic/statistic.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<ng-progress [color]=\"'#028F76'\" [showSpinner]=\"false\"></ng-progress>\n<h1>Statistic</h1>  \n<div class=\"statistic-box box\">\n  <div class=\"box-header\">\n  \t<h3>Wochennutzung</h3>\n    <button (click)=\"checkLoadAndSetData(false)\">-</button>\n    <button (click)=\"checkLoadAndSetData(true)\">+</button>\n  </div>\n  <div class=\"box-content\">\n  \t <nvd3 [options]=\"options\" [data]=\"data\"></nvd3>\n     <p>{{currentWeek}}</p>\n  </div>\n</div>\n<div class=\"statistic-box trend-box\">\n  <div class=\"box-header\">\n  \t<h3>Nutzungsverlauf</h3>\n  </div>\n  <div class=\"box-content\">\n  \t <nvd3 #linechart [options]=\"linechartoptions\" [data]=\"datatrend\"></nvd3>\n  </div>\n</div>"
+module.exports = "<h1>Statistic</h1>  \n<div class=\"statistic-box box\">\n  <div class=\"box-header\">\n  \t<h3>Wochennutzung</h3>\n    <button (click)=\"checkLoadAndSetData(false)\">-</button>\n    <button (click)=\"checkLoadAndSetData(true)\">+</button>\n  </div>\n  <div class=\"box-content\">\n  \t <nvd3 [options]=\"options\" [data]=\"data\"></nvd3>\n     <p>{{currentWeek}}</p>\n  </div>\n</div>\n<div class=\"statistic-box trend-box\">\n  <div class=\"box-header\">\n  \t<h3>Nutzungsverlauf</h3>\n  </div>\n  <div class=\"box-content\">\n  \t <nvd3 #linechart [options]=\"linechartoptions\" [data]=\"datatrend\"></nvd3>\n  </div>\n</div>"
 
 /***/ }),
 
@@ -556,7 +726,7 @@ var StatisticComponent = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return StatisticService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/esm5/http.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__ = __webpack_require__("../../../../rxjs/_esm5/add/operator/toPromise.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -582,7 +752,6 @@ var StatisticService = (function () {
             + "&end_date=" + this.getDateString(week.sunday);
         //console.log(url);
         return this.http.get(url).toPromise()
-            .then(function (response) { return response.json(); })
             .catch(this.handleError);
     };
     StatisticService.prototype.getDateString = function (date) {
@@ -594,7 +763,7 @@ var StatisticService = (function () {
     };
     StatisticService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_common_http__["b" /* HttpClient */]])
     ], StatisticService);
     return StatisticService;
 }());

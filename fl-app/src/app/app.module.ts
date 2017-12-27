@@ -1,8 +1,10 @@
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule }   from '@angular/forms';
-import { BrowserXhr, HttpModule } from '@angular/http';
-import { NgProgressModule, NgProgressBrowserXhr } from 'ngx-progressbar';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+
+import { NgProgressModule } from '@ngx-progressbar/core';
+import { NgProgressHttpClientModule } from '@ngx-progressbar/http-client';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -10,6 +12,12 @@ import { AppComponent }         from './app.component';
 import { StatisticService }          from './statistic/statistic.service';
 import { StatisticComponent } from './statistic/statistic.component';
 import { ChartService } from './statistic/chart.service';
+
+import { LocalizeService } from  './services/localize.service';
+import { HttpService } from  './services/http.service';
+import { HttpInterceptorService } from  './services/http-interceptor.service';
+
+import { AppApiService } from  './services/app-api.service';
 
 import { DatePipe } from '@angular/common';
 
@@ -21,33 +29,13 @@ import 'nvd3';
 import { LoginComponent } from './login/login.component';
 
 
-
-/* for angular 4.3 and later
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NgProgressModule, NgProgressInterceptor } from 'ngx-progressbar';
-
-@NgModule({
- providers: [
-   // ...
-   { provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true }
- ],
- imports: [
-   // ...
-   HttpClientModule,
-   NgProgressModule
- ]
-})
-*/
-
-
-
 @NgModule({
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule,
-    HttpModule,
-    NgProgressModule,
+    HttpClientModule,
+    NgProgressModule.forRoot(),
+    NgProgressHttpClientModule,
     AppRoutingModule,
     NvD3Module
   ],
@@ -59,8 +47,12 @@ import { NgProgressModule, NgProgressInterceptor } from 'ngx-progressbar';
   providers: [ 
     StatisticService, 
     ChartService,
+    HttpService,
+    { provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true },
+    AppApiService,
     DatePipe,
-    { provide: BrowserXhr, useClass: NgProgressBrowserXhr } ],
+    //{ provide: BrowserXhr, useClass: NgProgressBrowserXhr },
+     ],
   bootstrap: [ AppComponent ]
 })
 

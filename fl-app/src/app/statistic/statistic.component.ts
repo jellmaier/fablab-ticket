@@ -42,7 +42,7 @@ export class StatisticComponent implements OnInit {
 
   index = 0;
 
-  private checkLoadAndSetData(increment:boolean) {
+  public checkLoadAndSetData(increment:boolean) {
 
     if (increment)
       this.index++;
