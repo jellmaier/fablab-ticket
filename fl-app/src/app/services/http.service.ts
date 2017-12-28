@@ -3,6 +3,14 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { AppApiService, AppApiResponse } from './app-api.service';
 
 
+import { DeviceStatistics } from 'app/statistic/statistic.service';
+
+
+import { Observable }     from 'rxjs/Observable';
+import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/catch';
+//import 'rxjs/add/operator/toPromise';
+
 @Injectable()
 export class HttpService {
   
@@ -12,18 +20,34 @@ export class HttpService {
 
   //--------  get_terminal_token  -----------------------
   public getTerminalToken() {
-      this.http.get<any>( this.appApiService.getPluginApiUrl() + 'get_terminal_token',
-        { //headers: this.httpAuthHeader()
-          //headers: {'X-WP-Nonce':  this.nonce,  /*this.appApiService.getNonce() */ }
-                    }).subscribe(
+    let url = this.appApiService.getPluginApiUrl() + 'get_terminal_token';
+    
+    this.http.get<any>(url).subscribe(
           data =>  { console.log(data)},
           err =>  this.handleHttpError(err)
     );
   }
 
+
+  // -------  get Statistic Data  ------------------------
+
+  getStatisticOf(start: string, end: string): Observable<DeviceStatistics[]> {
+    
+    let url = this.appApiService.getPluginApiUrl() + 'statistic';
+    //let statisticUrl = 'http://fablab.tugraz.at/wp-json/sharepl/v1/statistic';
+
+    return this.http.get<DeviceStatistics[]>(url, {
+        params: {
+          start_date: start, 
+          end_date: end
+        }
+      }).catch((err: HttpErrorResponse) => Observable.throw(this.handleHttpError(err)));
+
+  }
+
   // -------  handleErrors  ------------------------
 
-  public handleHttpError(err: HttpErrorResponse) {
+  private handleHttpError(err: HttpErrorResponse) {
     if (err.error instanceof Error) {
       // A client-side or network error occurred. Handle it accordingly.
       console.log('An error occurred:', err.error.message);

@@ -267,7 +267,7 @@ var LoginComponent = (function () {
 /***/ "../../../../../src/app/services/AppAPI.json":
 /***/ (function(module, exports) {
 
-module.exports = {"blog_url":"http://127.0.0.1/wordpress","templates_url":"http://127.0.0.1/wordpress/wp-content/plugins/fablab-ticket/views/templates/","api_url":"http://127.0.0.1/wordpress/api/","sharing_url":"http://127.0.0.1/wordpress/wp-json/sharepl/v1/","nonce":"c694a76626","username":"admin","password":"10202911"}
+module.exports = {"blog_url":"http://127.0.0.1/wordpress","templates_url":"http://127.0.0.1/wordpress/wp-content/plugins/fablab-ticket/views/templates/","api_url":"http://127.0.0.1/wordpress/api/","sharing_url":"http://127.0.0.1/wordpress/wp-json/sharepl/v1/","nonce":"c694a76626"}
 
 /***/ }),
 
@@ -279,6 +279,8 @@ module.exports = {"blog_url":"http://127.0.0.1/wordpress","templates_url":"http:
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__AppAPI_json__ = __webpack_require__("../../../../../src/app/services/AppAPI.json");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__AppAPI_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__AppAPI_json__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__user_json__ = __webpack_require__("../../../../../src/app/services/user.json");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__user_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__user_json__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -290,6 +292,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
+
 var AppApiService = (function () {
     function AppApiService() {
         this.loadApiData();
@@ -298,6 +301,7 @@ var AppApiService = (function () {
         this.is_dev_mode = (typeof AppAPI === 'undefined');
         if (this.is_dev_mode) {
             this.app_api = __WEBPACK_IMPORTED_MODULE_1__AppAPI_json__;
+            this.user = __WEBPACK_IMPORTED_MODULE_2__user_json__["admin"]; // switch between admin and user
         }
         else {
             console.log('Runing in Embadded-Mode');
@@ -324,7 +328,7 @@ var AppApiService = (function () {
         return this.is_dev_mode;
     };
     AppApiService.prototype.getAutentificationToken = function () {
-        return btoa(this.app_api.username + ":" + this.app_api.password);
+        return btoa(this.user.username + ":" + this.user.password);
     };
     AppApiService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
@@ -392,6 +396,9 @@ var HttpInterceptorService = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_api_service__ = __webpack_require__("../../../../../src/app/services/app-api.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__ = __webpack_require__("../../../../rxjs/_esm5/Observable.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_observable_throw__ = __webpack_require__("../../../../rxjs/_esm5/add/observable/throw.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_catch__ = __webpack_require__("../../../../rxjs/_esm5/add/operator/catch.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -404,6 +411,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
+
+//import 'rxjs/add/operator/toPromise';
 var HttpService = (function () {
     function HttpService(http, appApiService) {
         this.http = http;
@@ -412,7 +423,20 @@ var HttpService = (function () {
     //--------  get_terminal_token  -----------------------
     HttpService.prototype.getTerminalToken = function () {
         var _this = this;
-        this.http.get(this.appApiService.getPluginApiUrl() + 'get_terminal_token', {}).subscribe(function (data) { console.log(data); }, function (err) { return _this.handleHttpError(err); });
+        var url = this.appApiService.getPluginApiUrl() + 'get_terminal_token';
+        this.http.get(url).subscribe(function (data) { console.log(data); }, function (err) { return _this.handleHttpError(err); });
+    };
+    // -------  get Statistic Data  ------------------------
+    HttpService.prototype.getStatisticOf = function (start, end) {
+        var _this = this;
+        var url = this.appApiService.getPluginApiUrl() + 'statistic';
+        //let statisticUrl = 'http://fablab.tugraz.at/wp-json/sharepl/v1/statistic';
+        return this.http.get(url, {
+            params: {
+                start_date: start,
+                end_date: end
+            }
+        }).catch(function (err) { return __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__["a" /* Observable */].throw(_this.handleHttpError(err)); });
     };
     // -------  handleErrors  ------------------------
     HttpService.prototype.handleHttpError = function (err) {
@@ -435,6 +459,13 @@ var HttpService = (function () {
 }());
 
 
+
+/***/ }),
+
+/***/ "../../../../../src/app/services/user.json":
+/***/ (function(module, exports) {
+
+module.exports = {"admin":{"username":"admin","password":"10202911"},"user":{"username":"jakob","password":"10202911"}}
 
 /***/ }),
 
@@ -682,9 +713,9 @@ var StatisticComponent = (function () {
         var _this = this;
         if (setData === void 0) { setData = false; }
         this.statisticService.getStatisticOfWeek(week)
-            .then(function (statisticdata) {
-            _this.data = statisticdata;
-            _this.addStatisticData(statisticdata, week, offset);
+            .subscribe(function (data) {
+            _this.data = data;
+            _this.addStatisticData(data, week, offset);
             if (setData)
                 _this.setData();
         });
@@ -726,9 +757,7 @@ var StatisticComponent = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return StatisticService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__ = __webpack_require__("../../../../rxjs/_esm5/add/operator/toPromise.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_app_services_http_service__ = __webpack_require__("../../../../../src/app/services/http.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -740,30 +769,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
-
 var StatisticService = (function () {
-    function StatisticService(http) {
-        this.http = http;
+    function StatisticService(httpService) {
+        this.httpService = httpService;
         this.statisticUrl = 'http://fablab.tugraz.at/wp-json/sharepl/v1/statistic'; // URL to web api
     }
     StatisticService.prototype.getStatisticOfWeek = function (week) {
-        var url = this.statisticUrl +
-            "?start_date=" + this.getDateString(week.monday)
-            + "&end_date=" + this.getDateString(week.sunday);
-        //console.log(url);
-        return this.http.get(url).toPromise()
-            .catch(this.handleError);
+        return this.httpService.getStatisticOf(this.getDateString(week.monday), this.getDateString(week.sunday));
     };
     StatisticService.prototype.getDateString = function (date) {
         return date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
     };
-    StatisticService.prototype.handleError = function (error) {
-        console.error('An error occurred', error); // for demo purposes only
-        return Promise.reject(error.message || error);
-    };
     StatisticService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_common_http__["b" /* HttpClient */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_app_services_http_service__["a" /* HttpService */]])
     ], StatisticService);
     return StatisticService;
 }());

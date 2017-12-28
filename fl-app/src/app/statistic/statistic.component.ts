@@ -1,17 +1,12 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
 
-import { StatisticService } from './statistic.service';
+import { StatisticService, Week} from './statistic.service';
 import { ChartService } from './chart.service';
 
 import { DatePipe } from '@angular/common';
 
 declare let d3: any;
 
-
-interface Week {
-  monday?: Date
-  sunday?: Date
-}
 
 @Component({
   selector: 'app-statistic',
@@ -140,12 +135,13 @@ export class StatisticComponent implements OnInit {
 
   private loadStatistic(week:Week, offset:number, setData:boolean = false):void {
     this.statisticService.getStatisticOfWeek(week)
-    .then(statisticdata => {
-      this.data = statisticdata;
-      this.addStatisticData(statisticdata, week, offset);
-      if (setData)
-        this.setData();
-    });
+    .subscribe(
+      data => {
+        this.data = data;
+        this.addStatisticData(data, week, offset);
+        if (setData)
+          this.setData();
+      });
   }
 
 

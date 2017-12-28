@@ -1,13 +1,20 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpService } from 'app/services/http.service';
+
 
 import { Observable }     from 'rxjs/Observable';
-import 'rxjs/add/operator/toPromise';
 
-
-interface Week {
+export interface Week {
   monday?: Date
   sunday?: Date
+}
+
+export interface DeviceStatistics {
+  id: number
+  name: string
+  color: string
+  number: number
+  duration: number
 }
 
 
@@ -16,35 +23,18 @@ export class StatisticService {
 
   private statisticUrl = 'http://fablab.tugraz.at/wp-json/sharepl/v1/statistic';  // URL to web api
 
-  constructor(private http: HttpClient) { }
+  constructor(private httpService: HttpService) { }
 
-  getStatisticOfWeek(week:Week): Promise<any[]> {
+  getStatisticOfWeek(week: Week): Observable<DeviceStatistics[]> {
+
+    return this.httpService.getStatisticOf(this.getDateString(week.monday), 
+                                           this.getDateString(week.sunday));
     
-    let url = this.statisticUrl + 
-            "?start_date=" + this.getDateString(week.monday)
-            + "&end_date=" + this.getDateString(week.sunday);
-    //console.log(url);
-    return this.http.get(url).toPromise()
-             .catch(this.handleError);
-    }
-
-    private getDateString(date:Date):String {
-      return date.getFullYear() + "-" + date.getMonth()+ "-" + date.getDate();
-    }
-
-     
-    private handleError(error: any): Promise<any> {
-      console.error('An error occurred', error); // for demo purposes only
-      return Promise.reject(error.message || error);
-    }
-    
-/*
-  handleError(error: any): Promise<any> {
-    console.error('An error occurred', error); 
-    return Promise.reject(error.message || error);
   }
 
-*/
+  private getDateString(date:Date):string {
+    return date.getFullYear() + "-" + date.getMonth()+ "-" + date.getDate();
+  }
 
 }
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import * as AppApiData from "./AppAPI.json";
+import * as UserData from "./user.json";
 
 export interface AppApiResponse {
   blog_url: string;
@@ -8,10 +9,13 @@ export interface AppApiResponse {
   api_url: string;
   sharing_url: string;
   nonce: string;
-  username?: string;
-  password?: string;
 }
 
+
+interface User {
+  username: string;
+  password: string;
+}
 
 declare var AppAPI: any;
 
@@ -20,6 +24,7 @@ declare var AppAPI: any;
 export class AppApiService {
 
   private app_api: AppApiResponse;
+  private user: User;
   private is_dev_mode: boolean;
 
   constructor() {
@@ -30,6 +35,7 @@ export class AppApiService {
     this.is_dev_mode = (typeof AppAPI === 'undefined');
     if (this.is_dev_mode) { // Check if it is embadded into the wordpress page
       this.app_api = (<AppApiResponse>(<any>AppApiData));
+      this.user = (<User>(<any>UserData).admin); // switch between admin and user
     } else {
       console.log('Runing in Embadded-Mode');
       this.app_api = AppAPI;
@@ -63,7 +69,7 @@ export class AppApiService {
   }
 
   public getAutentificationToken() {
-    return btoa(this.app_api.username + ":" + this.app_api.password);
+    return btoa(this.user.username + ":" + this.user.password);
   }
 
 }
