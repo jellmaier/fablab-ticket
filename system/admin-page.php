@@ -124,6 +124,22 @@ if (!class_exists('AdminPage'))
         );
 
         add_settings_field(
+          'number_login_fails',                                           // ID/Name of the field
+          'Anzahl Login veruche',                                   // Title
+          'fablab_number_login_fails_function',                           // callback
+          'fablab_options',                                         // page slug
+          'fablab_settings'                                         // section
+        );
+
+        add_settings_field(
+          'login_fail_delay',                                           // ID/Name of the field
+          'Sperrzeit nach zu vielen Login versuchen (min)',         // Title
+          'fablab_login_fail_delay_function',                           // callback
+          'fablab_options',                                         // page slug
+          'fablab_settings'                                         // section
+        );
+
+        add_settings_field(
           'base_page',                         // ID/Name of the field
           'Base Page',                         // Title
           'fablab_base_page_function',         // callback
@@ -320,6 +336,8 @@ function fablab_get_option($key = 'array') {
     'terminal_token' => '123456789',
     'ticket_terminals_only' => '0',
     'auto_logout' => '30',
+    'number_login_fails' => '5',
+    'login_fail_delay' => '10',
     'base_page' => '0',
   );
 
@@ -445,6 +463,12 @@ function fablab_terminal_token_function() {
 }
 function fablab_auto_logout() {
   echo '<input type="text" name="option_fields[auto_logout]" value="' . fablab_get_option('auto_logout') . '"/>';
+}
+function fablab_number_login_fails_function() {
+  echo '<input type="text" name="option_fields[number_login_fails]" value="' . fablab_get_option('number_login_fails') . '"/>';
+}
+function fablab_login_fail_delay_function() {
+  echo '<input type="text" name="option_fields[login_fail_delay]" value="' . fablab_get_option('login_fail_delay') . '"/>';
 }
 function fablab_base_page_function() {
 

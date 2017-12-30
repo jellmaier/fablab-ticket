@@ -21,7 +21,7 @@ export class HttpService {
   //--------  get_terminal_token  -----------------------
   public getTerminalToken() {
     let url = this.appApiService.getPluginApiUrl() + 'get_terminal_token';
-    
+
     this.http.get<any>(url).subscribe(
           data =>  { console.log(data)},
           err =>  this.handleHttpError(err)
@@ -29,9 +29,31 @@ export class HttpService {
   }
 
 
+  // -------  Login Methods  ------------------------
+
+
+  public checkLogin(login: string, password: string): Observable<any> {
+
+    let url = this.appApiService.getPluginApiUrl() + 'check_user_login';
+
+    return this.http.get<any>(url, {
+        params: { username: login, password: password }
+      }).catch((err: HttpErrorResponse) => Observable.throw(this.handleHttpError(err)));
+
+  }
+
+  public checkLoginToken(submitcode: string): Observable<any> {
+
+    let url = this.appApiService.getPluginApiUrl() + 'check_nfc_token';
+
+    return this.http.get<any>(url, {
+        params: { token: submitcode }
+      }).catch((err: HttpErrorResponse) => Observable.throw(this.handleHttpError(err)));
+
+  }
   // -------  get Statistic Data  ------------------------
 
-  getStatisticOf(start: string, end: string): Observable<DeviceStatistics[]> {
+  public getStatisticOf(start: string, end: string): Observable<DeviceStatistics[]> {
     
     let url = this.appApiService.getPluginApiUrl() + 'statistic';
     //let statisticUrl = 'http://fablab.tugraz.at/wp-json/sharepl/v1/statistic';

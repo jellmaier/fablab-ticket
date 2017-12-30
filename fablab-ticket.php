@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: FabLab Ticket
-Version: 3.0.5
+Version: 3.0.6
 Plugin URI: https://github.com/jellmaier/fablab-ticket
 Description: Ticketing and Reservation System for FabLabs
 Author: Jakob Ellmaier
@@ -19,6 +19,7 @@ load_plugin_textdomain( 'fablab-ticket', false, dirname( plugin_basename( __FILE
 
 include 'plugins/pinplugin.php';
 include 'plugins/nfc-login/login-shortcode.php';
+include 'plugins/nfc-login/login-rest.php';
 include 'plugins/resttest/resttest-shortcode.php';
 include 'plugins/menu/edit-menu.php';
 include 'posttypes/devices/device.php';
@@ -32,7 +33,6 @@ include 'system/strings.php';
 include 'system/user-list.php';
 include 'system/rest/ticketlist-user.php';
 include 'manage-scripts.php';
-
 
 
 
