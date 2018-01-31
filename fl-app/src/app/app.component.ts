@@ -5,6 +5,7 @@ import { Component }          from '@angular/core';
   template: `
     <ng-progress [color]="'#028F76'" [spinner]="false"></ng-progress>
     <nav>
+      <a routerLink="/terminallogin" routerLinkActive="active">TerminalLogin</a>
       <a routerLink="/login" routerLinkActive="active">Login</a>
       <a routerLink="/statistic" routerLinkActive="active">Statistic</a>
     </nav>

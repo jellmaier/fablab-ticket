@@ -4,28 +4,36 @@
 // Rest method to check nfc token
 //--------------------------------------------------------
 
-function check_user_login_fails($user_id) {
+function check_user_logins_left($user_id) {
   $latest_login_time = get_user_meta( $user_id, 'last-login-fail', true );
+
+  $max_number_logins = intval(fablab_get_option('number_login_fails'));
   
   if (empty($latest_login_time))
-    return true;
+    return $max_number_logins;
 
   $time_diff = current_time(  'timestamp' ) - $latest_login_time;
 
-  if ($time_diff > (60 * intval(fablab_get_option('login_fail_delay')))) { // tochange set in settings
+  if ($time_diff > (60 * intval(fablab_get_option('login_fail_delay')))) { 
     delete_user_meta( $user_id, 'last-login-fail');
     delete_user_meta( $user_id, 'login-fails');
-    return true;
+    return $max_number_logins;
   }
 
 
   $login_fails = intval(get_user_meta( $user_id, 'login-fails', true ));
 
-  if ($login_fails < intval(fablab_get_option('number_login_fails'))) { // tochange set in settings
-    return true;
+  if ($login_fails < intval(fablab_get_option('number_login_fails'))) { 
+    return $max_number_logins - $login_fails;
   }
 
-  return false;
+  return 0;
+}
+
+function calc_user_next_login($user_id) {
+  $latest_login_time = get_user_meta( $user_id, 'last-login-fail', true );
+  $time_diff = current_time(  'timestamp' ) - $latest_login_time;
+  return (intval(fablab_get_option('login_fail_delay')) - ($time_diff/60));
 }
 
 function set_user_login_fail($user_id) {
@@ -45,9 +53,10 @@ function rest_check_user_login($data) {
   $user = get_user_by( 'login', $username );
   $user_id = $user->ID;
 
-
-  if(!check_user_login_fails($user_id)) {
-    return new WP_Error( 'rest_forbidden', __( 'Zu viele Versuche', 'fablab-ticket' ), array( 'status' => 401 ) );
+  $logins_left = check_user_logins_left($user_id);
+  if($logins_left == 0) {
+    $time_left = calc_user_next_login($user_id);
+    return new WP_Error( 'rest_forbidden', sprintf(__( 'Zu viele Versuche! Nächster Login in %d Minuten möglich.' ), $time_left), array( 'status' => 401 ) );
   }
 
   //from https://codex.wordpress.org/Function_Reference/wp_signon
@@ -58,8 +67,8 @@ function rest_check_user_login($data) {
   $user_response = wp_signon( $creds );
   if ( is_wp_error($user_response) ) {
     set_user_login_fail($user_id);
-    return intval(get_user_meta( $user_id, 'login-fails', true ));
-    return new WP_Error( 'no_user_found', __( 'User not Logged in!.', 'fablab-ticket' ), array( 'status' => 401 ) );
+    //return intval(get_user_meta( $user_id, 'login-fails', true ));
+    return new WP_Error( 'no_user_found', sprintf(__( 'Login fehlgeschlagen, du hast noch %d versuche übrig.', 'fablab-ticket' ), $logins_left), array( 'status' => 401 ) );
   }
 
 

@@ -11,6 +11,13 @@ export interface AppApiResponse {
   nonce: string;
 }
 
+export interface AppConnect {
+  auto_logout: number;
+  is_terminal: boolean;
+  is_admin: boolean;
+  login_terminal_only: boolean;
+  user_display_name: string;
+}
 
 interface User {
   username: string;
@@ -24,6 +31,7 @@ declare var AppAPI: any;
 export class AppApiService {
 
   private app_api: AppApiResponse;
+  private app_connect: AppConnect;
   private user: User;
   private is_dev_mode: boolean;
 
@@ -70,6 +78,20 @@ export class AppApiService {
 
   public getAutentificationToken() {
     return btoa(this.user.username + ":" + this.user.password);
+  }
+
+  // AppConnect methods
+
+  public setAppConnect(data: AppConnect):void {
+    this.app_connect = data;
+  }
+
+  public isAppConnectLoaded():boolean {
+    return (this.app_connect != null);
+  }
+
+  public isTerminal():boolean {
+    return this.app_connect.is_terminal;
   }
 
 }

@@ -1,0 +1,7 @@
+<div id="message" class="message-box">
+  <p>Du bist nicht eingeloggt!</p>
+  <a href="{{appApiService.getBlogUrl()}}/login?redirect_to=' . get_permalink($post->ID) . '" style="margin-right:20px;">
+  <input type="submit"  value="Login"/></a>
+  <a href="{{appApiService.getBlogUrl()}}/wp-login.php?action=register">
+  <input type="submit"  value="Register"/></a>
+</div>

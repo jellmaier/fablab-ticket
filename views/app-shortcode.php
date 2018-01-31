@@ -19,7 +19,6 @@ if (!class_exists('FlNgAppShortcodeRest'))
     //--------------------------------------------------------
     public function get_fl_ng_app_shortcode($atts) {
 
-
       //--------------------------------------------------------
       // Display NG App
       //--------------------------------------------------------
@@ -30,6 +29,7 @@ if (!class_exists('FlNgAppShortcodeRest'))
       return '<app-root>Loading...</app-root>';
       
     }
+
   }
 }
 

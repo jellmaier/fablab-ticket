@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { AppApiService, AppApiResponse } from './app-api.service';
 
-
-import { DeviceStatistics } from 'app/statistic/statistic.service';
-
+import { DeviceStatistics } from 'app/statistic/statistic.service'
 
 import { Observable }     from 'rxjs/Observable';
 import 'rxjs/add/observable/throw';
@@ -18,14 +16,20 @@ export class HttpService {
                private appApiService: AppApiService ) {}
 
 
-  //--------  get_terminal_token  -----------------------
-  public getTerminalToken() {
+  //--------  terminal_token  -----------------------
+  public checkTerminalToken(terminal_token: string): Observable<any> {
+    let url = this.appApiService.getPluginApiUrl() + 'check_terminal_token';
+    return this.http.get<any>(url, {
+        params: { token: terminal_token }
+      })
+          .catch((err: HttpErrorResponse) => Observable.throw(this.handleHttpError(err)));
+  }
+  
+  public getTerminalToken(): Observable<any> {
     let url = this.appApiService.getPluginApiUrl() + 'get_terminal_token';
 
-    this.http.get<any>(url).subscribe(
-          data =>  { console.log(data)},
-          err =>  this.handleHttpError(err)
-    );
+    return this.http.get<any>(url)
+          .catch((err: HttpErrorResponse) => Observable.throw(this.handleHttpError(err)));
   }
 
 
@@ -38,7 +42,7 @@ export class HttpService {
 
     return this.http.get<any>(url, {
         params: { username: login, password: password }
-      }).catch((err: HttpErrorResponse) => Observable.throw(this.handleHttpError(err)));
+      });//.catch((err: HttpErrorResponse) => Observable.throw(this.handleHttpError(err)));
 
   }
 
@@ -70,13 +74,14 @@ export class HttpService {
   // -------  handleErrors  ------------------------
 
   private handleHttpError(err: HttpErrorResponse) {
+    console.log(err);
     if (err.error instanceof Error) {
       // A client-side or network error occurred. Handle it accordingly.
       console.log('An error occurred:', err.error.message);
     } else {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong,
-      console.log(`Backend returned code ${err.status}, body was: ${err.error}`);
+      console.log(`Backend returned code ${err.status}, body was: ${err.error.message}`);
     }
   }
 }

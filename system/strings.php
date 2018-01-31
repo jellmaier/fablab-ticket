@@ -11,7 +11,9 @@
       // this is the API address of the JSON API plugin
       'sharing_url' => get_bloginfo('wpurl') . '/wp-json/sharepl/v1/',
       // user nonce
-      'nonce' => wp_create_nonce( 'wp_rest' )
+      'nonce' => wp_create_nonce( 'wp_rest' ),
+      // user logged in
+      'is_user_logged_in' => is_user_logged_in()
     );
   }
 

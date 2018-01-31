@@ -1,0 +1,99 @@
+
+.login-form label, .login-form input {
+    display: block;
+}
+
+/* ------------------------------------------------------------ */
+/* overlay style */
+/* ------------------------------------------------------------ */
+
+.nfc-token {
+    opacity: 0; 
+    position: absolute;
+}
+
+.nfc-overlay p {
+    margin: 0;
+    margin-bottom: 6px;
+    color: #028F76;
+}
+
+
+.nfc-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    right: 0;
+    top: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    z-index: 10012;
+}
+
+.nfc-overlay-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    right: 0;
+    top: 0;
+    z-index: 10010;
+}
+
+/* NFC Overlay */
+
+.nfc-overlay-content {
+    width: 70%;
+    position: relative;
+    margin: 150px auto; 
+    padding: 30px 30px 30px;
+    background-color: #fdfdfd;
+    border: 7px solid #ccc;
+    border-radius: 8px;
+    z-index: 10013; /* 1px higher than the overlay layer */
+}
+
+@media all and (min-width: 800px) {
+    .nfc-overlay-content {
+        width: 650px;
+    }
+}
+
+@media all and (max-height: 800px) {
+    .nfc-overlay-content {
+        margin: 50px auto;
+    }
+}
+
+.nfc-overlay-content .close {
+    margin: -20px -14px;
+    float: right;
+    text-align: right;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 1;
+    opacity: 0.3;
+    text-decoration: none;  
+}
+.nfc-overlay-content .close:hover {
+    cursor: pointer;
+    opacity: 0.5;
+}
+
+.nfc-overlay-content h2 {
+    margin-top: 6px;
+    margin-bottom: 14px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.nfc-overlay-content img{
+    max-width: 100%;
+    height: auto;
+    vertical-align: middle;
+    border: 0;
+}
