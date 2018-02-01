@@ -33,8 +33,9 @@ import { TerminalLoginComponent }       from './login/terminallogin/terminallogi
 import { NfcloginComponent } from './login/nfclogin/nfclogin.component';
 import { RegisterComponent } from './login/register/register.component';
 
-import { IsLoggedInGuard, IsTerminalGuard } from './services/guards/login-guard.service';
+import { IsLoggedInGuard, IsNotLoggedInGuard, IsAdminGuard, IsTerminalGuard } from './services/guards/login-guard.service';
 import { TerminalService } from './services/terminal.service';
+import { StartpageComponent } from './startpage/startpage.component';
 
  
 @NgModule({
@@ -54,6 +55,7 @@ import { TerminalService } from './services/terminal.service';
     NfcloginComponent,
     RegisterComponent,
     TerminalLoginComponent,
+    StartpageComponent,
   ],
   providers: [ 
     StatisticService, 
@@ -63,6 +65,8 @@ import { TerminalService } from './services/terminal.service';
     AppApiService,
     DatePipe,
     IsLoggedInGuard,
+    IsNotLoggedInGuard,
+    IsAdminGuard,
     IsTerminalGuard,
     TerminalService,
     CookieService,

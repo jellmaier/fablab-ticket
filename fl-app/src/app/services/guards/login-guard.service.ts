@@ -8,17 +8,51 @@ import { TerminalService } from './../terminal.service';
 
 @Injectable()
 export class IsLoggedInGuard implements CanActivate {
+  constructor(private appApiService: AppApiService,
+              private router: Router) {}
+
   canActivate() {
-    console.log('AuthGuard#canActivate called');
-    return false;
+    console.log('IsLoggedInGuard#canActivate called');
+    
+    if( this.appApiService.isUserLoggedIn() == true) {
+      return true;
+    }
+    else {
+      this.router.navigate(['/terminallogin']);
+      return false;
+    }
+  }
+}
+
+@Injectable()
+export class IsNotLoggedInGuard implements CanActivate {
+  constructor(private appApiService: AppApiService,
+              private router: Router) {}
+
+  canActivate() {
+    console.log('IsNotLoggedInGuard#canActivate called');
+
+    if( this.appApiService.isUserLoggedIn() == true) {
+      this.router.navigate(['/startpage']);
+      return false;
+    }
+    else {
+      return true;
+    }
   }
 }
 
 @Injectable()
 export class IsAdminGuard implements CanActivate {
-  canActivate() {
-    console.log('AuthGuard#canActivate called');
-    return false;
+  constructor(private appApiService: AppApiService) {}
+
+  canActivate():boolean {
+    console.log('IsAdminGuard#canActivate called');
+
+    if( this.appApiService.isAdmin() == true)
+      return true;
+    else
+      return false;
   }
 }
 
@@ -29,19 +63,28 @@ export class IsTerminalGuard implements CanActivate {
               private router: Router) {}
 
   canActivate(): Observable<boolean> | boolean  {
-    console.log('AuthGuard#canActivate called');
-
+    console.log('IsTerminalGuard#canActivate called');
+/*
     if(!this.terminalService.hasTerminalToken()) {
       this.router.navigate(['/login']);
       return false;
     }
+*/
+    if (this.appApiService.isTerminal()) {
+      return true;
+    }
 
+    this.router.navigate(['/login']);
+    return false;
+
+    // check twice if the cookie is set
+/*
     if (this.appApiService.isAppConnectLoaded()) {
       return this.appApiService.isTerminal();
     }
 
     return this.terminalService.checkTerminalToken().map(data => data.is_terminal);
-
+*/
     // Navigate to the login page with extras
     //this.router.navigate(['/login']);
     //return false;

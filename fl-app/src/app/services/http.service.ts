@@ -17,13 +17,14 @@ export class HttpService {
 
 
   //--------  terminal_token  -----------------------
-  public checkTerminalToken(terminal_token: string): Observable<any> {
+  
+/*  public checkTerminalToken(terminal_token: string): Observable<any> {
     let url = this.appApiService.getPluginApiUrl() + 'check_terminal_token';
     return this.http.get<any>(url, {
         params: { token: terminal_token }
       })
           .catch((err: HttpErrorResponse) => Observable.throw(this.handleHttpError(err)));
-  }
+  } */
   
   public getTerminalToken(): Observable<any> {
     let url = this.appApiService.getPluginApiUrl() + 'get_terminal_token';

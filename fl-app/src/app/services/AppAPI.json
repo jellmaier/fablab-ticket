@@ -3,5 +3,7 @@
   "templates_url":"http:\/\/127.0.0.1\/wordpress\/wp-content\/plugins\/fablab-ticket\/views\/templates\/",
   "api_url":"http:\/\/127.0.0.1\/wordpress\/api\/",
   "sharing_url":"http:\/\/127.0.0.1\/wordpress\/wp-json\/sharepl\/v1\/",
-  "nonce":"c694a76626"
+  "nonce":"c694a76626",
+  "is_user_logged_in":true,
+  "is_terminal":true
 }

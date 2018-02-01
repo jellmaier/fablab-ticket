@@ -2,19 +2,21 @@ import { NgModule }             from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { StatisticComponent }   from './statistic/statistic.component';
+import { StartpageComponent }   from './startpage/startpage.component';
 import { LoginComponent }       from './login/login/login.component';
 import { TerminalLoginComponent }       from './login/terminallogin/terminallogin.component';
 import { NfcloginComponent } from './login/nfclogin/nfclogin.component';
  
-import { IsLoggedInGuard, IsTerminalGuard } from './services/guards/login-guard.service';
+import { IsNotLoggedInGuard, IsLoggedInGuard, IsAdminGuard, IsTerminalGuard } from './services/guards/login-guard.service';
 
 const routes: Routes = [
   { path: '', redirectTo: '/terminallogin', pathMatch: 'full' },
   //{ path: 'detail/:id', component: HeroDetailComponent },
-  { path: 'terminallogin',  canActivate: [ IsTerminalGuard ], component: TerminalLoginComponent },
-  { path: 'loginnfc',     canActivate: [ IsTerminalGuard ], component: NfcloginComponent },
-  { path: 'login',   component: LoginComponent },
-  { path: 'statistic',     component: StatisticComponent }
+  { path: 'terminallogin',  canActivate: [ IsNotLoggedInGuard, IsTerminalGuard ], component: TerminalLoginComponent },
+  { path: 'loginnfc',     canActivate: [ IsNotLoggedInGuard, IsTerminalGuard ], component: NfcloginComponent },
+  { path: 'startpage',     canActivate: [ IsLoggedInGuard ], component: StartpageComponent },
+  { path: 'login',  canActivate: [ IsNotLoggedInGuard ], component: LoginComponent },
+  { path: 'statistic',   canActivate: [ IsAdminGuard ],  component: StatisticComponent }
 ];
 
 @NgModule({

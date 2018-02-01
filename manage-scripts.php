@@ -28,6 +28,8 @@ if (!class_exists('ManageScripts'))
         wp_register_script('angular-cookies', plugin_dir_url(__FILE__) . 'system/js/angular/angular-cookies.min.js', array(), null, false);
         wp_register_script('round-progress', plugin_dir_url(__FILE__) . 'system/js/angular/roundProgress.min.js', array(), null, false);
         wp_localize_script( 'angular-core', 'AppAPI', angular_translation_array() );
+        wp_localize_script( 'angular-core', 'TerminalDataLoc', angular_terminal_array() );
+        wp_localize_script( 'angular-core', 'UserDataLoc', angular_user_array() );
         wp_enqueue_script('angular-core');
         wp_enqueue_script('angular-locale_de-at');
         wp_enqueue_script('angular-sanitize');

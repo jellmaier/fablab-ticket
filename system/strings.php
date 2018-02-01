@@ -12,8 +12,28 @@
       'sharing_url' => get_bloginfo('wpurl') . '/wp-json/sharepl/v1/',
       // user nonce
       'nonce' => wp_create_nonce( 'wp_rest' ),
+    );
+  }
+
+  function angular_terminal_array() {
+    return array(
+      // is_terminal
+      'is_terminal' => ($_COOKIE['terminal_token'] == fablab_get_option('terminal_token')),
+      // ticket_terminals_only
+      'ticket_terminals_only' => (fablab_get_option('ticket_terminals_only') == '1'),
+      // auto_logout
+      'auto_logout' =>fablab_get_option('auto_logout')
+    );
+  }
+
+  function angular_user_array() {
+    return array(
       // user logged in
-      'is_user_logged_in' => is_user_logged_in()
+      'is_user_logged_in' => is_user_logged_in(),
+      // is_admin
+      'is_admin' => is_manager(),
+      // user_display_name
+      'user_display_name' => wp_get_current_user()->display_name,
     );
   }
 
