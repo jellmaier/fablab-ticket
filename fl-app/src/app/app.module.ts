@@ -36,6 +36,7 @@ import { RegisterComponent } from './login/register/register.component';
 import { IsLoggedInGuard, IsNotLoggedInGuard, IsAdminGuard, IsTerminalGuard } from './services/guards/login-guard.service';
 import { TerminalService } from './services/terminal.service';
 import { StartpageComponent } from './startpage/startpage.component';
+import { AdminComponent } from './admin/admin/admin.component';
 
  
 @NgModule({
@@ -56,6 +57,7 @@ import { StartpageComponent } from './startpage/startpage.component';
     RegisterComponent,
     TerminalLoginComponent,
     StartpageComponent,
+    AdminComponent,
   ],
   providers: [ 
     StatisticService, 

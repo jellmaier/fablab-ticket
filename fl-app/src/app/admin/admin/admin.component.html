@@ -1,0 +1,15 @@
+<h4>Admin Optionen</h4>   <!-- totoranslate -->
+
+<a href="{{appApiService.getBlogUrl()}}/wp-admin/edit.php?post_type=device&page=fablab_options">   
+  <input type="submit" value="Einstellungen" style="margin-bottom:12px">
+</a>
+<br>
+<caption>This is a Login Terminal: </caption>                      <!-- totoranslate --> 
+<label class="switch" (click)="toggleIsTerminal()" [ngClass]="{'active': toggle_terminal}" >
+  <div class="slider round"></div>
+</label>
+<br>
+<caption>Ticket System Online: </caption>                       <!-- totoranslate -->
+<label class="switch" (click)="toggleTicketSystemOnline()" [ngClass]="{'active': toggle_ticket_system_online}" >
+  <div class="slider round"></div>
+</label>

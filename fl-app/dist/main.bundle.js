@@ -17,6 +17,98 @@ webpackEmptyAsyncContext.id = "../../../../../src/$$_lazy_route_resource lazy re
 
 /***/ }),
 
+/***/ "../../../../../src/app/admin/admin/admin.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "/* ------------------------------------------------------------ */\n/* Checkbox toggle */\n/* source: https://www.w3schools.com/howto/howto_css_switch.asp */\n/* ------------------------------------------------------------ */\n\n /* The switch - the box around the slider */\n.switch {\n  position: relative;\n  display: inline-block;\n  width: 34px;\n  height: 19px;\n  margin-bottom: -4px;\n  margin-left: 2px;\n  margin-right: 10px;\n}\n\n/* Hide default HTML checkbox */\n.switch input {display:none;}\n\n/* The slider */\n.slider {\n  position: absolute;\n  cursor: pointer;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background-color: #ccc;\n  transition: .4s;\n}\n\n.slider:before {\n  position: absolute;\n  content: \"\";\n  height: 13px;\n  width: 13px;\n  left: 3px;\n  bottom: 3px;\n  background-color: white;\n  transition: .2s;\n}\n\ninput:checked + .slider {\n  background-color: #AEDE1A;\n}\n\ninput:focus + .slider {\n  box-shadow: 0 0 1px #AEDE1A;\n}\n\ninput:checked + .slider:before {\n  -webkit-transform: translateX(15px);\n  transform: translateX(15px);\n}\n\n/* for Angular methodes */\n\n.active .slider {\n  background-color: #AEDE1A;\n}\n\n.active .slider:before {\n  -webkit-transform: translateX(15px);\n  transform: translateX(15px);\n}\n\n/* Rounded sliders */\n.slider.round {\n  border-radius: 19px;\n}\n\n.slider.round:before {\n  border-radius: 50%;\n}", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/admin/admin/admin.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<h4>Admin Optionen</h4>   <!-- totoranslate -->\n\n<a href=\"{{appApiService.getBlogUrl()}}/wp-admin/edit.php?post_type=device&page=fablab_options\">   \n  <input type=\"submit\" value=\"Einstellungen\" style=\"margin-bottom:12px\">\n</a>\n<br>\n<caption>This is a Login Terminal: </caption>                      <!-- totoranslate --> \n<label class=\"switch\" (click)=\"toggleIsTerminal()\" [ngClass]=\"{'active': toggle_terminal}\" >\n  <div class=\"slider round\"></div>\n</label>\n<br>\n<caption>Ticket System Online: </caption>                       <!-- totoranslate -->\n<label class=\"switch\" (click)=\"toggleTicketSystemOnline()\" [ngClass]=\"{'active': toggle_ticket_system_online}\" >\n  <div class=\"slider round\"></div>\n</label>\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/admin/admin/admin.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AdminComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_app_api_service__ = __webpack_require__("../../../../../src/app/services/app-api.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var AdminComponent = (function () {
+    function AdminComponent(appApiService) {
+        this.appApiService = appApiService;
+        this.toggle_terminal = false;
+        this.toggle_ticket_system_online = false;
+        this.take_until = false;
+        this.count = 0;
+    }
+    AdminComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.toggle_subscription = this.appApiService.getTerminalObservable()
+            .subscribe(function (isTerminal) {
+            //console.log('toggle: ' + isTerminal);
+            _this.toggle_terminal = isTerminal;
+            /*if(this.count >= 5) {
+              this.toggle_subscription.unsubscribe();
+            }
+            this.count ++;
+            */
+        });
+    };
+    AdminComponent.prototype.ngOnDestroy = function () {
+        this.toggle_subscription.unsubscribe();
+    };
+    AdminComponent.prototype.toggleIsTerminal = function () {
+        this.appApiService.toggleTerminal();
+        //this.appApiService.toggleTerminal();
+        //this.toggle_terminal = !this.toggle_terminal;
+        //console.log(this.toggleTerminal);
+    };
+    AdminComponent.prototype.toggleTicketSystemOnline = function () {
+        this.toggle_ticket_system_online = !this.toggle_ticket_system_online;
+        //console.log(this.toggleTerminal);
+    };
+    AdminComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'app-admin',
+            template: __webpack_require__("../../../../../src/app/admin/admin/admin.component.html"),
+            styles: [__webpack_require__("../../../../../src/app/admin/admin/admin.component.css")]
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_app_api_service__["a" /* AppApiService */]])
+    ], AdminComponent);
+    return AdminComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "../../../../../src/app/app-routing.module.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -152,6 +244,7 @@ var AppComponent = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__services_guards_login_guard_service__ = __webpack_require__("../../../../../src/app/services/guards/login-guard.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__services_terminal_service__ = __webpack_require__("../../../../../src/app/services/terminal.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__startpage_startpage_component__ = __webpack_require__("../../../../../src/app/startpage/startpage.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__admin_admin_admin_component__ = __webpack_require__("../../../../../src/app/admin/admin/admin.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -185,6 +278,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
 var AppModule = (function () {
     function AppModule() {
     }
@@ -207,6 +301,7 @@ var AppModule = (function () {
                 __WEBPACK_IMPORTED_MODULE_22__login_register_register_component__["a" /* RegisterComponent */],
                 __WEBPACK_IMPORTED_MODULE_20__login_terminallogin_terminallogin_component__["a" /* TerminalLoginComponent */],
                 __WEBPACK_IMPORTED_MODULE_25__startpage_startpage_component__["a" /* StartpageComponent */],
+                __WEBPACK_IMPORTED_MODULE_26__admin_admin_admin_component__["a" /* AdminComponent */],
             ],
             providers: [
                 __WEBPACK_IMPORTED_MODULE_8__statistic_statistic_service__["a" /* StatisticService */],
@@ -571,14 +666,15 @@ module.exports = {"is_user_logged_in":true,"is_admin":true,"user_display_name":"
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppApiService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__AppAPI_json__ = __webpack_require__("../../../../../src/app/services/AppAPI.json");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__AppAPI_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__AppAPI_json__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__UserData_json__ = __webpack_require__("../../../../../src/app/services/UserData.json");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__UserData_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__UserData_json__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__TerminalData_json__ = __webpack_require__("../../../../../src/app/services/TerminalData.json");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__TerminalData_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__TerminalData_json__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__user_json__ = __webpack_require__("../../../../../src/app/services/user.json");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__user_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__user_json__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_BehaviorSubject__ = __webpack_require__("../../../../rxjs/_esm5/BehaviorSubject.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__AppAPI_json__ = __webpack_require__("../../../../../src/app/services/AppAPI.json");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__AppAPI_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__AppAPI_json__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__UserData_json__ = __webpack_require__("../../../../../src/app/services/UserData.json");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__UserData_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__UserData_json__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__TerminalData_json__ = __webpack_require__("../../../../../src/app/services/TerminalData.json");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__TerminalData_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__TerminalData_json__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__user_json__ = __webpack_require__("../../../../../src/app/services/user.json");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__user_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__user_json__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -593,20 +689,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var AppApiService = (function () {
     function AppApiService() {
+        this.apiDataLoaded = false;
+        this.test_toggle = false;
+        this.toggle_subject = new __WEBPACK_IMPORTED_MODULE_1_rxjs_BehaviorSubject__["a" /* BehaviorSubject */](this.test_toggle);
+        this.app_data_subject = new __WEBPACK_IMPORTED_MODULE_1_rxjs_BehaviorSubject__["a" /* BehaviorSubject */](false);
         this.loadApiData();
     }
     AppApiService.prototype.loadApiData = function () {
         this.is_dev_mode = (typeof AppAPI === 'undefined');
         if (this.is_dev_mode) {
-            this.app_api = __WEBPACK_IMPORTED_MODULE_1__AppAPI_json__;
-            this.user_data = __WEBPACK_IMPORTED_MODULE_2__UserData_json__;
-            this.terminal_data = __WEBPACK_IMPORTED_MODULE_3__TerminalData_json__;
+            this.app_api = __WEBPACK_IMPORTED_MODULE_2__AppAPI_json__;
+            this.user_data = __WEBPACK_IMPORTED_MODULE_3__UserData_json__;
+            this.terminal_data = __WEBPACK_IMPORTED_MODULE_4__TerminalData_json__;
             if (this.user_data.is_admin)
-                this.user = __WEBPACK_IMPORTED_MODULE_4__user_json__["admin"];
+                this.user = __WEBPACK_IMPORTED_MODULE_5__user_json__["admin"];
             else
-                this.user = __WEBPACK_IMPORTED_MODULE_4__user_json__["user"];
+                this.user = __WEBPACK_IMPORTED_MODULE_5__user_json__["user"];
         }
         else {
             console.log('Runing in Embadded-Mode');
@@ -614,9 +715,14 @@ var AppApiService = (function () {
             this.user_data = UserDataLoc;
             this.terminal_data = TerminalDataLoc;
         }
+        this.app_data_subject.next(true);
         //console.log(this.app_api);
         //console.log(this.user_data);
         //console.log(this.terminal_data);
+    };
+    // check if data loaded
+    AppApiService.prototype.isApiDataLoaded = function () {
+        return this.app_data_subject;
     };
     // getter Methods
     AppApiService.prototype.getBlogUrl = function () {
@@ -640,18 +746,18 @@ var AppApiService = (function () {
     AppApiService.prototype.getAutentificationToken = function () {
         return btoa(this.user.username + ":" + this.user.password);
     };
-    // AppConnect methods
-    /*
-      public setAppConnect(data: AppConnect):void {
-        this.app_connect = data;
-      }
-    
-      public isAppConnectLoaded():boolean {
-        return (this.app_connect != null);
-      }*/
+    // -------   Terminal methods ----------
     AppApiService.prototype.isTerminal = function () {
         return this.terminal_data.is_terminal;
     };
+    AppApiService.prototype.toggleTerminal = function () {
+        this.test_toggle = !this.test_toggle;
+        this.toggle_subject.next(this.test_toggle);
+    };
+    AppApiService.prototype.getTerminalObservable = function () {
+        return this.toggle_subject;
+    };
+    // -------   Terminal methods ----------
     AppApiService.prototype.isUserLoggedIn = function () {
         return this.user_data.is_user_logged_in;
     };
@@ -1035,7 +1141,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/startpage/startpage.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  startpage works!\n</p>\n"
+module.exports = "<p>\n  startpage works!\n</p>\n<app-admin *ngIf=\"is_admin\" ></app-admin>\n"
 
 /***/ }),
 
@@ -1045,6 +1151,7 @@ module.exports = "<p>\n  startpage works!\n</p>\n"
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return StartpageComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_app_api_service__ = __webpack_require__("../../../../../src/app/services/app-api.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1055,10 +1162,24 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
 var StartpageComponent = (function () {
-    function StartpageComponent() {
+    function StartpageComponent(appApiService) {
+        this.appApiService = appApiService;
+        this.is_admin = false;
     }
     StartpageComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.is_admin_subscription = this.appApiService.isApiDataLoaded().subscribe(function (loaded) {
+            if (loaded == true) {
+                console.log('Admin: ' + _this.appApiService.isAdmin());
+                _this.is_admin = _this.appApiService.isAdmin();
+                //this.is_admin_subscription.unsubscribe();
+            }
+        });
+    };
+    StartpageComponent.prototype.ngOnDestroy = function () {
+        this.is_admin_subscription.unsubscribe();
     };
     StartpageComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
@@ -1066,7 +1187,7 @@ var StartpageComponent = (function () {
             template: __webpack_require__("../../../../../src/app/startpage/startpage.component.html"),
             styles: [__webpack_require__("../../../../../src/app/startpage/startpage.component.css")]
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_app_api_service__["a" /* AppApiService */]])
     ], StartpageComponent);
     return StartpageComponent;
 }());
