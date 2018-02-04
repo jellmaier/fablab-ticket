@@ -1,5 +1,6 @@
 {
   "is_terminal":true,
   "ticket_terminals_only":true,
-  "auto_logout":30
+  "auto_logout":30,
+  "ticket_system_online":true
 }

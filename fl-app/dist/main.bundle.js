@@ -49,6 +49,7 @@ module.exports = "<h4>Admin Optionen</h4>   <!-- totoranslate -->\n\n<a href=\"{
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AdminComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_app_api_service__ = __webpack_require__("../../../../../src/app/services/app-api.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_terminal_service__ = __webpack_require__("../../../../../src/app/services/terminal.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -60,38 +61,62 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
+
 var AdminComponent = (function () {
-    function AdminComponent(appApiService) {
+    function AdminComponent(appApiService, terminalSercie) {
         this.appApiService = appApiService;
+        this.terminalSercie = terminalSercie;
         this.toggle_terminal = false;
         this.toggle_ticket_system_online = false;
+        //private toggle_subscription: Subscription;
         this.take_until = false;
         this.count = 0;
     }
     AdminComponent.prototype.ngOnInit = function () {
+        this.initData();
+    };
+    AdminComponent.prototype.initData = function () {
         var _this = this;
-        this.toggle_subscription = this.appApiService.getTerminalObservable()
-            .subscribe(function (isTerminal) {
-            //console.log('toggle: ' + isTerminal);
-            _this.toggle_terminal = isTerminal;
-            /*if(this.count >= 5) {
-              this.toggle_subscription.unsubscribe();
+        this.appApiService.isApiDataLoaded()
+            .subscribe(function (isDataLoaded) {
+            if (isDataLoaded == true) {
+                _this.toggle_terminal = _this.appApiService.isTerminal();
+                _this.toggle_ticket_system_online = _this.appApiService.isTicketSystemOnline();
             }
-            this.count ++;
-            */
+            _this.count++;
         });
     };
+    /*
+      private loadToggleSubscription():void {
+        this.toggle_subscription = this.appApiService.getTerminalObservable()
+        .subscribe((isTerminal) => {
+          //console.log('toggle: ' + isTerminal);
+          this.toggle_terminal = isTerminal;
+          if(this.count >= 5) {
+            //this.toggle_subscription.unsubscribe();
+          }
+          this.count ++;
+          
+        })
+      }
+    
+    */
     AdminComponent.prototype.ngOnDestroy = function () {
-        this.toggle_subscription.unsubscribe();
+        //this.toggle_subscription.unsubscribe();
     };
     AdminComponent.prototype.toggleIsTerminal = function () {
-        this.appApiService.toggleTerminal();
         //this.appApiService.toggleTerminal();
-        //this.toggle_terminal = !this.toggle_terminal;
+        this.toggle_terminal = !this.toggle_terminal;
+        this.terminalSercie.makeTerminal(this.toggle_terminal);
         //console.log(this.toggleTerminal);
     };
     AdminComponent.prototype.toggleTicketSystemOnline = function () {
+        var _this = this;
         this.toggle_ticket_system_online = !this.toggle_ticket_system_online;
+        this.terminalSercie.setTicketSystemOnline(this.toggle_ticket_system_online).subscribe(function (data) {
+            _this.toggle_ticket_system_online = data;
+        });
+        //this.terminalSercie.makeTerminal(this.toggle_ticket_system_online);
         //console.log(this.toggleTerminal);
     };
     AdminComponent = __decorate([
@@ -100,7 +125,8 @@ var AdminComponent = (function () {
             template: __webpack_require__("../../../../../src/app/admin/admin/admin.component.html"),
             styles: [__webpack_require__("../../../../../src/app/admin/admin/admin.component.css")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_app_api_service__["a" /* AppApiService */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_app_api_service__["a" /* AppApiService */],
+            __WEBPACK_IMPORTED_MODULE_2__services_terminal_service__["a" /* TerminalService */]])
     ], AdminComponent);
     return AdminComponent;
 }());
@@ -649,7 +675,7 @@ module.exports = {"blog_url":"http://127.0.0.1/wordpress","templates_url":"http:
 /***/ "../../../../../src/app/services/TerminalData.json":
 /***/ (function(module, exports) {
 
-module.exports = {"is_terminal":true,"ticket_terminals_only":true,"auto_logout":30}
+module.exports = {"is_terminal":true,"ticket_terminals_only":true,"auto_logout":30,"ticket_system_online":true}
 
 /***/ }),
 
@@ -694,13 +720,14 @@ var AppApiService = (function () {
     function AppApiService() {
         this.apiDataLoaded = false;
         this.test_toggle = false;
-        this.toggle_subject = new __WEBPACK_IMPORTED_MODULE_1_rxjs_BehaviorSubject__["a" /* BehaviorSubject */](this.test_toggle);
+        //this.toggle_subject = new BehaviorSubject<boolean>(this.test_toggle);
         this.app_data_subject = new __WEBPACK_IMPORTED_MODULE_1_rxjs_BehaviorSubject__["a" /* BehaviorSubject */](false);
         this.loadApiData();
     }
     AppApiService.prototype.loadApiData = function () {
         this.is_dev_mode = (typeof AppAPI === 'undefined');
         if (this.is_dev_mode) {
+            console.log('Runing in Dev-Mode');
             this.app_api = __WEBPACK_IMPORTED_MODULE_2__AppAPI_json__;
             this.user_data = __WEBPACK_IMPORTED_MODULE_3__UserData_json__;
             this.terminal_data = __WEBPACK_IMPORTED_MODULE_4__TerminalData_json__;
@@ -710,7 +737,6 @@ var AppApiService = (function () {
                 this.user = __WEBPACK_IMPORTED_MODULE_5__user_json__["user"];
         }
         else {
-            console.log('Runing in Embadded-Mode');
             this.app_api = AppAPI;
             this.user_data = UserDataLoc;
             this.terminal_data = TerminalDataLoc;
@@ -750,14 +776,20 @@ var AppApiService = (function () {
     AppApiService.prototype.isTerminal = function () {
         return this.terminal_data.is_terminal;
     };
-    AppApiService.prototype.toggleTerminal = function () {
+    AppApiService.prototype.isTicketSystemOnline = function () {
+        return this.terminal_data.ticket_system_online;
+    };
+    /*
+      public toggleTerminal():void {
         this.test_toggle = !this.test_toggle;
         this.toggle_subject.next(this.test_toggle);
-    };
-    AppApiService.prototype.getTerminalObservable = function () {
+      }
+    
+      public getTerminalObservable():BehaviorSubject<boolean> {
         return this.toggle_subject;
-    };
-    // -------   Terminal methods ----------
+      }
+    */
+    // -------   User methods ----------
     AppApiService.prototype.isUserLoggedIn = function () {
         return this.user_data.is_user_logged_in;
     };
@@ -989,6 +1021,25 @@ var HttpService = (function () {
         this.http = http;
         this.appApiService = appApiService;
     }
+    //--------  ticket system online  -----------------------
+    /*  public checkTicketSystemOnline(): Observable<any> {
+    
+        let url = this.appApiService.getPluginApiUrl() + 'check_user_login';
+    
+        return this.http.get<any>(url, {
+            params: { username: 'login'}
+          });
+    
+      }
+    */
+    HttpService.prototype.setTicketSystemOnline = function (online) {
+        var _this = this;
+        var url = this.appApiService.getPluginApiUrl() + 'ticket_system_online';
+        var param = online ? 'online' : 'offline';
+        return this.http.post(url, {
+            params: { set_online: param }
+        }).catch(function (err) { return __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__["a" /* Observable */].throw(_this.handleHttpError(err)); });
+    };
     //--------  terminal_token  -----------------------
     /*  public checkTerminalToken(terminal_token: string): Observable<any> {
         let url = this.appApiService.getPluginApiUrl() + 'check_terminal_token';
@@ -1078,17 +1129,29 @@ var TerminalService = (function () {
     function TerminalService(httpService, cookieService) {
         this.httpService = httpService;
         this.cookieService = cookieService;
+        this.cookie_name = 'terminal_token';
+        this.cookie_days = 180;
+        this.cookie_path = '/';
         //this.setTerminalToken();
         //this.loadTerminalToken();
+        //console.log('has token: ' + this.hasTerminalToken());
     }
+    TerminalService.prototype.makeTerminal = function (make) {
+        if (make == true) {
+            this.setTerminalToken();
+        }
+        else {
+            this.deleteTerminalToken();
+        }
+    };
     TerminalService.prototype.setTerminalToken = function () {
         var _this = this;
         this.httpService.getTerminalToken().subscribe(function (data) {
-            _this.cookieService.set('terminal_token', data, 180);
+            _this.cookieService.set(_this.cookie_name, data, _this.cookie_days, _this.cookie_path);
         });
     };
     TerminalService.prototype.deleteTerminalToken = function () {
-        this.cookieService.delete('terminal_token');
+        this.cookieService.delete(this.cookie_name, this.cookie_path);
     };
     /*
     public loadTerminalToken():void {
@@ -1099,7 +1162,17 @@ var TerminalService = (function () {
     }
   */
     TerminalService.prototype.hasTerminalToken = function () {
-        return this.cookieService.check('terminal_token');
+        return this.cookieService.check(this.cookie_name);
+    };
+    /*
+      public checkTerminalToken(): Observable<AppConnect>{
+        let cookie_value = this.cookieService.get('terminal_token');
+        return this.httpService.checkTerminalToken(cookie_value);
+      }
+    */
+    // ------------ Ticket System Online --------
+    TerminalService.prototype.setTicketSystemOnline = function (online) {
+        return this.httpService.setTicketSystemOnline(online);
     };
     TerminalService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
@@ -1172,7 +1245,7 @@ var StartpageComponent = (function () {
         var _this = this;
         this.is_admin_subscription = this.appApiService.isApiDataLoaded().subscribe(function (loaded) {
             if (loaded == true) {
-                console.log('Admin: ' + _this.appApiService.isAdmin());
+                //console.log('Admin: ' + this.appApiService.isAdmin());
                 _this.is_admin = _this.appApiService.isAdmin();
                 //this.is_admin_subscription.unsubscribe();
             }

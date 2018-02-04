@@ -22,7 +22,9 @@
       // ticket_terminals_only
       'ticket_terminals_only' => (fablab_get_option('ticket_terminals_only') == '1'),
       // auto_logout
-      'auto_logout' =>fablab_get_option('auto_logout')
+      'auto_logout' =>fablab_get_option('auto_logout'),
+      // ticket system online
+      'ticket_system_online' => (fablab_get_option('ticket_online') == '1'),
     );
   }
 

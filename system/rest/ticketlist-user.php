@@ -44,7 +44,13 @@ add_action( 'rest_api_init', function () {
 //--------------------------------------------------------
 
 function rest_ticket_system_online($data) {
-  $set_online = sanitize_text_field($data['set_online']);
+
+  if ($data['set_online'] != null) {
+    $set_online = sanitize_text_field($data['set_online']);
+  } else {
+    $params = $data->get_params();
+    $set_online = sanitize_text_field($params['params']['set_online']);
+  }
 
   $options = fablab_get_option();
   

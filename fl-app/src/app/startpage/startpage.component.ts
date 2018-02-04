@@ -19,7 +19,7 @@ export class StartpageComponent implements OnInit {
   ngOnInit() {
     this.is_admin_subscription = this.appApiService.isApiDataLoaded().subscribe(loaded => {
       if (loaded == true) {
-        console.log('Admin: ' + this.appApiService.isAdmin());
+        //console.log('Admin: ' + this.appApiService.isAdmin());
         this.is_admin = this.appApiService.isAdmin();
         //this.is_admin_subscription.unsubscribe();
       }

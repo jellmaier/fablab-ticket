@@ -16,6 +16,30 @@ export class HttpService {
                private appApiService: AppApiService ) {}
 
 
+
+  //--------  ticket system online  -----------------------
+
+/*  public checkTicketSystemOnline(): Observable<any> {
+
+    let url = this.appApiService.getPluginApiUrl() + 'check_user_login';
+
+    return this.http.get<any>(url, {
+        params: { username: 'login'}
+      });
+
+  }
+*/
+  public setTicketSystemOnline(online:boolean): Observable<boolean> {
+
+    let url = this.appApiService.getPluginApiUrl() + 'ticket_system_online';
+    let param = online ? 'online' : 'offline' ;
+
+    return this.http.post<boolean>(url, {
+        params: { set_online: param }
+      }).catch((err: HttpErrorResponse) => Observable.throw(this.handleHttpError(err)));
+  }
+
+
   //--------  terminal_token  -----------------------
   
 /*  public checkTerminalToken(terminal_token: string): Observable<any> {

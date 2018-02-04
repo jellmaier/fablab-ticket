@@ -5,26 +5,42 @@ import { HttpService } from './http.service';
 
 import { Observable }     from 'rxjs/Observable';
 
+
+
 @Injectable()
 export class TerminalService {
+
+  private cookie_name:string = 'terminal_token';
+  private cookie_days:number = 180;
+  private cookie_path:string = '/';
 
   constructor(private httpService: HttpService,
               private cookieService: CookieService) {
     //this.setTerminalToken();
     //this.loadTerminalToken();
+    //console.log('has token: ' + this.hasTerminalToken());
+  }
+
+  public makeTerminal(make:boolean):void {
+
+    if (make == true) {
+      this.setTerminalToken();
+    } else {
+      this.deleteTerminalToken();
+    }
   }
 
  
-  public setTerminalToken():void {
+  private setTerminalToken():void {
     this.httpService.getTerminalToken().subscribe(
       data =>  {
-        this.cookieService.set( 'terminal_token', data, 180 );
+        this.cookieService.set( this.cookie_name , data, this.cookie_days, this.cookie_path);
       }
     );
   }
 
-  public deleteTerminalToken():void {
-    this.cookieService.delete('terminal_token');
+  private deleteTerminalToken():void {
+    this.cookieService.delete(this.cookie_name, this.cookie_path);
   }
   /*
   public loadTerminalToken():void {
@@ -35,7 +51,7 @@ export class TerminalService {
   }
 */
   public hasTerminalToken():boolean {
-    return this.cookieService.check('terminal_token');
+    return this.cookieService.check(this.cookie_name);
   }
 /*
   public checkTerminalToken(): Observable<AppConnect>{
@@ -43,6 +59,13 @@ export class TerminalService {
     return this.httpService.checkTerminalToken(cookie_value);
   }
 */
+
+  // ------------ Ticket System Online --------
+
+  public setTicketSystemOnline(online:boolean): Observable<boolean> {
+    return this.httpService.setTicketSystemOnline(online);
+  }
+
 
 
 }

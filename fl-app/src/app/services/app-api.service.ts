@@ -25,6 +25,7 @@ export interface TerminalData {
   is_terminal: boolean;
   ticket_terminals_only: boolean;
   auto_logout: number;
+  ticket_system_online: boolean;
 }
 
 interface User {
@@ -47,8 +48,6 @@ export class AppApiService {
   private toggle_subject: BehaviorSubject<boolean>;
 
 
-
-
   private app_api: AppApiResponse;
   private user_data: UserData;
   private terminal_data: TerminalData;
@@ -57,8 +56,9 @@ export class AppApiService {
   private is_dev_mode: boolean;
 
   constructor() {
-    this.toggle_subject = new BehaviorSubject<boolean>(this.test_toggle);
+    //this.toggle_subject = new BehaviorSubject<boolean>(this.test_toggle);
     this.app_data_subject = new BehaviorSubject<boolean>(false);
+
 
     this.loadApiData();
   }
@@ -68,6 +68,7 @@ export class AppApiService {
 
     this.is_dev_mode = (typeof AppAPI === 'undefined');
     if (this.is_dev_mode) { // Check if it is embadded into the wordpress page
+      console.log('Runing in Dev-Mode');
       this.app_api = (<AppApiResponse>(<any>AppApiDataDev));
       this.user_data = (<UserData>(<any>UserDataDev));
       this.terminal_data = (<TerminalData>(<any>TerminalDataDev));
@@ -76,7 +77,6 @@ export class AppApiService {
       else
         this.user = (<User>(<any>UserDev).user);
     } else {
-      console.log('Runing in Embadded-Mode');
       this.app_api = AppAPI;
       this.user_data = UserDataLoc;
       this.terminal_data = TerminalDataLoc;
@@ -131,6 +131,10 @@ export class AppApiService {
     return this.terminal_data.is_terminal;
   }
 
+  public isTicketSystemOnline():boolean {
+    return this.terminal_data.ticket_system_online;
+  }
+/*
   public toggleTerminal():void {
     this.test_toggle = !this.test_toggle;
     this.toggle_subject.next(this.test_toggle);
@@ -139,8 +143,8 @@ export class AppApiService {
   public getTerminalObservable():BehaviorSubject<boolean> {
     return this.toggle_subject;
   }
-
-  // -------   Terminal methods ----------
+*/
+  // -------   User methods ----------
 
   public isUserLoggedIn():boolean {
     return this.user_data.is_user_logged_in;
