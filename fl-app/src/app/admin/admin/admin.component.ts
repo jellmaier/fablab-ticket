@@ -6,6 +6,7 @@ import { Subscription }     from 'rxjs/Subscription';
 
 import { AppApiService } from './../../services/app-api.service';
 import { TerminalService } from './../../services/terminal.service';
+import { ParserService, CardData } from './../../services/parser.service';
 
 @Component({
   selector: 'app-admin',
@@ -24,10 +25,14 @@ export class AdminComponent implements OnInit {
 
 
   constructor(private appApiService: AppApiService,
-              private terminalSercie: TerminalService) { }
+              private terminalSercie: TerminalService,
+              private parserService: ParserService) { }
 
   ngOnInit() {
     this.initData();
+    //let teststring:string = 'name:jakob, cardid:12345, nachname: hubert, email:jakob.ellmaier@gmx.at';   
+    let teststring:string = '1233943515451';
+    console.log(this.parserService.parseCardData(teststring));
   }
 
 

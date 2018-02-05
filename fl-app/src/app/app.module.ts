@@ -19,6 +19,8 @@ import { HttpInterceptorService } from  './services/http-interceptor.service';
 
 import { CookieService } from 'ngx-cookie-service';
 
+import { ParserService }          from './services/parser.service';
+
 import { AppApiService } from  './services/app-api.service';
 
 import { DatePipe } from '@angular/common';
@@ -72,6 +74,7 @@ import { AdminComponent } from './admin/admin/admin.component';
     IsTerminalGuard,
     TerminalService,
     CookieService,
+    ParserService,
     //{ provide: BrowserXhr, useClass: NgProgressBrowserXhr },
      ],
   bootstrap: [ AppComponent ]
