@@ -448,7 +448,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/login/nfclogin/nfclogin.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h1 class=\"entry-title\">NFC-Login</h1>\n<div class=\"nfc-overlay-content\" >\n  <h2>Jetzt Karte auflegen</h2>     \n    <p>Achtung: Du musst die Karte zuerst zu deinem Account hinzufügen!</p>  <!-- totranslete class=\"nfc-token\"-->\n    <p>{{nfc_login_message}}</p>\n    <form #f=\"ngForm\" (keyup.enter)=\"submitCheckToken(f)\" class=\"nfc-token\" novalidate>\n      <input name=\"token\" autocomplete=\"off\" ngModel autofocus>\n    </form>\n    <img src=\"{{appApiService.getBlogUrl()}}/wp-content/plugins/fablab-ticket/plugins/nfc-login/tucard.jpg\"/> \n</div>\n\n"
+module.exports = "<input  style=\"margin-top:10px;\" (click)=\"showHideNfcOverlay()\" type=\"submit\"  value=\"Login with NFC-Card\"/>\n<!-- Overlay -->\n<div class=\"nfc-overlay\" *ngIf=\"showNfcOverlay\">\n  <div class=\"nfc-overlay-content\" *ngIf=\"showNfcOverlay\">\n    <a (click)=\"showHideNfcOverlay(false)\" class=\"close\">x</a>\n    <h2>Jetzt Karte auflegen</h2>     \n      <p>Achtung: Du musst die Karte zuerst zu deinem Account hinzufügen!</p>  <!-- totranslete class=\"nfc-token\"-->\n      <p>{{nfc_message}}</p>\n      <form #f=\"ngForm\" (keyup.enter)=\"submitCheckToken(f)\" class=\"nfc-token\" novalidate>\n        <input name=\"token\" autocomplete=\"off\" ngModel autofocus>\n      </form>\n      <img src=\"{{appApiService.getBlogUrl()}}/wp-content/plugins/fablab-ticket/plugins/nfc-login/tucard.jpg\"/> \n  </div>\n  <div class=\"nfc-overlay-background\" (click)=\"showHideNfcOverlay(false)\"></div>\n</div>"
 
 /***/ }),
 
@@ -472,29 +472,41 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+var NfcMode;
+(function (NfcMode) {
+    NfcMode[NfcMode["login"] = 1] = "login";
+    NfcMode[NfcMode["register"] = 2] = "register";
+    NfcMode[NfcMode["setcard"] = 3] = "setcard";
+})(NfcMode || (NfcMode = {}));
 var NfcloginComponent = (function () {
     function NfcloginComponent(httpService, appApiService) {
         this.httpService = httpService;
         this.appApiService = appApiService;
+        this.onCardLoaded = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.showNfcOverlay = false;
     }
     NfcloginComponent.prototype.ngOnInit = function () {
-        //this.httpService.getTerminalToken();
+    };
+    NfcloginComponent.prototype.showHideNfcOverlay = function (val) {
+        if (val === void 0) { val = null; }
+        if (val == null)
+            this.showNfcOverlay = !this.showNfcOverlay;
+        else
+            this.showNfcOverlay = val;
     };
     NfcloginComponent.prototype.submitCheckToken = function (nfc_form) {
-        var _this = this;
         console.log(nfc_form.controls['token'].value);
-        this.httpService.checkLoginToken(nfc_form.controls['token'].value).subscribe(function (data) {
-            _this.nfc_login_message = "Karte gefunden!";
-            _this.refresh();
-        }, function (err) {
-            console.log(err);
-            _this.nfc_login_message = "Karte nicht gefunden, bitte versuche es erneut!";
-        });
+        this.onCardLoaded.emit(nfc_form.controls['token'].value);
         nfc_form.reset();
     };
-    NfcloginComponent.prototype.refresh = function () {
-        window.location.reload();
-    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", String)
+    ], NfcloginComponent.prototype, "nfc_message", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
+        __metadata("design:type", Object)
+    ], NfcloginComponent.prototype, "onCardLoaded", void 0);
     NfcloginComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-nfclogin',
@@ -593,7 +605,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/login/terminallogin/terminallogin.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h1 class=\"entry-title\">Login</h1>\n<p>{{login_message}}</p>\n<form #loginform=\"ngForm\" (ngSubmit)=\"submitLogin(loginform)\" class=\"login-form\" novalidate>\n  <label for=\"loginInput\">Username:</label>  \n  <input name=\"login\" type=\"text\" id=\"loginInput\" ngModel>\n  <label for=\"passwordInput\">Password:</label>\n  <input name=\"password\" type=\"password\" id=\"passwordInput\" ngModel>\n  <button type=\"submit\">Login</button>  \n</form>\n\n<input  style=\"margin-top:10px;\" (click)=\"showHideNfcLogin()\" type=\"submit\"  value=\"Login with NFC-Card\"/>\n<!-- Overlay -->\n<div class=\"nfc-overlay\" *ngIf=\"showNfcLogin\">\n  <div class=\"nfc-overlay-content\" *ngIf=\"showNfcLogin\">\n    <a (click)=\"showHideNfcLogin(false)\" class=\"close\">x</a>\n    <h2>Jetzt Karte auflegen</h2>     \n      <p>Achtung: Du musst die Karte zuerst zu deinem Account hinzufügen!</p>  <!-- totranslete class=\"nfc-token\"-->\n      <p>{{nfc_login_message}}</p>\n      <form #f=\"ngForm\" (keyup.enter)=\"submitCheckToken(f)\" class=\"nfc-token\" novalidate>\n        <input name=\"token\" autocomplete=\"off\" ngModel autofocus>\n      </form>\n      <img src=\"{{appApiService.getBlogUrl()}}/wp-content/plugins/fablab-ticket/plugins/nfc-login/tucard.jpg\"/> \n  </div>\n  <div class=\"nfc-overlay-background\" (click)=\"showHideNfcLogin(false)\"></div>\n</div>\n\n"
+module.exports = "<h1 class=\"entry-title\">Login</h1>\n<p>{{login_message}}</p>\n<form #loginform=\"ngForm\" (ngSubmit)=\"submitLogin(loginform)\" class=\"login-form\" novalidate>\n  <label for=\"loginInput\">Username:</label>  \n  <input name=\"login\" type=\"text\" id=\"loginInput\" ngModel>\n  <label for=\"passwordInput\">Password:</label>\n  <input name=\"password\" type=\"password\" id=\"passwordInput\" ngModel>\n  <button type=\"submit\">Login</button>  \n</form> \n\n<app-nfclogin [nfc_message]=\"nfc_login_message\"\n   (onCardLoaded)=\"onCardLoaded($event)\"> ></app-nfclogin>\n\n"
 
 /***/ }),
 
@@ -621,16 +633,8 @@ var TerminalLoginComponent = (function () {
     function TerminalLoginComponent(httpService, appApiService) {
         this.httpService = httpService;
         this.appApiService = appApiService;
-        this.showNfcLogin = false;
     }
     TerminalLoginComponent.prototype.ngOnInit = function () {
-    };
-    TerminalLoginComponent.prototype.showHideNfcLogin = function (val) {
-        if (val === void 0) { val = null; }
-        if (val == null)
-            this.showNfcLogin = !this.showNfcLogin;
-        else
-            this.showNfcLogin = val;
     };
     TerminalLoginComponent.prototype.submitLogin = function (login_form) {
         var _this = this;
@@ -644,17 +648,16 @@ var TerminalLoginComponent = (function () {
             _this.login_message = err.error.message;
         });
     };
-    TerminalLoginComponent.prototype.submitCheckToken = function (nfc_form) {
+    TerminalLoginComponent.prototype.onCardLoaded = function (input) {
         var _this = this;
-        console.log(nfc_form.controls['token'].value);
-        this.httpService.checkLoginToken(nfc_form.controls['token'].value).subscribe(function (data) {
+        console.log('input string' + input);
+        this.httpService.checkLoginToken(input).subscribe(function (data) {
             _this.nfc_login_message = "Karte gefunden!";
             _this.refresh();
         }, function (err) {
             console.log(err);
             _this.nfc_login_message = "Karte nicht gefunden, bitte versuche es erneut!";
         });
-        nfc_form.reset();
     };
     TerminalLoginComponent.prototype.refresh = function () {
         window.location.reload();
@@ -692,7 +695,7 @@ module.exports = {"is_terminal":true,"ticket_terminals_only":true,"auto_logout":
 /***/ "../../../../../src/app/services/UserData.json":
 /***/ (function(module, exports) {
 
-module.exports = {"is_user_logged_in":true,"is_admin":true,"user_display_name":"Dev Admin"}
+module.exports = {"is_user_logged_in":false,"is_admin":true,"user_display_name":"Dev Admin"}
 
 /***/ }),
 

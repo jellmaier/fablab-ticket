@@ -11,21 +11,12 @@ import { NgForm } from '@angular/forms';
 })
 export class TerminalLoginComponent implements OnInit {
 
-  private showNfcLogin: boolean = false;
   private login_message: string;
-  private nfc_login_message: string;
 
   constructor(private httpService: HttpService,
               private appApiService: AppApiService) {}
 
   ngOnInit() {
-  }
-
-  public showHideNfcLogin(val: boolean = null) {
-    if(val == null)
-      this.showNfcLogin = !this.showNfcLogin;
-    else
-      this.showNfcLogin = val;
   }
 
   public submitLogin(login_form: NgForm) {
@@ -44,10 +35,18 @@ export class TerminalLoginComponent implements OnInit {
     );
   }
 
-  public submitCheckToken(nfc_form: NgForm) {
-    console.log(nfc_form.controls['token'].value);
 
-    this.httpService.checkLoginToken(nfc_form.controls['token'].value).subscribe(
+
+  // ----------- for NfcLogin ---------------------------------
+
+  
+  public nfc_login_message: string; // output to child
+
+  public onCardLoaded(input: string) {
+    console.log('input string' + input);
+
+
+    this.httpService.checkLoginToken(input).subscribe(
       data =>  {
         this.nfc_login_message = "Karte gefunden!";
         this.refresh();
@@ -57,11 +56,11 @@ export class TerminalLoginComponent implements OnInit {
         this.nfc_login_message = "Karte nicht gefunden, bitte versuche es erneut!";
       }
     );
-
-    nfc_form.reset();
-  } 
+    
+  }
 
   private refresh(): void {
       window.location.reload();
   }
+
 }

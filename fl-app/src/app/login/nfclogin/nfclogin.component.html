@@ -1,11 +1,15 @@
-<h1 class="entry-title">NFC-Login</h1>
-<div class="nfc-overlay-content" >
-  <h2>Jetzt Karte auflegen</h2>     
-    <p>Achtung: Du musst die Karte zuerst zu deinem Account hinzufügen!</p>  <!-- totranslete class="nfc-token"-->
-    <p>{{nfc_login_message}}</p>
-    <form #f="ngForm" (keyup.enter)="submitCheckToken(f)" class="nfc-token" novalidate>
-      <input name="token" autocomplete="off" ngModel autofocus>
-    </form>
-    <img src="{{appApiService.getBlogUrl()}}/wp-content/plugins/fablab-ticket/plugins/nfc-login/tucard.jpg"/> 
+<input  style="margin-top:10px;" (click)="showHideNfcOverlay()" type="submit"  value="Login with NFC-Card"/>
+<!-- Overlay -->
+<div class="nfc-overlay" *ngIf="showNfcOverlay">
+  <div class="nfc-overlay-content" *ngIf="showNfcOverlay">
+    <a (click)="showHideNfcOverlay(false)" class="close">x</a>
+    <h2>Jetzt Karte auflegen</h2>     
+      <p>Achtung: Du musst die Karte zuerst zu deinem Account hinzufügen!</p>  <!-- totranslete class="nfc-token"-->
+      <p>{{nfc_message}}</p>
+      <form #f="ngForm" (keyup.enter)="submitCheckToken(f)" class="nfc-token" novalidate>
+        <input name="token" autocomplete="off" ngModel autofocus>
+      </form>
+      <img src="{{appApiService.getBlogUrl()}}/wp-content/plugins/fablab-ticket/plugins/nfc-login/tucard.jpg"/> 
+  </div>
+  <div class="nfc-overlay-background" (click)="showHideNfcOverlay(false)"></div>
 </div>
-
