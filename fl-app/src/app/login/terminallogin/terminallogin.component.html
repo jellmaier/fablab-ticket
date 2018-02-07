@@ -8,6 +8,7 @@
   <button type="submit">Login</button>  
 </form> 
 
-<app-nfclogin [nfc_message]="nfc_login_message"
+<app-nfclogin [nfc_message]="nfc_login_message" [nfcButtonLabel]="nfc_button_label"
    (onCardLoaded)="onCardLoaded($event)"> ></app-nfclogin>
+
 

@@ -6,7 +6,6 @@ import { Subscription }     from 'rxjs/Subscription';
 
 import { AppApiService } from './../../services/app-api.service';
 import { TerminalService } from './../../services/terminal.service';
-import { ParserService, CardData } from './../../services/parser.service';
 
 @Component({
   selector: 'app-admin',
@@ -19,20 +18,14 @@ export class AdminComponent implements OnInit {
   private toggle_ticket_system_online:boolean = false;
   //private toggle_subscription: Subscription;
 
-  private take_until:boolean = false;
 
-  private count:number = 0;
 
 
   constructor(private appApiService: AppApiService,
-              private terminalSercie: TerminalService,
-              private parserService: ParserService) { }
+              private terminalSercie: TerminalService) { }
 
   ngOnInit() {
     this.initData();
-    //let teststring:string = 'name:jakob, cardid:12345, nachname: hubert, email:jakob.ellmaier@gmx.at';   
-    let teststring:string = '1233943515451';
-    console.log(this.parserService.parseCardData(teststring));
   }
 
 
@@ -43,7 +36,6 @@ export class AdminComponent implements OnInit {
         this.toggle_terminal = this.appApiService.isTerminal();
         this.toggle_ticket_system_online = this.appApiService.isTicketSystemOnline();
       }
-      this.count ++;
     })
   }
 /*
@@ -80,8 +72,7 @@ export class AdminComponent implements OnInit {
         this.toggle_ticket_system_online = data;
       }
     );
-    //this.terminalSercie.makeTerminal(this.toggle_ticket_system_online);
-    //console.log(this.toggleTerminal);
+
 
   }
 

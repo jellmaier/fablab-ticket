@@ -28,12 +28,21 @@ export class ParserService {
     itemseperator: ':'
   };
 
-  constructor() {
+  constructor() {}
 
+  public parseCardData(input:string):CardData {
+    let result:CardData = {};
 
+    if(input.includes(this.card_data_config.itemseperator)) {
+      this.stringToInterface(result, input);
+    } else {
+      result.cardid = input;
+    }
+
+    return result;
   }
 
-  private setCardData(result: CardData, key: string, value:string):void {
+  private mapCardData(result: CardData, key: string, value:string):void {
     key = key.trim();
     value = value.trim();
 
@@ -48,24 +57,13 @@ export class ParserService {
     }
   }
 
-  public parseCardData(input:string):CardData {
-    let result:CardData = {};
-
-    if(input.includes(this.card_data_config.itemseperator)) {
-      this.stringToInterface(result, input);
-    } else {
-      result.cardid = input;
-    }
-
-    return result;
-  }
 
   private stringToInterface(result:CardData, input:string):void {
 
     input.split(this.card_data_config.elementseperator).forEach(elemet => {
         let elemet_array = elemet.split(this.card_data_config.itemseperator);
         //console.log('key: ' + elemet_array[0] + ', value: ' + elemet_array[1]);
-        this.setCardData(result, elemet_array[0], elemet_array[1]);
+        this.mapCardData(result, elemet_array[0], elemet_array[1]);
         //result[elemet_array[0]] = elemet_array[1];
         //result_array.set(elemet_array[0], elemet_array[1]);
     });

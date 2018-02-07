@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { AppApiService } from 'app/services/app-api.service';
+import { AppApiService } from '../../services/app-api.service';
 
 @Component({
   selector: 'app-login',
@@ -9,7 +9,7 @@ import { AppApiService } from 'app/services/app-api.service';
 })
 export class LoginComponent implements OnInit {
 
-    constructor(private appApiService: AppApiService) {}
+  constructor(private appApiService: AppApiService) {}
 
   ngOnInit() {
   }

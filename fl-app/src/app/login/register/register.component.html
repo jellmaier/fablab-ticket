@@ -1,3 +1,21 @@
 <p>
   register works!
 </p>
+<h1 class="entry-title">Register</h1>
+<p>{{register_message}}</p>
+<form #registerform="ngForm" (ngSubmit)="submitRegister(registerform)" class="login-form" novalidate>
+  <label for="loginInput">Username:</label>  
+  <input [(ngModel)]="user.username" name="login" type="text" id="usernameInput" ngModel><br>
+  <label for="loginInput">Vorname:</label>  
+  <input [(ngModel)]="user.name" name="name" type="text" id="nameInput" ngModel>
+  <label for="loginInput">Nachname:</label>  
+  <input [(ngModel)]="user.surename" name="surename" type="text" id="surenameInput" ngModel><br>
+  <label for="loginInput">Email:</label>  
+  <input [(ngModel)]="user.email" name="email" type="text" id="emailInput" ngModel><br>
+  <label for="passwordInput">Password:</label>
+  <input [(ngModel)]="user.password" name="password" type="password" id="passwordInput" ngModel focus="{{focus_password}}"><br>
+  <button type="submit">Register</button>  
+</form> 
+
+<app-nfclogin [showNfcOverlay]="nfc_overlay" [nfcButtonLabel]="nfc_button_label"
+   (onCardLoaded)="onCardLoaded($event)"> ></app-nfclogin>

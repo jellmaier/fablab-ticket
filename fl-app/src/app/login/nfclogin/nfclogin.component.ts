@@ -1,9 +1,13 @@
 import { Component, OnInit, isDevMode, enableProdMode, EventEmitter, Input, Output} from '@angular/core';
-import { HttpService } from 'app/services/http.service';
-import { AppApiService } from 'app/services/app-api.service';
+import { HttpService } from '../../services/http.service';
+import { ParserService, CardData } from '../../services/parser.service';
+import { AppApiService } from '../../services/app-api.service';
 import { NgForm } from '@angular/forms';
 
- enum NfcMode {
+import { FocusModule } from 'angular2-focus';
+
+
+enum NfcMode {
     login    = 1,
     register = 2,
     setcard  = 3
@@ -17,13 +21,14 @@ import { NgForm } from '@angular/forms';
 export class NfcloginComponent implements OnInit {
 
   @Input()  nfc_message: string;
-  @Output() onCardLoaded = new EventEmitter<string>();
-
-  private showNfcOverlay: boolean = false;
+  @Input()  showNfcOverlay: boolean = false;
+  @Input()  nfcButtonLabel: string;
+  @Output() onCardLoaded = new EventEmitter<CardData>();
 
 
   constructor(private httpService: HttpService,
-              private appApiService: AppApiService) {}
+              private appApiService: AppApiService,
+              private parserService: ParserService) {}
 
   ngOnInit() {
 
@@ -34,6 +39,7 @@ export class NfcloginComponent implements OnInit {
       this.showNfcOverlay = !this.showNfcOverlay;
     else
       this.showNfcOverlay = val;
+
   }
 
 
@@ -41,7 +47,9 @@ export class NfcloginComponent implements OnInit {
   public submitCheckToken(nfc_form: NgForm):void {
     console.log(nfc_form.controls['token'].value);
 
-    this.onCardLoaded.emit(nfc_form.controls['token'].value);
+    let card_data: CardData = this.parserService.parseCardData(nfc_form.controls['token'].value);
+
+    this.onCardLoaded.emit(card_data);
 
     nfc_form.reset();
   } 

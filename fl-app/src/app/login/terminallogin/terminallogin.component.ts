@@ -1,7 +1,11 @@
 import { Component, OnInit, isDevMode, enableProdMode } from '@angular/core';
-import { HttpService } from 'app/services/http.service';
-import { AppApiService } from 'app/services/app-api.service';
+import { Router } from '@angular/router';
+import { HttpService } from '../../services/http.service';
+import { CardData } from '../../services/parser.service';
 import { NgForm } from '@angular/forms';
+
+
+    //let teststring:string = 'name:jakob, cardid:123456, nachname: hubert, email:jakob.ellmaier@gmx.at';   
 
 
 @Component({
@@ -14,7 +18,8 @@ export class TerminalLoginComponent implements OnInit {
   private login_message: string;
 
   constructor(private httpService: HttpService,
-              private appApiService: AppApiService) {}
+              private router: Router
+              ) {}
 
   ngOnInit() {
   }
@@ -41,12 +46,14 @@ export class TerminalLoginComponent implements OnInit {
 
   
   public nfc_login_message: string; // output to child
+  public nfc_button_label: string = 'Login with NFC-Card'; // show / hide Label
 
-  public onCardLoaded(input: string) {
-    console.log('input string' + input);
+  public onCardLoaded(card_data: CardData) {
 
+    console.log('input card' + card_data.cardid);
+    console.log('input name' + card_data.name + ' ' + card_data.surename);
 
-    this.httpService.checkLoginToken(input).subscribe(
+    this.httpService.checkLoginToken(card_data.cardid).subscribe(
       data =>  {
         this.nfc_login_message = "Karte gefunden!";
         this.refresh();

@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { StatisticComponent }   from './statistic/statistic.component';
 import { StartpageComponent }   from './startpage/startpage.component';
 import { LoginComponent }       from './login/login/login.component';
+import { RegisterComponent }       from './login/register/register.component';
 import { TerminalLoginComponent }       from './login/terminallogin/terminallogin.component';
 import { NfcloginComponent } from './login/nfclogin/nfclogin.component';
  
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: 'loginnfc',     canActivate: [ IsNotLoggedInGuard, IsTerminalGuard ], component: NfcloginComponent },
   { path: 'startpage',     canActivate: [ IsLoggedInGuard ], component: StartpageComponent },
   { path: 'login',  canActivate: [ IsNotLoggedInGuard ], component: LoginComponent },
+  { path: 'register',  canActivate: [ IsNotLoggedInGuard ], component: RegisterComponent },
   { path: 'statistic',   canActivate: [ IsAdminGuard ],  component: StatisticComponent }
 ];
 

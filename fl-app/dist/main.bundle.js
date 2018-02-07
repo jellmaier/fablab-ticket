@@ -50,7 +50,6 @@ module.exports = "<h4>Admin Optionen</h4>   <!-- totoranslate -->\n\n<a href=\"{
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_app_api_service__ = __webpack_require__("../../../../../src/app/services/app-api.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_terminal_service__ = __webpack_require__("../../../../../src/app/services/terminal.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_parser_service__ = __webpack_require__("../../../../../src/app/services/parser.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -63,23 +62,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-
 var AdminComponent = (function () {
-    function AdminComponent(appApiService, terminalSercie, parserService) {
+    //private toggle_subscription: Subscription;
+    function AdminComponent(appApiService, terminalSercie) {
         this.appApiService = appApiService;
         this.terminalSercie = terminalSercie;
-        this.parserService = parserService;
         this.toggle_terminal = false;
         this.toggle_ticket_system_online = false;
-        //private toggle_subscription: Subscription;
-        this.take_until = false;
-        this.count = 0;
     }
     AdminComponent.prototype.ngOnInit = function () {
         this.initData();
-        //let teststring:string = 'name:jakob, cardid:12345, nachname: hubert, email:jakob.ellmaier@gmx.at';   
-        var teststring = '1233943515451';
-        console.log(this.parserService.parseCardData(teststring));
     };
     AdminComponent.prototype.initData = function () {
         var _this = this;
@@ -89,7 +81,6 @@ var AdminComponent = (function () {
                 _this.toggle_terminal = _this.appApiService.isTerminal();
                 _this.toggle_ticket_system_online = _this.appApiService.isTicketSystemOnline();
             }
-            _this.count++;
         });
     };
     /*
@@ -122,8 +113,6 @@ var AdminComponent = (function () {
         this.terminalSercie.setTicketSystemOnline(this.toggle_ticket_system_online).subscribe(function (data) {
             _this.toggle_ticket_system_online = data;
         });
-        //this.terminalSercie.makeTerminal(this.toggle_ticket_system_online);
-        //console.log(this.toggleTerminal);
     };
     AdminComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
@@ -132,8 +121,7 @@ var AdminComponent = (function () {
             styles: [__webpack_require__("../../../../../src/app/admin/admin/admin.component.css")]
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_app_api_service__["a" /* AppApiService */],
-            __WEBPACK_IMPORTED_MODULE_2__services_terminal_service__["a" /* TerminalService */],
-            __WEBPACK_IMPORTED_MODULE_3__services_parser_service__["a" /* ParserService */]])
+            __WEBPACK_IMPORTED_MODULE_2__services_terminal_service__["a" /* TerminalService */]])
     ], AdminComponent);
     return AdminComponent;
 }());
@@ -152,9 +140,10 @@ var AdminComponent = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__statistic_statistic_component__ = __webpack_require__("../../../../../src/app/statistic/statistic.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__startpage_startpage_component__ = __webpack_require__("../../../../../src/app/startpage/startpage.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__login_login_login_component__ = __webpack_require__("../../../../../src/app/login/login/login.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__login_terminallogin_terminallogin_component__ = __webpack_require__("../../../../../src/app/login/terminallogin/terminallogin.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__login_nfclogin_nfclogin_component__ = __webpack_require__("../../../../../src/app/login/nfclogin/nfclogin.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_guards_login_guard_service__ = __webpack_require__("../../../../../src/app/services/guards/login-guard.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__login_register_register_component__ = __webpack_require__("../../../../../src/app/login/register/register.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__login_terminallogin_terminallogin_component__ = __webpack_require__("../../../../../src/app/login/terminallogin/terminallogin.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__login_nfclogin_nfclogin_component__ = __webpack_require__("../../../../../src/app/login/nfclogin/nfclogin.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_guards_login_guard_service__ = __webpack_require__("../../../../../src/app/services/guards/login-guard.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -169,14 +158,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
 var routes = [
     { path: '', redirectTo: '/terminallogin', pathMatch: 'full' },
     //{ path: 'detail/:id', component: HeroDetailComponent },
-    { path: 'terminallogin', canActivate: [__WEBPACK_IMPORTED_MODULE_7__services_guards_login_guard_service__["c" /* IsNotLoggedInGuard */], __WEBPACK_IMPORTED_MODULE_7__services_guards_login_guard_service__["d" /* IsTerminalGuard */]], component: __WEBPACK_IMPORTED_MODULE_5__login_terminallogin_terminallogin_component__["a" /* TerminalLoginComponent */] },
-    { path: 'loginnfc', canActivate: [__WEBPACK_IMPORTED_MODULE_7__services_guards_login_guard_service__["c" /* IsNotLoggedInGuard */], __WEBPACK_IMPORTED_MODULE_7__services_guards_login_guard_service__["d" /* IsTerminalGuard */]], component: __WEBPACK_IMPORTED_MODULE_6__login_nfclogin_nfclogin_component__["a" /* NfcloginComponent */] },
-    { path: 'startpage', canActivate: [__WEBPACK_IMPORTED_MODULE_7__services_guards_login_guard_service__["b" /* IsLoggedInGuard */]], component: __WEBPACK_IMPORTED_MODULE_3__startpage_startpage_component__["a" /* StartpageComponent */] },
-    { path: 'login', canActivate: [__WEBPACK_IMPORTED_MODULE_7__services_guards_login_guard_service__["c" /* IsNotLoggedInGuard */]], component: __WEBPACK_IMPORTED_MODULE_4__login_login_login_component__["a" /* LoginComponent */] },
-    { path: 'statistic', canActivate: [__WEBPACK_IMPORTED_MODULE_7__services_guards_login_guard_service__["a" /* IsAdminGuard */]], component: __WEBPACK_IMPORTED_MODULE_2__statistic_statistic_component__["a" /* StatisticComponent */] }
+    { path: 'terminallogin', canActivate: [__WEBPACK_IMPORTED_MODULE_8__services_guards_login_guard_service__["c" /* IsNotLoggedInGuard */], __WEBPACK_IMPORTED_MODULE_8__services_guards_login_guard_service__["d" /* IsTerminalGuard */]], component: __WEBPACK_IMPORTED_MODULE_6__login_terminallogin_terminallogin_component__["a" /* TerminalLoginComponent */] },
+    { path: 'loginnfc', canActivate: [__WEBPACK_IMPORTED_MODULE_8__services_guards_login_guard_service__["c" /* IsNotLoggedInGuard */], __WEBPACK_IMPORTED_MODULE_8__services_guards_login_guard_service__["d" /* IsTerminalGuard */]], component: __WEBPACK_IMPORTED_MODULE_7__login_nfclogin_nfclogin_component__["a" /* NfcloginComponent */] },
+    { path: 'startpage', canActivate: [__WEBPACK_IMPORTED_MODULE_8__services_guards_login_guard_service__["b" /* IsLoggedInGuard */]], component: __WEBPACK_IMPORTED_MODULE_3__startpage_startpage_component__["a" /* StartpageComponent */] },
+    { path: 'login', canActivate: [__WEBPACK_IMPORTED_MODULE_8__services_guards_login_guard_service__["c" /* IsNotLoggedInGuard */]], component: __WEBPACK_IMPORTED_MODULE_4__login_login_login_component__["a" /* LoginComponent */] },
+    { path: 'register', canActivate: [__WEBPACK_IMPORTED_MODULE_8__services_guards_login_guard_service__["c" /* IsNotLoggedInGuard */]], component: __WEBPACK_IMPORTED_MODULE_5__login_register_register_component__["a" /* RegisterComponent */] },
+    { path: 'statistic', canActivate: [__WEBPACK_IMPORTED_MODULE_8__services_guards_login_guard_service__["a" /* IsAdminGuard */]], component: __WEBPACK_IMPORTED_MODULE_2__statistic_statistic_component__["a" /* StatisticComponent */] }
 ];
 var AppRoutingModule = (function () {
     function AppRoutingModule() {
@@ -267,24 +258,26 @@ var AppComponent = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__angular_common__ = __webpack_require__("../../../common/esm5/common.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17_ng2_nvd3__ = __webpack_require__("../../../../ng2-nvd3/build/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17_ng2_nvd3___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_17_ng2_nvd3__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18_d3__ = __webpack_require__("../../../../d3/d3.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18_d3___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_18_d3__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19_nvd3__ = __webpack_require__("../../../../nvd3/build/nv.d3.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19_nvd3___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_19_nvd3__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__login_login_login_component__ = __webpack_require__("../../../../../src/app/login/login/login.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__login_terminallogin_terminallogin_component__ = __webpack_require__("../../../../../src/app/login/terminallogin/terminallogin.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__login_nfclogin_nfclogin_component__ = __webpack_require__("../../../../../src/app/login/nfclogin/nfclogin.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__login_register_register_component__ = __webpack_require__("../../../../../src/app/login/register/register.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__services_guards_login_guard_service__ = __webpack_require__("../../../../../src/app/services/guards/login-guard.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__services_terminal_service__ = __webpack_require__("../../../../../src/app/services/terminal.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__startpage_startpage_component__ = __webpack_require__("../../../../../src/app/startpage/startpage.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__admin_admin_admin_component__ = __webpack_require__("../../../../../src/app/admin/admin/admin.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18_angular2_focus__ = __webpack_require__("../../../../angular2-focus/dist/angular2-focus.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19_d3__ = __webpack_require__("../../../../d3/d3.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19_d3___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_19_d3__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20_nvd3__ = __webpack_require__("../../../../nvd3/build/nv.d3.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20_nvd3___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_20_nvd3__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__login_login_login_component__ = __webpack_require__("../../../../../src/app/login/login/login.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__login_terminallogin_terminallogin_component__ = __webpack_require__("../../../../../src/app/login/terminallogin/terminallogin.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__login_nfclogin_nfclogin_component__ = __webpack_require__("../../../../../src/app/login/nfclogin/nfclogin.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__login_register_register_component__ = __webpack_require__("../../../../../src/app/login/register/register.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__services_guards_login_guard_service__ = __webpack_require__("../../../../../src/app/services/guards/login-guard.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__services_terminal_service__ = __webpack_require__("../../../../../src/app/services/terminal.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__startpage_startpage_component__ = __webpack_require__("../../../../../src/app/startpage/startpage.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__admin_admin_admin_component__ = __webpack_require__("../../../../../src/app/admin/admin/admin.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -326,17 +319,18 @@ var AppModule = (function () {
                 __WEBPACK_IMPORTED_MODULE_4__ngx_progressbar_core__["b" /* NgProgressModule */].forRoot(),
                 __WEBPACK_IMPORTED_MODULE_5__ngx_progressbar_http_client__["a" /* NgProgressHttpClientModule */],
                 __WEBPACK_IMPORTED_MODULE_6__app_routing_module__["a" /* AppRoutingModule */],
-                __WEBPACK_IMPORTED_MODULE_17_ng2_nvd3__["NvD3Module"]
+                __WEBPACK_IMPORTED_MODULE_17_ng2_nvd3__["NvD3Module"],
+                __WEBPACK_IMPORTED_MODULE_18_angular2_focus__["a" /* FocusModule */].forRoot()
             ],
             declarations: [
                 __WEBPACK_IMPORTED_MODULE_7__app_component__["a" /* AppComponent */],
                 __WEBPACK_IMPORTED_MODULE_9__statistic_statistic_component__["a" /* StatisticComponent */],
-                __WEBPACK_IMPORTED_MODULE_20__login_login_login_component__["a" /* LoginComponent */],
-                __WEBPACK_IMPORTED_MODULE_22__login_nfclogin_nfclogin_component__["a" /* NfcloginComponent */],
-                __WEBPACK_IMPORTED_MODULE_23__login_register_register_component__["a" /* RegisterComponent */],
-                __WEBPACK_IMPORTED_MODULE_21__login_terminallogin_terminallogin_component__["a" /* TerminalLoginComponent */],
-                __WEBPACK_IMPORTED_MODULE_26__startpage_startpage_component__["a" /* StartpageComponent */],
-                __WEBPACK_IMPORTED_MODULE_27__admin_admin_admin_component__["a" /* AdminComponent */],
+                __WEBPACK_IMPORTED_MODULE_21__login_login_login_component__["a" /* LoginComponent */],
+                __WEBPACK_IMPORTED_MODULE_23__login_nfclogin_nfclogin_component__["a" /* NfcloginComponent */],
+                __WEBPACK_IMPORTED_MODULE_24__login_register_register_component__["a" /* RegisterComponent */],
+                __WEBPACK_IMPORTED_MODULE_22__login_terminallogin_terminallogin_component__["a" /* TerminalLoginComponent */],
+                __WEBPACK_IMPORTED_MODULE_27__startpage_startpage_component__["a" /* StartpageComponent */],
+                __WEBPACK_IMPORTED_MODULE_28__admin_admin_admin_component__["a" /* AdminComponent */],
             ],
             providers: [
                 __WEBPACK_IMPORTED_MODULE_8__statistic_statistic_service__["a" /* StatisticService */],
@@ -345,11 +339,11 @@ var AppModule = (function () {
                 { provide: __WEBPACK_IMPORTED_MODULE_3__angular_common_http__["a" /* HTTP_INTERCEPTORS */], useClass: __WEBPACK_IMPORTED_MODULE_12__services_http_interceptor_service__["a" /* HttpInterceptorService */], multi: true },
                 __WEBPACK_IMPORTED_MODULE_15__services_app_api_service__["a" /* AppApiService */],
                 __WEBPACK_IMPORTED_MODULE_16__angular_common__["d" /* DatePipe */],
-                __WEBPACK_IMPORTED_MODULE_24__services_guards_login_guard_service__["b" /* IsLoggedInGuard */],
-                __WEBPACK_IMPORTED_MODULE_24__services_guards_login_guard_service__["c" /* IsNotLoggedInGuard */],
-                __WEBPACK_IMPORTED_MODULE_24__services_guards_login_guard_service__["a" /* IsAdminGuard */],
-                __WEBPACK_IMPORTED_MODULE_24__services_guards_login_guard_service__["d" /* IsTerminalGuard */],
-                __WEBPACK_IMPORTED_MODULE_25__services_terminal_service__["a" /* TerminalService */],
+                __WEBPACK_IMPORTED_MODULE_25__services_guards_login_guard_service__["b" /* IsLoggedInGuard */],
+                __WEBPACK_IMPORTED_MODULE_25__services_guards_login_guard_service__["c" /* IsNotLoggedInGuard */],
+                __WEBPACK_IMPORTED_MODULE_25__services_guards_login_guard_service__["a" /* IsAdminGuard */],
+                __WEBPACK_IMPORTED_MODULE_25__services_guards_login_guard_service__["d" /* IsTerminalGuard */],
+                __WEBPACK_IMPORTED_MODULE_26__services_terminal_service__["a" /* TerminalService */],
                 __WEBPACK_IMPORTED_MODULE_13_ngx_cookie_service__["a" /* CookieService */],
                 __WEBPACK_IMPORTED_MODULE_14__services_parser_service__["a" /* ParserService */],
             ],
@@ -394,7 +388,7 @@ module.exports = "<div id=\"message\" class=\"message-box\">\n  <p>Du bist nicht
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_app_services_app_api_service__ = __webpack_require__("../../../../../src/app/services/app-api.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_app_api_service__ = __webpack_require__("../../../../../src/app/services/app-api.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -418,7 +412,7 @@ var LoginComponent = (function () {
             template: __webpack_require__("../../../../../src/app/login/login/login.component.html"),
             styles: [__webpack_require__("../../../../../src/app/login/login/login.component.css")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_app_services_app_api_service__["a" /* AppApiService */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_app_api_service__["a" /* AppApiService */]])
     ], LoginComponent);
     return LoginComponent;
 }());
@@ -448,7 +442,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/login/nfclogin/nfclogin.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<input  style=\"margin-top:10px;\" (click)=\"showHideNfcOverlay()\" type=\"submit\"  value=\"Login with NFC-Card\"/>\n<!-- Overlay -->\n<div class=\"nfc-overlay\" *ngIf=\"showNfcOverlay\">\n  <div class=\"nfc-overlay-content\" *ngIf=\"showNfcOverlay\">\n    <a (click)=\"showHideNfcOverlay(false)\" class=\"close\">x</a>\n    <h2>Jetzt Karte auflegen</h2>     \n      <p>Achtung: Du musst die Karte zuerst zu deinem Account hinzufügen!</p>  <!-- totranslete class=\"nfc-token\"-->\n      <p>{{nfc_message}}</p>\n      <form #f=\"ngForm\" (keyup.enter)=\"submitCheckToken(f)\" class=\"nfc-token\" novalidate>\n        <input name=\"token\" autocomplete=\"off\" ngModel autofocus>\n      </form>\n      <img src=\"{{appApiService.getBlogUrl()}}/wp-content/plugins/fablab-ticket/plugins/nfc-login/tucard.jpg\"/> \n  </div>\n  <div class=\"nfc-overlay-background\" (click)=\"showHideNfcOverlay(false)\"></div>\n</div>"
+module.exports = "<input  style=\"margin-top:10px;\" (click)=\"showHideNfcOverlay()\" type=\"submit\"  value=\"{{nfcButtonLabel}}\"/>\n<!-- Overlay -->\n<div class=\"nfc-overlay\" *ngIf=\"showNfcOverlay\">\n  <div class=\"nfc-overlay-content\" *ngIf=\"showNfcOverlay\">\n    <a (click)=\"showHideNfcOverlay(false)\" class=\"close\">x</a>\n    <h2>Jetzt Karte auflegen</h2>     \n      <p>Achtung: Du musst die Karte zuerst zu deinem Account hinzufügen!</p>  <!-- totranslete class=\"nfc-token\"-->\n      <p>{{nfc_message}}</p>\n      <form #f=\"ngForm\" (keyup.enter)=\"submitCheckToken(f)\" class=\"nfc-token\" novalidate>\n        <input name=\"token\" autocomplete=\"off\" ngModel focus=\"{{showNfcOverlay}}\">\n      </form>\n      <img src=\"{{appApiService.getBlogUrl()}}/wp-content/plugins/fablab-ticket/plugins/nfc-login/tucard.jpg\"/> \n  </div>\n  <div class=\"nfc-overlay-background\" (click)=\"showHideNfcOverlay(false)\"></div>\n</div>"
 
 /***/ }),
 
@@ -458,8 +452,9 @@ module.exports = "<input  style=\"margin-top:10px;\" (click)=\"showHideNfcOverla
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NfcloginComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_app_services_http_service__ = __webpack_require__("../../../../../src/app/services/http.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_app_services_app_api_service__ = __webpack_require__("../../../../../src/app/services/app-api.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_http_service__ = __webpack_require__("../../../../../src/app/services/http.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_parser_service__ = __webpack_require__("../../../../../src/app/services/parser.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_app_api_service__ = __webpack_require__("../../../../../src/app/services/app-api.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -472,6 +467,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var NfcMode;
 (function (NfcMode) {
     NfcMode[NfcMode["login"] = 1] = "login";
@@ -479,11 +475,12 @@ var NfcMode;
     NfcMode[NfcMode["setcard"] = 3] = "setcard";
 })(NfcMode || (NfcMode = {}));
 var NfcloginComponent = (function () {
-    function NfcloginComponent(httpService, appApiService) {
+    function NfcloginComponent(httpService, appApiService, parserService) {
         this.httpService = httpService;
         this.appApiService = appApiService;
-        this.onCardLoaded = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.parserService = parserService;
         this.showNfcOverlay = false;
+        this.onCardLoaded = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
     }
     NfcloginComponent.prototype.ngOnInit = function () {
     };
@@ -496,13 +493,22 @@ var NfcloginComponent = (function () {
     };
     NfcloginComponent.prototype.submitCheckToken = function (nfc_form) {
         console.log(nfc_form.controls['token'].value);
-        this.onCardLoaded.emit(nfc_form.controls['token'].value);
+        var card_data = this.parserService.parseCardData(nfc_form.controls['token'].value);
+        this.onCardLoaded.emit(card_data);
         nfc_form.reset();
     };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
         __metadata("design:type", String)
     ], NfcloginComponent.prototype, "nfc_message", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", Boolean)
+    ], NfcloginComponent.prototype, "showNfcOverlay", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", String)
+    ], NfcloginComponent.prototype, "nfcButtonLabel", void 0);
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
         __metadata("design:type", Object)
@@ -513,8 +519,9 @@ var NfcloginComponent = (function () {
             template: __webpack_require__("../../../../../src/app/login/nfclogin/nfclogin.component.html"),
             styles: [__webpack_require__("../../../../../src/app/login/nfclogin/nfclogin.component.css")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_app_services_http_service__["a" /* HttpService */],
-            __WEBPACK_IMPORTED_MODULE_2_app_services_app_api_service__["a" /* AppApiService */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_http_service__["a" /* HttpService */],
+            __WEBPACK_IMPORTED_MODULE_3__services_app_api_service__["a" /* AppApiService */],
+            __WEBPACK_IMPORTED_MODULE_2__services_parser_service__["a" /* ParserService */]])
     ], NfcloginComponent);
     return NfcloginComponent;
 }());
@@ -544,7 +551,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/login/register/register.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  register works!\n</p>\n"
+module.exports = "<p>\n  register works!\n</p>\n<h1 class=\"entry-title\">Register</h1>\n<p>{{register_message}}</p>\n<form #registerform=\"ngForm\" (ngSubmit)=\"submitRegister(registerform)\" class=\"login-form\" novalidate>\n  <label for=\"loginInput\">Username:</label>  \n  <input [(ngModel)]=\"user.username\" name=\"login\" type=\"text\" id=\"usernameInput\" ngModel><br>\n  <label for=\"loginInput\">Vorname:</label>  \n  <input [(ngModel)]=\"user.name\" name=\"name\" type=\"text\" id=\"nameInput\" ngModel>\n  <label for=\"loginInput\">Nachname:</label>  \n  <input [(ngModel)]=\"user.surename\" name=\"surename\" type=\"text\" id=\"surenameInput\" ngModel><br>\n  <label for=\"loginInput\">Email:</label>  \n  <input [(ngModel)]=\"user.email\" name=\"email\" type=\"text\" id=\"emailInput\" ngModel><br>\n  <label for=\"passwordInput\">Password:</label>\n  <input [(ngModel)]=\"user.password\" name=\"password\" type=\"password\" id=\"passwordInput\" ngModel focus=\"{{focus_password}}\"><br>\n  <button type=\"submit\">Register</button>  \n</form> \n\n<app-nfclogin [showNfcOverlay]=\"nfc_overlay\" [nfcButtonLabel]=\"nfc_button_label\"\n   (onCardLoaded)=\"onCardLoaded($event)\"> ></app-nfclogin>"
 
 /***/ }),
 
@@ -554,6 +561,7 @@ module.exports = "<p>\n  register works!\n</p>\n"
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return RegisterComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_http_service__ = __webpack_require__("../../../../../src/app/services/http.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -564,10 +572,43 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
 var RegisterComponent = (function () {
-    function RegisterComponent() {
+    function RegisterComponent(httpService) {
+        this.httpService = httpService;
+        this.user = {
+            username: '',
+            name: '',
+            surename: '',
+            email: '',
+            password: '',
+            cardid: ''
+        };
+        this.nfc_button_label = 'Register with TU-Card'; // show / hide Label
     }
     RegisterComponent.prototype.ngOnInit = function () {
+    };
+    RegisterComponent.prototype.onCardLoaded = function (card_data) {
+        if (this.user.username == '' && card_data.name != null && card_data.surename != null) {
+            this.user.username = card_data.name.toLowerCase() + card_data.surename.toLowerCase();
+        }
+        if (this.user.name == '') {
+            this.user.name = card_data.name;
+        }
+        if (this.user.surename == '') {
+            this.user.surename = card_data.surename;
+        }
+        if (this.user.email == '') {
+            this.user.email = card_data.email;
+        }
+        if (this.user.cardid == '') {
+            this.user.cardid = card_data.cardid;
+        }
+        this.nfc_overlay = false;
+        this.focus_password = true;
+    };
+    RegisterComponent.prototype.refresh = function () {
+        window.location.reload();
     };
     RegisterComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
@@ -575,7 +616,7 @@ var RegisterComponent = (function () {
             template: __webpack_require__("../../../../../src/app/login/register/register.component.html"),
             styles: [__webpack_require__("../../../../../src/app/login/register/register.component.css")]
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_http_service__["a" /* HttpService */]])
     ], RegisterComponent);
     return RegisterComponent;
 }());
@@ -605,7 +646,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/login/terminallogin/terminallogin.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h1 class=\"entry-title\">Login</h1>\n<p>{{login_message}}</p>\n<form #loginform=\"ngForm\" (ngSubmit)=\"submitLogin(loginform)\" class=\"login-form\" novalidate>\n  <label for=\"loginInput\">Username:</label>  \n  <input name=\"login\" type=\"text\" id=\"loginInput\" ngModel>\n  <label for=\"passwordInput\">Password:</label>\n  <input name=\"password\" type=\"password\" id=\"passwordInput\" ngModel>\n  <button type=\"submit\">Login</button>  \n</form> \n\n<app-nfclogin [nfc_message]=\"nfc_login_message\"\n   (onCardLoaded)=\"onCardLoaded($event)\"> ></app-nfclogin>\n\n"
+module.exports = "<h1 class=\"entry-title\">Login</h1>\n<p>{{login_message}}</p>\n<form #loginform=\"ngForm\" (ngSubmit)=\"submitLogin(loginform)\" class=\"login-form\" novalidate>\n  <label for=\"loginInput\">Username:</label>  \n  <input name=\"login\" type=\"text\" id=\"loginInput\" ngModel>\n  <label for=\"passwordInput\">Password:</label>\n  <input name=\"password\" type=\"password\" id=\"passwordInput\" ngModel>\n  <button type=\"submit\">Login</button>  \n</form> \n\n<app-nfclogin [nfc_message]=\"nfc_login_message\" [nfcButtonLabel]=\"nfc_button_label\"\n   (onCardLoaded)=\"onCardLoaded($event)\"> ></app-nfclogin>\n\n\n"
 
 /***/ }),
 
@@ -615,8 +656,8 @@ module.exports = "<h1 class=\"entry-title\">Login</h1>\n<p>{{login_message}}</p>
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TerminalLoginComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_app_services_http_service__ = __webpack_require__("../../../../../src/app/services/http.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_app_services_app_api_service__ = __webpack_require__("../../../../../src/app/services/app-api.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_http_service__ = __webpack_require__("../../../../../src/app/services/http.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -629,10 +670,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+//let teststring:string = 'name:jakob, cardid:123456, nachname: hubert, email:jakob.ellmaier@gmx.at';   
 var TerminalLoginComponent = (function () {
-    function TerminalLoginComponent(httpService, appApiService) {
+    function TerminalLoginComponent(httpService, router) {
         this.httpService = httpService;
-        this.appApiService = appApiService;
+        this.router = router;
+        this.nfc_button_label = 'Login with NFC-Card'; // show / hide Label
     }
     TerminalLoginComponent.prototype.ngOnInit = function () {
     };
@@ -648,10 +691,11 @@ var TerminalLoginComponent = (function () {
             _this.login_message = err.error.message;
         });
     };
-    TerminalLoginComponent.prototype.onCardLoaded = function (input) {
+    TerminalLoginComponent.prototype.onCardLoaded = function (card_data) {
         var _this = this;
-        console.log('input string' + input);
-        this.httpService.checkLoginToken(input).subscribe(function (data) {
+        console.log('input card' + card_data.cardid);
+        console.log('input name' + card_data.name + ' ' + card_data.surename);
+        this.httpService.checkLoginToken(card_data.cardid).subscribe(function (data) {
             _this.nfc_login_message = "Karte gefunden!";
             _this.refresh();
         }, function (err) {
@@ -668,8 +712,8 @@ var TerminalLoginComponent = (function () {
             template: __webpack_require__("../../../../../src/app/login/terminallogin/terminallogin.component.html"),
             styles: [__webpack_require__("../../../../../src/app/login/terminallogin/terminallogin.component.css")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_app_services_http_service__["a" /* HttpService */],
-            __WEBPACK_IMPORTED_MODULE_2_app_services_app_api_service__["a" /* AppApiService */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__services_http_service__["a" /* HttpService */],
+            __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */]])
     ], TerminalLoginComponent);
     return TerminalLoginComponent;
 }());
@@ -1145,7 +1189,17 @@ var ParserService = (function () {
             itemseperator: ':'
         };
     }
-    ParserService.prototype.setCardData = function (result, key, value) {
+    ParserService.prototype.parseCardData = function (input) {
+        var result = {};
+        if (input.includes(this.card_data_config.itemseperator)) {
+            this.stringToInterface(result, input);
+        }
+        else {
+            result.cardid = input;
+        }
+        return result;
+    };
+    ParserService.prototype.mapCardData = function (result, key, value) {
         key = key.trim();
         value = value.trim();
         if (key == this.card_data_config.cardid) {
@@ -1161,22 +1215,12 @@ var ParserService = (function () {
             result.email = value;
         }
     };
-    ParserService.prototype.parseCardData = function (input) {
-        var result = {};
-        if (input.includes(this.card_data_config.itemseperator)) {
-            this.stringToInterface(result, input);
-        }
-        else {
-            result.cardid = input;
-        }
-        return result;
-    };
     ParserService.prototype.stringToInterface = function (result, input) {
         var _this = this;
         input.split(this.card_data_config.elementseperator).forEach(function (elemet) {
             var elemet_array = elemet.split(_this.card_data_config.itemseperator);
             //console.log('key: ' + elemet_array[0] + ', value: ' + elemet_array[1]);
-            _this.setCardData(result, elemet_array[0], elemet_array[1]);
+            _this.mapCardData(result, elemet_array[0], elemet_array[1]);
             //result[elemet_array[0]] = elemet_array[1];
             //result_array.set(elemet_array[0], elemet_array[1]);
         });

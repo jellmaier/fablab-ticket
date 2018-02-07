@@ -27,6 +27,8 @@ import { DatePipe } from '@angular/common';
 
 import { NvD3Module } from 'ng2-nvd3';
 
+import { FocusModule } from 'angular2-focus';
+
 // d3 and nvd3 should be included somewhere
 import 'd3';
 import 'nvd3';
@@ -49,7 +51,8 @@ import { AdminComponent } from './admin/admin/admin.component';
     NgProgressModule.forRoot(),
     NgProgressHttpClientModule,
     AppRoutingModule,
-    NvD3Module
+    NvD3Module,
+    FocusModule.forRoot()
   ],
   declarations: [
     AppComponent,
