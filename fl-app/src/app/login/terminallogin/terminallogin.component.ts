@@ -27,9 +27,7 @@ export class TerminalLoginComponent implements OnInit {
   public submitLogin(login_form: NgForm) {
     let username: string = login_form.controls['login'].value;
     let password: string = login_form.controls['password'].value;
-    console.log(username);
-    console.log(password);
-
+    
     this.httpService.checkLogin(username, password).subscribe(
       data =>  {
         this.refresh();
@@ -45,7 +43,7 @@ export class TerminalLoginComponent implements OnInit {
   // ----------- for NfcLogin ---------------------------------
 
   
-  public nfc_login_message: string; // output to child
+  public nfc_login_message: string = "Achtung: Du musst die Karte zuerst zu deinem Account hinzufügen!"; // output to child
   public nfc_button_label: string = 'Login with NFC-Card'; // show / hide Label
 
   public onCardLoaded(card_data: CardData) {

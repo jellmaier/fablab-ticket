@@ -222,7 +222,7 @@ var AppComponent = (function () {
     AppComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-root',
-            template: "\n    <ng-progress [color]=\"'#028F76'\" [spinner]=\"false\"></ng-progress>\n    <nav>\n      <a routerLink=\"/terminallogin\" routerLinkActive=\"active\">TerminalLogin</a>\n      <a routerLink=\"/login\" routerLinkActive=\"active\">Login</a>\n      <a routerLink=\"/statistic\" routerLinkActive=\"active\">Statistic</a>\n    </nav>\n    <router-outlet></router-outlet>\n  ",
+            template: "\n    <ng-progress [color]=\"'#028F76'\" [spinner]=\"false\"></ng-progress>\n    <router-outlet></router-outlet>\n  ",
             styles: [__webpack_require__("../../../../../src/app/app.component.css")]
         })
     ], AppComponent);
@@ -442,7 +442,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/login/nfclogin/nfclogin.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<input  style=\"margin-top:10px;\" (click)=\"showHideNfcOverlay()\" type=\"submit\"  value=\"{{nfcButtonLabel}}\"/>\n<!-- Overlay -->\n<div class=\"nfc-overlay\" *ngIf=\"showNfcOverlay\">\n  <div class=\"nfc-overlay-content\" *ngIf=\"showNfcOverlay\">\n    <a (click)=\"showHideNfcOverlay(false)\" class=\"close\">x</a>\n    <h2>Jetzt Karte auflegen</h2>     \n      <p>Achtung: Du musst die Karte zuerst zu deinem Account hinzufügen!</p>  <!-- totranslete class=\"nfc-token\"-->\n      <p>{{nfc_message}}</p>\n      <form #f=\"ngForm\" (keyup.enter)=\"submitCheckToken(f)\" class=\"nfc-token\" novalidate>\n        <input name=\"token\" autocomplete=\"off\" ngModel focus=\"{{showNfcOverlay}}\">\n      </form>\n      <img src=\"{{appApiService.getBlogUrl()}}/wp-content/plugins/fablab-ticket/plugins/nfc-login/tucard.jpg\"/> \n  </div>\n  <div class=\"nfc-overlay-background\" (click)=\"showHideNfcOverlay(false)\"></div>\n</div>"
+module.exports = "<input  style=\"margin-top:10px;\" (click)=\"showHideNfcOverlay()\" type=\"submit\"  value=\"{{nfcButtonLabel}}\"/>\n<!-- Overlay -->\n<div class=\"nfc-overlay\" *ngIf=\"showNfcOverlay\">\n  <div class=\"nfc-overlay-content\" *ngIf=\"showNfcOverlay\">\n    <a (click)=\"showHideNfcOverlay(false)\" class=\"close\">x</a>\n    <h2>Jetzt Karte auflegen</h2>     <!-- totranslate -->\n      <p>{{nfc_message}}</p>\n      <form #f=\"ngForm\" (keyup.enter)=\"submitCheckToken(f)\" class=\"nfc-token\" novalidate>\n        <input name=\"token\" autocomplete=\"off\" ngModel focus=\"{{showNfcOverlay}}\">\n      </form>\n      <img src=\"{{appApiService.getBlogUrl()}}/wp-content/plugins/fablab-ticket/plugins/nfc-login/tucard.jpg\"/> \n  </div>\n  <div class=\"nfc-overlay-background\" (click)=\"showHideNfcOverlay(false)\"></div>\n</div>"
 
 /***/ }),
 
@@ -468,17 +468,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-var NfcMode;
-(function (NfcMode) {
-    NfcMode[NfcMode["login"] = 1] = "login";
-    NfcMode[NfcMode["register"] = 2] = "register";
-    NfcMode[NfcMode["setcard"] = 3] = "setcard";
-})(NfcMode || (NfcMode = {}));
 var NfcloginComponent = (function () {
     function NfcloginComponent(httpService, appApiService, parserService) {
         this.httpService = httpService;
         this.appApiService = appApiService;
         this.parserService = parserService;
+        this.auto_hide = false;
         this.showNfcOverlay = false;
         this.onCardLoaded = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
     }
@@ -492,9 +487,12 @@ var NfcloginComponent = (function () {
             this.showNfcOverlay = val;
     };
     NfcloginComponent.prototype.submitCheckToken = function (nfc_form) {
-        console.log(nfc_form.controls['token'].value);
+        //console.log(nfc_form.controls['token'].value);
         var card_data = this.parserService.parseCardData(nfc_form.controls['token'].value);
         this.onCardLoaded.emit(card_data);
+        if (this.auto_hide) {
+            this.showHideNfcOverlay(false);
+        }
         nfc_form.reset();
     };
     __decorate([
@@ -504,7 +502,7 @@ var NfcloginComponent = (function () {
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
         __metadata("design:type", Boolean)
-    ], NfcloginComponent.prototype, "showNfcOverlay", void 0);
+    ], NfcloginComponent.prototype, "auto_hide", void 0);
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
         __metadata("design:type", String)
@@ -538,7 +536,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, ".ng-valid[required], .ng-valid.required  {\n  border-left: 5px solid #42A948; /* green */\n}\n\n.ng-invalid:not(form)  {\n  border-left: 5px solid #a94442; /* red */\n}", ""]);
 
 // exports
 
@@ -551,7 +549,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/login/register/register.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  register works!\n</p>\n<h1 class=\"entry-title\">Register</h1>\n<p>{{register_message}}</p>\n<form #registerform=\"ngForm\" (ngSubmit)=\"submitRegister(registerform)\" class=\"login-form\" novalidate>\n  <label for=\"loginInput\">Username:</label>  \n  <input [(ngModel)]=\"user.username\" name=\"login\" type=\"text\" id=\"usernameInput\" ngModel><br>\n  <label for=\"loginInput\">Vorname:</label>  \n  <input [(ngModel)]=\"user.name\" name=\"name\" type=\"text\" id=\"nameInput\" ngModel>\n  <label for=\"loginInput\">Nachname:</label>  \n  <input [(ngModel)]=\"user.surename\" name=\"surename\" type=\"text\" id=\"surenameInput\" ngModel><br>\n  <label for=\"loginInput\">Email:</label>  \n  <input [(ngModel)]=\"user.email\" name=\"email\" type=\"text\" id=\"emailInput\" ngModel><br>\n  <label for=\"passwordInput\">Password:</label>\n  <input [(ngModel)]=\"user.password\" name=\"password\" type=\"password\" id=\"passwordInput\" ngModel focus=\"{{focus_password}}\"><br>\n  <button type=\"submit\">Register</button>  \n</form> \n\n<app-nfclogin [showNfcOverlay]=\"nfc_overlay\" [nfcButtonLabel]=\"nfc_button_label\"\n   (onCardLoaded)=\"onCardLoaded($event)\"> ></app-nfclogin>"
+module.exports = "\n<h1 class=\"entry-title\">Register</h1>\n<app-nfclogin [auto_hide]=\"nfc_overlay_autohide\" [nfcButtonLabel]=\"nfc_button_label\" \n   (onCardLoaded)=\"onCardLoaded($event)\"> ></app-nfclogin>\n<br>\n<form #registerform=\"ngForm\" (ngSubmit)=\"submitRegistration()\" class=\"login-form\">\n  <label for=\"loginInput\">Username:</label>  \n  <input [(ngModel)]=\"user.username\" name=\"login\" type=\"text\" id=\"usernameInput\" ngModel required minlength=\"5\"><br>\n  <label for=\"loginInput\">Vorname:</label>  \n  <input [(ngModel)]=\"user.name\" name=\"name\" type=\"text\" id=\"nameInput\" ngModel>\n  <label for=\"loginInput\">Nachname:</label>  \n  <input [(ngModel)]=\"user.surename\" name=\"surename\" type=\"text\" id=\"surenameInput\" ngModel><br>\n  <label for=\"loginInput\">Email:</label>  \n  <input [(ngModel)]=\"user.email\" name=\"email\" type=\"email\" id=\"emailInput\" ngModel email required><br>\n  <label for=\"passwordInput\">Password:</label>\n  <input [(ngModel)]=\"user.password\" name=\"password\" type=\"password\" id=\"passwordInput\" ngModel required minlength=\"8\" focus=\"{{focus_password}}\"><br>\n  <label for=\"cardset\">NFC-Card:</label>\n  <input [(ngModel)]=\"cardset\" name=\"cardset\" type=\"checkbox\" ngModel disabled><br>\n  <p>{{register_message}}</p>\n  <button type=\"submit\" [disabled]=\"registerform.form.invalid\">Registrieren</button>  \n</form> \n\n"
 
 /***/ }),
 
@@ -576,6 +574,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var RegisterComponent = (function () {
     function RegisterComponent(httpService) {
         this.httpService = httpService;
+        this.cardset = false;
+        // ----------- for NfcLogin ---------------------------------
+        this.nfc_overlay_autohide = true; // show / hide overlay
+        this.nfc_button_label = 'Register with TU-Card'; // show / hide Label
+    }
+    RegisterComponent.prototype.ngOnInit = function () {
         this.user = {
             username: '',
             name: '',
@@ -584,27 +588,35 @@ var RegisterComponent = (function () {
             password: '',
             cardid: ''
         };
-        this.nfc_button_label = 'Register with TU-Card'; // show / hide Label
-    }
-    RegisterComponent.prototype.ngOnInit = function () {
     };
+    RegisterComponent.prototype.submitRegistration = function () {
+        var _this = this;
+        this.httpService.registerUser(this.user).subscribe(function (data) {
+            //console.log(data);
+            _this.refresh();
+        }, function (err) {
+            //console.log(err);
+            _this.register_message = err.error.message;
+        });
+    };
+    //public showHideNfcOverlay: Function;
     RegisterComponent.prototype.onCardLoaded = function (card_data) {
         if (this.user.username == '' && card_data.name != null && card_data.surename != null) {
             this.user.username = card_data.name.toLowerCase() + card_data.surename.toLowerCase();
         }
-        if (this.user.name == '') {
+        if (this.user.name == '' && card_data.name != null) {
             this.user.name = card_data.name;
         }
-        if (this.user.surename == '') {
+        if (this.user.surename == '' && card_data.surename != null) {
             this.user.surename = card_data.surename;
         }
-        if (this.user.email == '') {
+        if (this.user.email == '' && card_data.email != null) {
             this.user.email = card_data.email;
         }
-        if (this.user.cardid == '') {
+        if (card_data.cardid != null) {
             this.user.cardid = card_data.cardid;
+            this.cardset = true;
         }
-        this.nfc_overlay = false;
         this.focus_password = true;
     };
     RegisterComponent.prototype.refresh = function () {
@@ -646,7 +658,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/login/terminallogin/terminallogin.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h1 class=\"entry-title\">Login</h1>\n<p>{{login_message}}</p>\n<form #loginform=\"ngForm\" (ngSubmit)=\"submitLogin(loginform)\" class=\"login-form\" novalidate>\n  <label for=\"loginInput\">Username:</label>  \n  <input name=\"login\" type=\"text\" id=\"loginInput\" ngModel>\n  <label for=\"passwordInput\">Password:</label>\n  <input name=\"password\" type=\"password\" id=\"passwordInput\" ngModel>\n  <button type=\"submit\">Login</button>  \n</form> \n\n<app-nfclogin [nfc_message]=\"nfc_login_message\" [nfcButtonLabel]=\"nfc_button_label\"\n   (onCardLoaded)=\"onCardLoaded($event)\"> ></app-nfclogin>\n\n\n"
+module.exports = "<h1 class=\"entry-title\">Login</h1>\n<p>{{login_message}}</p>\n<form #loginform=\"ngForm\" (ngSubmit)=\"submitLogin(loginform)\" class=\"login-form\" novalidate>\n  <label for=\"loginInput\">Username:</label>  \n  <input name=\"login\" type=\"text\" id=\"loginInput\" ngModel>\n  <label for=\"passwordInput\">Password:</label>\n  <input name=\"password\" type=\"password\" id=\"passwordInput\" ngModel>\n  <button type=\"submit\">Login</button>  \n</form>\n<app-nfclogin [nfc_message]=\"nfc_login_message\" [nfcButtonLabel]=\"nfc_button_label\"\n   (onCardLoaded)=\"onCardLoaded($event)\"> ></app-nfclogin>\n<br>\n<a routerLink=\"/register\"><input type=\"submit\"  value=\"Registrieren\"/></a>\n\n\n"
 
 /***/ }),
 
@@ -675,6 +687,8 @@ var TerminalLoginComponent = (function () {
     function TerminalLoginComponent(httpService, router) {
         this.httpService = httpService;
         this.router = router;
+        // ----------- for NfcLogin ---------------------------------
+        this.nfc_login_message = "Achtung: Du musst die Karte zuerst zu deinem Account hinzufügen!"; // output to child
         this.nfc_button_label = 'Login with NFC-Card'; // show / hide Label
     }
     TerminalLoginComponent.prototype.ngOnInit = function () {
@@ -683,8 +697,6 @@ var TerminalLoginComponent = (function () {
         var _this = this;
         var username = login_form.controls['login'].value;
         var password = login_form.controls['password'].value;
-        console.log(username);
-        console.log(password);
         this.httpService.checkLogin(username, password).subscribe(function (data) {
             _this.refresh();
         }, function (err) {
@@ -1054,9 +1066,10 @@ var HttpInterceptorService = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_api_service__ = __webpack_require__("../../../../../src/app/services/app-api.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__ = __webpack_require__("../../../../rxjs/_esm5/Observable.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_observable_throw__ = __webpack_require__("../../../../rxjs/_esm5/add/observable/throw.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_add_operator_catch__ = __webpack_require__("../../../../rxjs/_esm5/add/operator/catch.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ngx_cookie_service__ = __webpack_require__("../../../../ngx-cookie-service/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Observable__ = __webpack_require__("../../../../rxjs/_esm5/Observable.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_add_observable_throw__ = __webpack_require__("../../../../rxjs/_esm5/add/observable/throw.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_catch__ = __webpack_require__("../../../../rxjs/_esm5/add/operator/catch.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1072,11 +1085,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 //import 'rxjs/add/operator/toPromise';
 var HttpService = (function () {
-    function HttpService(http, appApiService) {
+    function HttpService(http, appApiService, cookieService) {
         this.http = http;
         this.appApiService = appApiService;
+        this.cookieService = cookieService;
     }
     //--------  ticket system online  -----------------------
     /*  public checkTicketSystemOnline(): Observable<any> {
@@ -1095,7 +1110,7 @@ var HttpService = (function () {
         var param = online ? 'online' : 'offline';
         return this.http.post(url, {
             params: { set_online: param }
-        }).catch(function (err) { return __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__["a" /* Observable */].throw(_this.handleHttpError(err)); });
+        }).catch(function (err) { return __WEBPACK_IMPORTED_MODULE_4_rxjs_Observable__["a" /* Observable */].throw(_this.handleHttpError(err)); });
     };
     //--------  terminal_token  -----------------------
     /*  public checkTerminalToken(terminal_token: string): Observable<any> {
@@ -1109,7 +1124,22 @@ var HttpService = (function () {
         var _this = this;
         var url = this.appApiService.getPluginApiUrl() + 'get_terminal_token';
         return this.http.get(url)
-            .catch(function (err) { return __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__["a" /* Observable */].throw(_this.handleHttpError(err)); });
+            .catch(function (err) { return __WEBPACK_IMPORTED_MODULE_4_rxjs_Observable__["a" /* Observable */].throw(_this.handleHttpError(err)); });
+    };
+    // -------  Register Methods  ------------------------
+    HttpService.prototype.registerUser = function (registerData) {
+        var url = this.appApiService.getPluginApiUrl() + 'register_user_on_terminal';
+        var terminaltoken = this.cookieService.get('terminal_token'); // should be in terminal service
+        return this.http.post(url, {
+            params: { username: registerData.username,
+                name: registerData.name,
+                surename: registerData.surename,
+                email: registerData.email,
+                password: registerData.password,
+                cardid: registerData.cardid,
+                terminaltoken: terminaltoken
+            }
+        });
     };
     // -------  Login Methods  ------------------------
     HttpService.prototype.checkLogin = function (login, password) {
@@ -1123,7 +1153,7 @@ var HttpService = (function () {
         var url = this.appApiService.getPluginApiUrl() + 'check_nfc_token';
         return this.http.get(url, {
             params: { token: submitcode }
-        }).catch(function (err) { return __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__["a" /* Observable */].throw(_this.handleHttpError(err)); });
+        }).catch(function (err) { return __WEBPACK_IMPORTED_MODULE_4_rxjs_Observable__["a" /* Observable */].throw(_this.handleHttpError(err)); });
     };
     // -------  get Statistic Data  ------------------------
     HttpService.prototype.getStatisticOf = function (start, end) {
@@ -1135,7 +1165,7 @@ var HttpService = (function () {
                 start_date: start,
                 end_date: end
             }
-        }).catch(function (err) { return __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__["a" /* Observable */].throw(_this.handleHttpError(err)); });
+        }).catch(function (err) { return __WEBPACK_IMPORTED_MODULE_4_rxjs_Observable__["a" /* Observable */].throw(_this.handleHttpError(err)); });
     };
     // -------  handleErrors  ------------------------
     HttpService.prototype.handleHttpError = function (err) {
@@ -1153,7 +1183,8 @@ var HttpService = (function () {
     HttpService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_common_http__["b" /* HttpClient */],
-            __WEBPACK_IMPORTED_MODULE_2__app_api_service__["a" /* AppApiService */]])
+            __WEBPACK_IMPORTED_MODULE_2__app_api_service__["a" /* AppApiService */],
+            __WEBPACK_IMPORTED_MODULE_3_ngx_cookie_service__["a" /* CookieService */]])
     ], HttpService);
     return HttpService;
 }());

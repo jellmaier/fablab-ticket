@@ -6,9 +6,10 @@
   <label for="passwordInput">Password:</label>
   <input name="password" type="password" id="passwordInput" ngModel>
   <button type="submit">Login</button>  
-</form> 
-
+</form>
 <app-nfclogin [nfc_message]="nfc_login_message" [nfcButtonLabel]="nfc_button_label"
    (onCardLoaded)="onCardLoaded($event)"> ></app-nfclogin>
+<br>
+<a routerLink="/register"><input type="submit"  value="Registrieren"/></a>
 
 

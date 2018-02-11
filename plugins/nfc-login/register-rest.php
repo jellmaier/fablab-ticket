@@ -5,100 +5,110 @@
 //--------------------------------------------------------
 
 
-  function rest_register_user_on_terminal($data) {
-    if(!isset( $data['username'] ))  
-      return new WP_Error( 'rest_forbidden', __( 'OMG you can not view private data.', 'fablab-ticket' ), array( 'status' => 401 ) );
+function check_nfc_token($token) {
+
+  if(strlen($token) < 6)
+    return 0;
+
+  $token_hash = wp_hash($token);
 
 
-    $username = sanitize_text_field($data['username']);
-    $password = sanitize_text_field($data['password']);
-
-
-
-  }
-  public function do_registration( $username, $email, $values ) {
-
-
-
-
-
-
-
-
-    // Try registration
-    if( self::$random_password ) {
-
-      $do_user = self::random_psw_registration( $username, $email );
-      $pwd     = $do_user['pwd'];
-
-    } else {
-
-      $pwd     = $values['register']['password'];
-      $do_user = wp_create_user( $username, $pwd, $email );
-
-    }
-
-    // Check for errors.
-    $do_user = isset( $do_user['do_user'] ) ? $do_user['do_user'] : $do_user;
-
-    if ( is_wp_error( $do_user ) ) {
-
-      foreach ($do_user->errors as $error) {
-        self::add_error( $error[0] );
+  $args = array(
+      'meta_key'     => 'nfc-token',
+      'meta_value'   => $token_hash,
+    );
+    $user_query = new WP_User_Query($args);
+    // Get the results
+    $users = $user_query->get_results();
+    // Check for results
+    if (count($users) == 1) {
+      foreach ($users as $user)
+      {
+        return $user->ID;
       }
-      return;
+    } else
+      return 0;
+  
+  return 0;
+}
 
-    } else {
 
-      $user_id = $do_user;
+function rest_register_user_on_terminal($data) {
 
-      // Set some meta if available
-      if( array_key_exists( 'first_name' , $values['register'] ) )
-        update_user_meta( $user_id, 'first_name', $values['register']['first_name'] );
-      if( array_key_exists( 'last_name' , $values['register'] ) )
-        update_user_meta( $user_id, 'last_name', $values['register']['last_name'] );
-      if( array_key_exists( 'user_url' , $values['register'] ) )
-        wp_update_user( array( 'ID' => $user_id, 'user_url' => $values['register']['user_url'] ) );
-      if( array_key_exists( 'description' , $values['register'] ) )
-        update_user_meta( $user_id, 'description', $values['register']['description'] );
+  $params = $data->get_params();
 
-      if( self::$random_password ) :
-        self::add_confirmation( apply_filters( 'wpum/form/register/success/message', __( 'Registration complete. We have sent you a confirmation email with your password.', 'wpum' ) ) );
-      else :
-        self::add_confirmation( apply_filters( 'wpum/form/register/success/message', __( 'Registration complete.', 'wpum' ) ) );
-      endif;
+  $terminaltoken = sanitize_text_field($params['params']['terminaltoken']);
 
-      // Add ability to extend registration process.
-      do_action( "wpum/form/register/success" , $user_id, $values );
+  if( $terminaltoken != fablab_get_option('terminal_token'))  
+    return new WP_Error( 'rest_forbidden', __( 'You can only register on the Terminal!.', 'fablab-ticket' ), array( 'status' => 401 ) );
 
-      // Send notification if password is manually added by the user.
-      wpum_new_user_notification( $do_user, $pwd );
+  $username = sanitize_text_field($params['params']['username']);
+  $name = sanitize_text_field($params['params']['name']);
+  $surename = sanitize_text_field($params['params']['surename']);
+  $email = sanitize_text_field($params['params']['email']);
+  $password = sanitize_text_field($params['params']['password']);
+  $cardid = sanitize_text_field($params['params']['cardid']);
 
-      // Needed to close the registration process properly.
-      do_action( "wpum/form/register/done" , $user_id, $values );
+  if( strlen($username) < 5 )
+    return new WP_Error( 'rest_forbidden', __( 'Username to short!', 'fablab-ticket' ), array( 'status' => 401 ) );
 
+  if(strlen($password) < 8)  
+    return new WP_Error( 'rest_forbidden', __( 'Password to short!', 'fablab-ticket' ), array( 'status' => 401 ) );
+
+  if(check_nfc_token($cardid) != 0)
+    return new WP_Error( 'rest_forbidden', __( 'Karte schon vorhanden!', 'fablab-ticket' ), array( 'status' => 401 ) );
+
+
+  $user = wp_create_user( $username, $password, $email );
+
+  
+
+  // Check for errors.
+  //$user = isset( $user['do_user'] ) ? $user['do_user'] : $user;
+
+  if ( is_wp_error( $user ) ) {
+    return $user; // return error
+  } else {
+
+    $user_id = $user;
+    
+    if( !empty( $name ) )
+      update_user_meta( $user_id, 'first_name', $name );
+
+    if( !empty( $surename ) )
+      update_user_meta( $user_id, 'last_name', $surename);
+
+    if(strlen($cardid) >= 6) {
+      $token_hash = wp_hash($cardid);
+      update_user_meta( $user_id, 'nfc-token', $token_hash );
     }
 
+
+    // Send notification if password is manually added by the user.
+    wpum_new_user_notification( $user_id, $password );
+
+
+    //login user
+    $user_login = get_user_by( 'id', $user_id ); 
+    if( $user_login ) {
+        wp_set_current_user( $user_id, $user_login->user_login );
+        wp_set_auth_cookie( $user_id );
+        do_action( 'wp_login', $user_login->user_login );
+    }
+
+    return new WP_REST_Response( null, 200 );
   }
 
-  /**
-   * Generate random password and register user
-   *
-   * @since 1.0.3
-   * @param  string $username username
-   * @param  string $email    email
-   * @return mixed
-   */
-  public static function random_psw_registration( $username, $email ) {
+}
 
-    // Generate something random for a password.
-    $pwd = wp_generate_password( 20, false );
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'sharepl/v1', '/register_user_on_terminal', array(
+    'methods' => 'POST',
+    'callback' => 'rest_register_user_on_terminal',
+    //'sanitize_callback' => 'rest_data_arg_sanitize_callback'
+  ) );
+} );
 
-    $do_user = wp_create_user( $username, $pwd, $email );
-
-    return array( 'do_user' => $do_user, 'pwd' => $pwd );
-
-  }
 
 
 ?>

@@ -2,7 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { AppApiService, AppApiResponse } from './app-api.service';
 
+import { CookieService } from 'ngx-cookie-service';
+
 import { DeviceStatistics } from 'app/statistic/statistic.service'
+import { UserRegister } from '../login/register/register.component'
 
 import { Observable }     from 'rxjs/Observable';
 import 'rxjs/add/observable/throw';
@@ -13,7 +16,8 @@ import 'rxjs/add/operator/catch';
 export class HttpService {
   
   constructor( private http: HttpClient, 
-               private appApiService: AppApiService ) {}
+               private appApiService: AppApiService,
+               private cookieService: CookieService ) {}
 
 
 
@@ -57,6 +61,27 @@ export class HttpService {
           .catch((err: HttpErrorResponse) => Observable.throw(this.handleHttpError(err)));
   }
 
+
+  // -------  Register Methods  ------------------------
+
+  public registerUser(registerData: UserRegister): Observable<any> {
+
+    let url:string = this.appApiService.getPluginApiUrl() + 'register_user_on_terminal';
+
+    let terminaltoken:string = this.cookieService.get('terminal_token'); // should be in terminal service
+
+    return this.http.post<any>(url, {
+        params: { username: registerData.username,
+                  name: registerData.name,
+                  surename: registerData.surename,
+                  email: registerData.email,
+                  password: registerData.password,
+                  cardid: registerData.cardid,
+                  terminaltoken: terminaltoken
+                 }
+      });
+
+  }
 
   // -------  Login Methods  ------------------------
 
