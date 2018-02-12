@@ -90,7 +90,7 @@ export class HttpService {
 
     let url = this.appApiService.getPluginApiUrl() + 'check_user_login';
 
-    return this.http.get<any>(url, {
+    return this.http.post<any>(url, {
         params: { username: login, password: password }
       });//.catch((err: HttpErrorResponse) => Observable.throw(this.handleHttpError(err)));
 

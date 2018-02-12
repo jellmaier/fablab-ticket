@@ -3,20 +3,37 @@
 <app-nfclogin [auto_hide]="nfc_overlay_autohide" [nfcButtonLabel]="nfc_button_label" 
    (onCardLoaded)="onCardLoaded($event)"> ></app-nfclogin>
 <br>
-<form #registerform="ngForm" (ngSubmit)="submitRegistration()" class="login-form">
-  <label for="loginInput">Username:</label>  
-  <input [(ngModel)]="user.username" name="login" type="text" id="usernameInput" ngModel required minlength="5"><br>
-  <label for="loginInput">Vorname:</label>  
-  <input [(ngModel)]="user.name" name="name" type="text" id="nameInput" ngModel>
-  <label for="loginInput">Nachname:</label>  
-  <input [(ngModel)]="user.surename" name="surename" type="text" id="surenameInput" ngModel><br>
-  <label for="loginInput">Email:</label>  
-  <input [(ngModel)]="user.email" name="email" type="email" id="emailInput" ngModel email required><br>
-  <label for="passwordInput">Password:</label>
-  <input [(ngModel)]="user.password" name="password" type="password" id="passwordInput" ngModel required minlength="8" focus="{{focus_password}}"><br>
-  <label for="cardset">NFC-Card:</label>
-  <input [(ngModel)]="cardset" name="cardset" type="checkbox" ngModel disabled><br>
+<form #registerform="ngForm" (ngSubmit)="submitRegistration()" class="box">
+  <p>
+    <!--label for="loginInput">Username:</label-->  
+    <input [(ngModel)]="user.username" name="login" type="text" id="usernameInput" 
+    ngModel required  minlength="5"
+    placeholder="Username" focus="true">
+  </p>  
+  <p> 
+    <input [(ngModel)]="user.name" name="name" type="text" id="nameInput" ngModel placeholder="Vorname" /><br>
+    <input [(ngModel)]="user.surename" name="surename" type="text" id="surenameInput" ngModel placeholder="Nachname" />
+  </p>
+  <p >
+    <!--label for="emailInput">Email:</label-->  
+    <input [(ngModel)]="user.email" name="email" type="email" id="emailInput" ngModel placeholder="E-Mail" email required>
+  </p>
+  <p>
+    <!--label for="passwordInput">Password:</label-->
+    <input [(ngModel)]="user.password" name="password" type="password" id="passwordInput" 
+              ngModel required minlength="8"  
+              placeholder="Password" focus="{{focus_password}}">
+  </p>
+  <p class="checkbox-field">
+    <label for="cardset">NFC-Card:</label>
+    <input [(ngModel)]="cardset" name="cardset" type="checkbox" id="cardset" ngModel disabled>
+  </p>
   <p>{{register_message}}</p>
   <button type="submit" [disabled]="registerform.form.invalid">Registrieren</button>  
 </form> 
+
+<p>
+  Du bist schon registriert? <a routerLink="/terminallogin">Hier einloggen</a><br>
+  <a href="../password-reset/">Passwort vergessen? </a>
+</p>
 

@@ -1,102 +1,60 @@
 
-.login-form label, .login-form input {
-    display: block;
+
+
+/*--------------------
+Form
+---------------------*/
+
+label {
+  margin-bottom: 2px;
 }
 
-/* ------------------------------------------------------------ */
-/* overlay style */
-/* ------------------------------------------------------------ */
-
-.nfc-token {
-    opacity: 0; 
-    position: absolute;
+label.checkbox {
+  padding: 5px 20px;
+  line-height: 1.7;
 }
 
-.nfc-overlay p {
-    margin: 0;
-    margin-bottom: 6px;
-    color: #028F76;
+form {
+  margin-top: 20px;
 }
 
-
-.nfc-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    right: 0;
-    top: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
-    z-index: 10012;
+form p {
+  margin-bottom: 10px;
 }
 
-.nfc-overlay-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
-    right: 0;
-    top: 0;
-    z-index: 10010;
+input[type=text],
+input[type=email],
+input[type=password] { 
+  width: 300px;
+  height: 32px;
+  padding: 0px 10px;
+  margin-bottom: 10px;
+  background-color: rgba(0,0,0,0.03);
+  border: none;
+  display: inline;
+  color: #303030;
+  font-size: 16px;
+  font-weight: 400;
 }
 
-/* NFC Overlay */
-
-.nfc-overlay-content {
-    width: 70%;
-    position: relative;
-    margin: 150px auto; 
-    padding: 30px 30px 30px;
-    background-color: #fdfdfd;
-    border: 7px solid #ccc;
-    border-radius: 8px;
-    z-index: 10013; /* 1px higher than the overlay layer */
-}
-
-@media all and (min-width: 800px) {
-    .nfc-overlay-content {
-        width: 650px;
-    }
-}
-
-@media all and (max-height: 800px) {
-    .nfc-overlay-content {
-        margin: 50px auto;
-    }
-}
-
-.nfc-overlay-content .close {
-    margin: -20px -14px;
-    float: right;
-    text-align: right;
-    font-size: 18px;
-    font-weight: bold;
-    line-height: 1;
-    opacity: 0.3;
-    text-decoration: none;  
-}
-.nfc-overlay-content .close:hover {
-    cursor: pointer;
-    opacity: 0.5;
-}
-
-.nfc-overlay-content h2 {
-    margin-top: 6px;
-    margin-bottom: 14px;
-    font-weight: bold;
-    letter-spacing: 0.5px;
-}
-
-.nfc-overlay-content img{
-    max-width: 100%;
-    height: auto;
-    vertical-align: middle;
-    border: 0;
+ ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    opacity: 0.7; /* Firefox */
 }
 
 
+input[type=text]:focus,
+input[type=email]:focus,
+input[type=password]:focus {
+  background-color: rgba(0,0,0,0.05);
+  /*background-color: rgba(2,143,118,0.15);*/
+  outline: none;
+  box-shadow: none;
+}
 
+.ng-valid[required], .ng-valid.required  {
+  border-left: 5px solid #42A948; /* green */
+}
+
+.ng-invalid:not(form)  {
+  border-left: 5px solid #a94442; /* red */
+}
