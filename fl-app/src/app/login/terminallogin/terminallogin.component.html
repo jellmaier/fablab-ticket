@@ -1,15 +1,19 @@
 <h1 class="entry-title">Login</h1>
-<p>{{login_message}}</p>
-<form #loginform="ngForm" (ngSubmit)="submitLogin(loginform)" class="login-form" novalidate>
-  <label for="loginInput">Username:</label>  
-  <input name="login" type="text" id="loginInput" ngModel>
-  <label for="passwordInput">Password:</label>
-  <input name="password" type="password" id="passwordInput" ngModel>
-  <button type="submit">Login</button>  
-</form>
+<br>
 <app-nfclogin [nfc_message]="nfc_login_message" [nfcButtonLabel]="nfc_button_label"
    (onCardLoaded)="onCardLoaded($event)"> ></app-nfclogin>
 <br>
-<a routerLink="/register"><input type="submit"  value="Registrieren"/></a>
+<form #loginform="ngForm" (ngSubmit)="submitLogin(loginform)" novalidate>
+  <input name="login" type="text" id="loginInput" ngModel placeholder="Username" focus="true"><br>
+  <input name="password" type="password" id="passwordInput" ngModel placeholder="Password"><br>
+  <p>{{login_message}}</p>
+  <button type="submit">Login</button>  
+</form>
+
+<br>
+<p>
+  Du hast noch keinen Account? <a routerLink="/register">Registrieren</a><br>
+  <a href="../password-reset/">Passwort vergessen? </a>
+</p>
 
 

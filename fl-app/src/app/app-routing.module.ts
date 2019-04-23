@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { StatisticComponent }   from './statistic/statistic.component';
 import { StartpageComponent }   from './startpage/startpage.component';
+import { AdminComponent }   from './admin/admin/admin.component';
 import { LoginComponent }       from './login/login/login.component';
 import { RegisterComponent }       from './login/register/register.component';
 import { TerminalLoginComponent }       from './login/terminallogin/terminallogin.component';
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'startpage',     canActivate: [ IsLoggedInGuard ], component: StartpageComponent },
   { path: 'login',  canActivate: [ IsNotLoggedInGuard ], component: LoginComponent },
   { path: 'register',  canActivate: [ IsNotLoggedInGuard ], component: RegisterComponent },
+  { path: 'admin',   canActivate: [ IsAdminGuard ],  component: AdminComponent },
   { path: 'statistic',   canActivate: [ IsAdminGuard ],  component: StatisticComponent }
 ];
 

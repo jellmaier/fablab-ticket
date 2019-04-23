@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgClass } from '@angular/common';
 
-import { Subscription }     from 'rxjs/Subscription';
+import { Subscription }     from 'rxjs';
 
 
 import { AppApiService } from './../../services/app-api.service';

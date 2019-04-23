@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { HttpService } from '../../services/http.service';
 import { CardData } from '../../services/parser.service';
 import { NgForm } from '@angular/forms';
+import { FocusModule } from 'angular2-focus';
 
 
     //let teststring:string = 'name:jakob, cardid:123456, nachname: hubert, email:jakob.ellmaier@gmx.at';   

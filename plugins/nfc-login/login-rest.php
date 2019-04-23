@@ -44,6 +44,9 @@ function set_user_login_fail($user_id) {
 
 function rest_check_user_login($data) {
 
+  $params = $data->get_params();
+  $data = isset( $params['params'] ) ? $params['params'] : $data;
+
   if(!isset( $data['username'] ))  
     return new WP_Error( 'rest_forbidden', __( 'OMG you can not view private data.', 'fablab-ticket' ), array( 'status' => 401 ) );
 
@@ -53,31 +56,35 @@ function rest_check_user_login($data) {
   $user = get_user_by( 'login', $username );
   $user_id = $user->ID;
 
+
   $logins_left = check_user_logins_left($user_id);
   if($logins_left == 0) {
     $time_left = calc_user_next_login($user_id);
     return new WP_Error( 'rest_forbidden', sprintf(__( 'Zu viele Versuche! Nächster Login in %d Minuten möglich.' ), $time_left), array( 'status' => 401 ) );
   }
 
-  //from https://codex.wordpress.org/Function_Reference/wp_signon
-  $creds = array();
-  $creds['user_login'] = sanitize_text_field($data['username']);
-  $creds['user_password'] = sanitize_text_field($data['password']);
-  $creds['remember'] = false;
-  $user_response = wp_signon( $creds );
-  if ( is_wp_error($user_response) ) {
+
+  
+  if (wp_check_password($password, $user->user_pass, $user->ID)) {
+    //from https://codex.wordpress.org/Function_Reference/wp_signon
+    $creds = array();
+    $creds['user_login'] = $username;
+    $creds['user_password'] = $password;
+    $creds['remember'] = false;
+    $user_response = wp_signon( $creds, false );
+  } else {
     set_user_login_fail($user_id);
     //return intval(get_user_meta( $user_id, 'login-fails', true ));
-    return new WP_Error( 'no_user_found', sprintf(__( 'Login fehlgeschlagen, du hast noch %d versuche übrig.', 'fablab-ticket' ), $logins_left), array( 'status' => 401 ) );
+    return new WP_Error( 'no_user_found', 
+      sprintf(__( 'Login fehlgeschlagen, du hast noch %d versuche übrig.', 'fablab-ticket' ), $logins_left), array( 'status' => 401 ) );
   }
-
 
   return new WP_REST_Response( null, 200 );
 }
 
 add_action( 'rest_api_init', function () {
   register_rest_route( 'sharepl/v1', '/check_user_login', array(
-    'methods' => 'GET',
+    'methods' => 'POST',
     'callback' => 'rest_check_user_login',
     'sanitize_callback' => 'rest_data_arg_sanitize_callback',
   ) );

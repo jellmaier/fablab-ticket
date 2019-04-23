@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
 import { AppApiService, AppApiResponse } from './app-api.service';
 
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 
 
 @Injectable()

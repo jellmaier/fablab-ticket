@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpService } from 'app/services/http.service';
 
 
-import { Observable }     from 'rxjs/Observable';
+import { Observable }     from 'rxjs';
 
 export interface Week {
   monday?: Date

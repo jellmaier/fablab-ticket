@@ -3,7 +3,7 @@ import { CookieService } from 'ngx-cookie-service';
 
 import { HttpService } from './http.service';
 
-import { Observable }     from 'rxjs/Observable';
+import { Observable }     from 'rxjs';
 
 
 

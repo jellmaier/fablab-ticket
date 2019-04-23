@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../../services/http.service';
 import { CardData } from '../../services/parser.service';
 import { NgForm } from '@angular/forms';
-
 import { FocusModule } from 'angular2-focus';
 
 
@@ -28,7 +27,7 @@ export class RegisterComponent implements OnInit {
   private register_message:string;
   private user: UserRegister;
   private cardset: boolean = false;
-  private focus_password: true;
+  private focus_password:boolean;
 
   constructor(private httpService: HttpService) { }
 

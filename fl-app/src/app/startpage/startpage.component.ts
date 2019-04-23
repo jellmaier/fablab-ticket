@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Subscription }     from 'rxjs/Subscription';
+import { Subscription }     from 'rxjs';
 
 import { AppApiService } from './../services/app-api.service';
 
@@ -17,7 +17,6 @@ export class StartpageComponent implements OnInit {
   private is_admin_subscription: Subscription;
 
   ngOnInit() {
-    //window.location.href = '../rest-test';
     this.loadAdminInfo();
     
   }
@@ -27,9 +26,16 @@ export class StartpageComponent implements OnInit {
       if (loaded == true) {
         //console.log('Admin: ' + this.appApiService.isAdmin());
         this.is_admin = this.appApiService.isAdmin();
+        if (this.is_admin == false) {
+          this.gotoAngular1();
+        }
         //this.is_admin_subscription.unsubscribe();
       }
     })
+  }
+
+  private gotoAngular1() {
+    window.location.href = '../mein-ticket';
   }
 
   ngOnDestroy() {

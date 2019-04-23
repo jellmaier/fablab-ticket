@@ -1,3 +1,7 @@
+
+import {throwError as observableThrowError,  Observable } from 'rxjs';
+
+import {catchError} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { AppApiService, AppApiResponse } from './app-api.service';
@@ -7,9 +11,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { DeviceStatistics } from 'app/statistic/statistic.service'
 import { UserRegister } from '../login/register/register.component'
 
-import { Observable }     from 'rxjs/Observable';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/catch';
+
 //import 'rxjs/add/operator/toPromise';
 
 @Injectable()
@@ -40,7 +42,7 @@ export class HttpService {
 
     return this.http.post<boolean>(url, {
         params: { set_online: param }
-      }).catch((err: HttpErrorResponse) => Observable.throw(this.handleHttpError(err)));
+      }).pipe(catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
   }
 
 
@@ -57,8 +59,8 @@ export class HttpService {
   public getTerminalToken(): Observable<any> {
     let url = this.appApiService.getPluginApiUrl() + 'get_terminal_token';
 
-    return this.http.get<any>(url)
-          .catch((err: HttpErrorResponse) => Observable.throw(this.handleHttpError(err)));
+    return this.http.get<any>(url).pipe(
+          catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
   }
 
 
@@ -90,7 +92,7 @@ export class HttpService {
 
     let url = this.appApiService.getPluginApiUrl() + 'check_user_login';
 
-    return this.http.get<any>(url, {
+    return this.http.post<any>(url, {
         params: { username: login, password: password }
       });//.catch((err: HttpErrorResponse) => Observable.throw(this.handleHttpError(err)));
 
@@ -102,7 +104,7 @@ export class HttpService {
 
     return this.http.get<any>(url, {
         params: { token: submitcode }
-      }).catch((err: HttpErrorResponse) => Observable.throw(this.handleHttpError(err)));
+      }).pipe(catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
 
   }
   // -------  get Statistic Data  ------------------------
@@ -117,7 +119,7 @@ export class HttpService {
           start_date: start, 
           end_date: end
         }
-      }).catch((err: HttpErrorResponse) => Observable.throw(this.handleHttpError(err)));
+      }).pipe(catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
 
   }
 

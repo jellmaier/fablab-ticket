@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject }     from 'rxjs/BehaviorSubject';
+import { BehaviorSubject }     from 'rxjs';
 
 import * as AppApiDataDev from "./AppAPI.json";
 import * as UserDataDev from "./UserData.json";

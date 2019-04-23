@@ -1,7 +1,7 @@
 import { Injectable }     from '@angular/core';
 import { CanActivate, Router }    from '@angular/router';
-import { Observable }     from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
+import { Observable }     from 'rxjs';
+
 
 import { AppApiService } from './../app-api.service';
 import { TerminalService } from './../terminal.service';

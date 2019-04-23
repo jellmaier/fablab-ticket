@@ -139,11 +139,12 @@ var AdminComponent = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__statistic_statistic_component__ = __webpack_require__("../../../../../src/app/statistic/statistic.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__startpage_startpage_component__ = __webpack_require__("../../../../../src/app/startpage/startpage.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__login_login_login_component__ = __webpack_require__("../../../../../src/app/login/login/login.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__login_register_register_component__ = __webpack_require__("../../../../../src/app/login/register/register.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__login_terminallogin_terminallogin_component__ = __webpack_require__("../../../../../src/app/login/terminallogin/terminallogin.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__login_nfclogin_nfclogin_component__ = __webpack_require__("../../../../../src/app/login/nfclogin/nfclogin.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_guards_login_guard_service__ = __webpack_require__("../../../../../src/app/services/guards/login-guard.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__admin_admin_admin_component__ = __webpack_require__("../../../../../src/app/admin/admin/admin.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__login_login_login_component__ = __webpack_require__("../../../../../src/app/login/login/login.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__login_register_register_component__ = __webpack_require__("../../../../../src/app/login/register/register.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__login_terminallogin_terminallogin_component__ = __webpack_require__("../../../../../src/app/login/terminallogin/terminallogin.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__login_nfclogin_nfclogin_component__ = __webpack_require__("../../../../../src/app/login/nfclogin/nfclogin.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__services_guards_login_guard_service__ = __webpack_require__("../../../../../src/app/services/guards/login-guard.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -159,15 +160,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
 var routes = [
     { path: '', redirectTo: '/terminallogin', pathMatch: 'full' },
     //{ path: 'detail/:id', component: HeroDetailComponent },
-    { path: 'terminallogin', canActivate: [__WEBPACK_IMPORTED_MODULE_8__services_guards_login_guard_service__["c" /* IsNotLoggedInGuard */], __WEBPACK_IMPORTED_MODULE_8__services_guards_login_guard_service__["d" /* IsTerminalGuard */]], component: __WEBPACK_IMPORTED_MODULE_6__login_terminallogin_terminallogin_component__["a" /* TerminalLoginComponent */] },
-    { path: 'loginnfc', canActivate: [__WEBPACK_IMPORTED_MODULE_8__services_guards_login_guard_service__["c" /* IsNotLoggedInGuard */], __WEBPACK_IMPORTED_MODULE_8__services_guards_login_guard_service__["d" /* IsTerminalGuard */]], component: __WEBPACK_IMPORTED_MODULE_7__login_nfclogin_nfclogin_component__["a" /* NfcloginComponent */] },
-    { path: 'startpage', canActivate: [__WEBPACK_IMPORTED_MODULE_8__services_guards_login_guard_service__["b" /* IsLoggedInGuard */]], component: __WEBPACK_IMPORTED_MODULE_3__startpage_startpage_component__["a" /* StartpageComponent */] },
-    { path: 'login', canActivate: [__WEBPACK_IMPORTED_MODULE_8__services_guards_login_guard_service__["c" /* IsNotLoggedInGuard */]], component: __WEBPACK_IMPORTED_MODULE_4__login_login_login_component__["a" /* LoginComponent */] },
-    { path: 'register', canActivate: [__WEBPACK_IMPORTED_MODULE_8__services_guards_login_guard_service__["c" /* IsNotLoggedInGuard */]], component: __WEBPACK_IMPORTED_MODULE_5__login_register_register_component__["a" /* RegisterComponent */] },
-    { path: 'statistic', canActivate: [__WEBPACK_IMPORTED_MODULE_8__services_guards_login_guard_service__["a" /* IsAdminGuard */]], component: __WEBPACK_IMPORTED_MODULE_2__statistic_statistic_component__["a" /* StatisticComponent */] }
+    { path: 'terminallogin', canActivate: [__WEBPACK_IMPORTED_MODULE_9__services_guards_login_guard_service__["c" /* IsNotLoggedInGuard */], __WEBPACK_IMPORTED_MODULE_9__services_guards_login_guard_service__["d" /* IsTerminalGuard */]], component: __WEBPACK_IMPORTED_MODULE_7__login_terminallogin_terminallogin_component__["a" /* TerminalLoginComponent */] },
+    { path: 'loginnfc', canActivate: [__WEBPACK_IMPORTED_MODULE_9__services_guards_login_guard_service__["c" /* IsNotLoggedInGuard */], __WEBPACK_IMPORTED_MODULE_9__services_guards_login_guard_service__["d" /* IsTerminalGuard */]], component: __WEBPACK_IMPORTED_MODULE_8__login_nfclogin_nfclogin_component__["a" /* NfcloginComponent */] },
+    { path: 'startpage', canActivate: [__WEBPACK_IMPORTED_MODULE_9__services_guards_login_guard_service__["b" /* IsLoggedInGuard */]], component: __WEBPACK_IMPORTED_MODULE_3__startpage_startpage_component__["a" /* StartpageComponent */] },
+    { path: 'login', canActivate: [__WEBPACK_IMPORTED_MODULE_9__services_guards_login_guard_service__["c" /* IsNotLoggedInGuard */]], component: __WEBPACK_IMPORTED_MODULE_5__login_login_login_component__["a" /* LoginComponent */] },
+    { path: 'register', canActivate: [__WEBPACK_IMPORTED_MODULE_9__services_guards_login_guard_service__["c" /* IsNotLoggedInGuard */]], component: __WEBPACK_IMPORTED_MODULE_6__login_register_register_component__["a" /* RegisterComponent */] },
+    { path: 'admin', canActivate: [__WEBPACK_IMPORTED_MODULE_9__services_guards_login_guard_service__["a" /* IsAdminGuard */]], component: __WEBPACK_IMPORTED_MODULE_4__admin_admin_admin_component__["a" /* AdminComponent */] },
+    { path: 'statistic', canActivate: [__WEBPACK_IMPORTED_MODULE_9__services_guards_login_guard_service__["a" /* IsAdminGuard */]], component: __WEBPACK_IMPORTED_MODULE_2__statistic_statistic_component__["a" /* StatisticComponent */] }
 ];
 var AppRoutingModule = (function () {
     function AppRoutingModule() {
@@ -378,7 +381,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/login/login/login.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"message\" class=\"message-box\">\n  <p>Du bist nicht eingeloggt!</p>\n  <a href=\"{{appApiService.getBlogUrl()}}/login?redirect_to=' . get_permalink($post->ID) . '\" style=\"margin-right:20px;\">\n  <input type=\"submit\"  value=\"Login\"/></a>\n  <a href=\"{{appApiService.getBlogUrl()}}/wp-login.php?action=register\">\n  <input type=\"submit\"  value=\"Register\"/></a>\n</div>"
+module.exports = "<div id=\"message\" class=\"message-box\">\n  <p>Du bist nicht eingeloggt!</p>\n  <a href=\"{{appApiService.getBlogUrl()}}/login?redirect_to=http://fablab.tugraz.at/mein-ticket/'\" style=\"margin-right:20px;\">\n  <input type=\"submit\"  value=\"Login\"/></a>\n  <a href=\"{{appApiService.getBlogUrl()}}/wp-login.php?action=register\">\n  <input type=\"submit\"  value=\"Register\"/></a>\n</div>\n"
 
 /***/ }),
 
@@ -429,7 +432,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "\n.login-form label, .login-form input {\n    display: block;\n}\n\n/* ------------------------------------------------------------ */\n/* overlay style */\n/* ------------------------------------------------------------ */\n\n.nfc-token {\n    opacity: 0; \n    position: absolute;\n}\n\n.nfc-overlay p {\n    margin: 0;\n    margin-bottom: 6px;\n    color: #028F76;\n}\n\n\n.nfc-overlay {\n    position: fixed;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    right: 0;\n    top: 0;\n    overflow-x: hidden;\n    overflow-y: auto;\n    z-index: 10012;\n}\n\n.nfc-overlay-background {\n    position: fixed;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    background-color: rgba(0,0,0,0.5);\n    right: 0;\n    top: 0;\n    z-index: 10010;\n}\n\n/* NFC Overlay */\n\n.nfc-overlay-content {\n    width: 70%;\n    position: relative;\n    margin: 150px auto; \n    padding: 30px 30px 30px;\n    background-color: #fdfdfd;\n    border: 7px solid #ccc;\n    border-radius: 8px;\n    z-index: 10013; /* 1px higher than the overlay layer */\n}\n\n@media all and (min-width: 800px) {\n    .nfc-overlay-content {\n        width: 650px;\n    }\n}\n\n@media all and (max-height: 800px) {\n    .nfc-overlay-content {\n        margin: 50px auto;\n    }\n}\n\n.nfc-overlay-content .close {\n    margin: -20px -14px;\n    float: right;\n    text-align: right;\n    font-size: 18px;\n    font-weight: bold;\n    line-height: 1;\n    opacity: 0.3;\n    text-decoration: none;  \n}\n.nfc-overlay-content .close:hover {\n    cursor: pointer;\n    opacity: 0.5;\n}\n\n.nfc-overlay-content h2 {\n    margin-top: 6px;\n    margin-bottom: 14px;\n    font-weight: bold;\n    letter-spacing: 0.5px;\n}\n\n.nfc-overlay-content img{\n    max-width: 100%;\n    height: auto;\n    vertical-align: middle;\n    border: 0;\n}", ""]);
+exports.push([module.i, "\n/* ------------------------------------------------------------ */\n/* overlay style */\n/* ------------------------------------------------------------ */\n\n.nfc-token {\n    opacity: 0; \n    position: absolute;\n}\n\n.nfc-overlay p {\n    margin: 0;\n    margin-bottom: 6px;\n    color: #028F76;\n}\n\n\n.nfc-overlay {\n    position: fixed;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    right: 0;\n    top: 0;\n    overflow-x: hidden;\n    overflow-y: auto;\n    z-index: 10012;\n}\n\n.nfc-overlay-background {\n    position: fixed;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    background-color: rgba(0,0,0,0.5);\n    right: 0;\n    top: 0;\n    z-index: 10010;\n}\n\n/* NFC Overlay */\n\n.nfc-overlay-content {\n    width: 70%;\n    position: relative;\n    margin: 150px auto; \n    padding: 30px 30px 30px;\n    background-color: #fdfdfd;\n    border: 7px solid #ccc;\n    border-radius: 8px;\n    z-index: 10013; /* 1px higher than the overlay layer */\n}\n\n@media all and (min-width: 800px) {\n    .nfc-overlay-content {\n        width: 650px;\n    }\n}\n\n@media all and (max-height: 800px) {\n    .nfc-overlay-content {\n        margin: 50px auto;\n    }\n}\n\n.nfc-overlay-content .close {\n    margin: -20px -14px;\n    float: right;\n    text-align: right;\n    font-size: 18px;\n    font-weight: bold;\n    line-height: 1;\n    opacity: 0.3;\n    text-decoration: none;  \n}\n.nfc-overlay-content .close:hover {\n    cursor: pointer;\n    opacity: 0.5;\n}\n\n.nfc-overlay-content h2 {\n    margin-top: 6px;\n    margin-bottom: 14px;\n    font-weight: bold;\n    letter-spacing: 0.5px;\n}\n\n.nfc-overlay-content img{\n    max-width: 100%;\n    height: auto;\n    vertical-align: middle;\n    border: 0;\n}", ""]);
 
 // exports
 
@@ -536,7 +539,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".ng-valid[required], .ng-valid.required  {\n  border-left: 5px solid #42A948; /* green */\n}\n\n.ng-invalid:not(form)  {\n  border-left: 5px solid #a94442; /* red */\n}", ""]);
+exports.push([module.i, "\n\n\n/*--------------------\nForm\n---------------------*/\n\nlabel {\n  margin-bottom: 2px;\n}\n\nform {\n  margin-top: 20px;\n}\n\nform p {\n  margin-bottom: 10px;\n}\n\ninput[type=text],\ninput[type=email],\ninput[type=password] { \n  width: 300px;\n  height: 32px;\n  padding: 0px 10px;\n  margin-bottom: 10px;\n  background-color: rgba(0,0,0,0.03);\n  border: none;\n  display: inline;\n  color: #303030;\n  font-size: 16px;\n  font-weight: 400;\n}\n\n ::-webkit-input-placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */\n    opacity: 0.7; /* Firefox */\n}\n\n :-ms-input-placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */\n    opacity: 0.7; /* Firefox */\n}\n\n ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */\n    opacity: 0.7; /* Firefox */\n}\n\n\ninput[type=text]:focus,\ninput[type=email]:focus,\ninput[type=password]:focus {\n  background-color: rgba(0,0,0,0.05);\n  /*background-color: rgba(2,143,118,0.15);*/\n  outline: none;\n  box-shadow: none;\n}\n\n.checkbox-field label{\n  display: inline;\n}\n\n.ng-valid[required], .ng-valid.required  {\n  border-left: 5px solid #42A948; /* green */\n}\n\n.ng-invalid:not(form)  {\n  border-left: 5px solid #a94442; /* red */\n}", ""]);
 
 // exports
 
@@ -549,7 +552,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/login/register/register.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "\n<h1 class=\"entry-title\">Register</h1>\n<app-nfclogin [auto_hide]=\"nfc_overlay_autohide\" [nfcButtonLabel]=\"nfc_button_label\" \n   (onCardLoaded)=\"onCardLoaded($event)\"> ></app-nfclogin>\n<br>\n<form #registerform=\"ngForm\" (ngSubmit)=\"submitRegistration()\" class=\"login-form\">\n  <label for=\"loginInput\">Username:</label>  \n  <input [(ngModel)]=\"user.username\" name=\"login\" type=\"text\" id=\"usernameInput\" ngModel required minlength=\"5\"><br>\n  <label for=\"loginInput\">Vorname:</label>  \n  <input [(ngModel)]=\"user.name\" name=\"name\" type=\"text\" id=\"nameInput\" ngModel>\n  <label for=\"loginInput\">Nachname:</label>  \n  <input [(ngModel)]=\"user.surename\" name=\"surename\" type=\"text\" id=\"surenameInput\" ngModel><br>\n  <label for=\"loginInput\">Email:</label>  \n  <input [(ngModel)]=\"user.email\" name=\"email\" type=\"email\" id=\"emailInput\" ngModel email required><br>\n  <label for=\"passwordInput\">Password:</label>\n  <input [(ngModel)]=\"user.password\" name=\"password\" type=\"password\" id=\"passwordInput\" ngModel required minlength=\"8\" focus=\"{{focus_password}}\"><br>\n  <label for=\"cardset\">NFC-Card:</label>\n  <input [(ngModel)]=\"cardset\" name=\"cardset\" type=\"checkbox\" ngModel disabled><br>\n  <p>{{register_message}}</p>\n  <button type=\"submit\" [disabled]=\"registerform.form.invalid\">Registrieren</button>  \n</form> \n\n"
+module.exports = "\n<h1 class=\"entry-title\">Register</h1>\n<app-nfclogin [auto_hide]=\"nfc_overlay_autohide\" [nfcButtonLabel]=\"nfc_button_label\" \n   (onCardLoaded)=\"onCardLoaded($event)\"> ></app-nfclogin>\n<br>\n<form #registerform=\"ngForm\" (ngSubmit)=\"submitRegistration()\" class=\"box\">\n  <p>\n    <!--label for=\"loginInput\">Username:</label-->  \n    <input [(ngModel)]=\"user.username\" name=\"login\" type=\"text\" id=\"usernameInput\" \n    ngModel required  minlength=\"5\"\n    placeholder=\"Username\" focus=\"true\">\n  </p>  \n  <p> \n    <input [(ngModel)]=\"user.name\" name=\"name\" type=\"text\" id=\"nameInput\" ngModel placeholder=\"Vorname\" /><br>\n    <input [(ngModel)]=\"user.surename\" name=\"surename\" type=\"text\" id=\"surenameInput\" ngModel placeholder=\"Nachname\" />\n  </p>\n  <p >\n    <!--label for=\"emailInput\">Email:</label-->  \n    <input [(ngModel)]=\"user.email\" name=\"email\" type=\"email\" id=\"emailInput\" ngModel placeholder=\"E-Mail\" email required>\n  </p>\n  <p>\n    <!--label for=\"passwordInput\">Password:</label-->\n    <input [(ngModel)]=\"user.password\" name=\"password\" type=\"password\" id=\"passwordInput\" \n              ngModel required minlength=\"8\"  \n              placeholder=\"Password\" focus=\"{{focus_password}}\">\n  </p>\n  <p class=\"checkbox-field\">\n    <label for=\"cardset\">NFC-Card:</label>\n    <input [(ngModel)]=\"cardset\" name=\"cardset\" type=\"checkbox\" id=\"cardset\" ngModel disabled>\n  </p>\n  <p>{{register_message}}</p>\n  <button type=\"submit\" [disabled]=\"registerform.form.invalid\">Registrieren</button>  \n</form> \n\n<p>\n  Du bist schon registriert? <a routerLink=\"/terminallogin\">Hier einloggen</a><br>\n  <a href=\"../password-reset/\">Passwort vergessen? </a>\n</p>\n\n"
 
 /***/ }),
 
@@ -645,7 +648,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "\n.login-form label, .login-form input {\n    display: block;\n}\n\n/* ------------------------------------------------------------ */\n/* overlay style */\n/* ------------------------------------------------------------ */\n\n.nfc-token {\n    opacity: 0; \n    position: absolute;\n}\n\n.nfc-overlay p {\n    margin: 0;\n    margin-bottom: 6px;\n    color: #028F76;\n}\n\n\n.nfc-overlay {\n    position: fixed;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    right: 0;\n    top: 0;\n    overflow-x: hidden;\n    overflow-y: auto;\n    z-index: 10012;\n}\n\n.nfc-overlay-background {\n    position: fixed;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    background-color: rgba(0,0,0,0.5);\n    right: 0;\n    top: 0;\n    z-index: 10010;\n}\n\n/* NFC Overlay */\n\n.nfc-overlay-content {\n    width: 70%;\n    position: relative;\n    margin: 150px auto; \n    padding: 30px 30px 30px;\n    background-color: #fdfdfd;\n    border: 7px solid #ccc;\n    border-radius: 8px;\n    z-index: 10013; /* 1px higher than the overlay layer */\n}\n\n@media all and (min-width: 800px) {\n    .nfc-overlay-content {\n        width: 650px;\n    }\n}\n\n@media all and (max-height: 800px) {\n    .nfc-overlay-content {\n        margin: 50px auto;\n    }\n}\n\n.nfc-overlay-content .close {\n    margin: -20px -14px;\n    float: right;\n    text-align: right;\n    font-size: 18px;\n    font-weight: bold;\n    line-height: 1;\n    opacity: 0.3;\n    text-decoration: none;  \n}\n.nfc-overlay-content .close:hover {\n    cursor: pointer;\n    opacity: 0.5;\n}\n\n.nfc-overlay-content h2 {\n    margin-top: 6px;\n    margin-bottom: 14px;\n    font-weight: bold;\n    letter-spacing: 0.5px;\n}\n\n.nfc-overlay-content img{\n    max-width: 100%;\n    height: auto;\n    vertical-align: middle;\n    border: 0;\n}\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n/*--------------------\nForm\n---------------------*/\n\nlabel {\n  margin-bottom: 2px;\n}\n\nlabel.checkbox {\n  padding: 5px 20px;\n  line-height: 1.7;\n}\n\nform {\n  margin-top: 20px;\n}\n\nform p {\n  margin-bottom: 10px;\n}\n\ninput[type=text],\ninput[type=email],\ninput[type=password] { \n  width: 300px;\n  height: 32px;\n  padding: 0px 10px;\n  margin-bottom: 10px;\n  background-color: rgba(0,0,0,0.03);\n  border: none;\n  display: inline;\n  color: #303030;\n  font-size: 16px;\n  font-weight: 400;\n}\n\n ::-webkit-input-placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */\n    opacity: 0.7; /* Firefox */\n}\n\n :-ms-input-placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */\n    opacity: 0.7; /* Firefox */\n}\n\n ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */\n    opacity: 0.7; /* Firefox */\n}\n\n\ninput[type=text]:focus,\ninput[type=email]:focus,\ninput[type=password]:focus {\n  background-color: rgba(0,0,0,0.05);\n  /*background-color: rgba(2,143,118,0.15);*/\n  outline: none;\n  box-shadow: none;\n}\n\n.ng-valid[required], .ng-valid.required  {\n  border-left: 5px solid #42A948; /* green */\n}\n\n.ng-invalid:not(form)  {\n  border-left: 5px solid #a94442; /* red */\n}", ""]);
 
 // exports
 
@@ -658,7 +661,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/login/terminallogin/terminallogin.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h1 class=\"entry-title\">Login</h1>\n<p>{{login_message}}</p>\n<form #loginform=\"ngForm\" (ngSubmit)=\"submitLogin(loginform)\" class=\"login-form\" novalidate>\n  <label for=\"loginInput\">Username:</label>  \n  <input name=\"login\" type=\"text\" id=\"loginInput\" ngModel>\n  <label for=\"passwordInput\">Password:</label>\n  <input name=\"password\" type=\"password\" id=\"passwordInput\" ngModel>\n  <button type=\"submit\">Login</button>  \n</form>\n<app-nfclogin [nfc_message]=\"nfc_login_message\" [nfcButtonLabel]=\"nfc_button_label\"\n   (onCardLoaded)=\"onCardLoaded($event)\"> ></app-nfclogin>\n<br>\n<a routerLink=\"/register\"><input type=\"submit\"  value=\"Registrieren\"/></a>\n\n\n"
+module.exports = "<h1 class=\"entry-title\">Login</h1>\n<br>\n<app-nfclogin [nfc_message]=\"nfc_login_message\" [nfcButtonLabel]=\"nfc_button_label\"\n   (onCardLoaded)=\"onCardLoaded($event)\"> ></app-nfclogin>\n<br>\n<form #loginform=\"ngForm\" (ngSubmit)=\"submitLogin(loginform)\" novalidate>\n  <input name=\"login\" type=\"text\" id=\"loginInput\" ngModel placeholder=\"Username\" focus=\"true\"><br>\n  <input name=\"password\" type=\"password\" id=\"passwordInput\" ngModel placeholder=\"Password\"><br>\n  <p>{{login_message}}</p>\n  <button type=\"submit\">Login</button>  \n</form>\n\n<br>\n<p>\n  Du hast noch keinen Account? <a routerLink=\"/register\">Registrieren</a><br>\n  <a href=\"../password-reset/\">Passwort vergessen? </a>\n</p>\n\n\n"
 
 /***/ }),
 
@@ -1144,7 +1147,7 @@ var HttpService = (function () {
     // -------  Login Methods  ------------------------
     HttpService.prototype.checkLogin = function (login, password) {
         var url = this.appApiService.getPluginApiUrl() + 'check_user_login';
-        return this.http.get(url, {
+        return this.http.post(url, {
             params: { username: login, password: password }
         }); //.catch((err: HttpErrorResponse) => Observable.throw(this.handleHttpError(err)));
     };
@@ -1376,7 +1379,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/startpage/startpage.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  startpage works!\n</p>\n<app-admin *ngIf=\"is_admin\" ></app-admin>\n"
+module.exports = "<app-admin *ngIf=\"is_admin\" ></app-admin>\n"
 
 /***/ }),
 
@@ -1404,7 +1407,6 @@ var StartpageComponent = (function () {
         this.is_admin = false;
     }
     StartpageComponent.prototype.ngOnInit = function () {
-        //window.location.href = '../rest-test';
         this.loadAdminInfo();
     };
     StartpageComponent.prototype.loadAdminInfo = function () {
@@ -1413,9 +1415,15 @@ var StartpageComponent = (function () {
             if (loaded == true) {
                 //console.log('Admin: ' + this.appApiService.isAdmin());
                 _this.is_admin = _this.appApiService.isAdmin();
+                if (_this.is_admin == false) {
+                    _this.gotoAngular1();
+                }
                 //this.is_admin_subscription.unsubscribe();
             }
         });
+    };
+    StartpageComponent.prototype.gotoAngular1 = function () {
+        window.location.href = '../mein-ticket';
     };
     StartpageComponent.prototype.ngOnDestroy = function () {
         this.is_admin_subscription.unsubscribe();
