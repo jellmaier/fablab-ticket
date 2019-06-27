@@ -1,0 +1,32 @@
+.statistic-box{
+    height: 100%;
+    border: 1px solid #eee;
+    box-shadow: 0 0 5px #eee;
+    background-color: #fff;
+    margin: 10px;
+    float: left;
+    position: relative;
+}
+
+.trend-box{
+    width: 800px;
+}
+
+.box{
+    width: 400px;
+}
+
+.box-header {
+    padding: 20px 20px 10px 20px;
+}
+
+.box-header h3{
+    margin:0;
+    border-bottom: solid 3px #028F76;
+    display: inline-block;
+}
+
+.box-content {
+    height: 100%;
+    padding: 5px;
+}

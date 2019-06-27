@@ -1,7 +1,7 @@
 
 <h1 class="entry-title">Register</h1>
-<app-nfclogin [auto_hide]="nfc_overlay_autohide" [nfcButtonLabel]="nfc_button_label" 
-   (onCardLoaded)="onCardLoaded($event)"> ></app-nfclogin>
+<app-nfclogin [autoHide]="nfcOverlayAutohide" [nfcButtonLabel]="nfcButtonLabel"
+              (onCardLoaded)="onCardLoaded($event)"> ></app-nfclogin>
 <br>
 <form #registerform="ngForm" (ngSubmit)="submitRegistration()" class="box">
   <p>
@@ -22,18 +22,18 @@
     <!--label for="passwordInput">Password:</label-->
     <input [(ngModel)]="user.password" name="password" type="password" id="passwordInput" 
               ngModel required minlength="8"  
-              placeholder="Password" focus="{{focus_password}}">
+              placeholder="Password" focus="{{focusPassword}}">
   </p>
   <p class="checkbox-field">
     <label for="cardset">NFC-Card:</label>
     <input [(ngModel)]="cardset" name="cardset" type="checkbox" id="cardset" ngModel disabled>
   </p>
-  <p>{{register_message}}</p>
+  <p>{{registerMessage}}</p>
   <button type="submit" [disabled]="registerform.form.invalid">Registrieren</button>  
 </form> 
 
 <p>
-  Du bist schon registriert? <a routerLink="/terminallogin">Hier einloggen</a><br>
+  Du bist schon registriert? <a routerLink="/{{ appRoutes.loginOnTerminal}}">Hier einloggen</a><br>
   <a href="../password-reset/">Passwort vergessen? </a>
 </p>
 

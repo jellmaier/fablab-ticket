@@ -1,18 +1,16 @@
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-
 import { HttpService } from './http.service';
-
-import { Observable }     from 'rxjs';
+import { Observable } from 'rxjs';
 
 
 
 @Injectable()
 export class TerminalService {
 
-  private cookie_name:string = 'terminal_token';
-  private cookie_days:number = 180;
-  private cookie_path:string = '/';
+  private cookieName: string = 'terminal_token';
+  private cookieDays: number = 180;
+  private cookiePath: string = '/';
 
   constructor(private httpService: HttpService,
               private cookieService: CookieService) {
@@ -23,7 +21,7 @@ export class TerminalService {
 
   public makeTerminal(make:boolean):void {
 
-    if (make == true) {
+    if (make === true) {
       this.setTerminalToken();
     } else {
       this.deleteTerminalToken();
@@ -34,13 +32,25 @@ export class TerminalService {
   private setTerminalToken():void {
     this.httpService.getTerminalToken().subscribe(
       data =>  {
-        this.cookieService.set( this.cookie_name , data, this.cookie_days, this.cookie_path);
+        this.cookieService.set( this.cookieName , data, this.cookieDays, this.cookiePath);
+      }
+    );
+
+    this.httpService.getDevices().subscribe(
+      data =>  {
+        console.log(data);
+      }
+    );
+
+    this.httpService.gettesturl().subscribe(
+      data =>  {
+        console.log(data);
       }
     );
   }
 
   private deleteTerminalToken():void {
-    this.cookieService.delete(this.cookie_name, this.cookie_path);
+    this.cookieService.delete(this.cookieName, this.cookiePath);
   }
   /*
   public loadTerminalToken():void {
@@ -51,7 +61,7 @@ export class TerminalService {
   }
 */
   public hasTerminalToken():boolean {
-    return this.cookieService.check(this.cookie_name);
+    return this.cookieService.check(this.cookieName);
   }
 /*
   public checkTerminalToken(): Observable<AppConnect>{

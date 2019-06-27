@@ -1,9 +1,9 @@
 {
-  "blog_url":"http:\/\/127.0.0.1\/wordpress",
-  "templates_url":"http:\/\/127.0.0.1\/wordpress\/wp-content\/plugins\/fablab-ticket\/views\/templates\/",
-  "api_url":"http:\/\/127.0.0.1\/wordpress\/api\/",
-  "sharing_url":"http:\/\/127.0.0.1\/wordpress\/wp-json\/sharepl\/v1\/",
-  "nonce":"c694a76626",
-  "is_user_logged_in":true,
+  "blog_url":"http:\/\/localhost:8888\/fablab",
+  "templates_url":"http:\/\/localhost:8888\/fablab\/wp-content\/plugins\/fablab-ticket\/views\/templates\/",
+  "api_url":"http:\/\/localhost:8888\/fablab\/api\/",
+  "sharing_url":"http:\/\/localhost:4200\/fablab\/wp-json\/sharepl\/v1\/",
+  "nonce":"d59c4e0daa",
+  "is_user_logged_in":false,
   "is_terminal":true
 }

@@ -1,15 +1,14 @@
+import { Observable, throwError as observableThrowError } from 'rxjs';
 
-import {throwError as observableThrowError,  Observable } from 'rxjs';
-
-import {catchError} from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { AppApiService, AppApiResponse } from './app-api.service';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { AppApiService, UserData } from './app-api.service';
 
 import { CookieService } from 'ngx-cookie-service';
 
-import { DeviceStatistics } from 'app/statistic/statistic.service'
-import { UserRegister } from '../login/register/register.component'
+import { DeviceStatistics } from 'app/statistic/statistic.service';
+import { UserRegister } from '../login/register/register.component';
 
 
 //import 'rxjs/add/operator/toPromise';
@@ -17,7 +16,7 @@ import { UserRegister } from '../login/register/register.component'
 @Injectable()
 export class HttpService {
   
-  constructor( private http: HttpClient, 
+  constructor( private http: HttpClient,
                private appApiService: AppApiService,
                private cookieService: CookieService ) {}
 
@@ -63,6 +62,20 @@ export class HttpService {
           catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
   }
 
+  public getDevices(): Observable<any> {
+    let url = this.appApiService.getPluginApiUrl() + 'device_types';
+
+    return this.http.get<any>(url).pipe(
+          catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
+  }
+
+  public gettesturl(): Observable<any> {
+    let url = 'https://httpbin.org/get';
+
+    return this.http.get<any>(url).pipe(
+          catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
+  }
+
 
   // -------  Register Methods  ------------------------
 
@@ -94,7 +107,18 @@ export class HttpService {
 
     return this.http.post<any>(url, {
         params: { username: login, password: password }
-      });//.catch((err: HttpErrorResponse) => Observable.throw(this.handleHttpError(err)));
+      }); //.catch((err: HttpErrorResponse) => Observable.throw(this.handleHttpError(err)));
+
+  }
+
+
+  public getUserData(login: string, password: string): Observable<UserData> {
+
+    let url = this.appApiService.getPluginApiUrl() + 'get_user_login_data';
+
+    return this.http.get<any>(url, {
+      params: { username: login, password: password }
+    }); //.catch((err: HttpErrorResponse) => Observable.throw(this.handleHttpError(err)));
 
   }
 
@@ -116,7 +140,7 @@ export class HttpService {
 
     return this.http.get<DeviceStatistics[]>(url, {
         params: {
-          start_date: start, 
+          start_date: start,
           end_date: end
         }
       }).pipe(catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
@@ -125,7 +149,7 @@ export class HttpService {
 
   // -------  handleErrors  ------------------------
 
-  private handleHttpError(err: HttpErrorResponse) {
+  private handleHttpError(err: HttpErrorResponse): void  {
     console.log(err);
     if (err.error instanceof Error) {
       // A client-side or network error occurred. Handle it accordingly.
@@ -138,4 +162,3 @@ export class HttpService {
   }
 }
 
-     

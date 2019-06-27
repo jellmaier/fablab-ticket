@@ -1,0 +1,14 @@
+<input  style="margin-top:10px;" (click)="showHideNfcOverlay()" type="submit"  value="{{nfcButtonLabel}}"/>
+<!-- Overlay -->
+<div class="nfc-overlay" *ngIf="showNfcOverlay">
+  <div class="nfc-overlay-content" *ngIf="showNfcOverlay">
+    <a (click)="showHideNfcOverlay(false)" class="close">x</a>
+    <h2>Jetzt Karte auflegen</h2>     <!-- totranslate -->
+      <p>{{ nfcMessage }}</p>
+      <form #f="ngForm" (keyup.enter)="submitCheckToken(f)" class="nfc-token" novalidate>
+        <input name="token" autocomplete="off" ngModel focus="{{showNfcOverlay}}">
+      </form>
+      <img src="{{appApiService.getBlogUrl()}}/wp-content/plugins/fablab-ticket/plugins/nfc-login/tucard.jpg"/> 
+  </div>
+  <div class="nfc-overlay-background" (click)="showHideNfcOverlay(false)"></div>
+</div>

@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TerminalLoginComponent } from './terminallogin.component';
+import { NfcLoginComponent } from '../nfclogin/nfc-login.component';
 
 describe('TerminalLoginComponent', () => {
   let component: TerminalLoginComponent;
@@ -8,7 +9,7 @@ describe('TerminalLoginComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TerminalLoginComponent ]
+      declarations: [ TerminalLoginComponent, NfcLoginComponent ]
     })
     .compileComponents();
   }));

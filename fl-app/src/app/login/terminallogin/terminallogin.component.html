@@ -1,12 +1,12 @@
 <h1 class="entry-title">Login</h1>
 <br>
-<app-nfclogin [nfc_message]="nfc_login_message" [nfcButtonLabel]="nfc_button_label"
-   (onCardLoaded)="onCardLoaded($event)"> ></app-nfclogin>
+<app-nfclogin [nfcMessage]="nfcLoginMessage" [nfcButtonLabel]="nfcButtonLabel"
+              (onCardLoaded)="onCardLoaded($event)"> ></app-nfclogin>
 <br>
 <form #loginform="ngForm" (ngSubmit)="submitLogin(loginform)" novalidate>
   <input name="login" type="text" id="loginInput" ngModel placeholder="Username" focus="true"><br>
   <input name="password" type="password" id="passwordInput" ngModel placeholder="Password"><br>
-  <p>{{login_message}}</p>
+  <p>{{ loginMessage }}</p>
   <button type="submit">Login</button>  
 </form>
 

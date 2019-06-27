@@ -1,0 +1,6 @@
+{
+  "/fablab/wp-json": {
+    "target": "http://localhost:8888",
+    "secure": false
+  }
+}

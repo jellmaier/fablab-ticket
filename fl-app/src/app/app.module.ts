@@ -1,6 +1,6 @@
-import { NgModule }      from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule }   from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { NgProgressModule } from '@ngx-progressbar/core';
@@ -8,20 +8,19 @@ import { NgProgressHttpClientModule } from '@ngx-progressbar/http-client';
 
 import { AppRoutingModule } from './app-routing.module';
 
-import { AppComponent }         from './app.component';
-import { StatisticService }          from './statistic/statistic.service';
+import { AppComponent } from './app.component';
+import { StatisticService } from './statistic/statistic.service';
 import { StatisticComponent } from './statistic/statistic.component';
 import { ChartService } from './statistic/chart.service';
 
-import { LocalizeService } from  './services/localize.service';
-import { HttpService } from  './services/http.service';
-import { HttpInterceptorService } from  './services/http-interceptor.service';
+import { HttpService } from './services/http.service';
+import { HttpInterceptorService } from './services/http-interceptor.service';
 
 import { CookieService } from 'ngx-cookie-service';
 
-import { ParserService }          from './services/parser.service';
+import { ParserService } from './services/parser.service';
 
-import { AppApiService } from  './services/app-api.service';
+import { AppApiService } from './services/app-api.service';
 
 import { DatePipe } from '@angular/common';
 
@@ -33,8 +32,8 @@ import { FocusModule } from 'angular2-focus';
 import 'd3';
 import 'nvd3';
 import { LoginComponent } from './login/login/login.component';
-import { TerminalLoginComponent }       from './login/terminallogin/terminallogin.component';
-import { NfcloginComponent } from './login/nfclogin/nfclogin.component';
+import { TerminalLoginComponent } from './login/terminallogin/terminallogin.component';
+import { NfcLoginComponent } from './login/nfclogin/nfc-login.component';
 import { RegisterComponent } from './login/register/register.component';
 
 import { IsLoggedInGuard, IsNotLoggedInGuard, IsAdminGuard, IsTerminalGuard } from './services/guards/login-guard.service';
@@ -58,14 +57,14 @@ import { AdminComponent } from './admin/admin/admin.component';
     AppComponent,
     StatisticComponent,
     LoginComponent,
-    NfcloginComponent,
+    NfcLoginComponent,
     RegisterComponent,
     TerminalLoginComponent,
     StartpageComponent,
     AdminComponent,
   ],
-  providers: [ 
-    StatisticService, 
+  providers: [
+    StatisticService,
     ChartService,
     HttpService,
     { provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true },

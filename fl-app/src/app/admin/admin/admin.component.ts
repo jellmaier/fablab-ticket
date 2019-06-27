@@ -1,75 +1,70 @@
-import { Component, OnInit } from '@angular/core';
-import { NgClass } from '@angular/common';
-
-import { Subscription }     from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 
-import { AppApiService } from './../../services/app-api.service';
-import { TerminalService } from './../../services/terminal.service';
+import { AppApiService } from '../../services/app-api.service';
+import { TerminalService } from '../../services/terminal.service';
 
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.css']
 })
-export class AdminComponent implements OnInit {
+export class AdminComponent implements OnInit, OnDestroy {
 
-  private toggle_terminal:boolean = false;
-  private toggle_ticket_system_online:boolean = false;
-  //private toggle_subscription: Subscription;
-
+  private toggleTerminal: boolean = false;
+  private isToggleTicketSystemOnline: boolean = false;
 
 
+  // private toggle_subscription: Subscription;
 
   constructor(private appApiService: AppApiService,
               private terminalSercie: TerminalService) { }
 
-  ngOnInit() {
+  ngOnInit():void {
     this.initData();
   }
 
 
   private initData():void {
     this.appApiService.isApiDataLoaded()
-    .subscribe((isDataLoaded) => { 
-      if(isDataLoaded == true) {
-        this.toggle_terminal = this.appApiService.isTerminal();
-        this.toggle_ticket_system_online = this.appApiService.isTicketSystemOnline();
+    .subscribe((isDataLoaded) => {
+      if (isDataLoaded === true) {
+        this.toggleTerminal = this.appApiService.isTerminal();
+        this.isToggleTicketSystemOnline = this.appApiService.isTicketSystemOnline();
       }
-    })
+    });
   }
 /*
   private loadToggleSubscription():void {
     this.toggle_subscription = this.appApiService.getTerminalObservable()
-    .subscribe((isTerminal) => { 
+    .subscribe((isTerminal) => {
       //console.log('toggle: ' + isTerminal);
-      this.toggle_terminal = isTerminal;
+      this.toggleTerminal = isTerminal;
       if(this.count >= 5) {
         //this.toggle_subscription.unsubscribe();
       }
       this.count ++;
-      
     })
   }
-
 */
-  ngOnDestroy() {
+
+  ngOnDestroy(): void {
     //this.toggle_subscription.unsubscribe();
   }
 
-  private toggleIsTerminal() {
+  private toggleIsTerminal(): void {
     //this.appApiService.toggleTerminal();
-    this.toggle_terminal = !this.toggle_terminal;
-    this.terminalSercie.makeTerminal(this.toggle_terminal);
+    this.toggleTerminal = !this.toggleTerminal;
+    this.terminalSercie.makeTerminal(this.toggleTerminal);
     //console.log(this.toggleTerminal);
 
   }
 
-  private toggleTicketSystemOnline() {
-    this.toggle_ticket_system_online = !this.toggle_ticket_system_online;
-    this.terminalSercie.setTicketSystemOnline(this.toggle_ticket_system_online).subscribe(
+  private toggleTicketSystemOnline(): void {
+    this.isToggleTicketSystemOnline = !this.isToggleTicketSystemOnline;
+    this.terminalSercie.setTicketSystemOnline(this.isToggleTicketSystemOnline).subscribe(
       data =>  {
-        this.toggle_ticket_system_online = data;
+        this.isToggleTicketSystemOnline = data;
       }
     );
 

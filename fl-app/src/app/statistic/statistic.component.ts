@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 
-import { StatisticService, Week} from './statistic.service';
+import { StatisticService, Week } from './statistic.service';
 import { ChartService } from './chart.service';
 
 import { DatePipe } from '@angular/common';
@@ -14,7 +14,7 @@ declare let d3: any;
     // include original styles
   styleUrls: [
     '../../../node_modules/nvd3/build/nv.d3.css',
-    './statistic.component.css'
+    './statistic.component.scss'
   ],
   encapsulation: ViewEncapsulation.None
 })
@@ -37,35 +37,35 @@ export class StatisticComponent implements OnInit {
 
   index = 0;
 
-  public checkLoadAndSetData(increment:boolean) {
+  public checkLoadAndSetData(increment: boolean): void {
 
-    if (increment)
+    if (increment) {
       this.index++;
-    else
+    } else {
       this.index--;
-
-    if(this.datatrend[0].values.find(x => x.x == this.index))
+    }
+    if (this.datatrend[0].values.find(x => x.x === this.index)) {
       this.setData();
-    else {
+    } else {
       console.log('noentry');
-      let weeknuber:number = - this.index;
-      this.loadStatistic(this.getWeek(weeknuber), weeknuber, true);
+      let weekNumber: number = - this.index;
+      this.loadStatistic(this.getWeek(weekNumber), weekNumber, true);
       return;
     }
 
   }
 
-  private setData() {
+  private setData(): void {
 
     let data = [];
     console.log(this.datatrend);
 
     for (let entry of this.datatrend) {
-      let dataentry = entry.values.find(x => x.x == this.index);
-      data.push({ 
-        name: entry.key, 
-        color: entry.color, 
-        number : dataentry.y 
+      let dataentry = entry.values.find(x => x.x === this.index);
+      data.push({
+        name: entry.key,
+        color: entry.color,
+        number : dataentry.y
       });
       this.currentWeek = dataentry.label;
     }
@@ -75,14 +75,14 @@ export class StatisticComponent implements OnInit {
 
   private getWeek(earlierWeeks:number):Week {
 
-    let current:Date = new Date();     // get current date   
-    let weekend:number = current.getDate() - current.getDay() - (earlierWeeks * 7);   // day 0 is sunday 
-    let weekstart:number = weekend - 6;       // end day is the first day + 6 	
-    let monday:Date = new Date(current.setDate(weekstart));  
+    let current:Date = new Date();     // get current date
+    let weekend:number = current.getDate() - current.getDay() - (earlierWeeks * 7);   // day 0 is sunday
+    let weekstart:number = weekend - 6;       // end day is the first day + 6
+    let monday:Date = new Date(current.setDate(weekstart));
     current = new Date();     // reset current date
     let sunday:Date = new Date(current.setDate(weekend));
 
-    let week:Week = {
+    let week: Week = {
         monday: monday,
         sunday: sunday
     };
@@ -101,15 +101,15 @@ export class StatisticComponent implements OnInit {
 
 
     let string = Number(this.datePipe.transform(week.monday, 'yyMMdd'));
-  // week.monday | date :'fullDate');
+    // week.monday | date :'fullDate');
 
     for (let entry of data) {
 
-      if (this.datatrend.find(x => x.key == entry.name)) {
+      if (this.datatrend.find(x => x.key === entry.name)) {
         // push data to existing entry
-        this.datatrend.find(x => x.key == entry.name).values
+        this.datatrend.find(x => x.key === entry.name).values
             .push({ x: -offset, y: entry.number, label: this.getWeekString(week)});
-        this.datatrend.find(x => x.key == entry.name).values.sort(function (a, b) {
+        this.datatrend.find(x => x.key === entry.name).values.sort( function(a, b) {
           return d3.ascending(a.x, b.x);
         });
       } else {
@@ -120,7 +120,7 @@ export class StatisticComponent implements OnInit {
                       
                       label: this.getWeekString(week)
               } ],
-              color: entry.color 
+              color: entry.color
         });
       }
     }
@@ -129,7 +129,7 @@ export class StatisticComponent implements OnInit {
 
   }
 
-  private getWeekString(week:Week):String {
+  private getWeekString(week:Week): string {
     return week.monday.toDateString() + ' - ' + week.sunday.toDateString();
   }
 
@@ -146,19 +146,16 @@ export class StatisticComponent implements OnInit {
 
 
 
-  ngOnInit() {
+  ngOnInit(): void {
 
     this.datatrend = [];
     this.options = this.chartService.getOptions();
     this.data = this.chartService.getData();
-    this.linechartoptions = this.chartService.getlinechartoptions();  
+    this.linechartoptions = this.chartService.getlinechartoptions();
 
-    for (let i:number = 0; i < 12; i++)
+    for (let i:number = 0; i < 12; i++) {
       this.loadStatistic(this.getWeek(i), i);
-
-  };
-  
-
-  
+    }
+  }
 
 }

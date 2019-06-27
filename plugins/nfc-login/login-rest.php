@@ -65,13 +65,8 @@ function rest_check_user_login($data) {
 
 
   
-  if (wp_check_password($password, $user->user_pass, $user->ID)) {
-    //from https://codex.wordpress.org/Function_Reference/wp_signon
-    $creds = array();
-    $creds['user_login'] = $username;
-    $creds['user_password'] = $password;
-    $creds['remember'] = false;
-    $user_response = wp_signon( $creds, false );
+  if (wp_check_password($password, $user->user_pass, $user_id)) {
+    wp_set_auth_cookie($user_id);
   } else {
     set_user_login_fail($user_id);
     //return intval(get_user_meta( $user_id, 'login-fails', true ));

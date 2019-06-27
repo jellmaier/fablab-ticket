@@ -1,15 +1,16 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { LoginGuardService } from './login-guard.service';
+import { IsLoggedInGuard } from './login-guard.service';
+import { AppApiService } from '../app-api.service';
 
 describe('LoginGuardService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [LoginGuardService]
+      providers: [IsLoggedInGuard, AppApiService]
     });
   });
 
-  it('should be created', inject([LoginGuardService], (service: LoginGuardService) => {
+  it('should be created', inject([IsLoggedInGuard], (service: IsLoggedInGuard) => {
     expect(service).toBeTruthy();
   }));
 });

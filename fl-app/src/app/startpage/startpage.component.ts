@@ -1,45 +1,45 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { Subscription }     from 'rxjs';
+import { Subscription } from 'rxjs';
 
-import { AppApiService } from './../services/app-api.service';
+import { AppApiService } from '../services/app-api.service';
 
 @Component({
   selector: 'app-startpage',
   templateUrl: './startpage.component.html',
-  styleUrls: ['./startpage.component.css']
+  styleUrls: ['./startpage.component.scss']
 })
-export class StartpageComponent implements OnInit {
+export class StartpageComponent implements OnInit, OnDestroy {
 
   constructor(private appApiService: AppApiService) { }
 
-  private is_admin:boolean = false;
-  private is_admin_subscription: Subscription;
+  private isAdmin:boolean = false;
+  private isAdminSubscription: Subscription;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadAdminInfo();
-    
+ 
   }
 
-  private loadAdminInfo():void {
-    this.is_admin_subscription = this.appApiService.isApiDataLoaded().subscribe(loaded => {
-      if (loaded == true) {
+  private loadAdminInfo(): void {
+    this.isAdminSubscription = this.appApiService.isApiDataLoaded().subscribe(loaded => {
+      if (loaded === true) {
         //console.log('Admin: ' + this.appApiService.isAdmin());
-        this.is_admin = this.appApiService.isAdmin();
-        if (this.is_admin == false) {
+        this.isAdmin = this.appApiService.isAdmin();
+        if (this.isAdmin === false) {
           this.gotoAngular1();
         }
-        //this.is_admin_subscription.unsubscribe();
+        //this.isAdminSubscription.unsubscribe();
       }
-    })
+    });
   }
 
-  private gotoAngular1() {
+  private gotoAngular1():void  {
     window.location.href = '../mein-ticket';
   }
 
-  ngOnDestroy() {
-    this.is_admin_subscription.unsubscribe();
+  ngOnDestroy(): void {
+    this.isAdminSubscription.unsubscribe();
   }
 
 }

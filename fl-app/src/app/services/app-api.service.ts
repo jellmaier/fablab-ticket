@@ -1,11 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject }     from 'rxjs';
-
-import * as AppApiDataDev from "./AppAPI.json";
-import * as UserDataDev from "./UserData.json";
-import * as TerminalDataDev from "./TerminalData.json";
-import * as UserDev from "./user.json";
+import { BehaviorSubject } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
 
 export interface AppApiResponse {
   blog_url: string;
@@ -19,6 +15,7 @@ export interface UserData {
   is_user_logged_in: boolean;
   is_admin: boolean;
   user_display_name: string;
+  nonce: string;
 }
 
 export interface TerminalData {
@@ -33,6 +30,10 @@ interface User {
   password: string;
 }
 
+// define require to import data
+declare var require: any;
+
+// javascript variables defined in wordpress
 declare var AppAPI: any;
 declare var UserDataLoc: any;
 declare var TerminalDataLoc: any;
@@ -42,119 +43,118 @@ declare var TerminalDataLoc: any;
 export class AppApiService {
 
   private apiDataLoaded: boolean = false;
-  private app_data_subject: BehaviorSubject<boolean>;
+  private appDataSubject:BehaviorSubject<boolean>;
 
-  private test_toggle: boolean = false;
-  private toggle_subject: BehaviorSubject<boolean>;
+  private testToggle:boolean = false;
+  private toggleSubject:BehaviorSubject<boolean>;
 
 
-  private app_api: AppApiResponse;
-  private user_data: UserData;
-  private terminal_data: TerminalData;
+  private appApi: AppApiResponse;
+  private userData: UserData;
+  private terminalData: TerminalData;
   //private app_connect: AppConnect;
   private user: User;
-  private is_dev_mode: boolean;
+  private isDevModeEnabled:boolean;
 
-  constructor() {
-    //this.toggle_subject = new BehaviorSubject<boolean>(this.test_toggle);
-    this.app_data_subject = new BehaviorSubject<boolean>(false);
-
-
+  constructor( private cookieService: CookieService ) {
+    this.appDataSubject = new BehaviorSubject<boolean>(false);
     this.loadApiData();
   }
 
-  private loadApiData() {
+  private loadApiData():void {
 
+    this.isDevModeEnabled = (typeof AppAPI === 'undefined');
 
-    this.is_dev_mode = (typeof AppAPI === 'undefined');
-    if (this.is_dev_mode) { // Check if it is embadded into the wordpress page
+    // when AppAPI start in dev mode and load app data fom json
+    if (this.isDevModeEnabled) {
       console.log('Runing in Dev-Mode');
-      this.app_api = (<AppApiResponse>(<any>AppApiDataDev));
-      this.user_data = (<UserData>(<any>UserDataDev));
-      this.terminal_data = (<TerminalData>(<any>TerminalDataDev));
-      if (this.user_data.is_admin) // switch between admin and user
-        this.user = (<User>(<any>UserDev).admin); 
-      else
-        this.user = (<User>(<any>UserDev).user);
+      this.appApi = require('./AppAPI.json');
+      this.userData = require('./UserData.json');
+      this.terminalData = require('./TerminalData.json');
     } else {
-      this.app_api = AppAPI;
-      this.user_data = UserDataLoc;
-      this.terminal_data = TerminalDataLoc;
+      this.appApi = AppAPI;
+      this.userData = UserDataLoc;
+      this.terminalData = TerminalDataLoc;
     }
-    this.app_data_subject.next(true);
-    //console.log(this.app_api);
-    //console.log(this.user_data);
-    //console.log(this.terminal_data);
+    this.appDataSubject.next(true);
+
+    //console.log(this.appApi);
+    //console.log(this.userData);
+    //console.log(this.terminalData);
 
 
   }
+
+  //
+  public setDevUserLoggedIn(data:UserData):void {
+    this.userData = data;
+  }
+
 
   // check if data loaded
 
   public isApiDataLoaded():BehaviorSubject<boolean> {
-    return this.app_data_subject;
+    return this.appDataSubject;
   }
 
   // getter Methods
 
-  public getBlogUrl() {
-    return this.app_api.blog_url;
+  public getBlogUrl():string {
+    return this.appApi.blog_url;
   }
 
-   public getTemplatesUrl() {
-    return this.app_api.templates_url;
+   public getTemplatesUrl():string {
+    return this.appApi.templates_url;
   }
   
-  public getApiUrl() {
-    return this.app_api.api_url;
+  public getApiUrl():string {
+    return this.appApi.api_url;
   }
 
-  public getPluginApiUrl() {
-    return this.app_api.sharing_url;
+  public getPluginApiUrl():string {
+    return this.appApi.sharing_url;
   }
 
-  public getNonce() {
-    return this.app_api.nonce;
+  public getNonce():string {
+    return this.userData.nonce;
   }
 
-  public isDevMode() {
-    return this.is_dev_mode;
+  public isDevMode():boolean {
+    return this.isDevModeEnabled;
   }
 
-  public getAutentificationToken() {
-    return btoa(this.user.username + ":" + this.user.password);
+  public getAutentificationToken():string {
+    return btoa(this.user.username + ':' + this.user.password);
   }
 
   // -------   Terminal methods ----------
 
   public isTerminal():boolean {
-    return this.terminal_data.is_terminal;
+    return this.terminalData.is_terminal;
   }
 
   public isTicketSystemOnline():boolean {
-    return this.terminal_data.ticket_system_online;
+    return this.terminalData.ticket_system_online;
   }
 /*
   public toggleTerminal():void {
     this.test_toggle = !this.test_toggle;
-    this.toggle_subject.next(this.test_toggle);
+    this.toggleSubject.next(this.test_toggle);
   }
 
   public getTerminalObservable():BehaviorSubject<boolean> {
-    return this.toggle_subject;
+    return this.toggleSubject;
   }
 */
   // -------   User methods ----------
 
   public isUserLoggedIn():boolean {
-    return this.user_data.is_user_logged_in;
+    return this.userData.is_user_logged_in;
   }
 
   public isAdmin():boolean {
-    return this.user_data.is_admin;
+    return this.userData.is_admin;
   }
-
-
 
 }
 

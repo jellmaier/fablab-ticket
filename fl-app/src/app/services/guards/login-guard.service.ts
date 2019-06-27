@@ -1,24 +1,26 @@
-import { Injectable }     from '@angular/core';
-import { CanActivate, Router }    from '@angular/router';
-import { Observable }     from 'rxjs';
+import { Injectable } from '@angular/core';
+import { CanActivate, Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 
-import { AppApiService } from './../app-api.service';
-import { TerminalService } from './../terminal.service';
+import { AppApiService } from '../app-api.service';
+import { TerminalService } from '../terminal.service';
+import { appRoutes } from '../../app-routs';
 
 @Injectable()
 export class IsLoggedInGuard implements CanActivate {
-  constructor(private appApiService: AppApiService,
-              private router: Router) {}
 
-  canActivate() {
+  constructor(private appApiService: AppApiService,
+              private router: Router) {
+  }
+
+  canActivate(): Observable<boolean> | boolean {
     console.log('IsLoggedInGuard#canActivate called');
-    
-    if( this.appApiService.isUserLoggedIn() == true) {
+
+    if (this.appApiService.isUserLoggedIn() === true) {
       return true;
-    }
-    else {
-      this.router.navigate(['/terminallogin']);
+    } else {
+      this.router.navigate(['/' + appRoutes.loginOnTerminal]);
       return false;
     }
   }
@@ -29,14 +31,13 @@ export class IsNotLoggedInGuard implements CanActivate {
   constructor(private appApiService: AppApiService,
               private router: Router) {}
 
-  canActivate() {
+  canActivate(): Observable<boolean> | boolean {
     console.log('IsNotLoggedInGuard#canActivate called');
 
-    if( this.appApiService.isUserLoggedIn() == true) {
-      this.router.navigate(['/startpage']);
+    if (this.appApiService.isUserLoggedIn() === true) {
+      this.router.navigate(['/' + appRoutes.startpage]);
       return false;
-    }
-    else {
+    } else {
       return true;
     }
   }
@@ -49,17 +50,15 @@ export class IsAdminGuard implements CanActivate {
   canActivate():boolean {
     console.log('IsAdminGuard#canActivate called');
 
-    if( this.appApiService.isAdmin() == true)
-      return true;
-    else
-      return false;
+    return this.appApiService.isAdmin() === true;
+
   }
 }
 
 @Injectable()
 export class IsTerminalGuard implements CanActivate {
   constructor(private appApiService: AppApiService,
-              private terminalService: TerminalService, 
+              private terminalService: TerminalService,
               private router: Router) {}
 
   canActivate(): Observable<boolean> | boolean  {
@@ -74,7 +73,7 @@ export class IsTerminalGuard implements CanActivate {
       return true;
     }
 
-    this.router.navigate(['/login']);
+    this.router.navigate(['/' + appRoutes.login]);
     return false;
 
     // check twice if the cookie is set

@@ -36,6 +36,8 @@
       'is_admin' => is_manager(),
       // user_display_name
       'user_display_name' => wp_get_current_user()->display_name,
+      // user nonce
+      'nonce' => wp_create_nonce( 'wp_rest' ),
     );
   }
 

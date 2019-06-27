@@ -1,40 +1,55 @@
-import { Component, OnInit, isDevMode, enableProdMode } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpService } from '../../services/http.service';
 import { CardData } from '../../services/parser.service';
 import { NgForm } from '@angular/forms';
-import { FocusModule } from 'angular2-focus';
+import { AppApiService, UserData } from '../../services/app-api.service';
 
 
-    //let teststring:string = 'name:jakob, cardid:123456, nachname: hubert, email:jakob.ellmaier@gmx.at';   
+//let teststring:string = 'name:jakob, cardid:123456, nachname: hubert, email:jakob.ellmaier@gmx.at';
 
 
 @Component({
   selector: 'app-login',
   templateUrl: './terminallogin.component.html',
-  styleUrls: ['./terminallogin.component.css']
+  styleUrls: ['./terminallogin.component.scss']
 })
 export class TerminalLoginComponent implements OnInit {
 
-  private login_message: string;
+  private loginMessage: string;
 
   constructor(private httpService: HttpService,
-              private router: Router
+              private router: Router,
+              private appApi: AppApiService,
               ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
-  public submitLogin(login_form: NgForm) {
-    let username: string = login_form.controls['login'].value;
-    let password: string = login_form.controls['password'].value;
+  public submitLogin(loginForm: NgForm): void {
+    let username: string = loginForm.controls['login'].value;
+    let password: string = loginForm.controls['password'].value;
     
     this.httpService.checkLogin(username, password).subscribe(
       data =>  {
-        this.refresh();
+
+        if (this.appApi.isDevMode()) {
+          this.httpService.getUserData(username, password).subscribe(
+            (data: UserData) =>  {
+              this.appApi.setDevUserLoggedIn(data);
+              this.router.navigate(['/startpage']);
+            },
+            err =>  {
+              this.loginMessage = err.error.message;
+            }
+          );
+        } else {
+          this.refresh();
+        }
+
       },
       err =>  {
-        this.login_message = err.error.message;
+        this.loginMessage = err.error.message;
       }
     );
   }
@@ -44,22 +59,22 @@ export class TerminalLoginComponent implements OnInit {
   // ----------- for NfcLogin ---------------------------------
 
   
-  public nfc_login_message: string = "Achtung: Du musst die Karte zuerst zu deinem Account hinzufügen!"; // output to child
-  public nfc_button_label: string = 'Login with NFC-Card'; // show / hide Label
+  public nfcLoginMessage: string = 'Achtung: Du musst die Karte zuerst zu deinem Account hinzufügen!'; // output to child
+  public nfcButtonLabel: string = 'Login with NFC-Card'; // show / hide Label
 
-  public onCardLoaded(card_data: CardData) {
+  public onCardLoaded(cardData: CardData): void {
 
-    console.log('input card' + card_data.cardid);
-    console.log('input name' + card_data.name + ' ' + card_data.surename);
+    console.log('input card' + cardData.cardid);
+    console.log('input name' + cardData.name + ' ' + cardData.surename);
 
-    this.httpService.checkLoginToken(card_data.cardid).subscribe(
+    this.httpService.checkLoginToken(cardData.cardid).subscribe(
       data =>  {
-        this.nfc_login_message = "Karte gefunden!";
+        this.nfcLoginMessage = 'Karte gefunden!';
         this.refresh();
       },
       err =>  {
         console.log(err);
-        this.nfc_login_message = "Karte nicht gefunden, bitte versuche es erneut!";
+        this.nfcLoginMessage = 'Karte nicht gefunden, bitte versuche es erneut!';
       }
     );
     
