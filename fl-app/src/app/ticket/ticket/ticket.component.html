@@ -1,0 +1,11 @@
+<div>
+  <div class="fl-ticket-element {{ticket.status}}"
+       [ngClass]="{'blink': ticket.available, 'highlight': ticket.changed }"
+       [style.border-color]="ticket.color">
+    <p class="ticket-content">{{ ticket.post_date | date : "EEEE, d. MMMM y, HH:mm" }}<p>
+    <h2>{{ ticket.post_title }}</h2>
+    <p class="ticket-content"> Gerät: <b>{{ ticket.device_title }}</b>
+      <span *ngIf="ticket.pin"> | Geräte-Pin: <b>{{ ticket.pin }}</b></span></p>
+    <div class="status-icon"></div>
+  </div>
+</div>

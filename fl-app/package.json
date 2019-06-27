@@ -30,11 +30,11 @@
     "moment": "^2.19.1",
     "ng2-nvd3": "^2.0.0",
     "ngx-cookie-service": "^1.0.10",
-    "npm": "^6.9.0",
+    "npm": "^6.9.1",
     "rxjs": "^6.5.1",
+    "rxjs-compat": "^6.0.0-rc.0",
     "tslib": "^1.9.0",
-    "zone.js": "^0.8.14",
-    "rxjs-compat": "^6.0.0-rc.0"
+    "zone.js": "^0.8.14"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.13.0",

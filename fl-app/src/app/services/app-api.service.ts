@@ -69,25 +69,39 @@ export class AppApiService {
     if (this.isDevModeEnabled) {
       console.log('Runing in Dev-Mode');
       this.appApi = require('./AppAPI.json');
-      this.userData = require('./UserData.json');
       this.terminalData = require('./TerminalData.json');
+      this.userData = require('./UserData.json');
+
+      const userLoggedIn:string = localStorage.getItem('is-user-logged-in');
+      if (userLoggedIn === 'true') {
+        console.log('Load Data from LocalStorage');
+        this.userData.is_user_logged_in = true;
+        this.userData.is_admin = (localStorage.getItem('is-admin') === 'true');
+        this.userData.nonce = localStorage.getItem('nonce');
+        this.userData.user_display_name = localStorage.getItem('user-display-name');
+      }
     } else {
       this.appApi = AppAPI;
       this.userData = UserDataLoc;
       this.terminalData = TerminalDataLoc;
     }
     this.appDataSubject.next(true);
-
-    //console.log(this.appApi);
-    //console.log(this.userData);
-    //console.log(this.terminalData);
-
-
   }
 
   //
   public setDevUserLoggedIn(data:UserData):void {
     this.userData = data;
+    localStorage.setItem('nonce', data.nonce);
+    localStorage.setItem('is-user-logged-in', String(data.is_user_logged_in));
+    localStorage.setItem('is-admin', String(data.is_admin));
+    localStorage.setItem('user-display-name', String(data.user_display_name));
+  }
+
+  public setDevUserLoggedOut():void {
+    localStorage.removeItem('nonce');
+    localStorage.removeItem('is-user-logged-in');
+    localStorage.removeItem('is-admin');
+    localStorage.removeItem('user-display-name');
   }
 
 

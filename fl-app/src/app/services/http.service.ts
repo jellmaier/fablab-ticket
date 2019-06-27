@@ -9,6 +9,7 @@ import { CookieService } from 'ngx-cookie-service';
 
 import { DeviceStatistics } from 'app/statistic/statistic.service';
 import { UserRegister } from '../login/register/register.component';
+import { TicketData, TicketList } from '../ticket/my-tickets/my-tickets.component';
 
 
 //import 'rxjs/add/operator/toPromise';
@@ -36,8 +37,8 @@ export class HttpService {
 */
   public setTicketSystemOnline(online:boolean): Observable<boolean> {
 
-    let url = this.appApiService.getPluginApiUrl() + 'ticket_system_online';
-    let param = online ? 'online' : 'offline' ;
+    const url: string = this.appApiService.getPluginApiUrl() + 'ticket_system_online';
+    const param: string = online ? 'online' : 'offline' ;
 
     return this.http.post<boolean>(url, {
         params: { set_online: param }
@@ -56,21 +57,37 @@ export class HttpService {
   } */
   
   public getTerminalToken(): Observable<any> {
-    let url = this.appApiService.getPluginApiUrl() + 'get_terminal_token';
+    const url: string = this.appApiService.getPluginApiUrl() + 'get_terminal_token';
 
     return this.http.get<any>(url).pipe(
           catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
   }
 
   public getDevices(): Observable<any> {
-    let url = this.appApiService.getPluginApiUrl() + 'device_types';
+    const url: string = this.appApiService.getPluginApiUrl() + 'device_types';
+
+    return this.http.get<any>(url).pipe(
+          catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
+  }
+
+  public getMyTickets(hash: string): Observable<TicketList> {
+    const url: string = this.appApiService.getPluginApiUrl() + 'tickets_current_user';
+
+    return this.http.get<any>(url, {
+        params: { hash }
+      }).pipe(
+          catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
+  }
+
+  public getMyTicketDetails(id: number): Observable<TicketData> {
+    const url: string = this.appApiService.getPluginApiUrl() + 'ticket_values/' + id;
 
     return this.http.get<any>(url).pipe(
           catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
   }
 
   public gettesturl(): Observable<any> {
-    let url = 'https://httpbin.org/get';
+    const url: string = 'https://httpbin.org/get';
 
     return this.http.get<any>(url).pipe(
           catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
@@ -81,9 +98,9 @@ export class HttpService {
 
   public registerUser(registerData: UserRegister): Observable<any> {
 
-    let url:string = this.appApiService.getPluginApiUrl() + 'register_user_on_terminal';
+    const url: string = this.appApiService.getPluginApiUrl() + 'register_user_on_terminal';
 
-    let terminaltoken:string = this.cookieService.get('terminal_token'); // should be in terminal service
+    const terminalToken:string = this.cookieService.get('terminal_token'); // should be in terminal service
 
     return this.http.post<any>(url, {
         params: { username: registerData.username,
@@ -92,7 +109,7 @@ export class HttpService {
                   email: registerData.email,
                   password: registerData.password,
                   cardid: registerData.cardid,
-                  terminaltoken: terminaltoken
+                  terminaltoken: terminalToken
                  }
       });
 
@@ -103,10 +120,10 @@ export class HttpService {
 
   public checkLogin(login: string, password: string): Observable<any> {
 
-    let url = this.appApiService.getPluginApiUrl() + 'check_user_login';
+    const url: string = this.appApiService.getPluginApiUrl() + 'check_user_login';
 
     return this.http.post<any>(url, {
-        params: { username: login, password: password }
+        params: { username: login, password }
       }); //.catch((err: HttpErrorResponse) => Observable.throw(this.handleHttpError(err)));
 
   }
@@ -114,17 +131,17 @@ export class HttpService {
 
   public getUserData(login: string, password: string): Observable<UserData> {
 
-    let url = this.appApiService.getPluginApiUrl() + 'get_user_login_data';
+    const url: string = this.appApiService.getPluginApiUrl() + 'get_user_login_data';
 
     return this.http.get<any>(url, {
-      params: { username: login, password: password }
+      params: { username: login, password }
     }); //.catch((err: HttpErrorResponse) => Observable.throw(this.handleHttpError(err)));
 
   }
 
   public checkLoginToken(submitcode: string): Observable<any> {
 
-    let url = this.appApiService.getPluginApiUrl() + 'check_nfc_token';
+    const url: string = this.appApiService.getPluginApiUrl() + 'check_nfc_token';
 
     return this.http.get<any>(url, {
         params: { token: submitcode }
@@ -134,8 +151,8 @@ export class HttpService {
   // -------  get Statistic Data  ------------------------
 
   public getStatisticOf(start: string, end: string): Observable<DeviceStatistics[]> {
-    
-    let url = this.appApiService.getPluginApiUrl() + 'statistic';
+
+    const url: string = this.appApiService.getPluginApiUrl() + 'statistic';
     //let statisticUrl = 'http://fablab.tugraz.at/wp-json/sharepl/v1/statistic';
 
     return this.http.get<DeviceStatistics[]>(url, {
@@ -159,6 +176,15 @@ export class HttpService {
       // The response body may contain clues as to what went wrong,
       console.log(`Backend returned code ${err.status}, body was: ${err.error.message}`);
     }
+    if (err.status === 403) {
+      this.appApiService.setDevUserLoggedOut();
+      this.refresh();
+    }
+  }
+
+
+  private refresh(): void {
+    window.location.reload();
   }
 }
 

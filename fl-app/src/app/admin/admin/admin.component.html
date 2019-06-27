@@ -5,11 +5,11 @@
 </a>
 <br>
 <caption>This is a Login Terminal: </caption>                      <!-- totoranslate --> 
-<label class="switch" (click)="toggleIsTerminal()" [ngClass]="{'active': toggle_terminal}" >
+<label class="switch" (click)="toggleIsTerminal()" [class.active]="toggleTerminal" >
   <div class="slider round"></div>
 </label>
 <br>
 <caption>Ticket System Online: </caption>                       <!-- totoranslate -->
-<label class="switch" (click)="toggleTicketSystemOnline()" [ngClass]="{'active': toggle_ticket_system_online}" >
+<label class="switch" (click)="toggleTicketSystemOnline()" [class.active]="isToggleTicketSystemOnline" >
   <div class="slider round"></div>
 </label>

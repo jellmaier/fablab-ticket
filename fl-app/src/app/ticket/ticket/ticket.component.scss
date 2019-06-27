@@ -1,0 +1,64 @@
+
+.fl-ticket-element {
+  font-family: Helvetica, Arial, Sans-Serif;
+  position: relative;
+  background: #fff;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+  padding: 20px 24px;
+  margin: 18px 10px;
+  transition: all 0.2s ease;
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+
+  border-width: 0 0 0 5px;
+  border-style: solid;
+  border-color: #ccc;
+
+  h2 {
+    margin-top: 6px;
+    margin-bottom: 6px;
+    font-size: 28px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    color: #74a4a3;
+  }
+
+  p {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  input[type=submit] {
+    margin: 10px 4px 0 0;
+    border: 1px solid #74a4a3;
+    background: none;
+    color: #74a4a3;
+    text-transform: none;
+    padding: 10px 16px;
+    font-weight: bold;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    border-radius: 5px;
+    transition: all 0.2s ease;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    display: inline-block;
+    box-shadow: none;
+    text-shadow: none;
+
+
+    &:enabled:hover{
+      background: #74a4a3;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: none;
+      text-shadow: none;
+    }
+
+    &[disabled] {
+      opacity: 0.6;
+    }
+  }
+
+}
+
