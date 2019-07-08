@@ -129,6 +129,10 @@ export class AppApiService {
     return this.appApi.sharing_url;
   }
 
+  public getRestBaseUrl():string {
+    return '/fablab/wp-json/sharepl/v2/';
+  }
+
   public getNonce():string {
     return this.userData.nonce;
   }

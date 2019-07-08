@@ -7,6 +7,7 @@ include 'ticket-handler.php';
 include 'ticket-queries.php';
 include 'ticket-rest.php';
 include 'ticket-rest-getter.php';
+include 'ticket-rest-getter-v2.php';
 include 'ticket-rest-permission.php';
 
 if (!class_exists('Ticket'))

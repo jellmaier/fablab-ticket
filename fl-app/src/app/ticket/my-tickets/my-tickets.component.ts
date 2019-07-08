@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { HttpService } from '../../services/http.service';
+import { Observable } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 export interface TicketList {
   tickets: Array<Ticket>;
@@ -32,17 +34,25 @@ export interface TicketData {
 @Component({
   selector: 'app-my-tickets',
   templateUrl: './my-tickets.component.html',
-  styleUrls: ['./my-tickets.component.scss']
+  styleUrls: ['./my-tickets.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MyTicketsComponent implements OnInit {
 
   private hash: string = '';
   private tickets: Array<Ticket>;
+  tickets$: Observable<TicketList>;
 
-  constructor(private httpService: HttpService) { }
+  constructor(private httpService: HttpService,
+              private ref: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.loadTickets();
+   // this.loadTickets();
+    this.loadTicketsAsync();
+  }
+
+  loadTicketsAsync():void {
+    this.tickets$ = this.httpService.getMyTicketsV2(this.hash);
   }
 
   loadTickets():void {
@@ -50,16 +60,13 @@ export class MyTicketsComponent implements OnInit {
       data =>  {
         console.log(data);
         this.tickets = data.tickets;
+        this.ref.markForCheck();
         this.tickets.forEach( ticket => {
           this.httpService.getMyTicketDetails(ticket.ID).subscribe(
             ticketData =>  {
               console.log(ticketData);
-              //ticket.device_title = ticketData.device_title;
-              //ticket.pin = ticketData.pin;
-              //ticket.color = ticketData.color;
               Object.assign(ticket, ticketData);
-
-
+              this.ref.markForCheck();
             },
             err =>  {
               console.log(err.error.message);

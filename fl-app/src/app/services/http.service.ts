@@ -79,6 +79,15 @@ export class HttpService {
           catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
   }
 
+  public getMyTicketsV2(hash: string): Observable<TicketList> {
+    const url: string = this.appApiService.getRestBaseUrl() + 'myTickets';
+
+    return this.http.get<any>(url, {
+        params: { hash }
+      }).pipe(
+          catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
+  }
+
   public getMyTicketDetails(id: number): Observable<TicketData> {
     const url: string = this.appApiService.getPluginApiUrl() + 'ticket_values/' + id;
 
