@@ -9,7 +9,8 @@ import { CookieService } from 'ngx-cookie-service';
 
 import { DeviceStatistics } from 'app/statistic/statistic.service';
 import { UserRegister } from '../login/register/register.component';
-import { TicketData, TicketList } from '../ticket/my-tickets/my-tickets.component';
+import { Ticket, TicketData, TicketList } from '../ticket/my-tickets/my-tickets.component';
+import { Router } from '@angular/router';
 
 
 //import 'rxjs/add/operator/toPromise';
@@ -18,6 +19,7 @@ import { TicketData, TicketList } from '../ticket/my-tickets/my-tickets.componen
 export class HttpService {
   
   constructor( private http: HttpClient,
+               private router: Router,
                private appApiService: AppApiService,
                private cookieService: CookieService ) {}
 
@@ -100,6 +102,21 @@ export class HttpService {
 
     return this.http.get<any>(url).pipe(
           catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
+  }
+
+  // --- HATEOAS Methods ------------------------
+
+  public getResourceByLink(link: string): Observable<any> {
+    const url: string = this.appApiService.getRestBaseUrl() + '/' + link;
+    return this.http.get<any>(url).pipe(
+      catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
+  }
+
+  public getCurrentResource(): Observable<any> {
+    console.log(this.appApiService.getRestBaseUrl() + this.router.url);
+    const url: string = this.appApiService.getRestBaseUrl() + this.router.url;
+    return this.http.get<any>(url).pipe(
+      catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
   }
 
 

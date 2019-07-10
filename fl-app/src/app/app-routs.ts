@@ -5,4 +5,7 @@ export const appRoutes: any = {
   register: 'register',
   startpage: 'startpage',
   statistic: 'statistic',
+  profiles: 'profiles',
+  profilesWithId: 'profiles/:id',
+  profilesAndTickets: 'profiles/:id/tickets'
 };

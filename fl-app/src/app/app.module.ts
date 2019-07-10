@@ -42,6 +42,8 @@ import { StartpageComponent } from './startpage/startpage.component';
 import { AdminComponent } from './admin/admin/admin.component';
 import { MyTicketsComponent } from './ticket/my-tickets/my-tickets.component';
 import { TicketComponent } from './ticket/ticket/ticket.component';
+import { ProfilesComponent } from './profiles/profiles.component';
+import { ProfileRedirectComponent } from './profile-redirect/profile-redirect.component';
 
  
 @NgModule({
@@ -66,6 +68,8 @@ import { TicketComponent } from './ticket/ticket/ticket.component';
     AdminComponent,
     MyTicketsComponent,
     TicketComponent,
+    ProfilesComponent,
+    ProfileRedirectComponent,
   ],
   providers: [
     StatisticService,

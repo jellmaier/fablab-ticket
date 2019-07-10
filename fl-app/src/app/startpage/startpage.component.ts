@@ -1,8 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { AppApiService } from '../services/app-api.service';
+import { HttpService } from '../services/http.service';
+import { Ticket, TicketList } from '../ticket/my-tickets/my-tickets.component';
 
 @Component({
   selector: 'app-startpage',
@@ -11,14 +13,22 @@ import { AppApiService } from '../services/app-api.service';
 })
 export class StartpageComponent implements OnInit, OnDestroy {
 
-  constructor(private appApiService: AppApiService) { }
+  constructor(private httpService: HttpService,
+              private ref: ChangeDetectorRef,
+              private appApiService: AppApiService) { }
 
   private isAdmin:boolean = false;
   private isAdminSubscription: Subscription;
+  private hash: string = '';
+  tickets$: Observable<TicketList>;
 
   ngOnInit(): void {
     this.loadAdminInfo();
- 
+    this.loadTicketsAsync();
+  }
+
+  loadTicketsAsync():void {
+    this.tickets$ = this.httpService.getMyTicketsV2(this.hash);
   }
 
   private loadAdminInfo(): void {

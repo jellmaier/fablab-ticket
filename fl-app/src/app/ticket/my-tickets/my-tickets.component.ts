@@ -1,7 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { HttpService } from '../../services/http.service';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
 
 export interface TicketList {
   tickets: Array<Ticket>;
@@ -39,45 +37,11 @@ export interface TicketData {
 })
 export class MyTicketsComponent implements OnInit {
 
-  private hash: string = '';
-  private tickets: Array<Ticket>;
+  @Input()
   tickets$: Observable<TicketList>;
 
-  constructor(private httpService: HttpService,
-              private ref: ChangeDetectorRef) { }
+  constructor() { }
 
   ngOnInit(): void {
-   // this.loadTickets();
-    this.loadTicketsAsync();
   }
-
-  loadTicketsAsync():void {
-    this.tickets$ = this.httpService.getMyTicketsV2(this.hash);
-  }
-
-  loadTickets():void {
-    this.httpService.getMyTickets(this.hash).subscribe(
-      data =>  {
-        console.log(data);
-        this.tickets = data.tickets;
-        this.ref.markForCheck();
-        this.tickets.forEach( ticket => {
-          this.httpService.getMyTicketDetails(ticket.ID).subscribe(
-            ticketData =>  {
-              console.log(ticketData);
-              Object.assign(ticket, ticketData);
-              this.ref.markForCheck();
-            },
-            err =>  {
-              console.log(err.error.message);
-            }
-          );
-        });
-      },
-      err =>  {
-        console.log(err.error.message);
-      }
-    );
-  }
-
 }

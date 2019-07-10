@@ -11,6 +11,8 @@ import { NfcLoginComponent } from './login/nfclogin/nfc-login.component';
  
 import { IsNotLoggedInGuard, IsLoggedInGuard, IsAdminGuard, IsTerminalGuard } from './services/guards/login-guard.service';
 import { appRoutes } from './app-routs';
+import { ProfilesComponent } from './profiles/profiles.component';
+import { ProfileRedirectComponent } from './profile-redirect/profile-redirect.component';
 
 const routes: Routes = [
   { path: '', redirectTo: appRoutes.loginOnTerminal, pathMatch: 'full' },
@@ -21,6 +23,9 @@ const routes: Routes = [
   { path: appRoutes.login,         canActivate: [ IsNotLoggedInGuard ], component: LoginComponent },
   { path: appRoutes.register,      canActivate: [ IsNotLoggedInGuard ], component: RegisterComponent },
   { path: 'admin',                 canActivate: [ IsAdminGuard ],  component: AdminComponent },
+  { path: appRoutes.profiles,           canActivate: [ IsLoggedInGuard ], component: ProfileRedirectComponent },
+  { path: appRoutes.profilesWithId,     canActivate: [ IsLoggedInGuard ], component: ProfilesComponent },
+  { path: appRoutes.profilesAndTickets, canActivate: [ IsLoggedInGuard ], component: StartpageComponent },
   { path: appRoutes.statistic,     canActivate: [ IsAdminGuard ],  component: StatisticComponent }
 ];
 

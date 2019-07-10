@@ -130,7 +130,7 @@ export class AppApiService {
   }
 
   public getRestBaseUrl():string {
-    return '/fablab/wp-json/sharepl/v2/';
+    return '/fablab/wp-json/sharepl/v2';
   }
 
   public getNonce():string {
