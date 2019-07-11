@@ -8,7 +8,7 @@
 // Get Tickets by Query
 //--------------------------------------------------------
 
- function restGetTickets($ticket_query, $old_hash) {
+ function restGetTickets($user_id, $ticket_query, $old_hash) {
   
   $ticket_list = array();
 
@@ -17,9 +17,11 @@
   if ( $ticket_query->have_posts() ) {
     while ( $ticket_query->have_posts() ) : $ticket_query->the_post() ;
 
-      $ticket = getTicketValues($post->ID);
+      $ticket = getTicketValues($user_id, $post->ID);
       $ticket['post_title'] = $post->post_title;
       $ticket['post_date'] = $post->post_date;
+
+      $ticket['links'] = getTicketLinks($user_id, $post->ID);
 
       array_push($ticket_list, $ticket);
 
@@ -44,35 +46,13 @@
   return $result;
 }
 
-
-//--------------------------------------------------------
-// Rest get Tickets from current User
-//--------------------------------------------------------
-
-function restMyTickets($data) {
-  $old_hash = sanitize_text_field($data['hash']);
-  
-  return restGetTickets(get_ticket_query_from_user(get_current_user_id()), $old_hash);
-
-}
-
-add_action( 'rest_api_init', function () {
-  register_rest_route( 'sharepl/v2', '/myTickets', array(
-    'methods' => 'GET',
-    'callback' => 'restMyTickets',
-    'permission_callback' => 'rest_ticket_user_permission',
-    'sanitize_callback' => 'rest_data_arg_sanitize_callback',
-  ) );
-} );
-
-
 //--------------------------------------------------------
 // Rest create links function
 //--------------------------------------------------------
 
+function restCreateLink($appLink, $relation, $type = 'GET', $label = null) {
 
-function restCreateLink($appLink, $relation, $type = 'GET') {
-
+  //https://www.iana.org/assignments/link-relations/link-relations.xhtml
 
 
   $link = array();
@@ -80,6 +60,9 @@ function restCreateLink($appLink, $relation, $type = 'GET') {
   $link['href'] = $appLink;
   $link['rel'] = $relation;
   $link['type'] = $type;
+  if ( $label != null ) {
+    $link['label'] = $label;
+  }
   
   return $link;
 
@@ -116,8 +99,10 @@ add_action( 'rest_api_init', function () {
 
 function restProfiles($data) {
 
-    $links = array(); 
-  array_push($links, restCreateLink('profiles' . '/' . get_current_user_id(). '/tickets', 'tickets'));
+  $user_id = $data['id'];
+
+  $links = array(); 
+  array_push($links, restCreateLink('profiles' . '/' . $user_id . '/tickets', 'tickets'));
 
   $resource = array();
   $resource['links'] = $links;
@@ -130,7 +115,7 @@ add_action( 'rest_api_init', function () {
   register_rest_route( 'sharepl/v2', '/profiles/(?P<id>\d+)', array(
     'methods' => 'GET',
     'callback' => 'restProfiles',
-   // 'permission_callback' => 'restUserPermissionById',
+    'permission_callback' => 'restUserPermissionById',
     'sanitize_callback' => 'rest_data_arg_sanitize_callback',
   ) );
 } );
@@ -140,9 +125,11 @@ add_action( 'rest_api_init', function () {
 //--------------------------------------------------------
 
 function restTicketsForUser($data) {
+
+  $user_id = $data['id'];
   $old_hash = sanitize_text_field($data['hash']);
   
-  return restGetTickets(get_ticket_query_from_user(get_current_user_id()), $old_hash);
+  return restGetTickets($user_id, get_ticket_query_from_user( $user_id ), $old_hash );
 
 }
 
@@ -159,7 +146,7 @@ add_action( 'rest_api_init', function () {
 //--------------------------------------------------------
 // get Ticket values
 //--------------------------------------------------------
-function getTicketValues($ticket_id) {
+function getTicketValues($user_id, $ticket_id) {
 
   $ticket = array();
 
@@ -184,12 +171,23 @@ function getTicketValues($ticket_id) {
   }
   $ticket['device_id'] = $device_id;
 
-  if (get_post_field( 'post_author', $ticket_id ) == get_current_user_id()) {
+  if (get_post_field( 'post_author', $ticket_id ) == $user_id) {
     $ticket['pin'] = get_post_meta($ticket_id, 'pin', true );
   }
  
   return $ticket; 
 }
 
+//--------------------------------------------------------
+// get Ticket links
+//--------------------------------------------------------
+function getTicketLinks($user_id, $ticket_id) {
+
+  $links = array(); 
+ // array_push( $links, restCreateLink( ('profiles/' . $user_id . '/tickets/' . $ticket_id ), 'delete', 'DELETE', 'Ticket löschen'));
+  array_push( $links, restCreateLink( ('profiles/' . $user_id . '/tickets/' . $ticket_id ), 'delete', 'PUT', 'Ticket beabeiten'));
+
+  return $links;
+}
 
 ?>

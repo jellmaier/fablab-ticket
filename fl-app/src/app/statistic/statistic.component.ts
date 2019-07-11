@@ -95,7 +95,7 @@ export class StatisticComponent implements OnInit {
   }
 */
 
-  @ViewChild('linechart') linechart;
+  @ViewChild('linechart', { static: false }) linechart;
 
   private addStatisticData(data:Array<any>, week:Week, offset:number):void {
 

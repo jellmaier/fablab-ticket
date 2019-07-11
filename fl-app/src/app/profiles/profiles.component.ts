@@ -1,11 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { HttpService } from '../services/http.service';
-import { Router } from '@angular/router';
 import { LinkService } from '../services/link.service';
-import { observable, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { TicketList } from '../ticket/my-tickets/my-tickets.component';
-import { switchMap } from 'rxjs-compat/operator/switchMap';
-import { mergeMap } from 'rxjs-compat/operator/mergeMap';
+import { switchMap } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-profiles',
@@ -18,21 +17,22 @@ export class ProfilesComponent implements OnInit {
   tickets$: Observable<TicketList>;
 
   constructor(private httpService: HttpService,
+              private router: Router,
+              private route: ActivatedRoute,
               private linkService: LinkService) { }
 
   ngOnInit(): void {
-    this.loadResource();
+    if (this.route.snapshot.data['redirect'] === true) {
+      this.loadRedirectResource();
+    } else {
+      this.loadProfileResource();
+    }
   }
 
-  loadResource():void {
-
-    this.tickets$ = this.httpService.getResourceByLink('profiles/1/tickets');
-
+  loadRedirectResource():void {
     this.httpService.getCurrentResource().subscribe(
       data =>  {
-        console.log(data);
-        console.log(this.linkService.getHrefByReltype(data.links, 'tickets'));
-        //this.tickets$ = this.httpService.getResourceByLink(this.linkService.getHrefByReltype(data.links, 'tickets'));
+        this.router.navigate(['/' + this.linkService.getHrefByReltype(data.links, 'related')]);
       },
       err =>  {
         console.log(err.error.message);
@@ -40,12 +40,11 @@ export class ProfilesComponent implements OnInit {
     );
   }
 
-  loadResource2():void {
-
-  //  this.tickets$ = this.httpService.getResourceByLink('profiles/1/tickets');
-
+  loadProfileResource():void {
     this.tickets$ = this.httpService.getCurrentResource().pipe(
-     // switchMap(character =>   this.httpService.getResourceByLink('profiles/1/tickets'))
+      switchMap((response: any) => {
+        return this.httpService.getResourceByLink(this.linkService.getHrefByReltype(response.links, 'tickets'));
+      })
     );
 
   }

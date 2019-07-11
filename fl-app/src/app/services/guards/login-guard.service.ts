@@ -35,7 +35,7 @@ export class IsNotLoggedInGuard implements CanActivate {
     console.log('IsNotLoggedInGuard#canActivate called');
 
     if (this.appApiService.isUserLoggedIn() === true) {
-      this.router.navigate(['/' + appRoutes.startpage]);
+      this.router.navigate(['/' + appRoutes.profiles]);
       return false;
     } else {
       return true;

@@ -4,6 +4,7 @@ import { HttpService } from '../../services/http.service';
 import { CardData } from '../../services/parser.service';
 import { NgForm } from '@angular/forms';
 import { AppApiService, UserData } from '../../services/app-api.service';
+import { appRoutes } from '../../app-routs';
 
 
 //let teststring:string = 'name:jakob, cardid:123456, nachname: hubert, email:jakob.ellmaier@gmx.at';
@@ -37,7 +38,7 @@ export class TerminalLoginComponent implements OnInit {
           this.httpService.getUserData(username, password).subscribe(
             (data: UserData) =>  {
               this.appApi.setDevUserLoggedIn(data);
-              this.router.navigate(['/startpage']);
+              this.router.navigate(['/' + appRoutes.profiles]);
             },
             err =>  {
               this.loginMessage = err.error.message;

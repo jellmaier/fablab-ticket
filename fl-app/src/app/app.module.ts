@@ -43,18 +43,22 @@ import { AdminComponent } from './admin/admin/admin.component';
 import { MyTicketsComponent } from './ticket/my-tickets/my-tickets.component';
 import { TicketComponent } from './ticket/ticket/ticket.component';
 import { ProfilesComponent } from './profiles/profiles.component';
-import { ProfileRedirectComponent } from './profile-redirect/profile-redirect.component';
+import { DialogComponent } from './dialog/dialog.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDialogModule } from '@angular/material';
 
  
 @NgModule({
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
     NgProgressModule.forRoot(),
     NgProgressHttpClientModule,
     AppRoutingModule,
     NvD3Module,
+    MatDialogModule,
     FocusModule.forRoot()
   ],
   declarations: [
@@ -69,7 +73,7 @@ import { ProfileRedirectComponent } from './profile-redirect/profile-redirect.co
     MyTicketsComponent,
     TicketComponent,
     ProfilesComponent,
-    ProfileRedirectComponent,
+    DialogComponent,
   ],
   providers: [
     StatisticService,
