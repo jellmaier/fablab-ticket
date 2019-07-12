@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { HttpService } from '../../services/http.service';
-import { CardData, ParserService } from '../../services/parser.service';
-import { AppApiService } from '../../services/app-api.service';
+import { HttpService } from '../../../services/http.service';
+import { CardData, ParserService } from '../../../services/parser.service';
+import { AppApiService } from '../../../services/app-api.service';
 import { NgForm } from '@angular/forms';
 
 

@@ -1,0 +1,9 @@
+<div *ngIf="show" class="fl-overlay">
+  <div class="device-ticket">
+    <a class="close"
+       (click)="closeOverlay()">x</a>
+    <ng-content></ng-content>
+  </div>
+  <div class="fl-overlay-background"
+       (click)="closeOverlay()"></div>
+</div>

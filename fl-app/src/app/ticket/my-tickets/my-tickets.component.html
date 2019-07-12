@@ -1,3 +1,4 @@
 <div *ngFor="let ticket of ( tickets$ | async )?.tickets">
-  <app-ticket [ticket]="ticket"></app-ticket>
+  <app-ticket [ticket]="ticket"
+              (buttonClick)="buttonClick.emit($event)"></app-ticket>
 </div>

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpService } from '../../services/http.service';
-import { CardData } from '../../services/parser.service';
+import { HttpService } from '../../../services/http.service';
+import { CardData } from '../../../services/parser.service';
 import { NgForm } from '@angular/forms';
-import { AppApiService, UserData } from '../../services/app-api.service';
-import { appRoutes } from '../../app-routs';
+import { AppApiService, UserData } from '../../../services/app-api.service';
+import { appRoutes } from '../../../app-routs';
 
 
 //let teststring:string = 'name:jakob, cardid:123456, nachname: hubert, email:jakob.ellmaier@gmx.at';

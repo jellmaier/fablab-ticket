@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Link, Links } from '../../services/link.service';
 
 export interface TicketList {
   tickets: Array<Ticket>;
@@ -16,6 +17,7 @@ export interface Ticket {
   color?: string;
   available?: boolean;
   changed?: boolean;
+  links: Links;
 }
 
 export interface TicketData {
@@ -39,6 +41,8 @@ export class MyTicketsComponent implements OnInit {
 
   @Input()
   tickets$: Observable<TicketList>;
+
+  @Output() buttonClick: EventEmitter<Link> = new EventEmitter();
 
   constructor() { }
 

@@ -7,8 +7,8 @@ import { AppApiService, UserData } from './app-api.service';
 
 import { CookieService } from 'ngx-cookie-service';
 
-import { DeviceStatistics } from 'app/statistic/statistic.service';
-import { UserRegister } from '../login/register/register.component';
+import { DeviceStatistics } from 'app/pages/statistic/statistic.service';
+import { UserRegister } from '../pages/login/register/register.component';
 import { Ticket, TicketData, TicketList } from '../ticket/my-tickets/my-tickets.component';
 import { Router } from '@angular/router';
 

@@ -7,5 +7,9 @@
     <p class="ticket-content"> Gerät: <b>{{ ticket.device_title }}</b>
       <span *ngIf="ticket.pin"> | Geräte-Pin: <b>{{ ticket.pin }}</b></span></p>
     <div class="status-icon"></div>
+    <div *ngFor="let link of ticket.links">
+      <app-button [label]="link.label"
+                  (buttonClick)="buttonClicked($event, link)"></app-button>
+    </div>
   </div>
 </div>

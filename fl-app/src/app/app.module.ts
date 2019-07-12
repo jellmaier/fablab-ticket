@@ -9,9 +9,9 @@ import { NgProgressHttpClientModule } from '@ngx-progressbar/http-client';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
-import { StatisticService } from './statistic/statistic.service';
-import { StatisticComponent } from './statistic/statistic.component';
-import { ChartService } from './statistic/chart.service';
+import { StatisticService } from './pages/statistic/statistic.service';
+import { StatisticComponent } from './pages/statistic/statistic.component';
+import { ChartService } from './pages/statistic/chart.service';
 
 import { HttpService } from './services/http.service';
 import { HttpInterceptorService } from './services/http-interceptor.service';
@@ -31,21 +31,23 @@ import { FocusModule } from 'angular2-focus';
 // d3 and nvd3 should be included somewhere
 import 'd3';
 import 'nvd3';
-import { LoginComponent } from './login/login/login.component';
-import { TerminalLoginComponent } from './login/terminallogin/terminallogin.component';
-import { NfcLoginComponent } from './login/nfclogin/nfc-login.component';
-import { RegisterComponent } from './login/register/register.component';
+import { LoginComponent } from './pages/login/login/login.component';
+import { TerminalLoginComponent } from './pages/login/terminallogin/terminallogin.component';
+import { NfcLoginComponent } from './pages/login/nfclogin/nfc-login.component';
+import { RegisterComponent } from './pages/login/register/register.component';
 
 import { IsLoggedInGuard, IsNotLoggedInGuard, IsAdminGuard, IsTerminalGuard } from './services/guards/login-guard.service';
 import { TerminalService } from './services/terminal.service';
-import { StartpageComponent } from './startpage/startpage.component';
+import { StartpageComponent } from './pages/startpage/startpage.component';
 import { AdminComponent } from './admin/admin/admin.component';
 import { MyTicketsComponent } from './ticket/my-tickets/my-tickets.component';
 import { TicketComponent } from './ticket/ticket/ticket.component';
-import { ProfilesComponent } from './profiles/profiles.component';
-import { DialogComponent } from './dialog/dialog.component';
+import { ProfilesComponent } from './pages/profiles/profiles.component';
+import { DialogMatComponent } from './components/dialog-mat/dialog-mat.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material';
+import { DialogComponent } from './components/dialog/dialog.component';
+import { ButtonComponent } from './components/button/button.component';
 
  
 @NgModule({
@@ -73,7 +75,9 @@ import { MatDialogModule } from '@angular/material';
     MyTicketsComponent,
     TicketComponent,
     ProfilesComponent,
+    DialogMatComponent,
     DialogComponent,
+    ButtonComponent,
   ],
   providers: [
     StatisticService,

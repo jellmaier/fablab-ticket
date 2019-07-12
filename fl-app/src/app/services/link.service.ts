@@ -5,6 +5,7 @@ export interface Link {
   href: string;
   rel: string;
   type: string;
+  label: string;
 }
 
 export interface Links extends Array<Link> {}

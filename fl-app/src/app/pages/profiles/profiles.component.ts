@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { HttpService } from '../services/http.service';
-import { LinkService } from '../services/link.service';
+import { ChangeDetectionStrategy, Component, EventEmitter, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { TicketList } from '../ticket/my-tickets/my-tickets.component';
 import { switchMap } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HttpService } from '../../services/http.service';
+import { Link, LinkService } from '../../services/link.service';
+import { TicketList } from '../../ticket/my-tickets/my-tickets.component';
 
 @Component({
   selector: 'app-profiles',
@@ -15,6 +15,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ProfilesComponent implements OnInit {
 
   tickets$: Observable<TicketList>;
+  $openDialogEvent: EventEmitter<boolean> = new EventEmitter();
 
   constructor(private httpService: HttpService,
               private router: Router,
@@ -47,6 +48,10 @@ export class ProfilesComponent implements OnInit {
       })
     );
 
+  }
+
+  buttonClicked(link: Link): void {
+    this.$openDialogEvent.emit(true);
   }
 
 }

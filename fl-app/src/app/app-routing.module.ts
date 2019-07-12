@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { StatisticComponent } from './statistic/statistic.component';
-import { StartpageComponent } from './startpage/startpage.component';
+import { StatisticComponent } from './pages/statistic/statistic.component';
+import { StartpageComponent } from './pages/startpage/startpage.component';
 import { AdminComponent } from './admin/admin/admin.component';
-import { LoginComponent } from './login/login/login.component';
-import { RegisterComponent } from './login/register/register.component';
-import { TerminalLoginComponent } from './login/terminallogin/terminallogin.component';
-import { NfcLoginComponent } from './login/nfclogin/nfc-login.component';
+import { LoginComponent } from './pages/login/login/login.component';
+import { RegisterComponent } from './pages/login/register/register.component';
+import { TerminalLoginComponent } from './pages/login/terminallogin/terminallogin.component';
+import { NfcLoginComponent } from './pages/login/nfclogin/nfc-login.component';
  
 import { IsNotLoggedInGuard, IsLoggedInGuard, IsAdminGuard, IsTerminalGuard } from './services/guards/login-guard.service';
 import { appRoutes } from './app-routs';
-import { ProfilesComponent } from './profiles/profiles.component';
+import { ProfilesComponent } from './pages/profiles/profiles.component';
 
 const routes: Routes = [
   { path: '', redirectTo: appRoutes.loginOnTerminal, pathMatch: 'full' },

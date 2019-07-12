@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Ticket } from '../my-tickets/my-tickets.component';
+import { Link } from '../../services/link.service';
 
 @Component({
   selector: 'app-ticket',
@@ -10,9 +11,17 @@ export class TicketComponent implements OnInit {
 
   @Input() ticket: Ticket;
 
+  @Output() buttonClick: EventEmitter<Link> = new EventEmitter();
+
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  buttonClicked(clicked: boolean, link: Link): void {
+    if ( clicked ) {
+      this.buttonClick.emit(link);
+    }
   }
 
 }

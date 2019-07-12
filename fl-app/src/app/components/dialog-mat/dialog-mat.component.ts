@@ -1,15 +1,15 @@
 import { Component, OnInit, ChangeDetectionStrategy, Inject } from '@angular/core';
 
 @Component({
-  selector: 'app-dialog',
-  templateUrl: './dialog.component.html',
-  styleUrls: ['./dialog.component.scss'],
+  selector: 'app-dialog-mat',
+  templateUrl: './dialog-mat.component.html',
+  styleUrls: ['./dialog-mat.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DialogComponent {
+export class DialogMatComponent {
 
   constructor(
-   // public dialogRef: MatDialogRef<DialogComponent>,
+   // public dialogRef: MatDialogRef<DialogMatComponent>,
    // @Inject(MAT_DIALOG_DATA) public data: DialogData
    ) {}
 

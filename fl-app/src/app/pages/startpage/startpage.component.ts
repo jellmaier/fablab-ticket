@@ -1,10 +1,9 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 
 import { Observable, Subscription } from 'rxjs';
-
-import { AppApiService } from '../services/app-api.service';
-import { HttpService } from '../services/http.service';
-import { Ticket, TicketList } from '../ticket/my-tickets/my-tickets.component';
+import { HttpService } from '../../services/http.service';
+import { AppApiService } from '../../services/app-api.service';
+import { TicketList } from '../../ticket/my-tickets/my-tickets.component';
 
 @Component({
   selector: 'app-startpage',

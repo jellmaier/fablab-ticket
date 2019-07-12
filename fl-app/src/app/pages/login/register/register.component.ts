@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpService } from '../../services/http.service';
-import { CardData } from '../../services/parser.service';
-import { appRoutes } from '../../app-routs';
+import { HttpService } from '../../../services/http.service';
+import { CardData } from '../../../services/parser.service';
+import { appRoutes } from '../../../app-routs';
 
 
 //let teststring:string = 'name:jakob, cardid:123556, nachname: hubert, email:jakob.ellmaier@gmx.at';

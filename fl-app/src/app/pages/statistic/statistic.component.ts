@@ -13,7 +13,7 @@ declare let d3: any;
   templateUrl: './statistic.component.html',
     // include original styles
   styleUrls: [
-    '../../../node_modules/nvd3/build/nv.d3.css',
+    '../../../../node_modules/nvd3/build/nv.d3.css',
     './statistic.component.scss'
   ],
   encapsulation: ViewEncapsulation.None
