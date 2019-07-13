@@ -35,6 +35,7 @@ include 'system/strings.php';
 include 'system/user-list.php';
 include 'system/rest/ticketlist-user.php';
 include 'manage-scripts.php';
+include 'rest/rest-endpoints.php';
 
 
 
@@ -48,6 +49,7 @@ new TicketShortcodeRest();
 new TicketListShortcodeRest();
 new ManageScripts();
 new RestTestShortcode();
+new RestEndpoints();
 
 
 

@@ -11,6 +11,7 @@ import { DeviceStatistics } from 'app/pages/statistic/statistic.service';
 import { UserRegister } from '../pages/login/register/register.component';
 import { Ticket, TicketData, TicketList } from '../ticket/my-tickets/my-tickets.component';
 import { Router } from '@angular/router';
+import { Link } from './link.service';
 
 
 //import 'rxjs/add/operator/toPromise';
@@ -106,9 +107,16 @@ export class HttpService {
 
   // --- HATEOAS Methods ------------------------
 
-  public getResourceByLink(link: string): Observable<any> {
-    const url: string = this.appApiService.getRestBaseUrl() + '/' + link;
+  public getResourceByHref(href: string): Observable<any> {
+    const url: string = this.appApiService.getRestBaseUrl() + '/' + href;
     return this.http.get<any>(url).pipe(
+      catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
+  }
+
+  public requestByLink(link: Link): Observable<any> {
+    const url: string = this.appApiService.getRestBaseUrl() + '/' + link.href;
+
+    return this.http.request<any>(link.type, url).pipe(
       catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
   }
 

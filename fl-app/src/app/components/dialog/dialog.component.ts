@@ -15,14 +15,14 @@ import {
 })
 export class DialogComponent implements OnInit, OnDestroy {
 
-  @Input() $openDialogEvent: EventEmitter<boolean>;
+  @Input() openDialogEvent$: EventEmitter<boolean>;
 
   show: boolean = false;
 
   constructor(private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.$openDialogEvent.subscribe( event => {
+    this.openDialogEvent$.subscribe(event => {
       this.show = event;
       this.cdr.markForCheck();
     });
@@ -33,7 +33,7 @@ export class DialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.$openDialogEvent.unsubscribe();
+    this.openDialogEvent$.unsubscribe();
   }
 
 }

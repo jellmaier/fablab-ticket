@@ -15,7 +15,8 @@ import { TicketList } from '../../ticket/my-tickets/my-tickets.component';
 export class ProfilesComponent implements OnInit {
 
   tickets$: Observable<TicketList>;
-  $openDialogEvent: EventEmitter<boolean> = new EventEmitter();
+  ticketOverlayData$: Observable<any>;
+  openDialogEvent$: EventEmitter<boolean> = new EventEmitter();
 
   constructor(private httpService: HttpService,
               private router: Router,
@@ -44,14 +45,16 @@ export class ProfilesComponent implements OnInit {
   loadProfileResource():void {
     this.tickets$ = this.httpService.getCurrentResource().pipe(
       switchMap((response: any) => {
-        return this.httpService.getResourceByLink(this.linkService.getHrefByReltype(response.links, 'tickets'));
+        return this.httpService.getResourceByHref(this.linkService.getHrefByReltype(response.links, 'tickets'));
       })
     );
 
   }
 
   buttonClicked(link: Link): void {
-    this.$openDialogEvent.emit(true);
+    console.log(link);
+    //this.ticketOverlayData$ = this.httpService.requestByLink(link);
+    this.openDialogEvent$.emit(true);
   }
 
 }
