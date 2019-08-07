@@ -1,10 +1,15 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpService } from '../../services/http.service';
 import { Link, LinkService } from '../../services/link.service';
-import { TicketList } from '../../ticket/my-tickets/my-tickets.component';
+import { DeviceList, TicketList } from '../../ticket/my-tickets/my-tickets.component';
+
+interface ProfileData {
+  tickets$: Observable<TicketList>;
+  devices$: Observable<DeviceList>;
+}
 
 @Component({
   selector: 'app-profiles',
@@ -14,7 +19,7 @@ import { TicketList } from '../../ticket/my-tickets/my-tickets.component';
 })
 export class ProfilesComponent implements OnInit {
 
-  tickets$: Observable<TicketList>;
+  profileData$: Observable<ProfileData>;
   ticketOverlayData$: Observable<any>;
   openDialogEvent$: EventEmitter<boolean> = new EventEmitter();
 
@@ -41,11 +46,28 @@ export class ProfilesComponent implements OnInit {
       }
     );
   }
+/*
+  loadProfileResource():void {
+    this.profileData$ = this.httpService.getCurrentResource().pipe(
+      switchMap((response: any) => {
+        return forkJoin(
+          this.httpService.getResourceByHref(this.linkService.getHrefByReltype(response.links, 'tickets')),
+          this.httpService.getResourceByHref(this.linkService.getHrefByReltype(response.links, 'devices'))
+        );
+      }),
+      map((value: [TicketList, any]) => {
+        return { tickets: value[0], devices: value[1] } as ProfileDataaa;
+      })
+    );
+    */
 
   loadProfileResource():void {
-    this.tickets$ = this.httpService.getCurrentResource().pipe(
-      switchMap((response: any) => {
-        return this.httpService.getResourceByHref(this.linkService.getHrefByReltype(response.links, 'tickets'));
+    this.profileData$ = this.httpService.getCurrentResource().pipe(
+      mergeMap((response: any) => {
+        return of({
+          tickets$: this.httpService.getResourceByHref(this.linkService.getHrefByReltype(response.links, 'tickets')),
+          devices$: this.httpService.getResourceByHref(this.linkService.getHrefByReltype(response.links, 'devices'))
+        } as ProfileData);
       })
     );
 
@@ -56,5 +78,4 @@ export class ProfilesComponent implements OnInit {
     //this.ticketOverlayData$ = this.httpService.requestByLink(link);
     this.openDialogEvent$.emit(true);
   }
-
 }

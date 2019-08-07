@@ -7,6 +7,14 @@ export interface TicketList {
   hash: string;
 }
 
+export interface DeviceList extends Array<Device>{}
+
+
+export interface Device {
+  id: number;
+  name: string;
+}
+
 export interface Ticket {
   ID: number;
   post_date: string;

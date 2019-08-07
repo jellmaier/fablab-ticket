@@ -1,5 +1,6 @@
 <?php
 
+include 'devices/rest-endpoints.php';
 include 'tickets/rest-endpoints.php';
 include 'rest-permission.php';
 
@@ -10,6 +11,7 @@ if (!class_exists('RestEndpointsV2Profiles'))
     public function __construct()
     {
     	new RestEndpointsV2ProfilesTickets();
+    	new RestEndpointsV2ProfilesDevices();
 
       add_action( 'rest_api_init', array(&$this, 'restRegisterRoutes') );
 
@@ -58,7 +60,9 @@ if (!class_exists('RestEndpointsV2Profiles'))
 
 		  $user_id = $data['id'];
 
+
 		  $links = array(); 
+		  array_push($links, RestEndpointsV2::createLink('profiles' . '/' . $user_id . '/devices', 'devices'));
 		  array_push($links, RestEndpointsV2::createLink('profiles' . '/' . $user_id . '/tickets', 'tickets'));
 
 		  $resource = array();

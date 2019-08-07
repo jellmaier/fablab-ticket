@@ -1,7 +1,11 @@
 <p>
   profiles works!
 </p>
-<app-my-tickets [tickets$]="tickets$"
+<app-my-tickets [tickets$]=" (profileData$ | async)?.tickets$"
                 (buttonClick)="buttonClicked($event)"></app-my-tickets>
+
+<div *ngFor="let device of ((profileData$ | async)?.devices$ | async )">
+  {{ device.name }}
+</div>
 <app-dialog [openDialogEvent$]="openDialogEvent$">
 </app-dialog>
