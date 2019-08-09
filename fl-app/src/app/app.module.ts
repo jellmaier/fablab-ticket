@@ -40,8 +40,8 @@ import { IsLoggedInGuard, IsNotLoggedInGuard, IsAdminGuard, IsTerminalGuard } fr
 import { TerminalService } from './services/terminal.service';
 import { StartpageComponent } from './pages/startpage/startpage.component';
 import { AdminComponent } from './admin/admin/admin.component';
-import { MyTicketsComponent } from './ticket/my-tickets/my-tickets.component';
-import { TicketComponent } from './ticket/ticket/ticket.component';
+import { MyTicketsComponent } from './pages/profiles/my-tickets/my-tickets.component';
+import { TicketComponent } from './components/ticket/ticket.component';
 import { ProfilesComponent } from './pages/profiles/profiles.component';
 import { DialogMatComponent } from './components/dialog-mat/dialog-mat.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';

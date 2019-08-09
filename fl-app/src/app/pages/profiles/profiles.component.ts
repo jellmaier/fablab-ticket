@@ -4,7 +4,7 @@ import { mergeMap } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpService } from '../../services/http.service';
 import { Link, LinkService } from '../../services/link.service';
-import { DeviceList, TicketList } from '../../ticket/my-tickets/my-tickets.component';
+import { DeviceList, TicketList } from './my-tickets/my-tickets.component';
 
 interface ProfileData {
   tickets$: Observable<TicketList>;

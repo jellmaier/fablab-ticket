@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Link, Links } from '../../services/link.service';
+import { Link, Links } from '../../../services/link.service';
 
 export interface TicketList {
   tickets: Array<Ticket>;

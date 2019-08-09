@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Ticket } from '../my-tickets/my-tickets.component';
+import { Ticket } from '../../pages/profiles/my-tickets/my-tickets.component';
 import { Link } from '../../services/link.service';
 
 @Component({

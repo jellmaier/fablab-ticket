@@ -3,6 +3,7 @@
 include 'devices/rest-endpoints.php';
 include 'tickets/rest-endpoints.php';
 include 'rest-permission.php';
+include 'rest-profiles-service.php';
 
 if (!class_exists('RestEndpointsV2Profiles'))
 {
@@ -21,18 +22,19 @@ if (!class_exists('RestEndpointsV2Profiles'))
 
         register_rest_route( 'sharepl/v2', '/profiles', array(
 			    'methods' => 'GET',
-			    'callback' => array(&$this, 'restProfilesCurrentUser'),
+			    'callback' => array('RestV2Profiles', 'restProfilesCurrentUser'),
 			   // 'permission_callback' => 'restUserPermissionById',
 			    'sanitize_callback' => 'rest_data_arg_sanitize_callback',
 			  ) );
 
-			  register_rest_route( 'sharepl/v2', '/profiles/(?P<id>\d+)', array(
+			  register_rest_route( 'sharepl/v2', '/profiles/(?P<userId>\d+)', array(
 			    'methods' => 'GET',
-			    'callback' => array(&$this, 'restProfiles'),
-			    'permission_callback' => 'restUserPermissionById',
+			    'callback' => array('RestV2Profiles', 'restProfiles'),
+			    'permission_callback' => array('RestV2Permission', 'restUserPermissionById'),
 			    'sanitize_callback' => 'rest_data_arg_sanitize_callback',
 			  ) );
 
+			 
 		}
 
     //--------------------------------------------------------
@@ -58,7 +60,7 @@ if (!class_exists('RestEndpointsV2Profiles'))
 
 		public function restProfiles($data) {
 
-		  $user_id = $data['id'];
+		  $user_id = $data['userId'];
 
 
 		  $links = array(); 
