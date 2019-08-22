@@ -1,6 +1,7 @@
 <?php
 
 include 'rest-devices-service.php';
+include 'new-ticket/rest-endpoints.php';
 
 if (!class_exists('RestEndpointsV2ProfilesDevices'))
 {
@@ -10,6 +11,8 @@ if (!class_exists('RestEndpointsV2ProfilesDevices'))
     public function __construct()
     {
 
+
+    	new RestEndpointsV2ProfilesDevicesNewTicket();
       add_action( 'rest_api_init', array(&$this, 'restRegisterRoutes') );
 
     }
@@ -22,14 +25,14 @@ if (!class_exists('RestEndpointsV2ProfilesDevices'))
 			    'permission_callback' => array('RestV2Permission', 'restUserPermissionById'),
 			    'sanitize_callback' => 'rest_data_arg_sanitize_callback',
 			  ) );
-
+/*
 			 register_rest_route( 'sharepl/v2', '/profiles/(?P<userId>\d+)/devices/(?P<deviceId>\d+)', array(
 			    'methods' => 'GET',
 			    'callback' => array('RestV2Devices', 'restPofileDevice'),
 			  //  'permission_callback' => 'restUserPermissionById',
 			    'sanitize_callback' => 'rest_data_arg_sanitize_callback',
 			  ) );
-
+*/
 		}
 
   }

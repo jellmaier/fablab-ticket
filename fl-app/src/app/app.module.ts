@@ -38,7 +38,6 @@ import { RegisterComponent } from './pages/login/register/register.component';
 
 import { IsLoggedInGuard, IsNotLoggedInGuard, IsAdminGuard, IsTerminalGuard } from './services/guards/login-guard.service';
 import { TerminalService } from './services/terminal.service';
-import { StartpageComponent } from './pages/startpage/startpage.component';
 import { AdminComponent } from './admin/admin/admin.component';
 import { MyTicketsComponent } from './pages/profiles/my-tickets/my-tickets.component';
 import { TicketComponent } from './components/ticket/ticket.component';
@@ -48,6 +47,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material';
 import { DialogComponent } from './components/dialog/dialog.component';
 import { ButtonComponent } from './components/button/button.component';
+import { DevicesComponent } from './pages/profiles/devices/devices.component';
+import { DeviceComponent } from './components/device/device.component';
 
  
 @NgModule({
@@ -70,7 +71,6 @@ import { ButtonComponent } from './components/button/button.component';
     NfcLoginComponent,
     RegisterComponent,
     TerminalLoginComponent,
-    StartpageComponent,
     AdminComponent,
     MyTicketsComponent,
     TicketComponent,
@@ -78,6 +78,8 @@ import { ButtonComponent } from './components/button/button.component';
     DialogMatComponent,
     DialogComponent,
     ButtonComponent,
+    DevicesComponent,
+    DeviceComponent,
   ],
   providers: [
     StatisticService,

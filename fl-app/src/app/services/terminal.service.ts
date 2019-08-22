@@ -14,9 +14,6 @@ export class TerminalService {
 
   constructor(private httpService: HttpService,
               private cookieService: CookieService) {
-    //this.setTerminalToken();
-    //this.loadTerminalToken();
-    //console.log('has token: ' + this.hasTerminalToken());
   }
 
   public makeTerminal(make:boolean):void {
@@ -35,40 +32,15 @@ export class TerminalService {
         this.cookieService.set( this.cookieName , data, this.cookieDays, this.cookiePath);
       }
     );
-
-    this.httpService.getDevices().subscribe(
-      data =>  {
-        console.log(data);
-      }
-    );
-
-    this.httpService.gettesturl().subscribe(
-      data =>  {
-        console.log(data);
-      }
-    );
   }
 
   private deleteTerminalToken():void {
     this.cookieService.delete(this.cookieName, this.cookiePath);
   }
-  /*
-  public loadTerminalToken():void {
-    this.checkTerminalToken().subscribe(
-      data =>  {
-        this.appApiService.setAppConnect(data);
-      });
-  }
-*/
+
   public hasTerminalToken():boolean {
     return this.cookieService.check(this.cookieName);
   }
-/*
-  public checkTerminalToken(): Observable<AppConnect>{
-    let cookie_value = this.cookieService.get('terminal_token');
-    return this.httpService.checkTerminalToken(cookie_value);
-  }
-*/
 
   // ------------ Ticket System Online --------
 

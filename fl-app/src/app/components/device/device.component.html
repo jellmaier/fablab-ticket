@@ -1,0 +1,8 @@
+<div class="fl-device-element fl-device-element-content"
+     [ngStyle]="{'border-style': '6px solid ' + device.color,
+                 'background-color': device.color}"
+     (click)="deviceClicked()">
+  <h2>{{device.name}}</h2>
+  <!--p>Verfügbare Geräte: <b><?= $number_devices ?></b></br>Wartende Personen: <b><?= $waiting['persons'] ?></b></p-->
+  <!--p id="waiting-time">Vorraussichtlich Wartezeit: <b><?= get_post_time_string($waiting['time'], true) ?></b></p-->
+</div>

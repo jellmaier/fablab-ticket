@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { StatisticComponent } from './pages/statistic/statistic.component';
-import { StartpageComponent } from './pages/startpage/startpage.component';
 import { AdminComponent } from './admin/admin/admin.component';
 import { LoginComponent } from './pages/login/login/login.component';
 import { RegisterComponent } from './pages/login/register/register.component';
@@ -15,16 +14,13 @@ import { ProfilesComponent } from './pages/profiles/profiles.component';
 
 const routes: Routes = [
   { path: '', redirectTo: appRoutes.loginOnTerminal, pathMatch: 'full' },
-  //{ path: 'detail/:id', component: HeroDetailComponent },
   { path: appRoutes.loginOnTerminal, canActivate: [ IsNotLoggedInGuard, IsTerminalGuard ], component: TerminalLoginComponent },
   { path: appRoutes.loginNfc,      canActivate: [ IsNotLoggedInGuard, IsTerminalGuard ], component: NfcLoginComponent },
-  { path: appRoutes.startpage,     canActivate: [ IsLoggedInGuard ], component: StartpageComponent },
   { path: appRoutes.login,         canActivate: [ IsNotLoggedInGuard ], component: LoginComponent },
   { path: appRoutes.register,      canActivate: [ IsNotLoggedInGuard ], component: RegisterComponent },
   { path: 'admin',                 canActivate: [ IsAdminGuard ],  component: AdminComponent },
   { path: appRoutes.profiles,           canActivate: [ IsLoggedInGuard ], component: ProfilesComponent, data: { redirect: true }},
   { path: appRoutes.profilesWithId,     canActivate: [ IsLoggedInGuard ], component: ProfilesComponent },
-  { path: appRoutes.profilesAndTickets, canActivate: [ IsLoggedInGuard ], component: StartpageComponent },
   { path: appRoutes.statistic,     canActivate: [ IsAdminGuard ],  component: StatisticComponent }
 ];
 

@@ -10,6 +10,3 @@ import { Component }          from '@angular/core';
 })
 export class AppComponent {
 }
-
-
-//<ng-progress [color]="'#028F76'" [showSpinner]="false"></ng-progress>

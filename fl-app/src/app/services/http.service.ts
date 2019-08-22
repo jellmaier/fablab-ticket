@@ -9,12 +9,12 @@ import { CookieService } from 'ngx-cookie-service';
 
 import { DeviceStatistics } from 'app/pages/statistic/statistic.service';
 import { UserRegister } from '../pages/login/register/register.component';
-import { Ticket, TicketData, TicketList } from '../pages/profiles/my-tickets/my-tickets.component';
 import { Router } from '@angular/router';
-import { Link } from './link.service';
+import { Link, Links } from './link.service';
 
-
-//import 'rxjs/add/operator/toPromise';
+export interface BasicResource {
+  links: Links;
+}
 
 @Injectable()
 export class HttpService {
@@ -66,64 +66,24 @@ export class HttpService {
           catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
   }
 
-  public getDevices(): Observable<any> {
-    const url: string = this.appApiService.getPluginApiUrl() + 'device_types';
-
-    return this.http.get<any>(url).pipe(
-          catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
-  }
-
-  public getMyTickets(hash: string): Observable<TicketList> {
-    const url: string = this.appApiService.getPluginApiUrl() + 'tickets_current_user';
-
-    return this.http.get<any>(url, {
-        params: { hash }
-      }).pipe(
-          catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
-  }
-
-  public getMyTicketsV2(hash: string): Observable<TicketList> {
-    const url: string = this.appApiService.getRestBaseUrl() + 'myTickets';
-
-    return this.http.get<any>(url, {
-        params: { hash }
-      }).pipe(
-          catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
-  }
-
-  public getMyTicketDetails(id: number): Observable<TicketData> {
-    const url: string = this.appApiService.getPluginApiUrl() + 'ticket_values/' + id;
-
-    return this.http.get<any>(url).pipe(
-          catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
-  }
-
-  public gettesturl(): Observable<any> {
-    const url: string = 'https://httpbin.org/get';
-
-    return this.http.get<any>(url).pipe(
-          catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
-  }
-
   // --- HATEOAS Methods ------------------------
 
-  public getResourceByHref(href: string): Observable<any> {
+  public getResourceByHref<T>(href: string): Observable<T> {
     const url: string = this.appApiService.getRestBaseUrl() + '/' + href;
-    return this.http.get<any>(url).pipe(
+    return this.http.get<T>(url).pipe(
       catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
   }
 
-  public requestByLink(link: Link): Observable<any> {
+  public requestByLink<T>(link: Link): Observable<T> {
     const url: string = this.appApiService.getRestBaseUrl() + '/' + link.href;
-
-    return this.http.request<any>(link.type, url).pipe(
+    return this.http.request<T>(link.type, url).pipe(
       catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
   }
 
-  public getCurrentResource(): Observable<any> {
+  public getCurrentResource<T>(): Observable<T> {
     console.log(this.appApiService.getRestBaseUrl() + this.router.url);
     const url: string = this.appApiService.getRestBaseUrl() + this.router.url;
-    return this.http.get<any>(url).pipe(
+    return this.http.get<T>(url).pipe(
       catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
   }
 

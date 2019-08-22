@@ -1,0 +1,6 @@
+<p>devices works!</p>
+<div *ngFor="let device of ( devices$ | async )">
+  <app-device [device]="device"
+              (buttonClick)="buttonClick.emit($event)"></app-device>
+</div>
+

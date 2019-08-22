@@ -1,11 +1,10 @@
-<p>
-  profiles works!
-</p>
+<p>Hello!</p>
+
 <app-my-tickets [tickets$]=" (profileData$ | async)?.tickets$"
                 (buttonClick)="buttonClicked($event)"></app-my-tickets>
 
-<div *ngFor="let device of ((profileData$ | async)?.devices$ | async )">
-  {{ device.name }}
-</div>
+<app-devices [devices$]="(profileData$ | async)?.devices$"
+             (buttonClick)="buttonClicked($event)"></app-devices>
+
 <app-dialog [openDialogEvent$]="openDialogEvent$">
 </app-dialog>

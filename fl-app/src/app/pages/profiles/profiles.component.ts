@@ -2,9 +2,10 @@ import { ChangeDetectionStrategy, Component, EventEmitter, OnInit } from '@angul
 import { Observable, of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpService } from '../../services/http.service';
+import { BasicResource, HttpService } from '../../services/http.service';
 import { Link, LinkService } from '../../services/link.service';
-import { DeviceList, TicketList } from './my-tickets/my-tickets.component';
+import { TicketList } from './my-tickets/my-tickets.component';
+import { DeviceList } from './devices/devices.component';
 
 interface ProfileData {
   tickets$: Observable<TicketList>;
@@ -37,7 +38,7 @@ export class ProfilesComponent implements OnInit {
   }
 
   loadRedirectResource():void {
-    this.httpService.getCurrentResource().subscribe(
+    this.httpService.getCurrentResource<BasicResource>().subscribe(
       data =>  {
         this.router.navigate(['/' + this.linkService.getHrefByReltype(data.links, 'related')]);
       },
@@ -62,20 +63,20 @@ export class ProfilesComponent implements OnInit {
     */
 
   loadProfileResource():void {
-    this.profileData$ = this.httpService.getCurrentResource().pipe(
+     this.profileData$ = this.httpService.getCurrentResource<BasicResource>().pipe(
       mergeMap((response: any) => {
         return of({
-          tickets$: this.httpService.getResourceByHref(this.linkService.getHrefByReltype(response.links, 'tickets')),
-          devices$: this.httpService.getResourceByHref(this.linkService.getHrefByReltype(response.links, 'devices'))
+          tickets$: this.httpService.getResourceByHref<TicketList>(this.linkService.getHrefByReltype(response.links, 'tickets')),
+          devices$: this.httpService.getResourceByHref<DeviceList>(this.linkService.getHrefByReltype(response.links, 'devices'))
         } as ProfileData);
       })
     );
-
   }
 
   buttonClicked(link: Link): void {
-    console.log(link);
-    //this.ticketOverlayData$ = this.httpService.requestByLink(link);
-    this.openDialogEvent$.emit(true);
+    this.httpService.requestByLink<any>(link).subscribe(a => {
+      console.log(a);
+    });
+   // this.openDialogEvent$.emit(true);
   }
 }

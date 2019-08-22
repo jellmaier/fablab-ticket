@@ -107,7 +107,8 @@ if (!class_exists('RestV2Tickets'))
 
       $links = array(); 
      // array_push( $links, RestEndpointsV2::createLink( ('profiles/' . $user_id . '/tickets/' . $ticket_id ), 'delete', 'DELETE', 'Ticket löschen'));
-      array_push( $links, RestEndpointsV2::createLink( ('profiles/' . $user_id . '/tickets/' . $ticket_id ), 'edit', 'GET', 'Ticket beabeiten'));
+      array_push( $links, RestEndpointsV2::createLink( ('profiles/' . $user_id . '/tickets/' . $ticket_id ), 
+                                                       'edit', 'GET', 'Ticket beabeiten'));
 
       return $links;
     }

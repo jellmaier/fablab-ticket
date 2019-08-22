@@ -1,0 +1,32 @@
+.fl-device-element {
+  border: 6px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+.fl-device-element-content{
+  transition: background-color 0.3s ease;
+  -webkit-transition: background-color 0.3s ease;
+  -moz-transition: background-color 0.3s ease;
+  background-color: rgba(0,0,0,0.15);
+  padding: 14px 18px;
+  color: #fff;
+}
+.fl-device-element-content:hover{
+  background-color: rgba(0,0,0,0);
+}
+.fl-device-element-content h2{
+  margin-top: 6px;
+  margin-bottom: 14px;
+  color: rgba(256,256,256,0.9);
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+.fl-device-element-content p{
+  color: rgba(256,256,256,0.7);
+  margin-bottom: 5px;
+}
+.fl-device-element-content:hover p{
+  color: rgba(256,256,256,1);
+}

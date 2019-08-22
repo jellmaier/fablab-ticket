@@ -1,21 +1,14 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Link, Links } from '../../../services/link.service';
+import { BasicResource } from '../../../services/http.service';
 
 export interface TicketList {
   tickets: Array<Ticket>;
   hash: string;
 }
 
-export interface DeviceList extends Array<Device>{}
-
-
-export interface Device {
-  id: number;
-  name: string;
-}
-
-export interface Ticket {
+export interface Ticket extends BasicResource {
   ID: number;
   post_date: string;
   post_title: string;
@@ -25,7 +18,6 @@ export interface Ticket {
   color?: string;
   available?: boolean;
   changed?: boolean;
-  links: Links;
 }
 
 export interface TicketData {
