@@ -20,15 +20,15 @@ if (!class_exists('RestEndpointsV2Profiles'))
 
     public function restRegisterRoutes() {
 
-        register_rest_route( 'sharepl/v2', '/profiles', array(
-			    'methods' => 'GET',
+        register_rest_route( RestV2Routes::appRoute, '/profiles', array(
+			    'methods' => RestV2Methods::GET,
 			    'callback' => array('RestV2Profiles', 'restProfilesCurrentUser'),
 			   // 'permission_callback' => 'restUserPermissionById',
 			    'sanitize_callback' => 'rest_data_arg_sanitize_callback',
 			  ) );
 
-			  register_rest_route( 'sharepl/v2', '/profiles/(?P<userId>\d+)', array(
-			    'methods' => 'GET',
+			  register_rest_route( RestV2Routes::appRoute, '/profiles/(?P<userId>\d+)', array(
+			    'methods' => RestV2Methods::GET,
 			    'callback' => array('RestV2Profiles', 'restProfiles'),
 			    'permission_callback' => array('RestV2Permission', 'restUserPermissionById'),
 			    'sanitize_callback' => 'rest_data_arg_sanitize_callback',

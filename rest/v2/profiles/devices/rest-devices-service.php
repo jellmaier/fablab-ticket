@@ -99,11 +99,11 @@ if (!class_exists('RestV2Devices'))
       $links = array(); 
   
       array_push($links, RestEndpointsV2::createLink( ('profiles/' . $user_id . '/devices/' . $device_type_id . '/new-ticket' ),
-                                                      'new-ticket', 'POST', 'Ticket erstellen') );
+                                                      'new-ticket', RestV2Methods::POST, 'Ticket erstellen') );
 
 
       array_push($links, RestEndpointsV2::createLink( ('profiles/' . $user_id . '/devices/' . $device_type_id . '/new-ticket-view' ),
-                                                      'new-ticket', 'GET', 'Ticket erstellen') );
+                                                      'new-ticket', RestV2Methods::GET, 'Ticket erstellen') );
 
       return $links;
 
