@@ -40,7 +40,7 @@ export class ProfilesComponent implements OnInit {
   loadRedirectResource():void {
     this.httpService.getCurrentResource<BasicResource>().subscribe(
       data =>  {
-        this.router.navigate(['/' + this.linkService.getHrefByReltype(data.links, 'related')]);
+        this.router.navigate(['/' + this.linkService.getHrefByReltype(data._links, 'related')]);
       },
       err =>  {
         console.log(err.error.message);
@@ -64,10 +64,10 @@ export class ProfilesComponent implements OnInit {
 
   loadProfileResource():void {
      this.profileData$ = this.httpService.getCurrentResource<BasicResource>().pipe(
-      mergeMap((response: any) => {
+      mergeMap((response: BasicResource) => {
         return of({
-          tickets$: this.httpService.getResourceByHref<TicketList>(this.linkService.getHrefByReltype(response.links, 'tickets')),
-          devices$: this.httpService.getResourceByHref<DeviceList>(this.linkService.getHrefByReltype(response.links, 'devices'))
+          tickets$: this.httpService.getResourceByHref<TicketList>(this.linkService.getHrefByReltype(response._links, 'tickets')),
+          devices$: this.httpService.getResourceByHref<DeviceList>(this.linkService.getHrefByReltype(response._links, 'devices'))
         } as ProfileData);
       })
     );

@@ -20,7 +20,7 @@ export class DeviceComponent implements OnInit {
   }
 
   deviceClicked(): void {
-    this.buttonClick.emit(this.linkService.getLinkByReltype(this.device.links, 'new-ticket'));
+    this.buttonClick.emit(this.linkService.getLinkByReltype(this.device._links, 'new-ticket'));
   }
 
 }

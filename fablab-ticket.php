@@ -32,6 +32,7 @@ include 'views/ticketlist/ticketlist-shortcode-rest.php';
 include 'views/getticket/getticket-shortcode-rest.php';
 include 'system/admin-page.php';
 include 'system/settings-service.php';
+include 'system/user-service.php';
 include 'system/strings.php';
 include 'system/user-list.php';
 include 'system/rest/ticketlist-user.php';

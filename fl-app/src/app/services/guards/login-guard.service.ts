@@ -20,7 +20,7 @@ export class IsLoggedInGuard implements CanActivate {
     if (this.appApiService.isUserLoggedIn() === true) {
       return true;
     } else {
-      this.router.navigate(['/' + appRoutes.loginOnTerminal]);
+      this.router.navigate(['/' + appRoutes.login]);
       return false;
     }
   }

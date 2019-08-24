@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpParams } from '@angular/common/http';
 
 
 export interface Link {
@@ -6,6 +7,7 @@ export interface Link {
   rel: string;
   type: string;
   label: string;
+  params?: HttpParams;
 }
 
 export interface Links extends Array<Link> {}

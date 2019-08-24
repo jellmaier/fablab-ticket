@@ -5,3 +5,7 @@
   <a href="{{appApiService.getBlogUrl()}}/wp-login.php?action=register">
   <input type="submit"  value="Register"/></a>
 </div>
+<div> {{ ( loginData$ | async )?.login.loginHeading }}</div>
+<app-input-mask [mask]="( loginData$ | async )?.login.loginMask"
+                (submitClick)="submitClicked($event)">
+</app-input-mask>

@@ -20,6 +20,3 @@ if (!class_exists('OptionService'))
     }
   }
 }
-
-
-?>

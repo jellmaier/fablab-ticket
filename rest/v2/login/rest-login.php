@@ -5,38 +5,58 @@ if (!class_exists('RestV2Login'))
 {
   class RestV2Login
   {
-    public function restPerformLogin($data)
+
+    public function restGetLoginOptions($data)
     {
-      $params = $data->get_params();
-      $data = isset($params['params']) ? $params['params'] : $data;
 
-      if (!isset($data['username']))
-        return new WP_Error('rest_forbidden', __('OMG you can not view private data.', 'fablab-ticket'), array('status' => 401));
-
-
-      $username = sanitize_text_field($data['username']);
-      $password = sanitize_text_field($data['password']);
-      $user = get_user_by('login', $username);
-      $user_id = $user->ID;
-
-
-      $logins_left = RestV2LoginService::checkUserLoginsLeft($user_id);
-      if ($logins_left == 0) {
-        $time_left = RestV2LoginService::calcUserNextLogin($user_id);
-        return new WP_Error('rest_forbidden', sprintf(__('Zu viele Versuche! Nächster Login in %d Minuten möglich.'), $time_left), array('status' => 401));
+      if ( UserService::isLoggedIn() ) {
+        return RestV2Login::getBasicResource();
       }
+      return RestV2Login::getLoginOptions();
+    }
+
+    public function getBasicResource() {
+
+      $links = array();
+      array_push($links, RestEndpointsV2::createGETLink('profiles' . '/' . UserService::getCurrentUserId(), 'related'));
+
+      $resource = array();
+      $resource['loggedIn'] = true;
+      $resource['_links'] = $links;
+
+      return $resource;
+
+    }
+
+    private function getLoginOptions() {
+
+      $links = array();
+      array_push($links, RestEndpointsV2::createGETLink('login/nfc', 'login-nfc', 'Login/Registrieren mit NFC'));
+      array_push($links, RestEndpointsV2::createGETLink('register', 'register', 'Registrieren'));
+      array_push($links, RestEndpointsV2::createGETLink('password-reset', 'password-reset', 'Passwort vergessen?'));
+
+      $login_fields = array(
+        RestEndpointsV2::createTextField('Username', 'username'),
+        RestEndpointsV2::createPasswordField('Password', 'password'));
 
 
-      if (wp_check_password($password, $user->user_pass, $user_id)) {
-        wp_set_auth_cookie($user_id);
-      } else {
-        RestV2LoginService::setUserLoginFail($user_id);
-        //return intval(get_user_meta( $user_id, 'login-fails', true ));
-        return new WP_Error('no_user_found',
-          sprintf(__('Login fehlgeschlagen, du hast noch %d versuche übrig.', 'fablab-ticket'), $logins_left), array('status' => 401));
-      }
+      $loginMaskLinks = array();
+      array_push($loginMaskLinks, RestEndpointsV2::createPOSTLink('login' , 'submit', 'Login'));
 
-      return new WP_REST_Response(null, 200);
+      $loginMask = array();
+      $loginMask['inputFields'] = $login_fields;
+      $loginMask['_links'] = $loginMaskLinks;
+      $login = array();
+      $login['loginHeading'] = 'Login';
+      $login['loginMessage'] = 'Du bist nicht eingeloggt!';
+      $login['loginMask'] = $loginMask;
+      $login['registerInfo'] = 'Du hast noch keinen Account?';
+      $resource = array();
+      $resource['loggedIn'] = false;
+      $resource['login'] = $login;
+      $resource['_links'] = $links;
+
+      return $resource;
 
     }
 

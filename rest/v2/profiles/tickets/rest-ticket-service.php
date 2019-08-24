@@ -24,7 +24,7 @@ if (!class_exists('RestV2Tickets'))
           $ticket['post_title'] = $post->post_title;
           $ticket['post_date'] = $post->post_date;
 
-          $ticket['links'] = RestV2Tickets::getTicketLinks($user_id, $post->ID);
+          $ticket['_links'] = RestV2Tickets::getTicketLinks($user_id, $post->ID);
 
           array_push($ticket_list, $ticket);
 
@@ -106,9 +106,9 @@ if (!class_exists('RestV2Tickets'))
     private function getTicketLinks($user_id, $ticket_id) {
 
       $links = array(); 
-     // array_push( $links, RestEndpointsV2::createLink( ('profiles/' . $user_id . '/tickets/' . $ticket_id ), 'delete', 'DELETE', 'Ticket löschen'));
-      array_push( $links, RestEndpointsV2::createLink( ('profiles/' . $user_id . '/tickets/' . $ticket_id ), 
-                                                       'edit', RestV2Methods::GET, 'Ticket beabeiten'));
+     // array_push( $links, RestEndpointsV2::createDELETELink( ('profiles/' . $user_id . '/tickets/' . $ticket_id ), 'delete', 'Ticket löschen'));
+      array_push( $links, RestEndpointsV2::createGETLink( ('profiles/' . $user_id . '/tickets/' . $ticket_id ),
+                                                       'edit', 'Ticket beabeiten'));
 
       return $links;
     }

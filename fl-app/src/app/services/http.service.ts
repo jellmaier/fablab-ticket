@@ -13,7 +13,11 @@ import { Router } from '@angular/router';
 import { Link, Links } from './link.service';
 
 export interface BasicResource {
-  links: Links;
+  _links: Links;
+}
+
+export interface Params {
+  [index: string]: string;
 }
 
 @Injectable()
@@ -76,7 +80,7 @@ export class HttpService {
 
   public requestByLink<T>(link: Link): Observable<T> {
     const url: string = this.appApiService.getRestBaseUrl() + '/' + link.href;
-    return this.http.request<T>(link.type, url).pipe(
+    return this.http.request<T>(link.type, url, {body: link.params}).pipe(
       catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
   }
 

@@ -49,6 +49,7 @@ import { DialogComponent } from './components/dialog/dialog.component';
 import { ButtonComponent } from './components/button/button.component';
 import { DevicesComponent } from './pages/profiles/devices/devices.component';
 import { DeviceComponent } from './components/device/device.component';
+import { InputMaskComponent } from './pages/login/login/input-mask/input-mask.component';
 
  
 @NgModule({
@@ -80,6 +81,7 @@ import { DeviceComponent } from './components/device/device.component';
     ButtonComponent,
     DevicesComponent,
     DeviceComponent,
+    InputMaskComponent,
   ],
   providers: [
     StatisticService,

@@ -7,10 +7,10 @@ if (!class_exists('RestV2Service'))
     public function restBasicResources($data) {
 
       $links = array();
-      array_push($links, RestEndpointsV2::createLink('profiles' . '/' . get_current_user_id(), 'related'));
+      array_push($links, RestEndpointsV2::createGETLink('profiles' . '/' . get_current_user_id(), 'related'));
 
       $resource = array();
-      $resource['links'] = $links;
+      $resource['_links'] = $links;
 
       return $resource;
 

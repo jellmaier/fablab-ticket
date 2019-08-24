@@ -2,6 +2,7 @@
 
 include 'rest-login.php';
 include 'rest-login-dev.php';
+include 'rest-login-perform.php';
 include 'rest-login-service.php';
 
 if (!class_exists('RestEndpointsV2Login'))
@@ -26,10 +27,15 @@ if (!class_exists('RestEndpointsV2Login'))
     }
 
     public function restRegisterRoutes() {
-      $this->routeService->registerAnonymousPOST('login/perform-login',
-        'RestV2Login','restPerformLogin');
+      $this->routeService->registerAnonymousGET('login',
+        'RestV2Login','restGetLoginOptions');
+
+      $this->routeService->registerAnonymousPOST('login',
+        'RestV2LoginPerform','restPerformLogin');
 
 		}
+
+
 
     public function restRegisterDEVRoutes() {
       $this->routeService->registerAnonymousGET('login/user-data',

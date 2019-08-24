@@ -37,7 +37,7 @@ if (!class_exists('RestV2Devices'))
 		  $devices = RestV2Devices::getDeviceTypes($user_id);
 
 		  foreach($devices as &$device) {
-		    $device['links'] = RestV2Devices::getDeviceLinks($user_id, $device['id']);
+		    $device['_links'] = RestV2Devices::getDeviceLinks($user_id, $device['id']);
 		  }
 
 		  return $devices;
@@ -98,12 +98,12 @@ if (!class_exists('RestV2Devices'))
 		private function getDeviceLinks($user_id, $device_type_id) {
       $links = array(); 
   
-      array_push($links, RestEndpointsV2::createLink( ('profiles/' . $user_id . '/devices/' . $device_type_id . '/new-ticket' ),
-                                                      'new-ticket', RestV2Methods::POST, 'Ticket erstellen') );
+      array_push($links, RestEndpointsV2::createPOSTLink( ('profiles/' . $user_id . '/devices/' . $device_type_id . '/new-ticket' ),
+                                                      'new-ticket', 'Ticket erstellen') );
 
 
-      array_push($links, RestEndpointsV2::createLink( ('profiles/' . $user_id . '/devices/' . $device_type_id . '/new-ticket-view' ),
-                                                      'new-ticket', RestV2Methods::GET, 'Ticket erstellen') );
+      array_push($links, RestEndpointsV2::createGETLink( ('profiles/' . $user_id . '/devices/' . $device_type_id . '/new-ticket-view' ),
+                                                      'new-ticket','Ticket erstellen') );
 
       return $links;
 

@@ -13,7 +13,7 @@ import { appRoutes } from './app-routs';
 import { ProfilesComponent } from './pages/profiles/profiles.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: appRoutes.loginOnTerminal, pathMatch: 'full' },
+  { path: '', redirectTo: appRoutes.login, pathMatch: 'full' },
   { path: appRoutes.loginOnTerminal, canActivate: [ IsNotLoggedInGuard, IsTerminalGuard ], component: TerminalLoginComponent },
   { path: appRoutes.loginNfc,      canActivate: [ IsNotLoggedInGuard, IsTerminalGuard ], component: NfcLoginComponent },
   { path: appRoutes.login,         canActivate: [ IsNotLoggedInGuard ], component: LoginComponent },

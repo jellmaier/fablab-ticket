@@ -1,0 +1,8 @@
+<form #inputform="ngForm" (ngSubmit)="submitLogin(inputform)" novalidate>
+  <ng-container *ngFor="let inputField of mask?.inputFields ; let i = index">
+    <input [name]="inputField.parameter" [type]="getInputFieldType(inputField)"
+           [id]="inputField.parameter" ngModel [placeholder]="inputField.label"
+           [focus]="i === 0" [required]="inputField.required" ><br>
+  </ng-container>
+  <app-button [label]="submitLink?.label"></app-button>
+</form>
