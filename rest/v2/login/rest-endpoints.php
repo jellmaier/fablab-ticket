@@ -9,33 +9,32 @@ if (!class_exists('RestEndpointsV2Login'))
   class RestEndpointsV2Login
   {
 
-    public function __construct()
+    private $routeService;
+    public function __construct(RestV2RoutesService $routeService)
     {
-      add_action( 'rest_api_init', array(&$this, 'restRegisterRoutes') );
-      add_action( 'rest_api_init', array(&$this, 'restRegisterDEVRoutes') ); //todo dev mode check
+      $this->routeService = $routeService;
+    //  new RestEndpointsV2LoginNfc($routeService);
+     // new RestEndpointsV2Register($routeService);
+
+
+      $this->routeService->registerEndpoints($this, 'restRegisterRoutes');
+
+      if (SettingsService::isDevMode()) {
+        $this->routeService->registerEndpoints($this, 'restRegisterDEVRoutes');
+      }
+
     }
 
     public function restRegisterRoutes() {
-
-      register_rest_route( RestV2Routes::appRoute, 'login/perform-login', array(
-        'methods' => RestV2Methods::POST,
-        'callback' => array('RestV2Login', 'restPerformLogin'),
-        'sanitize_callback' => 'rest_data_arg_sanitize_callback',
-      ) );
+      $this->routeService->registerAnonymousPOST('login/perform-login',
+        'RestV2Login','restPerformLogin');
 
 		}
 
     public function restRegisterDEVRoutes() {
-
-      register_rest_route( RestV2Routes::appRoute, 'login/user-data', array(
-        'methods' => RestV2Methods::GET,
-        'callback' => array('RestV2LoginDev', 'restGetUserData'),
-        'sanitize_callback' => 'rest_data_arg_sanitize_callback',
-      ) );
-
+      $this->routeService->registerAnonymousGET('login/user-data',
+        'RestV2LoginDev', 'restGetUserData');
     }
 
   }
 }
-
-?>

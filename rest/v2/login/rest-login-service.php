@@ -10,14 +10,14 @@ if (!class_exists('RestV2LoginService'))
     {
       $latest_login_time = get_user_meta($user_id, 'last-login-fail', true);
 
-      $max_number_logins = intval(fablab_get_option('number_login_fails'));
+      $max_number_logins = intval(SettingsService::getOption('number_login_fails'));
 
       if (empty($latest_login_time))
         return $max_number_logins;
 
       $time_diff = current_time('timestamp') - $latest_login_time;
 
-      if ($time_diff > (60 * intval(fablab_get_option('login_fail_delay')))) {
+      if ($time_diff > (60 * intval(SettingsService::getOption('login_fail_delay')))) {
         delete_user_meta($user_id, 'last-login-fail');
         delete_user_meta($user_id, 'login-fails');
         return $max_number_logins;
@@ -26,7 +26,7 @@ if (!class_exists('RestV2LoginService'))
 
       $login_fails = intval(get_user_meta($user_id, 'login-fails', true));
 
-      if ($login_fails < intval(fablab_get_option('number_login_fails'))) {
+      if ($login_fails < intval(SettingsService::getOption('number_login_fails'))) {
         return $max_number_logins - $login_fails;
       }
 
@@ -37,7 +37,7 @@ if (!class_exists('RestV2LoginService'))
     {
       $latest_login_time = get_user_meta($user_id, 'last-login-fail', true);
       $time_diff = current_time('timestamp') - $latest_login_time;
-      return (intval(fablab_get_option('login_fail_delay')) - ($time_diff / 60));
+      return (intval(SettingsService::getOption('login_fail_delay')) - ($time_diff / 60));
     }
 
     public function setUserLoginFail($user_id)

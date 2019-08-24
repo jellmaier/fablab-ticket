@@ -44,5 +44,3 @@ if (!class_exists('RestV2Profiles'))
 
   }
 }
-
-?>

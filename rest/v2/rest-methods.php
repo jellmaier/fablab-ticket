@@ -12,5 +12,3 @@ if (!class_exists('RestV2Methods'))
 
   }
 }
-
-?>

@@ -1,26 +1,22 @@
 <?php
 
-include 'rest-ticket-service.php';
 
-if (!class_exists('RestEndpointsV2ProfilesTickets'))
+if (!class_exists('RestEndpointsV2Register'))
 {
-  class RestEndpointsV2ProfilesTickets
+  class RestEndpointsV2Register
   {
-    public function __construct()
-    {
+    private $routeService;
 
-      add_action( 'rest_api_init', array(&$this, 'restRegisterRoutes') );
+    public function __construct(RestV2RoutesService $routeService)
+    {
+      $this->routeService = $routeService;
+   //   $this->routeService->registerEndpoints($this, 'restRegisterRoutes');
 
     }
 
     public function restRegisterRoutes() {
-
-      register_rest_route( RestV2Routes::appRoute, '/profiles/(?P<userId>\d+)/tickets', array(
-			    'methods' => RestV2Methods::GET,
-			    'callback' => array('RestV2Tickets', 'restTicketsForUser'),
-			    'permission_callback' => array('RestV2Permission', 'restUserPermissionById'),
-			    'sanitize_callback' => 'rest_data_arg_sanitize_callback',
-			  ) );
+      $this->routeService->registerAnonymousPOST('register',
+        'RestV2Login','restPerformLogin');
 
 
 		}

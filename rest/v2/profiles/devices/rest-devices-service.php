@@ -23,11 +23,11 @@ if (!class_exists('RestV2Devices'))
 		// Load Devices available for Profile
 		//--------------------------------------------------------
 
-		public function restPofileDevices($data) {
+		public function restProfileDevices($data) {
 		  
 		  $user_id = $data['userId'];
 
-		  if (fablab_get_option('ticket_online') != 1)
+		  if (SettingsService::getOption('ticket_online') != 1)
 		    return new WP_Error( 'rest_ticket_offline', __( 'Ticket-System offline', 'fablab-ticket' ), array( 'status' => 423 ) );
 
 		  if (RestV2Devices::isUserTicketLimitExceeded($user_id)) {
@@ -47,7 +47,7 @@ if (!class_exists('RestV2Devices'))
 			// check total user ticket count
 		  $query_arg = array( 'post_type' => 'ticket', 'author' => $user_id, 'post_status' => 'publish');
 		  $user_ticket_count =  count(get_posts($query_arg));
-		  $tickets_per_user = fablab_get_option('tickets_per_user');
+		  $tickets_per_user = SettingsService::getOption('tickets_per_user');
 
 		  return ($user_ticket_count >= $tickets_per_user);
 		}
@@ -90,7 +90,7 @@ if (!class_exists('RestV2Devices'))
     private function isUserTicketLimitPerDeviceTypeExceeded($user_id, $device_type_id) {
 
 		  $device_ticket_count = get_number_of_tickets_by_device_type_and_user($device_type_id, $user_id);
-			$tickets_per_device = fablab_get_option('tickets_per_device');
+			$tickets_per_device = SettingsService::getOption('tickets_per_device');
 
 		  return ($device_ticket_count >= $tickets_per_device);
 		}

@@ -2,39 +2,31 @@
 
 include 'devices/rest-endpoints.php';
 include 'tickets/rest-endpoints.php';
-include 'rest-permission.php';
 include 'rest-profiles-service.php';
 
 if (!class_exists('RestEndpointsV2Profiles'))
 {
   class RestEndpointsV2Profiles
   {
-    public function __construct()
+    private $routeService;
+
+    public function __construct(RestV2RoutesService $routeService)
     {
-    	new RestEndpointsV2ProfilesTickets();
-    	new RestEndpointsV2ProfilesDevices();
+      $this->routeService = $routeService;
 
-      add_action( 'rest_api_init', array(&$this, 'restRegisterRoutes') );
+    	new RestEndpointsV2ProfilesTickets($routeService);
+    	new RestEndpointsV2ProfilesDevices($routeService);
 
+      $this->routeService->registerEndpoints($this, 'restRegisterRoutes');
     }
 
     public function restRegisterRoutes() {
 
-        register_rest_route( RestV2Routes::appRoute, '/profiles', array(
-			    'methods' => RestV2Methods::GET,
-			    'callback' => array('RestV2Profiles', 'restProfilesCurrentUser'),
-			   // 'permission_callback' => 'restUserPermissionById',
-			    'sanitize_callback' => 'rest_data_arg_sanitize_callback',
-			  ) );
+      $this->routeService->registerLoggedInGET('profiles',
+        'RestV2Profiles','restProfilesCurrentUser');
 
-			  register_rest_route( RestV2Routes::appRoute, '/profiles/(?P<userId>\d+)', array(
-			    'methods' => RestV2Methods::GET,
-			    'callback' => array('RestV2Profiles', 'restProfiles'),
-			    'permission_callback' => array('RestV2Permission', 'restUserPermissionById'),
-			    'sanitize_callback' => 'rest_data_arg_sanitize_callback',
-			  ) );
-
-			 
+      $this->routeService->registerUserGET('profiles/' . RestV2Routes::userId,
+        'RestV2Profiles','restProfiles');
 		}
 
     //--------------------------------------------------------
@@ -62,7 +54,6 @@ if (!class_exists('RestEndpointsV2Profiles'))
 
 		  $user_id = $data['userId'];
 
-
 		  $links = array(); 
 		  array_push($links, RestEndpointsV2::createLink('profiles' . '/' . $user_id . '/devices', 'devices'));
 		  array_push($links, RestEndpointsV2::createLink('profiles' . '/' . $user_id . '/tickets', 'tickets'));
@@ -77,5 +68,3 @@ if (!class_exists('RestEndpointsV2Profiles'))
 
   }
 }
-
-?>

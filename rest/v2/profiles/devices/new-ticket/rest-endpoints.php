@@ -6,34 +6,27 @@ if (!class_exists('RestEndpointsV2ProfilesDevicesNewTicket'))
 {
   class RestEndpointsV2ProfilesDevicesNewTicket
   {
+    private $routeService;
 
-    public function __construct()
+    public function __construct(RestV2RoutesService $routeService)
     {
+      $this->routeService = $routeService;
 
-      add_action( 'rest_api_init', array(&$this, 'restRegisterRoutes') );
+      $this->routeService->registerEndpoints($this, 'restRegisterRoutes');
 
     }
 
     public function restRegisterRoutes() {
+
 /*
-			  register_rest_route( RestV2Routes::appRoute, '/profiles/(?P<userId>\d+)/devices/(?P<deviceId>\d+)/new-ticket', array(
-			    'methods' => RestV2Methods::GET,
-			    'callback' => array('RestV2NewTicket', 'restPofileNewTicket'),
-			    'permission_callback' => array('RestV2Permission', 'restUserPermissionById'),
-			    'sanitize_callback' => 'rest_data_arg_sanitize_callback',
-			  ) );
+      $this->routeService->registerUserGET('profiles/' . RestV2Routes::userId . '/devices/'. RestV2Routes::userId . '/new-ticket',
+        'RestV2NewTicket','restProfileNewTicket');
 */
-			  register_rest_route( RestV2Routes::appRoute, '/profiles/(?P<userId>\d+)/devices/(?P<deviceId>\d+)/new-ticket', array(
-			    'methods' => RestV2Methods::POST,
-			    'callback' => array('RestV2NewTicket', 'restPofileNewTicket'),
-			   // 'callback' => array('RestV2Devices', 'restPofileDevice'),
-			    'permission_callback' => array('RestV2Permission', 'restUserPermissionById'),
-			    'sanitize_callback' => 'rest_data_arg_sanitize_callback',
-			  ) );
+      // http://localhost:4200/fablab/wp-json/sharepl/v2/profiles/1/devices/2/new-ticket
+      $this->routeService->registerUserPOST('profiles/' . RestV2Routes::userId . '/devices/'. RestV2Routes::deviceId . '/new-ticket',
+        'RestV2NewTicket','restProfileNewTicket');
 
 		}
 
   }
 }
-
-?>

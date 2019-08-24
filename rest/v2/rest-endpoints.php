@@ -1,6 +1,8 @@
 <?php
 
 include 'rest-routes.php';
+include 'rest-permission.php';
+include 'rest-routes-service.php';
 include 'rest-methods.php';
 include 'login/rest-endpoints.php';
 include 'profiles/rest-endpoints.php';
@@ -9,25 +11,22 @@ if (!class_exists('RestEndpointsV2'))
 {
   class RestEndpointsV2
   {
+    private $routeService;
+
     public function __construct()
     {
-      new RestEndpointsV2Login();
-    	new RestEndpointsV2Profiles();
+      $this->routeService = new RestV2RoutesService();
+      new RestEndpointsV2Login($this->routeService);
+    	new RestEndpointsV2Profiles($this->routeService);;
 
-      //add_action( 'rest_api_init', array(&$this, 'restRegisterRoutes') );
 
+     // $this->routeService->registerEndpoints($this, 'restRegisterRoutes');
     }
 
     public function restRegisterRoutes()
     {
-
-      register_rest_route(RestV2Routes::appRoute, '', array(
-        'methods' => RestV2Methods::GET,
-        'callback' => array('RestV2Service', 'restBasicResources'),
-        //  'permission_callback' => array('RestV2Permission', 'restUserPermissionById'),
-        'sanitize_callback' => 'rest_data_arg_sanitize_callback',
-      ));
-
+      $this->routeService->registerAnonymousGET('',
+        'RestV2Service','restBasicResources');
     }
 
     //--------------------------------------------------------
@@ -51,5 +50,3 @@ if (!class_exists('RestEndpointsV2'))
 		}
   }
 }
-
-?>

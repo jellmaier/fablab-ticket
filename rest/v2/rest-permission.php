@@ -5,10 +5,11 @@ if (!class_exists('RestV2Permission'))
 {
   class RestV2Permission
   {
+    public function restAnonymous() {
+      return true;
+    }
 
-		// Rest Permisions
-
-		public function restUserPermission() {
+		public function restLoggedInPermission() {
 
 		  if ( ! is_user_logged_in() )
 		    return new WP_Error( 'rest_not_logged_in', 'You are not currently logged in.', array( 'status' => 401 ) );
@@ -31,5 +32,3 @@ if (!class_exists('RestV2Permission'))
 
   }
 }
-
-?>

@@ -4,7 +4,7 @@ if (!class_exists('RestV2NewTicket'))
 {
   class RestV2NewTicket
   {
-		public function restPofileNewTicket($data) {
+		public function restProfileNewTicket($data) {
 
 		  return RestV2NewTicket::newTicketForUser($data['userId'], $data['deviceId'], 'device_type');
 
@@ -13,7 +13,7 @@ if (!class_exists('RestV2NewTicket'))
 		private	function newTicketForUser($user_id, $device_id, $ticket_type) {
 
 
-      $options = fablab_get_option();
+      $options = SettingsService::getOptions();
 
 			if ($options['ticket_online'] != 1)
 			  return new WP_Error( 'rest_ticket_offline', __( 'Ticket-System offline', 'fablab-ticket' ), array( 'status' => 423 ) );
