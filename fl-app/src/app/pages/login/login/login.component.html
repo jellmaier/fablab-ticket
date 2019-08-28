@@ -1,11 +1,6 @@
-<div id="message" class="message-box">
-  <p>Du bist nicht eingeloggt!</p>
-  <a href="{{appApiService.getBlogUrl()}}/login?redirect_to=http://fablab.tugraz.at/mein-ticket/'" style="margin-right:20px;">
-  <input type="submit"  value="Login"/></a>
-  <a href="{{appApiService.getBlogUrl()}}/wp-login.php?action=register">
-  <input type="submit"  value="Register"/></a>
-</div>
-<div> {{ ( loginData$ | async )?.login.loginHeading }}</div>
-<app-input-mask [mask]="( loginData$ | async )?.login.loginMask"
+<div> {{ loginData?.login?.loginHeading }}</div>
+<div> {{ loginData?.login?.loginMessage }}</div>
+<app-input-mask [mask]="loginData?.login?.loginMask"
                 (submitClick)="submitClicked($event)">
 </app-input-mask>
+<div> {{ loginErrorMessage }}</div>

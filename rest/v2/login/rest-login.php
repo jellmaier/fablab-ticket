@@ -21,7 +21,7 @@ if (!class_exists('RestV2Login'))
       array_push($links, RestEndpointsV2::createGETLink('profiles' . '/' . UserService::getCurrentUserId(), 'related'));
 
       $resource = array();
-      $resource['loggedIn'] = true;
+      $resource['userInfos'] = angular_user_array();
       $resource['_links'] = $links;
 
       return $resource;
@@ -51,8 +51,7 @@ if (!class_exists('RestV2Login'))
       $login['loginMessage'] = 'Du bist nicht eingeloggt!';
       $login['loginMask'] = $loginMask;
       $login['registerInfo'] = 'Du hast noch keinen Account?';
-      $resource = array();
-      $resource['loggedIn'] = false;
+      $resource = RestV2Login::getBasicResource();
       $resource['login'] = $login;
       $resource['_links'] = $links;
 

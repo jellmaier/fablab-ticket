@@ -1,17 +1,24 @@
 import { Injectable } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
-import { CookieService } from 'ngx-cookie-service';
+import { BasicResource } from './http.service';
+import { Link } from './link.service';
 
 export interface AppApiResponse {
   blog_url: string;
   templates_url: string;
   api_url: string;
   sharing_url: string;
+  rest_v2_url: string;
   nonce: string;
 }
 
-export interface UserData {
+export interface AppApiResponseV2 {
+  is_dev_mode: boolean;
+  rest_v2_url: string;
+}
+
+export interface UserData extends BasicResource{
   is_user_logged_in: boolean;
   is_admin: boolean;
   user_display_name: string;
@@ -25,16 +32,12 @@ export interface TerminalData {
   ticket_system_online: boolean;
 }
 
-interface User {
-  username: string;
-  password: string;
-}
-
 // define require to import data
 declare var require: any;
 
 // javascript variables defined in wordpress
 declare var AppAPI: any;
+declare var AppAPIv2: any;
 declare var UserDataLoc: any;
 declare var TerminalDataLoc: any;
 
@@ -42,31 +45,28 @@ declare var TerminalDataLoc: any;
 @Injectable()
 export class AppApiService {
 
-  private apiDataLoaded: boolean = false;
   private appDataSubject:BehaviorSubject<boolean>;
 
-  private testToggle:boolean = false;
-  private toggleSubject:BehaviorSubject<boolean>;
-
-
   private appApi: AppApiResponse;
+  private appApiv2: AppApiResponseV2;
   private userData: UserData;
   private terminalData: TerminalData;
-  //private app_connect: AppConnect;
-  private user: User;
-  private isDevModeEnabled:boolean;
 
-  constructor( private cookieService: CookieService ) {
+  constructor() {
     this.appDataSubject = new BehaviorSubject<boolean>(false);
     this.loadApiData();
   }
 
   private loadApiData():void {
 
-    this.isDevModeEnabled = (typeof AppAPI === 'undefined');
+    if (typeof AppAPIv2 === 'undefined') {
+      this.appApiv2 = require('./AppAPIv2.json');
+    } else {
+      this.appApiv2 = AppAPIv2;
+    }
 
     // when AppAPI start in dev mode and load app data fom json
-    if (this.isDevModeEnabled) {
+    if (this.appApiv2.is_dev_mode) {
       console.log('Runing in Dev-Mode');
       this.appApi = require('./AppAPI.json');
       this.terminalData = require('./TerminalData.json');
@@ -117,20 +117,12 @@ export class AppApiService {
     return this.appApi.blog_url;
   }
 
-   public getTemplatesUrl():string {
-    return this.appApi.templates_url;
-  }
-  
-  public getApiUrl():string {
-    return this.appApi.api_url;
-  }
-
   public getPluginApiUrl():string {
     return this.appApi.sharing_url;
   }
 
   public getRestBaseUrl():string {
-    return '/fablab/wp-json/sharepl/v2';
+    return this.appApi.rest_v2_url;
   }
 
   public getNonce():string {
@@ -138,11 +130,7 @@ export class AppApiService {
   }
 
   public isDevMode():boolean {
-    return this.isDevModeEnabled;
-  }
-
-  public getAutentificationToken():string {
-    return btoa(this.user.username + ':' + this.user.password);
+    return this.appApiv2.is_dev_mode;
   }
 
   // -------   Terminal methods ----------
@@ -154,16 +142,7 @@ export class AppApiService {
   public isTicketSystemOnline():boolean {
     return this.terminalData.ticket_system_online;
   }
-/*
-  public toggleTerminal():void {
-    this.test_toggle = !this.test_toggle;
-    this.toggleSubject.next(this.test_toggle);
-  }
 
-  public getTerminalObservable():BehaviorSubject<boolean> {
-    return this.toggleSubject;
-  }
-*/
   // -------   User methods ----------
 
   public isUserLoggedIn():boolean {

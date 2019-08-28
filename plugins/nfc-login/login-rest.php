@@ -44,6 +44,7 @@ function set_user_login_fail($user_id) {
 
 function rest_check_user_login($data) {
 
+
   $params = $data->get_params();
   $data = isset( $params['params'] ) ? $params['params'] : $data;
 

@@ -2,7 +2,7 @@ import { Observable, throwError as observableThrowError } from 'rxjs';
 
 import { catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { AppApiService, UserData } from './app-api.service';
 
 import { CookieService } from 'ngx-cookie-service';
@@ -80,12 +80,26 @@ export class HttpService {
 
   public requestByLink<T>(link: Link): Observable<T> {
     const url: string = this.appApiService.getRestBaseUrl() + '/' + link.href;
-    return this.http.request<T>(link.type, url, {body: link.params}).pipe(
+    let options: {
+      body?: any;
+      params?: HttpParams | {
+        [param: string]: string | string[];
+      };
+    };
+
+    if (!!link.params) {
+      if (link.type === 'GET') {
+        options = {params: link.params};
+      } else {
+        options = {body: link.params};
+      }
+    }
+    return this.http.request<T>(link.type, url, options).pipe(
       catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
   }
 
   public getCurrentResource<T>(): Observable<T> {
-    console.log(this.appApiService.getRestBaseUrl() + this.router.url);
+    //console.log(this.appApiService.getRestBaseUrl() + this.router.url);
     const url: string = this.appApiService.getRestBaseUrl() + this.router.url;
     return this.http.get<T>(url).pipe(
       catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));

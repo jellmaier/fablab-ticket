@@ -16,7 +16,7 @@ const routes: Routes = [
   { path: '', redirectTo: appRoutes.login, pathMatch: 'full' },
   { path: appRoutes.loginOnTerminal, canActivate: [ IsNotLoggedInGuard, IsTerminalGuard ], component: TerminalLoginComponent },
   { path: appRoutes.loginNfc,      canActivate: [ IsNotLoggedInGuard, IsTerminalGuard ], component: NfcLoginComponent },
-  { path: appRoutes.login,         canActivate: [ IsNotLoggedInGuard ], component: LoginComponent },
+  { path: appRoutes.login,         component: LoginComponent },
   { path: appRoutes.register,      canActivate: [ IsNotLoggedInGuard ], component: RegisterComponent },
   { path: 'admin',                 canActivate: [ IsAdminGuard ],  component: AdminComponent },
   { path: appRoutes.profiles,           canActivate: [ IsLoggedInGuard ], component: ProfilesComponent, data: { redirect: true }},

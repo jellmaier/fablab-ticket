@@ -9,6 +9,8 @@ if (!class_exists('RestV2LoginDev'))
       $params = $data->get_params();
       $data = isset($params['params']) ? $params['params'] : $data;
 
+    //  return $data;
+
       if (!isset($data['username']))
         return new WP_Error('rest_forbidden', __('OMG you can not view private data.', 'fablab-ticket'), array('status' => 401));
 
@@ -30,12 +32,12 @@ if (!class_exists('RestV2LoginDev'))
         $old_user_id = get_current_user_id();
 
         wp_set_current_user($user_id);
-        $user_infos = angular_user_array();
+        $resource = RestV2Login::getBasicResource();
 
         // reset old user
         wp_set_current_user($old_user_id);
 
-        return $user_infos;
+        return $resource;
 
       } else {
         RestV2LoginService::setUserLoginFail($user_id);
@@ -45,6 +47,16 @@ if (!class_exists('RestV2LoginDev'))
       }
     }
 
+    public function getLinkGetUserData() {
+      $links = array();
+      array_push($links, RestEndpointsV2::createPOSTLink('login/user-data', 'login-nonce'));
+
+      $resource = array();
+      $resource['_links'] = $links;
+
+      return $resource;
+
+    }
   }
 }
 

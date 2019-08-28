@@ -38,7 +38,7 @@ if (!class_exists('RestEndpointsV2Login'))
 
 
     public function restRegisterDEVRoutes() {
-      $this->routeService->registerAnonymousGET('login/user-data',
+      $this->routeService->registerAnonymousPOST('login/user-data',
         'RestV2LoginDev', 'restGetUserData');
     }
 

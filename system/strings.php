@@ -10,8 +10,20 @@
       'api_url' => get_bloginfo('wpurl') . '/api/',
       // this is the API address of the JSON API plugin
       'sharing_url' => get_bloginfo('wpurl') . '/wp-json/sharepl/v1/',
+      // rest v2 url
+      'rest_v2_url' => get_bloginfo('wpurl') . '/wp-json/sharepl/v2/',
       // user nonce
       'nonce' => wp_create_nonce( 'wp_rest' ),
+    );
+  }
+
+  function angular_app_api_v2_array() {
+    return array(
+
+      'is_dev_mode' => SettingsService::isDevMode(),
+      'rest_v2_url' => get_bloginfo('wpurl') . '/wp-json/sharepl/v2/',
+      // user nonce
+      'nonce' => wp_create_nonce( 'wp_rest' )
     );
   }
 
