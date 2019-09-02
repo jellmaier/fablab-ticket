@@ -74,7 +74,7 @@ if (!class_exists('RestV2Devices'))
 		  return $available_devices;
     }
 
-    private function showDeviceTypeForUser($user_id, $device_type_id) {
+    public function showDeviceTypeForUser($user_id, $device_type_id) {
 
       return ( RestV2Devices::hasBeginnerDevicesOfDeviceType($device_type_id)
 		           && !RestV2Devices::isUserTicketLimitPerDeviceTypeExceeded($user_id, $device_type_id) );
@@ -97,12 +97,8 @@ if (!class_exists('RestV2Devices'))
 
 		private function getDeviceLinks($user_id, $device_type_id) {
       $links = array(); 
-  
-      array_push($links, RestEndpointsV2::createPOSTLink( ('profiles/' . $user_id . '/devices/' . $device_type_id . '/new-ticket' ),
-                                                      'new-ticket', 'Ticket erstellen') );
 
-
-      array_push($links, RestEndpointsV2::createGETLink( ('profiles/' . $user_id . '/devices/' . $device_type_id . '/new-ticket-view' ),
+      array_push($links, RestEndpointsV2::createGETLink( ('profiles/' . $user_id . '/devices/' . $device_type_id . '/new-ticket' ),
                                                       'new-ticket','Ticket erstellen') );
 
       return $links;

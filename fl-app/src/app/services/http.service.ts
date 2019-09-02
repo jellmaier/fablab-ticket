@@ -73,13 +73,13 @@ export class HttpService {
   // --- HATEOAS Methods ------------------------
 
   public getResourceByHref<T>(href: string): Observable<T> {
-    const url: string = this.appApiService.getRestBaseUrl() + '/' + href;
+    const url: string = this.appApiService.getRestBaseUrl() + href;
     return this.http.get<T>(url).pipe(
       catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
   }
 
   public requestByLink<T>(link: Link): Observable<T> {
-    const url: string = this.appApiService.getRestBaseUrl() + '/' + link.href;
+    const url: string = this.appApiService.getRestBaseUrl() + link.href;
     let options: {
       body?: any;
       params?: HttpParams | {

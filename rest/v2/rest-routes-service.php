@@ -67,7 +67,32 @@ if (!class_exists('RestV2RoutesService'))
 
     public function registerUserDELETE($path, $callbackClass, $callbackMethod) {
 
-      $this->registerRoute($path, RestV2Methods::DELETE,'restUserPermissionById',
+      $this->registerRoute($path, RestV2Methods::DELETE,'restTicketUpdatePermission',
+        $callbackClass, $callbackMethod);
+    }
+    // ---------- User Ticket Methods -------------------
+
+    public function registerUserTicketGET($path, $callbackClass, $callbackMethod) {
+
+      $this->registerRoute($path, RestV2Methods::GET,'restTicketUpdatePermission',
+        $callbackClass, $callbackMethod);
+    }
+
+    public function registerUserTicketPOST($path, $callbackClass, $callbackMethod) {
+
+      $this->registerRoute($path, RestV2Methods::POST,'restTicketUpdatePermission',
+        $callbackClass, $callbackMethod);
+    }
+
+    public function registerUserTicketPUT($path, $callbackClass, $callbackMethod) {
+
+      $this->registerRoute($path, RestV2Methods::PUT,'restTicketUpdatePermission',
+        $callbackClass, $callbackMethod);
+    }
+
+    public function registerUserTicketDELETE($path, $callbackClass, $callbackMethod) {
+
+      $this->registerRoute($path, RestV2Methods::DELETE,'restTicketUpdatePermission',
         $callbackClass, $callbackMethod);
     }
 

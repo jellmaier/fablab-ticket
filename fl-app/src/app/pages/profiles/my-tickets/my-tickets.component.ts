@@ -20,17 +20,6 @@ export interface Ticket extends BasicResource {
   changed?: boolean;
 }
 
-export interface TicketData {
-  device_title:string;
-  available: boolean;
-  color: string;
-  device_id: number;
-  pin: string;
-  status: string;
-}
-
-
-
 @Component({
   selector: 'app-my-tickets',
   templateUrl: './my-tickets.component.html',

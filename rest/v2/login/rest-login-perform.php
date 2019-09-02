@@ -19,7 +19,7 @@ if (!class_exists('RestV2LoginPerform'))
       $password = sanitize_text_field($data['password']);
       $user = get_user_by('login', $username);
       $user_id = $user->ID;
-      
+
       // todo Implement random return when no user_id
 
       $logins_left = RestV2LoginService::checkUserLoginsLeft($user_id);

@@ -6,11 +6,13 @@ import { BasicResource, HttpService } from '../../services/http.service';
 import { Link, LinkService } from '../../services/link.service';
 import { TicketList } from './my-tickets/my-tickets.component';
 import { DeviceList } from './devices/devices.component';
+import { DialogData } from '../../components/dialog/dialog.component';
 
 interface ProfileData {
   tickets$: Observable<TicketList>;
   devices$: Observable<DeviceList>;
 }
+
 
 @Component({
   selector: 'app-profiles',
@@ -21,8 +23,9 @@ interface ProfileData {
 export class ProfilesComponent implements OnInit {
 
   profileData$: Observable<ProfileData>;
-  ticketOverlayData$: Observable<any>;
+  ticketOverlayData$: Observable<DialogData>;
   openDialogEvent$: EventEmitter<boolean> = new EventEmitter();
+  showDialog: boolean = false;
 
   constructor(private httpService: HttpService,
               private router: Router,
@@ -63,6 +66,7 @@ export class ProfilesComponent implements OnInit {
     */
 
   loadProfileResource():void {
+    //refactor to store, avoid duplicate calls
      this.profileData$ = this.httpService.getCurrentResource<BasicResource>().pipe(
       mergeMap((response: BasicResource) => {
         return of({
@@ -73,10 +77,17 @@ export class ProfilesComponent implements OnInit {
     );
   }
 
-  buttonClicked(link: Link): void {
-    this.httpService.requestByLink<any>(link).subscribe(a => {
-      console.log(a);
-    });
-   // this.openDialogEvent$.emit(true);
+  buttonClicked(showDialog: boolean, link: Link): void {
+    this.ticketOverlayData$ = this.httpService.requestByLink<DialogData>(link);
+    this.showDialog = showDialog;
+    if (!showDialog) {
+      this.loadProfileResource();
+    }
+  }
+
+  closeDialog(closeDialog: boolean): void {
+    if (closeDialog) {
+      this.showDialog = false;
+    }
   }
 }

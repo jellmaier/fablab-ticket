@@ -1,12 +1,12 @@
 <?php
 
-if (!class_exists('RestV2NewTicket'))
+if (!class_exists('RestV2NewTicketCreate'))
 {
-  class RestV2NewTicket
+  class RestV2NewTicketCreate
   {
-		public function restProfileNewTicket($data) {
+		public function restNewTicket($data) {
 
-		  return RestV2NewTicket::newTicketForUser($data['userId'], $data['deviceId'], 'device_type');
+		  return RestV2NewTicketCreate::newTicketForUser($data['userId'], $data['deviceId'], 'device_type');
 
 		}
 
