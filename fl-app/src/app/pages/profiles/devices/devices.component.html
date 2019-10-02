@@ -1,6 +1,5 @@
-<p>devices works!</p>
-<div *ngFor="let device of ( devices$ | async )">
+<p>{{ devices?.message }}</p>
+<div *ngFor="let device of devices?.devices">
   <app-device [device]="device"
               (buttonClick)="buttonClick.emit($event)"></app-device>
 </div>
-

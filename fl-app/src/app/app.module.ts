@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { NgProgressModule } from '@ngx-progressbar/core';
 import { NgProgressHttpClientModule } from '@ngx-progressbar/http-client';
@@ -27,7 +27,6 @@ import { DatePipe } from '@angular/common';
 import { NvD3Module } from 'ng2-nvd3';
 
 import { FocusModule } from 'angular2-focus';
-
 // d3 and nvd3 should be included somewhere
 import 'd3';
 import 'nvd3';
@@ -36,7 +35,7 @@ import { TerminalLoginComponent } from './pages/login/terminallogin/terminallogi
 import { NfcLoginComponent } from './pages/login/nfclogin/nfc-login.component';
 import { RegisterComponent } from './pages/login/register/register.component';
 
-import { IsLoggedInGuard, IsNotLoggedInGuard, IsAdminGuard, IsTerminalGuard } from './services/guards/login-guard.service';
+import { IsAdminGuard, IsLoggedInGuard, IsNotLoggedInGuard, IsTerminalGuard } from './services/guards/login-guard.service';
 import { TerminalService } from './services/terminal.service';
 import { AdminComponent } from './admin/admin/admin.component';
 import { MyTicketsComponent } from './pages/profiles/my-tickets/my-tickets.component';
@@ -50,8 +49,16 @@ import { ButtonComponent } from './components/button/button.component';
 import { DevicesComponent } from './pages/profiles/devices/devices.component';
 import { DeviceComponent } from './components/device/device.component';
 import { InputMaskComponent } from './pages/login/login/input-mask/input-mask.component';
+import { StoreModule } from '@ngrx/store';
+import { ticketReducer } from './pages/profiles/store/reducers/ticket.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { TicketEffects } from './pages/profiles/store/effects/ticket.effects';
+import { ProfileEffects } from './pages/profiles/store/effects/profile.effects';
+import { DeviceEffects } from './pages/profiles/store/effects/device.effects';
+import { deviceReducer } from './pages/profiles/store/reducers/device.reducer';
+import { profileReducer } from './pages/profiles/store/reducers/profile.reducer';
 
- 
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -63,7 +70,24 @@ import { InputMaskComponent } from './pages/login/login/input-mask/input-mask.co
     AppRoutingModule,
     NvD3Module,
     MatDialogModule,
-    FocusModule.forRoot()
+    FocusModule.forRoot(),
+    StoreModule.forRoot({
+      ticket: ticketReducer,
+      device: deviceReducer,
+      profile: profileReducer,
+    }, {
+      runtimeChecks: {
+        strictStateImmutability: true,
+        strictActionImmutability: true,
+        strictStateSerializability: true,
+        strictActionSerializability: true,
+      }
+    }),
+    EffectsModule.forRoot([
+      TicketEffects,
+      DeviceEffects,
+      ProfileEffects
+    ])
   ],
   declarations: [
     AppComponent,

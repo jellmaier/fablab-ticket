@@ -1,14 +1,12 @@
-<p>Hello!</p>
+<app-devices [devices]="devices$ | async"
+             (buttonClick)="buttonClickedAndShowDialog($event)"></app-devices>
 
-<app-my-tickets [tickets$]=" (profileData$ | async)?.tickets$"
-                (buttonClick)="buttonClicked(true, $event)"></app-my-tickets>
+<app-my-tickets [tickets]=" tickets$ | async"
+                (buttonClick)="buttonClickedAndShowDialog($event)"></app-my-tickets>
 
-<app-devices [devices$]="(profileData$ | async)?.devices$"
-             (buttonClick)="buttonClicked(true, $event)"></app-devices>
 
-<app-dialog [openDialogEvent$]="openDialogEvent$"
-            [data]="(ticketOverlayData$| async)"
+<app-dialog [data]="ticketOverlayData$| async"
             [showDialog]="showDialog"
-            (buttonClick)="buttonClicked(false, $event)"
+            (buttonClick)="buttonClickedAndHideDialog($event)"
             (closeDialog)="closeDialog($event)">
 </app-dialog>

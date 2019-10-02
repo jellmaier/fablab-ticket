@@ -1,17 +1,14 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, OnInit } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BasicResource, HttpService } from '../../services/http.service';
+import { HttpService } from '../../services/http.service';
 import { Link, LinkService } from '../../services/link.service';
-import { TicketList } from './my-tickets/my-tickets.component';
+import { Ticket } from './my-tickets/my-tickets.component';
 import { DeviceList } from './devices/devices.component';
 import { DialogData } from '../../components/dialog/dialog.component';
-
-interface ProfileData {
-  tickets$: Observable<TicketList>;
-  devices$: Observable<DeviceList>;
-}
+import { Store } from '@ngrx/store';
+import { DEVICE_STORE_PATH, ProfileState, TICKET_STORE_PATH } from './store/profile.state';
+import * as ProfileActions from './store/actions/profile.actions';
 
 
 @Component({
@@ -22,67 +19,38 @@ interface ProfileData {
 })
 export class ProfilesComponent implements OnInit {
 
-  profileData$: Observable<ProfileData>;
   ticketOverlayData$: Observable<DialogData>;
-  openDialogEvent$: EventEmitter<boolean> = new EventEmitter();
   showDialog: boolean = false;
+
+  tickets$: Observable<Ticket[]>;
+  devices$: Observable<DeviceList>;
 
   constructor(private httpService: HttpService,
               private router: Router,
               private route: ActivatedRoute,
-              private linkService: LinkService) { }
+              private linkService: LinkService,
+              private store: Store<ProfileState>) {
+    this.tickets$ = store.select(TICKET_STORE_PATH);
+    this.devices$ = store.select(DEVICE_STORE_PATH);
+  }
 
   ngOnInit(): void {
     if (this.route.snapshot.data['redirect'] === true) {
-      this.loadRedirectResource();
+      this.store.dispatch(new ProfileActions.ProfileLoadRedirect(null));
     } else {
-      this.loadProfileResource();
+      this.store.dispatch(new ProfileActions.ProfileInit(null));
     }
   }
 
-  loadRedirectResource():void {
-    this.httpService.getCurrentResource<BasicResource>().subscribe(
-      data =>  {
-        this.router.navigate(['/' + this.linkService.getHrefByReltype(data._links, 'related')]);
-      },
-      err =>  {
-        console.log(err.error.message);
-      }
-    );
-  }
-/*
-  loadProfileResource():void {
-    this.profileData$ = this.httpService.getCurrentResource().pipe(
-      switchMap((response: any) => {
-        return forkJoin(
-          this.httpService.getResourceByHref(this.linkService.getHrefByReltype(response.links, 'tickets')),
-          this.httpService.getResourceByHref(this.linkService.getHrefByReltype(response.links, 'devices'))
-        );
-      }),
-      map((value: [TicketList, any]) => {
-        return { tickets: value[0], devices: value[1] } as ProfileDataaa;
-      })
-    );
-    */
-
-  loadProfileResource():void {
-    //refactor to store, avoid duplicate calls
-     this.profileData$ = this.httpService.getCurrentResource<BasicResource>().pipe(
-      mergeMap((response: BasicResource) => {
-        return of({
-          tickets$: this.httpService.getResourceByHref<TicketList>(this.linkService.getHrefByReltype(response._links, 'tickets')),
-          devices$: this.httpService.getResourceByHref<DeviceList>(this.linkService.getHrefByReltype(response._links, 'devices'))
-        } as ProfileData);
-      })
-    );
-  }
-
-  buttonClicked(showDialog: boolean, link: Link): void {
+  buttonClickedAndShowDialog(link: Link): void {
     this.ticketOverlayData$ = this.httpService.requestByLink<DialogData>(link);
-    this.showDialog = showDialog;
-    if (!showDialog) {
-      this.loadProfileResource();
-    }
+    this.showDialog = true;
+  }
+
+  buttonClickedAndHideDialog(link: Link): void {
+    this.httpService.requestByLink<DialogData>(link).subscribe();
+    this.showDialog = false;
+    this.store.dispatch(new ProfileActions.ProfileInit(null));
   }
 
   closeDialog(closeDialog: boolean): void {
