@@ -7,7 +7,7 @@ if (!class_exists('OptionService'))
 
     public static function isDevMode()
     {
-      return TRUE; // todo add option
+      return FALSE; // todo add option
     }
     public function getOption($key)
     {

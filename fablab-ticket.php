@@ -36,6 +36,7 @@ include 'system/user-service.php';
 include 'system/strings.php';
 include 'system/user-list.php';
 include 'system/rest/ticketlist-user.php';
+include 'manage-app-scripts.php';
 include 'manage-scripts.php';
 include 'rest/rest-endpoints.php';
 
@@ -50,6 +51,7 @@ new FlNgAppShortcodeRest();
 new TicketShortcodeRest();
 new TicketListShortcodeRest();
 new ManageScripts();
+new ManageAppScripts();
 new RestTestShortcode();
 new RestEndpoints();
 
