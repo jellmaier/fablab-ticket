@@ -2,7 +2,7 @@ import { Observable, throwError as observableThrowError } from 'rxjs';
 
 import { catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { AppApiService, UserData } from './app-api.service';
 
 import { CookieService } from 'ngx-cookie-service';
@@ -99,8 +99,7 @@ export class HttpService {
   }
 
   public getCurrentResource<T>(): Observable<T> {
-    //console.log(this.appApiService.getRestBaseUrl() + this.router.url);
-    const url: string = this.appApiService.getRestBaseUrl() + this.router.url;
+    const url: string = this.appApiService.getRestBaseUrl() + this.router.url.substr(1); // delete / from router url
     return this.http.get<T>(url).pipe(
       catchError((err: HttpErrorResponse) => observableThrowError(this.handleHttpError(err))));
   }

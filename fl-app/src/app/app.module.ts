@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
@@ -22,7 +22,7 @@ import { ParserService } from './services/parser.service';
 
 import { AppApiService } from './services/app-api.service';
 
-import { DatePipe } from '@angular/common';
+import { DatePipe, registerLocaleData } from '@angular/common';
 
 import { NvD3Module } from 'ng2-nvd3';
 
@@ -58,6 +58,10 @@ import { DeviceEffects } from './pages/profiles/store/effects/device.effects';
 import { deviceReducer } from './pages/profiles/store/reducers/device.reducer';
 import { profileReducer } from './pages/profiles/store/reducers/profile.reducer';
 
+
+import localeDeAt from '@angular/common/locales/de-AT';
+
+registerLocaleData(localeDeAt, 'de-AT');
 
 @NgModule({
   imports: [
@@ -122,7 +126,8 @@ import { profileReducer } from './pages/profiles/store/reducers/profile.reducer'
     CookieService,
     ParserService,
     //{ provide: BrowserXhr, useClass: NgProgressBrowserXhr },
-     ],
+    { provide: LOCALE_ID, useValue: 'de-AT' }
+  ],
   bootstrap: [ AppComponent ]
 })
 

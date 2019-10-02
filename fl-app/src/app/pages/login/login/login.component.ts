@@ -67,6 +67,7 @@ export class LoginComponent implements OnInit {
           dataLink.params = link.params;
           return this.httpService.requestByLink<BasicResource>(dataLink);
         } else {
+          this.refresh();
           return of(loginInfos);
         }
       }),
@@ -86,6 +87,10 @@ export class LoginComponent implements OnInit {
   private setLoginAndRedirect(loginInfos: LoginInfos | LoginPerformInfos): void {
     this.appApiService.setDevUserLoggedIn(loginInfos.userInfos);
     this.router.navigate(['/' + this.linkService.getHrefByReltype(loginInfos._links, 'related')]);
+  }
+
+  private refresh(): void {
+    window.location.reload();
   }
 
 }
