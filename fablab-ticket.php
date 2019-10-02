@@ -20,7 +20,7 @@ load_plugin_textdomain( 'fablab-ticket', false, dirname( plugin_basename( __FILE
 include 'plugins/pinplugin.php';
 include 'plugins/nfc-login/login-shortcode.php';
 include 'plugins/nfc-login/login-rest.php';
-include 'plugins/nfc-login/login-get-auth-data-rest.php';
+//include 'plugins/nfc-login/login-get-auth-data-rest.php';
 include 'plugins/nfc-login/register-rest.php';
 include 'plugins/resttest/resttest-shortcode.php';
 include 'plugins/menu/edit-menu.php';
