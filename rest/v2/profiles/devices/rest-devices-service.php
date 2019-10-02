@@ -4,20 +4,6 @@ if (!class_exists('RestV2Devices'))
 {
   class RestV2Devices
   {
-		public function restPofileDevice($data) {
-
-		  
-		  return RestV2Devices::restPofileDeviceTest($data);
-
-		}
-
-		private function restPofileDeviceTest($data) {
-
-		  
-		  return $data['deviceId'] . 'lalgggal';
-
-		}
-
 
     //--------------------------------------------------------
 		// Load Devices available for Profile
@@ -27,20 +13,23 @@ if (!class_exists('RestV2Devices'))
 		  
 		  $user_id = $data['userId'];
 
-		  if (SettingsService::getOption('ticket_online') != 1)
-		    return new WP_Error( 'rest_ticket_offline', __( 'Ticket-System offline', 'fablab-ticket' ), array( 'status' => 423 ) );
+      $deviceList = array();
 
-		  if (RestV2Devices::isUserTicketLimitExceeded($user_id)) {
-		    return new WP_Error( 'rest_ticket_offline', __( 'MAx Tickets', 'fablab-ticket' ), array( 'status' => 423 ) );
-		  }
+		  if (SettingsService::getOption('ticket_online') != 1) {
+        $deviceList['message'] = __( 'Das Ticket-System ist offline-', 'fablab-ticket' );
+      } else if (RestV2Devices::isUserTicketLimitExceeded($user_id)) {
+        $deviceList['message'] = __( 'Sie haben die maximale Anzahl an Tickets gezogen!', 'fablab-ticket' );
+		  } else {
+        $devices = RestV2Devices::getDeviceTypes($user_id);
 
-		  $devices = RestV2Devices::getDeviceTypes($user_id);
+        foreach($devices as &$device) {
+          $device['_links'] = RestV2Devices::getDeviceLinks($user_id, $device['id']);
+        }
+        $deviceList['devices'] = $devices;
+      }
 
-		  foreach($devices as &$device) {
-		    $device['_links'] = RestV2Devices::getDeviceLinks($user_id, $device['id']);
-		  }
 
-		  return $devices;
+      return $deviceList;
 		}
 
 		private function isUserTicketLimitExceeded($user_id) {
