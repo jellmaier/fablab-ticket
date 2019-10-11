@@ -15,17 +15,25 @@ if (!class_exists('RestV2Devices'))
 
       $deviceList = array();
 
+      $deviceList['title'] = __( 'Geräte', 'fablab-ticket' );
+
 		  if (SettingsService::getOption('ticket_online') != 1) {
         $deviceList['message'] = __( 'Das Ticket-System ist offline-', 'fablab-ticket' );
       } else if (RestV2Devices::isUserTicketLimitExceeded($user_id)) {
-        $deviceList['message'] = __( 'Sie haben die maximale Anzahl an Tickets gezogen!', 'fablab-ticket' );
+        $deviceList['message'] = __( 'Die maximale Anzahl an Tickets is bereits gezogen!', 'fablab-ticket' );
 		  } else {
         $devices = RestV2Devices::getDeviceTypes($user_id);
 
-        foreach($devices as &$device) {
-          $device['_links'] = RestV2Devices::getDeviceLinks($user_id, $device['id']);
+        if (empty($devices)) {
+          $deviceList['message'] = __( 'Zurzeit sind keine Geräte verfügbar', 'fablab-ticket' );
+        } else {
+          $deviceList['message'] = __( 'Verfügbare Geräte:', 'fablab-ticket' );
+          foreach($devices as &$device) {
+            $device['_links'] = RestV2Devices::getDeviceLinks($user_id, $device['id']);
+          }
+          $deviceList['devices'] = $devices;
         }
-        $deviceList['devices'] = $devices;
+
       }
 
 

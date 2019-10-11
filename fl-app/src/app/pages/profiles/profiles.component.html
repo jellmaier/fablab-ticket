@@ -1,3 +1,6 @@
+<h2> {{ (profile$ | async)?.title}}</h2>
+<p> {{ (profile$ | async)?.message}}</p>
+<br>
 <app-devices [devices]="devices$ | async"
              (buttonClick)="buttonClickedAndShowDialog($event)"></app-devices>
 

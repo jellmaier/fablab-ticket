@@ -3,8 +3,9 @@ import { Link } from '../../../services/link.service';
 import { BasicResource } from '../../../services/http.service';
 
 export interface DeviceList {
-  devices: Array<Device>;
+  title: string;
   message: string;
+  devices: Array<Device>;
 }
 
 export interface Device extends BasicResource {

@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 import { Link } from '../../../../services/link.service';
-import { Device } from '../../devices/devices.component';
+import { DeviceList } from '../../devices/devices.component';
 
 
 
@@ -17,7 +17,7 @@ export class InitDevice implements Action {
 export class DevicesLoaded implements Action {
   readonly type: string = DEVICES_LOADED;
 
-  constructor(public payload: Device[]) {}
+  constructor(public payload: DeviceList) {}
 }
 
 

@@ -13,7 +13,7 @@ export class TicketEffects {
     ofType<TicketActions.InitTicket>(TicketActions.INIT_TICKET),
     mergeMap((action) => this.httpService.requestByLink<TicketList>(action.payload)
       .pipe(
-        map((ticketList: TicketList) => ({ type: TicketActions.TICKETS_LOADED, payload: ticketList.tickets }))
+        map((ticketList: TicketList) => ({ type: TicketActions.TICKETS_LOADED, payload: ticketList }))
       ))
     )
   );

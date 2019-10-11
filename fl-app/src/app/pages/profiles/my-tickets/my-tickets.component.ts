@@ -3,6 +3,8 @@ import { Link } from '../../../services/link.service';
 import { BasicResource } from '../../../services/http.service';
 
 export interface TicketList {
+  title: string;
+  message: string;
   tickets: Array<Ticket>;
   hash: string;
 }
@@ -28,7 +30,7 @@ export interface Ticket extends BasicResource {
 export class MyTicketsComponent implements OnInit {
 
   @Input()
-  tickets: Array<Ticket>;
+  tickets: TicketList;
 
   @Output() buttonClick: EventEmitter<Link> = new EventEmitter();
 

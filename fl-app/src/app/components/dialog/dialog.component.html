@@ -2,6 +2,7 @@
   <div class="device-ticket">
     <a class="close"
        (click)="closeOverlay()">x</a>
+    <p *ngIf="!!!data">Loading...</p>
     <h2>{{ data?.Label }}</h2>
     <div [innerHTML]="data?.DeviceInfo"></div>
     <div *ngFor="let link of data?._links">

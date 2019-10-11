@@ -12,7 +12,6 @@ if (!class_exists('RestV2Tickets'))
 
      private function restGetTickets($user_id, $ticket_query, $old_hash) {
 
-      
       $ticket_list = array();
 
       global $post;
@@ -40,6 +39,12 @@ if (!class_exists('RestV2Tickets'))
 
 
       $result = array();
+
+      $result['title'] = __( 'Tickets', 'fablab-ticket' );
+       if (!empty($ticket_list)) {
+         $result['message'] = __( 'Die gezogenen Tickets:', 'fablab-ticket' );
+       }
+
       $result['tickets'] = $ticket_list;
       $result['hash'] = wp_hash(serialize($ticket_list));
 

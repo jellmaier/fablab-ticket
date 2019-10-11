@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { Ticket } from '../../my-tickets/my-tickets.component';
+import { Ticket, TicketList } from '../../my-tickets/my-tickets.component';
 import { Link } from '../../../../services/link.service';
 
 
@@ -19,7 +19,7 @@ export class InitTicket implements Action {
 export class TicketsLoaded implements Action {
   readonly type: string = TICKETS_LOADED;
 
-  constructor(public payload: Ticket[]) {}
+  constructor(public payload: TicketList) {}
 }
 
 export class AddTicket implements Action {

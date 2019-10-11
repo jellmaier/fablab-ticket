@@ -1,4 +1,5 @@
-<div *ngFor="let ticket of tickets">
+<p>{{ tickets?.message }}</p>
+<div *ngFor="let ticket of tickets?.tickets">
   <app-ticket [ticket]="ticket"
               (buttonClick)="buttonClick.emit($event)"></app-ticket>
 </div>

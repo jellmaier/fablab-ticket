@@ -30,12 +30,14 @@ if (!class_exists('RestV2Profiles'))
 
 		  $user_id = $data['userId'];
 
+      $resource = array();
+      $resource['title'] = "Hallo, " . UserService::getUserDisplayName($user_id) . "!";
+      $resource['message'] = __( 'Willkommen im FabLab!', 'fablab-ticket' );
 
 		  $links = array(); 
 		  array_push($links, RestEndpointsV2::createGETLink('profiles' . '/' . $user_id . '/devices', 'devices'));
 		  array_push($links, RestEndpointsV2::createGETLink('profiles' . '/' . $user_id . '/tickets', 'tickets'));
 
-		  $resource = array();
 		  $resource['_links'] = $links;
 		  
 		  return $resource;
