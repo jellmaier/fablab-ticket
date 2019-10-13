@@ -1,6 +1,9 @@
 <div> {{ loginData?.login?.loginHeading }}</div>
 <div> {{ loginData?.login?.loginMessage }}</div>
-<app-input-mask [mask]="loginData?.login?.loginMask"
+
+<p *ngIf="!!!loginData">Loading...</p>
+<app-input-mask  *ngIf="!!loginData"
+                 [mask]="loginData?.login?.loginMask"
                 (submitClick)="submitClicked($event)">
 </app-input-mask>
 <div> {{ loginErrorMessage }}</div>

@@ -1,4 +1,4 @@
 {
   "is_dev_mode":true,
-  "rest_v2_url":"http:\/\/localhost:4200\/fablab\/wp-json\/sharepl\/v2"
+  "rest_v2_url":"http:\/\/localhost:4200\/fablab\/wp-json\/sharepl\/v2\/"
 }

@@ -29,7 +29,7 @@ module.exports = "<input type=\"submit\"\n       (click)=\"clickEvent()\"\n     
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"fl-device-element fl-device-element-content\"\n     [ngStyle]=\"{'border-style': '6px solid ' + device.color,\n                 'background-color': device.color}\"\n     (click)=\"deviceClicked()\">\n  <h2>{{device.name}}</h2>\n  <!--p>Verfügbare Geräte: <b><?= $number_devices ?></b></br>Wartende Personen: <b><?= $waiting['persons'] ?></b></p-->\n  <!--p id=\"waiting-time\">Vorraussichtlich Wartezeit: <b><?= get_post_time_string($waiting['time'], true) ?></b></p-->\n</div>\n"
+module.exports = "<div class=\"fl-device-element\"\n     [ngStyle]=\"{'border': '6px solid ' + device.color,\n                   'background-color': device.color}\">\n  <div class=\"fl-device-element-content\"\n       (click)=\"deviceClicked()\">\n    <h2>{{device.name}}</h2>\n    <!--p>Verfügbare Geräte: <b><?= $number_devices ?></b></br>Wartende Personen: <b><?= $waiting['persons'] ?></b></p-->\n    <!--p id=\"waiting-time\">Vorraussichtlich Wartezeit: <b><?= get_post_time_string($waiting['time'], true) ?></b></p-->\n\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -51,7 +51,7 @@ module.exports = "<p>\n  dialog workssss!\n</p>\n"
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"showDialog\" class=\"fl-overlay\">\n  <div class=\"device-ticket\">\n    <a class=\"close\"\n       (click)=\"closeOverlay()\">x</a>\n    <h2>{{ data?.Label }}</h2>\n    <div [innerHTML]=\"data?.DeviceInfo\"></div>\n    <div *ngFor=\"let link of data?._links\">\n      <app-button [label]=\"link.label\"\n                  (buttonClick)=\"buttonClicked($event, link)\"></app-button>\n    </div>\n  </div>\n  <div class=\"fl-overlay-background\"\n       (click)=\"closeOverlay()\"></div>\n</div>\n"
+module.exports = "<div *ngIf=\"showDialog\" class=\"fl-overlay\">\n  <div class=\"device-ticket\">\n    <a class=\"close\"\n       (click)=\"closeOverlay()\">x</a>\n    <p *ngIf=\"!!!data\">Loading...</p>\n    <h2>{{ data?.Label }}</h2>\n    <div [innerHTML]=\"data?.DeviceInfo\"></div>\n    <div *ngFor=\"let link of data?._links\">\n      <app-button [label]=\"link.label\"\n                  (buttonClick)=\"buttonClicked($event, link)\"></app-button>\n    </div>\n  </div>\n  <div class=\"fl-overlay-background\"\n       (click)=\"closeOverlay()\"></div>\n</div>\n"
 
 /***/ }),
 
@@ -84,7 +84,7 @@ module.exports = "<form #inputform=\"ngForm\" (ngSubmit)=\"submitLogin(inputform
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div> {{ loginData?.login?.loginHeading }}</div>\n<div> {{ loginData?.login?.loginMessage }}</div>\n<app-input-mask [mask]=\"loginData?.login?.loginMask\"\n                (submitClick)=\"submitClicked($event)\">\n</app-input-mask>\n<div> {{ loginErrorMessage }}</div>\n"
+module.exports = "<div> {{ loginData?.login?.loginHeading }}</div>\n<div> {{ loginData?.login?.loginMessage }}</div>\n\n<p *ngIf=\"!!!loginData\">Loading...</p>\n<app-input-mask  *ngIf=\"!!loginData\"\n                 [mask]=\"loginData?.login?.loginMask\"\n                (submitClick)=\"submitClicked($event)\">\n</app-input-mask>\n<div> {{ loginErrorMessage }}</div>\n"
 
 /***/ }),
 
@@ -139,7 +139,7 @@ module.exports = "<p>{{ devices?.message }}</p>\n<div *ngFor=\"let device of dev
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngFor=\"let ticket of tickets\">\n  <app-ticket [ticket]=\"ticket\"\n              (buttonClick)=\"buttonClick.emit($event)\"></app-ticket>\n</div>\n"
+module.exports = "<p>{{ tickets?.message }}</p>\n<div *ngFor=\"let ticket of tickets?.tickets\">\n  <app-ticket [ticket]=\"ticket\"\n              (buttonClick)=\"buttonClick.emit($event)\"></app-ticket>\n</div>\n"
 
 /***/ }),
 
@@ -150,7 +150,7 @@ module.exports = "<div *ngFor=\"let ticket of tickets\">\n  <app-ticket [ticket]
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<app-devices [devices]=\"devices$ | async\"\n             (buttonClick)=\"buttonClickedAndShowDialog($event)\"></app-devices>\n\n<app-my-tickets [tickets]=\" tickets$ | async\"\n                (buttonClick)=\"buttonClickedAndShowDialog($event)\"></app-my-tickets>\n\n\n<app-dialog [data]=\"ticketOverlayData$| async\"\n            [showDialog]=\"showDialog\"\n            (buttonClick)=\"buttonClickedAndHideDialog($event)\"\n            (closeDialog)=\"closeDialog($event)\">\n</app-dialog>\n"
+module.exports = "<h2> {{ (profile$ | async)?.title}}</h2>\n<p> {{ (profile$ | async)?.message}}</p>\n<app-devices [devices]=\"devices$ | async\"\n             (buttonClick)=\"buttonClickedAndShowDialog($event)\"></app-devices>\n\n<app-my-tickets [tickets]=\" tickets$ | async\"\n                (buttonClick)=\"buttonClickedAndShowDialog($event)\"></app-my-tickets>\n\n\n<app-dialog [data]=\"ticketOverlayData$| async\"\n            [showDialog]=\"showDialog\"\n            (buttonClick)=\"buttonClickedAndHideDialog($event)\"\n            (closeDialog)=\"closeDialog($event)\">\n</app-dialog>\n"
 
 /***/ }),
 
@@ -1497,7 +1497,7 @@ var MyTicketsComponent = /** @class */ (function () {
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Array)
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
     ], MyTicketsComponent.prototype, "tickets", void 0);
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])(),
@@ -1566,6 +1566,7 @@ var ProfilesComponent = /** @class */ (function () {
         this.showDialog = false;
         this.tickets$ = store.select(_store_profile_state__WEBPACK_IMPORTED_MODULE_6__["TICKET_STORE_PATH"]);
         this.devices$ = store.select(_store_profile_state__WEBPACK_IMPORTED_MODULE_6__["DEVICE_STORE_PATH"]);
+        this.profile$ = store.select(_store_profile_state__WEBPACK_IMPORTED_MODULE_6__["PROFILE_STORE_PATH"]);
     }
     ProfilesComponent.prototype.ngOnInit = function () {
         if (this.route.snapshot.data['redirect'] === true) {
@@ -1648,7 +1649,7 @@ var DevicesLoaded = /** @class */ (function () {
         this.type = DEVICES_LOADED;
     }
     DevicesLoaded.ctorParameters = function () { return [
-        { type: Array }
+        { type: undefined }
     ]; };
     return DevicesLoaded;
 }());
@@ -1764,7 +1765,7 @@ var TicketsLoaded = /** @class */ (function () {
         this.type = TICKETS_LOADED;
     }
     TicketsLoaded.ctorParameters = function () { return [
-        { type: Array }
+        { type: undefined }
     ]; };
     return TicketsLoaded;
 }());
@@ -1886,28 +1887,11 @@ var ProfileEffects = /** @class */ (function () {
         }, { dispatch: false });
         this.initProfile$ = Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_4__["createEffect"])(function () {
             return _this.actions$.pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_4__["ofType"])(_actions_profile_actions__WEBPACK_IMPORTED_MODULE_5__["PROFILE_INIT"]), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["mergeMap"])(function () { return _this.httpService.getCurrentResource()
-                .pipe(
-            /* concatMapTo((response: BasicResource) => [
-               new TicketActions.InitTicket(this.linkService.getLinkByReltype(response._links, 'tickets')),
-               new DeviceActions.InitDevice(this.linkService.getLinkByReltype(response._links, 'devices'))
-             ])*/
-            // map((resource: BasicResource) =>
-            // ({ type: DeviceActions.DEVICES_LOADED, payload: this.linkService.getHrefByReltype(resource._links, 'devices') })),
-            // map((resource: BasicResource) =>
-            //  ({ type: TicketActions.INIT_TICKET, payload: this.linkService.getLinkByReltype(resource._links, 'tickets') }))
-            Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (resource) {
-                return ({ type: _actions_profile_actions__WEBPACK_IMPORTED_MODULE_5__["PROFILE_LOADED"], payload: resource });
+                .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["switchMap"])(function (resource) {
+                return [{ type: _actions_device_actions__WEBPACK_IMPORTED_MODULE_7__["INIT_DEVICE"], payload: _this.linkService.getLinkByReltype(resource._links, 'devices') },
+                    { type: _actions_ticket_actions__WEBPACK_IMPORTED_MODULE_6__["INIT_TICKET"], payload: _this.linkService.getLinkByReltype(resource._links, 'tickets') },
+                    { type: _actions_profile_actions__WEBPACK_IMPORTED_MODULE_5__["PROFILE_LOADED"], payload: resource }];
             })); }));
-        });
-        this.loadedProfile$ = Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_4__["createEffect"])(function () {
-            return _this.actions$.pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_4__["ofType"])(_actions_profile_actions__WEBPACK_IMPORTED_MODULE_5__["PROFILE_LOADED"]), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (action) {
-                return ({ type: (_actions_ticket_actions__WEBPACK_IMPORTED_MODULE_6__["INIT_TICKET"]), payload: _this.linkService.getLinkByReltype(action.payload._links, 'tickets') });
-            }));
-        });
-        this.loaded2Profile$ = Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_4__["createEffect"])(function () {
-            return _this.actions$.pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_4__["ofType"])(_actions_profile_actions__WEBPACK_IMPORTED_MODULE_5__["PROFILE_LOADED"]), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (action) {
-                return ({ type: _actions_device_actions__WEBPACK_IMPORTED_MODULE_7__["INIT_DEVICE"], payload: _this.linkService.getLinkByReltype(action.payload._links, 'devices') });
-            }));
         });
     }
     ProfileEffects.ctorParameters = function () { return [
@@ -1958,7 +1942,7 @@ var TicketEffects = /** @class */ (function () {
         this.ticketActions$ = ticketActions$;
         this.httpService = httpService;
         this.loadTickets$ = Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_4__["createEffect"])(function () { return _this.ticketActions$.pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_4__["ofType"])(_actions_ticket_actions__WEBPACK_IMPORTED_MODULE_5__["INIT_TICKET"]), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["mergeMap"])(function (action) { return _this.httpService.requestByLink(action.payload)
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (ticketList) { return ({ type: _actions_ticket_actions__WEBPACK_IMPORTED_MODULE_5__["TICKETS_LOADED"], payload: ticketList.tickets }); })); })); });
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (ticketList) { return ({ type: _actions_ticket_actions__WEBPACK_IMPORTED_MODULE_5__["TICKETS_LOADED"], payload: ticketList }); })); })); });
     }
     TicketEffects.ctorParameters = function () { return [
         { type: _ngrx_effects__WEBPACK_IMPORTED_MODULE_4__["Actions"] },
@@ -2070,9 +2054,10 @@ function ticketReducer(state, action) {
         case _actions_ticket_actions__WEBPACK_IMPORTED_MODULE_0__["TICKETS_LOADED"]:
             return action.payload;
         case _actions_ticket_actions__WEBPACK_IMPORTED_MODULE_0__["ADD_TICKET"]:
-            return state.concat([action.payload]);
+            // return [...state, tickets: action.payload as Ticket];#
+            return state;
         case _actions_ticket_actions__WEBPACK_IMPORTED_MODULE_0__["REMOVE_TICKET"]:
-            state.splice(action.payload, 1);
+            state.tickets.splice(action.payload, 1);
             return state;
         default:
             return state;
@@ -2413,7 +2398,7 @@ module.exports = {"blog_url":"http://localhost:8888/fablab","templates_url":"htt
 /*! exports provided: is_dev_mode, rest_v2_url, default */
 /***/ (function(module) {
 
-module.exports = {"is_dev_mode":true,"rest_v2_url":"http://localhost:4200/fablab/wp-json/sharepl/v2"};
+module.exports = {"is_dev_mode":true,"rest_v2_url":"http://localhost:4200/fablab/wp-json/sharepl/v2/"};
 
 /***/ }),
 
@@ -2461,14 +2446,15 @@ var AppApiService = /** @class */ (function () {
         this.loadApiData();
     }
     AppApiService.prototype.loadApiData = function () {
-        if (typeof AppAPIv2 === 'undefined') {
+        var standaloneMode = typeof AppAPIv2 === 'undefined';
+        if (standaloneMode) {
             this.appApiv2 = __webpack_require__(/*! ./AppAPIv2.json */ "./src/app/services/AppAPIv2.json");
         }
         else {
             this.appApiv2 = AppAPIv2;
         }
-        // when AppAPI start in dev mode and load app data fom json
-        if (this.appApiv2.is_dev_mode) {
+        // when AppAPI start in standalone mode and load app data fom json
+        if (standaloneMode) {
             console.log('Runing in Dev-Mode');
             this.appApi = __webpack_require__(/*! ./AppAPI.json */ "./src/app/services/AppAPI.json");
             this.terminalData = __webpack_require__(/*! ./TerminalData.json */ "./src/app/services/TerminalData.json");
@@ -2515,7 +2501,7 @@ var AppApiService = /** @class */ (function () {
         return this.appApi.sharing_url;
     };
     AppApiService.prototype.getRestBaseUrl = function () {
-        return this.appApi.rest_v2_url;
+        return this.appApiv2.rest_v2_url;
     };
     AppApiService.prototype.getNonce = function () {
         return this.userData.nonce;

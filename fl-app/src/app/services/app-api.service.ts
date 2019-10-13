@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
 import { BasicResource } from './http.service';
-import { Link } from './link.service';
 
 export interface AppApiResponse {
   blog_url: string;
@@ -59,14 +58,16 @@ export class AppApiService {
 
   private loadApiData():void {
 
-    if (typeof AppAPIv2 === 'undefined') {
+    const standaloneMode: boolean = typeof AppAPIv2 === 'undefined';
+
+    if (standaloneMode) {
       this.appApiv2 = require('./AppAPIv2.json');
     } else {
       this.appApiv2 = AppAPIv2;
     }
 
-    // when AppAPI start in dev mode and load app data fom json
-    if (this.appApiv2.is_dev_mode) {
+    // when AppAPI start in standalone mode and load app data fom json
+    if (standaloneMode) {
       console.log('Runing in Dev-Mode');
       this.appApi = require('./AppAPI.json');
       this.terminalData = require('./TerminalData.json');
@@ -122,7 +123,7 @@ export class AppApiService {
   }
 
   public getRestBaseUrl():string {
-    return this.appApi.rest_v2_url;
+    return this.appApiv2.rest_v2_url;
   }
 
   public getNonce():string {
